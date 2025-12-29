@@ -157,6 +157,15 @@ config = {
             },
         },
     },
+    "e2e-playwright": {
+        "1": {
+            "earlyFail": True,
+            "skip": False,
+            "suites": [
+                "shares",
+            ],
+        },
+    },
     "build": True,
 }
 
@@ -282,7 +291,10 @@ def pnpmlint(ctx):
                  installPnpm() +
                  lint() +
                  checkFormatting(),
-        "trigger": base_trigger,
+        "trigger": {
+            # copy base trigger to be able to append branches later
+            "ref": base_trigger["ref"][:],
+        },
     }
 
     for branch in config["branches"]:
@@ -522,70 +534,134 @@ def sonarcloudCoverageReport(sonar_env):
     ]
 
 def e2eTestsOnPlaywright(ctx):
-    pipelines = []
-
-    # pipeline steps
-    steps = skipIfUnchanged(ctx, "e2e-tests-playwright")
-
-    environment = {
-        "BASE_URL_OCIS": "ocis:9200",
-        "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
-        "TESTS_RUNNER": "playwright",
-        "SKIP_A11Y_TESTS": True,
+    default = {
+        "skip": False,
+        "suites": [],
+        "features": [],
+        "tikaNeeded": False,
+        "federationServer": False,
+        "failOnUncaughtConsoleError": False,
+        "extraServerEnvironment": {},
+        "skipA11y": True,
+        "reportTracing": False,
     }
 
-    steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-             installPnpm() + \
-             restoreBrowsersCache() + \
-             restoreBuildArtifactCache(ctx, "web-dist", "dist")
+    pipelines = []
+    params = {}
+    matrices = config["e2e-playwright"]
+    browser = "chromium"
 
-    if ctx.build.event == "cron":
-        steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
-    else:
-        steps += restoreOcisCache()
+    for suite, matrix in matrices.items():
+        for item in default:
+            params[item] = matrix[item] if item in matrix else default[item]
 
-    steps += ocisService()
+        if params["skip"]:
+            continue
 
-    steps.append({
-        "name": "e2e-tests-playwright",
-        "image": OC_CI_NODEJS_IMAGE,
-        "environment": environment,
-        "commands": [
-            "pnpm test:e2e:playwright --project=chromium",
-        ],
-    })
+        # pipeline steps
+        steps = skipIfUnchanged(ctx, "e2e-tests-playwright")
 
-    if not "skip-a11y" in ctx.build.title.lower():
-        steps += uploadA11yResult(ctx) + logA11yReport()
+        if "app-provider" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+            steps = skipIfUnchanged(ctx, "drone-ci")
 
-    steps += uploadTracingResult(ctx, "playwright") + \
-             logTracingResult(ctx, "playwright")
+        if "ocm" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+            steps = skipIfUnchanged(ctx, "drone-ci")
 
-    pipelines.append({
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "e2e-tests-playwright",
-        "workspace": web_workspace,
-        "steps": steps,
-        "depends_on": ["cache-ocis"],
-        "trigger": base_trigger,
-    })
+        if ("with-tracing" in ctx.build.title.lower()):
+            params["reportTracing"] = True
 
+        if "skip-a11y" in ctx.build.title.lower():
+            params["skipA11y"] = True
+
+        environment = {
+            "BASE_URL_OCIS": "ocis:9200",
+            "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
+            "HEADLESS": "true",
+            "RETRY": "1",
+            "BROWSER": browser,
+            "REPORT_TRACING": params["reportTracing"],
+            "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+            "SKIP_A11Y_TESTS": params["skipA11y"],
+            "TESTS_RUNNER": "playwright",
+        }
+
+        if "suites" in matrix:
+            environment["TEST_SUITES"] = ",".join(params["suites"])
+            steps += filterTestSuitesToRun(ctx, params["suites"])
+        elif "features" in matrix:
+            environment["FEATURE_FILES"] = ",".join(params["features"])
+            steps += filterTestSuitesToRun(ctx, params["features"])
+        else:
+            print("Error: No suites or features defined for e2e test suite '%s'" % suite)
+            return []
+
+        steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+                 installPnpm() + \
+                 restoreBrowsersCache() + \
+                 restoreBuildArtifactCache(ctx, "web-dist", "dist")
+
+        if ctx.build.event == "cron":
+            steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
+        else:
+            steps += restoreOcisCache()
+
+        if "app-provider" in suite:
+            environment["FAIL_ON_UNCAUGHT_CONSOLE_ERR"] = False
+
+            # app-provider specific steps
+            steps += collaboraService() + \
+                     onlyofficeService() + \
+                     waitForServices("online-offices", ["collabora:9980", "onlyoffice:443"]) + \
+                     ocisService(params["extraServerEnvironment"]) + \
+                     wopiCollaborationService("collabora") + \
+                     wopiCollaborationService("onlyoffice") + \
+                     waitForServices("wopi", ["wopi-collabora:9300", "wopi-onlyoffice:9300"])
+        elif "ocm" in suite:
+            steps += ocisService(params["extraServerEnvironment"]) + \
+                     (ocisService(params["extraServerEnvironment"], "federation") if params["federationServer"] else [])
+        else:
+            # oCIS specific steps
+            steps += (tikaService() if params["tikaNeeded"] else []) + \
+                     ocisService(params["extraServerEnvironment"])
+
+        steps += [{
+                     "name": "e2e-tests-playwright",
+                     "image": OC_CI_NODEJS_IMAGE,
+                     "environment": environment,
+                     "commands": [
+                         "pnpm test:e2e:playwright --project=%s" % browser,
+                     ],
+                 }]
+
+        if not "skip-a11y" in ctx.build.title.lower():
+            steps += uploadA11yResult(ctx) + logA11yReport()
+
+        steps += uploadTracingResult(ctx, "playwright") + \
+                logTracingResult(ctx, "playwright")
+
+        pipelines.append({
+            "kind": "pipeline",
+            "type": "docker",
+            "name": "e2e-pw-%s" % suite,
+            "workspace": web_workspace,
+            "steps": steps,
+            "depends_on": ["cache-ocis"],
+            "trigger": base_trigger,
+        })
     return pipelines
 
 def e2eTests(ctx):
     default = {
         "skip": False,
-        "logLevel": "2",
-        "reportTracing": "false",
-        "db": "mysql:5.5",
+        "reportTracing": False,
         "suites": [],
         "features": [],
         "tikaNeeded": False,
         "federationServer": False,
-        "failOnUncaughtConsoleError": "false",
+        "failOnUncaughtConsoleError": False,
         "extraServerEnvironment": {},
-        "skipA11y": "false",
+        "skipA11y": False,
     }
 
     pipelines = []
@@ -596,6 +672,9 @@ def e2eTests(ctx):
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
 
+        if params["skip"]:
+            continue
+
         # pipeline steps
         steps = skipIfUnchanged(ctx, "e2e-tests")
 
@@ -604,9 +683,6 @@ def e2eTests(ctx):
 
         if "ocm" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
             steps = skipIfUnchanged(ctx, "drone-ci")
-
-        if params["skip"]:
-            continue
 
         if ("with-tracing" in ctx.build.title.lower()):
             params["reportTracing"] = "true"
