@@ -38,3 +38,38 @@ export async function createPublicLink({
   const publicObject = new objects.applicationFiles.Link({ page })
   await publicObject.create({ resource, password: substitute(password) })
 }
+
+export async function anonymousUserOpensPublicLink({
+  actorsEnvironment,
+  linksEnvironment,
+  stepUser,
+  name
+}: {
+  actorsEnvironment: ActorsEnvironment
+  linksEnvironment: LinksEnvironment
+  stepUser: string
+  name: string
+}): Promise<void> {
+  const { page } = await actorsEnvironment.createActor({
+    key: stepUser,
+    namespace: actorsEnvironment.generateNamespace(`${stepUser} user language change`, 'Anonymous')
+  })
+
+  const { url } = linksEnvironment.getLink({ name })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.open({ url })
+}
+
+export async function anonymousUserUnlocksPublicLink({
+  actorsEnvironment,
+  stepUser,
+  password
+}: {
+  actorsEnvironment: ActorsEnvironment
+  password: string
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.authenticate({ password: substitute(password) })
+}

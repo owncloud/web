@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
 import { objects } from '../../..'
@@ -59,7 +59,11 @@ export const openPanelForResource = async ({
 const openGlobal = async ({ page }: { page: Page }): Promise<void> => {
   await page.locator('#files-toggle-sidebar').click()
   const a11yObject = new objects.a11y.Accessibility({ page })
-  await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
+  expect(
+    a11yViolations,
+    `Found ${a11yViolations.length} severe accessibility violations in sidebar panel`
+  ).toHaveLength(0)
 }
 
 export const open = async ({
@@ -91,7 +95,11 @@ export const close = async ({ page }: { page: Page }): Promise<void> => {
   // await sidebar transitions
   await new Promise((resolve) => setTimeout(resolve, 250))
   const a11yObject = new objects.a11y.Accessibility({ page })
-  await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
+  expect(
+    a11yViolations,
+    `Found ${a11yViolations.length} severe accessibility violations in sidebar panel`
+  ).toHaveLength(0)
   const isSubPanelActive = await page.locator(closeSidebarSubPanelBtn).isVisible()
   if (isSubPanelActive) {
     await page.locator(closeSidebarSubPanelBtn).click()
@@ -137,7 +145,11 @@ export const closePasswordProtectedFolder = async ({ page }: { page: Page }): Pr
     .locator(closeSidebarSubPanelBtn)
     .isVisible()
   const a11yObject = new objects.a11y.Accessibility({ page })
-  await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
+  expect(
+    a11yViolations,
+    `Found ${a11yViolations.length} severe accessibility violations in sidebar panel`
+  ).toHaveLength(0)
   if (isSubPanelActive) {
     await page.frameLocator(folderModalIframe).locator(closeSidebarSubPanelBtn).click()
   } else {
