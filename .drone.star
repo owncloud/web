@@ -583,7 +583,7 @@ def e2eTestsOnPlaywright(ctx):
             "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
             "SKIP_A11Y_TESTS": params["skipA11y"],
-            "TESTS_RUNNER": "playwright",
+            "TEST_TYPE": "playwright",
         }
 
         if "suites" in matrix:
@@ -630,7 +630,9 @@ def e2eTestsOnPlaywright(ctx):
                      "image": OC_CI_NODEJS_IMAGE,
                      "environment": environment,
                      "commands": [
-                         "pnpm test:e2e:playwright --project=%s" % browser,
+                         "[ -f \"%s/tests/drone/suites.env\" ] && . \"%s/tests/drone/suites.env\"",
+                         "cd tests/e2e",
+                         "bash run-e2e.sh --type playwright",
                      ],
                  }]
 
