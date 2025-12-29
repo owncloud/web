@@ -79,7 +79,7 @@ test.describe('Search in the project space', () => {
   test('Search in the project spaces', async () => {
     // search for project space objects
 
-    await ui.searchesUsingGlobalSearchAndFilter({
+    await ui.searchGloballyWithFilter({
       actorsEnvironment,
       stepUser: 'Alice',
       keyword: "-'s",
@@ -87,7 +87,7 @@ test.describe('Search in the project space', () => {
     })
 
     expect(
-      await ui.isResourceDisplayedInList({
+      await ui.resourceExists({
         actorsEnvironment,
         listType: 'search list',
         stepUser: 'Alice',
@@ -96,7 +96,7 @@ test.describe('Search in the project space', () => {
     ).toBeTruthy()
 
     expect(
-      await ui.isResourceDisplayedInList({
+      await ui.resourceExists({
         actorsEnvironment,
         listType: 'search list',
         stepUser: 'Alice',
@@ -104,7 +104,7 @@ test.describe('Search in the project space', () => {
       })
     ).toBeFalsy()
 
-    await ui.searchesUsingGlobalSearchAndFilter({
+    await ui.searchGloballyWithFilter({
       actorsEnvironment,
       stepUser: 'Alice',
       keyword: '!;_+-&)',
@@ -112,7 +112,7 @@ test.describe('Search in the project space', () => {
     })
 
     expect(
-      await ui.isResourceDisplayedInList({
+      await ui.resourceExists({
         actorsEnvironment,
         listType: 'search list',
         stepUser: 'Alice',
@@ -121,7 +121,7 @@ test.describe('Search in the project space', () => {
     ).toBeTruthy()
 
     expect(
-      await ui.isResourceDisplayedInList({
+      await ui.resourceExists({
         actorsEnvironment,
         listType: 'search list',
         stepUser: 'Alice',

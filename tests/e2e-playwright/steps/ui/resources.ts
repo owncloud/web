@@ -73,7 +73,7 @@ export async function createResource({
   })
 }
 
-export async function searchesUsingGlobalSearchAndFilter({
+export async function searchGloballyWithFilter({
   actorsEnvironment,
   stepUser,
   keyword,
