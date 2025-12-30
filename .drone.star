@@ -708,7 +708,7 @@ def e2eTests(ctx):
         "federationServer": False,
         "failOnUncaughtConsoleError": False,
         "extraServerEnvironment": {},
-        "skipA11y": False,
+        "skipA11y": True,
     }
 
     pipelines = []
@@ -748,7 +748,7 @@ def e2eTests(ctx):
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
             "BROWSER": "chromium",
             "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
-            "SKIP_A11Y_TESTS": True,
+            "SKIP_A11Y_TESTS": params["skipA11y"],
         }
 
         if "suites" in matrix:

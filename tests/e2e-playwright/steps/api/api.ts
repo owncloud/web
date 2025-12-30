@@ -106,7 +106,7 @@ export async function userHasCreatedPublicLinkOfResource({
   resource: string
   role: string
   name?: string
-  password?: undefined
+  password?: string
   space?: 'Personal'
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
