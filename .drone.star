@@ -195,6 +195,7 @@ config = {
             "skip": False,
             "suites": [
                 "shares",
+                "search",
             ],
         },
     },
