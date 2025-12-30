@@ -46,6 +46,8 @@ import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { extensionPoints } from './extensionPoints'
 import { isSilentRedirectRoute } from './helpers/silentRedirect'
+import { captureException } from '@sentry/vue'
+import { CRASH_CODES } from '@ownclouders/web-pkg/src/errors/codes'
 
 export const bootstrapApp = async (configurationPath: string, appsReadyCallback: () => void) => {
   const isSilentRedirect = isSilentRedirectRoute()
@@ -232,15 +234,21 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       sharesStore.setGraphRoles(graphRoleDefinitions)
 
       // Load spaces to make them available across the application
-      await spacesStore.loadSpaces({ graphClient: clientService.graphAuthenticated })
-      const personalSpace = spacesStore.spaces.find(isPersonalSpaceResource)
+      try {
+        await spacesStore.loadSpaces({ graphClient: clientService.graphAuthenticated })
+        const personalSpace = spacesStore.spaces.find(isPersonalSpaceResource)
 
-      if (personalSpace) {
-        spacesStore.updateSpaceField({
-          id: personalSpace.id,
-          field: 'name',
-          value: app.config.globalProperties.$gettext('Personal')
-        })
+        if (personalSpace) {
+          spacesStore.updateSpaceField({
+            id: personalSpace.id,
+            field: 'name',
+            value: app.config.globalProperties.$gettext('Personal')
+          })
+        }
+      } catch (error) {
+        console.error(error)
+        captureException(error)
+        router.push({ name: 'crash', query: { code: CRASH_CODES.RUNTIME_BOOTSTRAP_SPACES_LOAD } })
       }
     },
     {
