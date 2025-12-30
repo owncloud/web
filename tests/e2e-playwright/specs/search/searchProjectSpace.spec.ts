@@ -78,7 +78,6 @@ test.describe('Search in the project space', () => {
 
   test('Search in the project spaces', async () => {
     // search for project space objects
-
     await ui.searchGloballyWithFilter({
       actorsEnvironment,
       stepUser: 'Alice',

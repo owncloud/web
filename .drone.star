@@ -190,7 +190,7 @@ config = {
     # NOTE: make the pipelines similar to the above e2e
     # along with the addition of new test suites
     "e2e-playwright": {
-        "1": {
+        "3": {
             "earlyFail": True,
             "skip": False,
             "suites": [
