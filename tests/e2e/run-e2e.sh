@@ -174,10 +174,21 @@ function checkSuites() {
 }
 
 function buildSuitesPattern() {
+    local delimiter=","
+    local bracket_open="{"
+    local bracket_close="}"
+
     CURRENT_SUITES_COUNT=$(echo "$1" | wc -w) # count words
-    suites=$(echo "$1" | xargs | sed -E "s/( )+/,/g")
+
+    if [[ "$TEST_TYPE" == "playwright" ]]; then
+        delimiter="|"
+        bracket_open="("
+        bracket_close=")"
+    fi
+
+    suites=$(echo "$1" | xargs | sed -E "s/( )+/$delimiter/g")
     if [[ $CURRENT_SUITES_COUNT -gt 1 ]]; then
-        suites="{$suites}"
+        suites="$bracket_open${suites}$bracket_close"
     fi
     GLOB_FEATURE_PATHS="$FEATURES_DIR/$suites"
 }
