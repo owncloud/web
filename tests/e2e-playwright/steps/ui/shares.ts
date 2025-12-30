@@ -5,6 +5,7 @@ import {
   CollaboratorType,
   ICollaborator
 } from '../../../e2e/support/objects/app-files/share/collaborator'
+import { ActionViaType } from '../../../e2e/support/objects/app-files/share/actions'
 
 const parseShareTable = function (
   usersEnvironment: UsersEnvironment,
@@ -119,7 +120,9 @@ export async function shareResource({
   stepUser,
   resource,
   resourceType,
-  recipient
+  recipient,
+  role = 'Can view',
+  actions = 'QUICK_ACTION'
 }: {
   actorsEnvironment: ActorsEnvironment
   usersEnvironment: UsersEnvironment
@@ -127,12 +130,14 @@ export async function shareResource({
   resource: string
   resourceType: ResourceType
   recipient: string
+  role: string
+  actions: ActionViaType
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   const roleId = await getDynamicRoleIdByName(
     usersEnvironment.getUser({ key: stepUser }),
-    'Can view',
+    role,
     resourceType
   )
 
@@ -141,6 +146,27 @@ export async function shareResource({
     recipients: [
       { collaborator: usersEnvironment.getUser({ key: recipient }), role: roleId, type: 'user' }
     ],
-    via: 'QUICK_ACTION'
+    via: actions
+  })
+}
+
+export async function removeSharee({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  resource,
+  recipient
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  recipient: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  await shareObject.removeSharee({
+    resource,
+    recipients: [{ collaborator: usersEnvironment.getUser({ key: recipient }) }]
   })
 }

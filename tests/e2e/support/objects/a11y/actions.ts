@@ -28,7 +28,9 @@ export const selectors = {
   appbarBatchActions: '#oc-appbar-batch-actions',
   filesSpaceTableCheckbox: '#files-space-table .oc-checkbox',
   uploadMenuDropdown: '#upload-menu-drop',
-  appSidebar: '#app-sidebar'
+  appSidebar: '#app-sidebar',
+  removeUserModal: '.oc-modal.oc-modal-danger',
+  appSwitcherDropdown: '#app-switcher-dropdown'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']

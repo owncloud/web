@@ -47,6 +47,24 @@ export async function userHasCreatedFolder({
   await api.dav.createFolderInsidePersonalSpace({ user, folder: folderName })
 }
 
+export async function userHasCreatedFolders({
+  usersEnvironment,
+  stepUser,
+  folderNames
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  folderNames: string[]
+}): Promise<void> {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  for (const folderName of folderNames) {
+    await api.dav.createFolderInsidePersonalSpace({
+      user,
+      folder: folderName
+    })
+  }
+}
+
 export async function userHasCreatedFile({
   usersEnvironment,
   stepUser,

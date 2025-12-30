@@ -1,8 +1,10 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import util from 'util'
 import { config } from '../../../config'
+import { objects } from '../..'
 
 const appSwitcherButton = '#_appSwitcherButton'
+const appSwitcherDropdown = '#app-switcher-dropdown'
 const appSelector = `//ul[contains(@class, "applications-list")]//*[@data-test-id="%s"]`
 const notificationsBell = `#oc-notifications-bell`
 const notificationsDrop = `#oc-notifications-drop`
@@ -26,6 +28,14 @@ export class Application {
   async open({ name }: { name: string }): Promise<void> {
     await this.#page.waitForTimeout(1000)
     await this.#page.locator(appSwitcherButton).click()
+    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+    const violations = await a11yObject.getSevereAccessibilityViolations(
+      a11yObject.getSelectors().appSwitcherDropdown
+    )
+    expect(
+      violations,
+      `Found ${violations.length} severe accessibility violations in app switcher dropdown`
+    ).toHaveLength(0)
     await this.#page.locator(util.format(appSelector, `app.${name}.menuItem`)).click()
   }
 
