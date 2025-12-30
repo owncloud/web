@@ -87,7 +87,12 @@ function mapDependentPackagesToTestSuite(testSuite, depPackages) {
 }
 
 function getChangedFiles() {
-  const changedFiles = execSync(`git diff --name-only origin/${targetBranch} HEAD`).toString()
+  const isPushEvent = process.env.DRONE_BUILD_EVENT === 'push'
+  // compare with the second last commit for push events
+  const commitHead = isPushEvent ? '~1' : ''
+  const changedFiles = execSync(
+    `git diff --name-only origin/${targetBranch} HEAD${commitHead}`
+  ).toString()
   console.log('[INFO] Changed files:\n', changedFiles)
   return [...new Set([...changedFiles.split('\n')])].filter((file) => file.trim())
 }
