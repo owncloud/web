@@ -6,6 +6,7 @@ import NotFoundPage from '../pages/notFound.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import ResolvePrivateLinkPage from '../pages/resolvePrivateLink.vue'
+import CrashPage from '../pages/crash.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
 import {
@@ -93,6 +94,14 @@ const routes = [
     name: 'notFound',
     component: NotFoundPage,
     meta: { title: $gettext('Not found'), authContext: 'hybrid' }
+  },
+  {
+    path: '/crash',
+    name: 'crash',
+    component: CrashPage,
+    meta: {
+      authContext: 'hybrid'
+    }
   }
 ]
 export const router = patchRouter(
