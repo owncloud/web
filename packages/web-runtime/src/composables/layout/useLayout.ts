@@ -20,7 +20,8 @@ export const useLayout = (options?: LayoutOptions) => {
       'oidcCallback',
       'oidcSilentRedirect',
       'resolvePublicLink',
-      'accessDenied'
+      'accessDenied',
+      'crash'
     ]
     if (
       !unref(router.currentRoute).name ||
