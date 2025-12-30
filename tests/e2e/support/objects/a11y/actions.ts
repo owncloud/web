@@ -49,7 +49,7 @@ export const analyzeAccessibilityConformityViolations = async (args: {
     .include(include)
     .analyze()
 
-  if (config.testRunner === 'playwright') {
+  if (config.testType === 'playwright') {
     test.info().attach('accessibility-scan', {
       body: JSON.stringify(a11yResult, null, 2),
       contentType: 'application/json'

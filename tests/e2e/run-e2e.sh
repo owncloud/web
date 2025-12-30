@@ -2,13 +2,9 @@
 
 SCRIPT_PATH=$(dirname "$0")
 SCRIPT_PATH=$(cd "${SCRIPT_PATH_REL}" && pwd) # absolute path
-FEATURES_DIR="${SCRIPT_PATH}/cucumber/features"
 PROJECT_ROOT=$(cd "$SCRIPT_PATH/../../" && pwd)
 SCRIPT_PATH_REL=${SCRIPT_PATH//"$PROJECT_ROOT/"/}
 
-E2E_COMMAND="pnpm test:e2e:cucumber" # run command defined in package.json
-
-ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
 FILTER_SUITES=""
 EXCLUDE_SUITES=""
 FEATURE_PATHS=""
@@ -31,11 +27,15 @@ Available options:
                       e.g.: --run-part 2 (runs part 2 out of 4)
     --total-parts   - total number of groups to divide into
                       e.g.: --total-parts 4 (suites will be divided into 4 groups)
+    --type          - type of tests to run. (Default: 'cucumber' tests)
+                      e.g.: --type playwright to run Playwright specs.
     --help, -h      - show cli options
 
 Available env variables:
     TEST_SUITES     - Comma separated list of suites to run. (Will be ignored if --suites is provided)
     FEATURE_FILES   - Comma separated list of feature files to run. (Will be ignored if feature paths are provided)
+    TEST_TYPE       - Type of tests to run. (Default: 'cucumber' tests)
+                      e.g.: TEST_TYPE='playwright' to run Playwright specs.
 "
 
 function log() {
@@ -61,6 +61,10 @@ function log() {
 while [[ $# -gt 0 ]]; do
     key="$1"
     case ${key} in
+    --type)
+        TEST_TYPE="$2"
+        shift 2
+        ;;
     --suites)
         FILTER_SUITES=$(echo "$2" | sed -E "s/,/\n/g")
         shift 2
@@ -95,13 +99,41 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+# defaullt browser: chromium
+if [[ -z $BROWSER ]]; then
+    BROWSER="chromium"
+fi
+
+if [[ "$TEST_TYPE" == "playwright" ]]; then
+    FEATURES_DIR="${SCRIPT_PATH}/../e2e-playwright/specs"
+    FEATURES_DIR=$(cd "$FEATURES_DIR" && pwd) # get absolute path
+    E2E_COMMAND="pnpm test:e2e:playwright --project=$BROWSER" # run command defined in package.json
+    ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
+else
+    FEATURES_DIR="${SCRIPT_PATH}/cucumber/features"
+    E2E_COMMAND="pnpm test:e2e:cucumber" # run command defined in package.json
+    ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
+fi
+
 function getFeaturePaths() {
+    local paths
+    local real_paths
+    local a_path
+    local parent_path
+
     # $1    - paths to suite or feature file
     paths=$(echo "$1" | xargs)
     real_paths=""
     for path in $paths; do
+        parent_path="."
         real_paths+=" $SCRIPT_PATH/$path" # maintain the white space
-        a_path=$(echo "$path" | cut -d ":" -f1)
+        if [[ "$TEST_TYPE" == "playwright" ]]; then
+            local spec_path
+            parent_path="../e2e-playwright"
+            spec_path=$(cd "$SCRIPT_PATH/../e2e-playwright" && pwd)
+            real_paths+=" $spec_path/$path"
+        fi
+        a_path=$(echo "$parent_path/$path" | cut -d ":" -f1)
         if [[ ! -f $a_path && ! -d $a_path ]]; then
             log error "File or folder doesn't exist: '$a_path'"
             log info "Path must be relative to '$SCRIPT_PATH_REL'"
@@ -147,7 +179,7 @@ function buildSuitesPattern() {
     if [[ $CURRENT_SUITES_COUNT -gt 1 ]]; then
         suites="{$suites}"
     fi
-    GLOB_FEATURE_PATHS="$FEATURES_DIR/$suites/**/*.feature"
+    GLOB_FEATURE_PATHS="$FEATURES_DIR/$suites"
 }
 
 if [[ -n $TEST_SUITES ]] && [[ -z "$FILTER_SUITES" ]]; then

@@ -6,7 +6,7 @@ export const config = {
   tempAssetsPath: './tests/e2e/filesForUpload/temp',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   basicAuth: process.env.BASIC_AUTH === 'true',
-  testRunner: process.env.TESTS_RUNNER ?? 'cucumber',
+  testType: process.env.TEST_TYPE ?? 'cucumber',
   // admin user
   adminUsername: process.env.ADMIN_USERNAME ?? 'admin',
   adminPassword: process.env.ADMIN_PASSWORD ?? 'admin',

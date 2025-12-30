@@ -36,7 +36,7 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
 
     // Collect trace when retrying the failed test.
-    trace: 'on-first-retry'
+    trace: config.reportTracing ? 'on' : 'on-first-retry'
   },
   // Configure projects for major browsers.
   projects: [

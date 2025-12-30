@@ -156,6 +156,47 @@ config = {
                 "OCM_OCM_PROVIDER_AUTHORIZER_PROVIDERS_FILE": "%s" % dir["ocmProviders"],
             },
         },
+        "keycloak": {
+            "earlyFail": True,
+            "skip": False,
+            "features": [
+                "cucumber/features/journeys",
+                "cucumber/features/admin-settings/users.feature:20",
+                "cucumber/features/admin-settings/users.feature:43",
+                "cucumber/features/admin-settings/users.feature:106",
+                "cucumber/features/admin-settings/users.feature:131",
+                "cucumber/features/admin-settings/users.feature:185",
+                "cucumber/features/admin-settings/spaces.feature",
+                "cucumber/features/admin-settings/groups.feature",
+                "cucumber/features/admin-settings/general.feature",
+                "cucumber/features/keycloak",
+            ],
+            "extraServerEnvironment": {
+                "PROXY_AUTOPROVISION_ACCOUNTS": "true",
+                "PROXY_ROLE_ASSIGNMENT_DRIVER": "oidc",
+                "OCIS_OIDC_ISSUER": "https://keycloak:8443/realms/oCIS",
+                "PROXY_OIDC_REWRITE_WELLKNOWN": "true",
+                "WEB_OIDC_CLIENT_ID": "web",
+                "PROXY_USER_OIDC_CLAIM": "preferred_username",
+                "PROXY_USER_CS3_CLAIM": "username",
+                "OCIS_ADMIN_USER_ID": "",
+                "OCIS_EXCLUDE_RUN_SERVICES": "idp",
+                "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
+                "GRAPH_USERNAME_MATCH": "none",
+                "KEYCLOAK_DOMAIN": "keycloak:8443",
+            },
+        },
+    },
+    # NOTE: make the pipelines similar to the above e2e
+    # along with the addition of new test suites
+    "e2e-playwright": {
+        "1": {
+            "earlyFail": True,
+            "skip": False,
+            "suites": [
+                "shares",
+            ],
+        },
     },
     "build": True,
 }
@@ -183,6 +224,15 @@ go_step_volumes = [{
 web_workspace = {
     "base": dir["base"],
     "path": config["app"],
+}
+
+base_trigger = {
+    "ref": [
+        "refs/heads/master",
+        "refs/heads/stable-*",
+        "refs/tags/**",
+        "refs/pull/**",
+    ],
 }
 
 def main(ctx):
@@ -232,8 +282,7 @@ def stagePipelines(ctx):
 
     e2e_playwright_pipeline = e2eTestsOnPlaywright(ctx)
     e2e_pipelines = e2eTests(ctx)
-    keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_playwright_pipeline + e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(e2e_playwright_pipeline + e2e_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(ctx), build(ctx))
@@ -243,24 +292,14 @@ def pnpmCache(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-pnpm",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "steps": skipIfUnchanged(ctx, "cache") +
                  installPnpm() +
                  rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  checkBrowsersCache() +
                  installBrowsers() +
                  cacheBrowsers(),
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def pnpmlint(ctx):
@@ -277,22 +316,15 @@ def pnpmlint(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "lint",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "steps": skipIfUnchanged(ctx, "lint") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  installPnpm() +
                  lint() +
                  checkFormatting(),
         "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
+            # copy base trigger to be able to append branches later
+            "ref": base_trigger["ref"][:],
         },
     }
 
@@ -322,10 +354,7 @@ def build(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "build",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "steps": steps,
         "trigger": {
             "ref": [
@@ -440,10 +469,7 @@ def buildCacheWeb(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-web",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "steps": skipIfUnchanged(ctx, "cache") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  installPnpm() +
@@ -458,14 +484,7 @@ def buildCacheWeb(ctx):
                      ],
                  }] +
                  rebuildBuildArtifactCache(ctx, "web-dist", "dist"),
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def unitTests(ctx):
@@ -494,10 +513,7 @@ def unitTests(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "unit-tests",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "clone": {
             "disable": True,  # Sonarcloud does not apply issues on already merged branch
         },
@@ -528,14 +544,7 @@ def unitTests(ctx):
                          ],
                      },
                  ] + sonarcloudCoverageReport(sonar_env = sonar_env),
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def sonarcloudCoverageReport(sonar_env):
@@ -556,112 +565,164 @@ def sonarcloudCoverageReport(sonar_env):
     ]
 
 def e2eTestsOnPlaywright(ctx):
-    e2e_workspace = {
-        "base": dir["base"],
-        "path": config["app"],
-    }
-
-    e2e_trigger = {
-        "ref": [
-            "refs/heads/master",
-            "refs/heads/stable-*",
-            "refs/tags/**",
-            "refs/pull/**",
-        ],
-    }
-
-    pipelines = []
-
-    # pipeline steps
-    steps = skipIfUnchanged(ctx, "e2e-tests-playwright")
-
-    environment = {
-        "BASE_URL_OCIS": "ocis:9200",
-        "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
-        "TESTS_RUNNER": "playwright",
-        "SKIP_A11Y_TESTS": True,
-    }
-
-    steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-             installPnpm() + \
-             restoreBrowsersCache() + \
-             restoreBuildArtifactCache(ctx, "web-dist", "dist")
-
-    if ctx.build.event == "cron":
-        steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
-    else:
-        steps += restoreOcisCache()
-
-    steps += ocisService()
-
-    steps.append({
-        "name": "e2e-tests-playwright",
-        "image": OC_CI_NODEJS_IMAGE,
-        "environment": environment,
-        "commands": [
-            "pnpm test:e2e:playwright --project=chromium",
-        ],
-    })
-
-    if not "skip-a11y" in ctx.build.title.lower():
-        steps += uploadA11yResult(ctx) + logA11yReport()
-
-    steps += uploadTracingResult(ctx, "playwright") + \
-             logTracingResult(ctx, "playwright")
-
-    pipelines.append({
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "e2e-tests-playwright",
-        "workspace": e2e_workspace,
-        "steps": steps,
-        "depends_on": ["cache-ocis"],
-        "trigger": e2e_trigger,
-    })
-
-    return pipelines
-
-def e2eTests(ctx):
-    e2e_workspace = {
-        "base": dir["base"],
-        "path": config["app"],
-    }
-
-    e2e_volumes = [{
-        "name": "gopath",
-        "temp": {},
-    }]
-
     default = {
         "skip": False,
-        "logLevel": "2",
-        "reportTracing": "false",
-        "db": "mysql:5.5",
         "suites": [],
         "features": [],
         "tikaNeeded": False,
         "federationServer": False,
-        "failOnUncaughtConsoleError": "false",
+        "failOnUncaughtConsoleError": False,
         "extraServerEnvironment": {},
-        "skipA11y": "false",
-    }
-
-    e2e_trigger = {
-        "ref": [
-            "refs/heads/master",
-            "refs/heads/stable-*",
-            "refs/tags/**",
-            "refs/pull/**",
-        ],
+        "skipA11y": True,
+        "reportTracing": False,
     }
 
     pipelines = []
+    e2e_volumes = []
+    services = []
+    params = {}
+    matrices = config["e2e-playwright"]
+    browser = "chromium"
+
+    for suite, matrix in matrices.items():
+        for item in default:
+            params[item] = matrix[item] if item in matrix else default[item]
+
+        if params["skip"]:
+            continue
+
+        # pipeline steps
+        steps = skipIfUnchanged(ctx, "e2e-tests-playwright")
+
+        if "app-provider" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+            steps = skipIfUnchanged(ctx, "drone-ci")
+
+        if "ocm" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+            steps = skipIfUnchanged(ctx, "drone-ci")
+
+        if ("with-tracing" in ctx.build.title.lower()):
+            params["reportTracing"] = True
+
+        if "skip-a11y" in ctx.build.title.lower():
+            params["skipA11y"] = True
+
+        environment = {
+            "BASE_URL_OCIS": "ocis:9200",
+            "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
+            "HEADLESS": "true",
+            "RETRY": "1",
+            "BROWSER": browser,
+            "REPORT_TRACING": params["reportTracing"],
+            "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+            "SKIP_A11Y_TESTS": params["skipA11y"],
+            "TEST_TYPE": "playwright",
+        }
+
+        if "suites" in matrix:
+            environment["TEST_SUITES"] = ",".join(params["suites"])
+            steps += filterTestSuitesToRun(ctx, params["suites"])
+        elif "features" in matrix:
+            environment["FEATURE_FILES"] = ",".join(params["features"])
+            steps += filterTestSuitesToRun(ctx, params["features"])
+        else:
+            print("Error: No suites or features defined for e2e test suite '%s'" % suite)
+            return []
+
+        steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+                 installPnpm() + \
+                 restoreBrowsersCache() + \
+                 restoreBuildArtifactCache(ctx, "web-dist", "dist")
+
+        if ctx.build.event == "cron":
+            steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
+        else:
+            steps += restoreOcisCache()
+
+        if "keycloak" in suite:
+            environment["KEYCLOAK"] = "true"
+            environment["KEYCLOAK_HOST"] = "keycloak:8443"
+            e2e_volumes += [{
+                "name": "certs",
+                "temp": {},
+            }]
+            steps += keycloakService()
+            services += postgresService()
+
+        if "app-provider" in suite:
+            environment["FAIL_ON_UNCAUGHT_CONSOLE_ERR"] = False
+
+            # app-provider specific steps
+            steps += collaboraService() + \
+                     onlyofficeService() + \
+                     waitForServices("online-offices", ["collabora:9980", "onlyoffice:443"]) + \
+                     ocisService(params["extraServerEnvironment"]) + \
+                     wopiCollaborationService("collabora") + \
+                     wopiCollaborationService("onlyoffice") + \
+                     waitForServices("wopi", ["wopi-collabora:9300", "wopi-onlyoffice:9300"])
+        elif "ocm" in suite:
+            steps += ocisService(params["extraServerEnvironment"]) + \
+                     (ocisService(params["extraServerEnvironment"], "federation") if params["federationServer"] else [])
+        else:
+            # oCIS specific steps
+            steps += (tikaService() if params["tikaNeeded"] else []) + \
+                     ocisService(params["extraServerEnvironment"])
+
+        steps += [{
+            "name": "e2e-tests",
+            "image": OC_CI_NODEJS_IMAGE,
+            "environment": environment,
+            "commands": [
+                "[ -f \"%s/tests/drone/suites.env\" ] && . \"%s/tests/drone/suites.env\"",
+                "cd tests/e2e",
+                "bash run-e2e.sh --type playwright",
+            ],
+        }]
+
+        if not "skip-a11y" in ctx.build.title.lower():
+            steps += uploadA11yResult(ctx) + logA11yReport()
+
+        steps += uploadTracingResult(ctx, "playwright") + \
+                 logTracingResult(ctx, "playwright")
+
+        pipelines.append({
+            "kind": "pipeline",
+            "type": "docker",
+            "name": "e2e-pw-%s" % suite,
+            "workspace": web_workspace,
+            "steps": steps,
+            "depends_on": ["cache-ocis"],
+            "trigger": base_trigger,
+            "volumes": e2e_volumes,
+            "services": services,
+        })
+    return pipelines
+
+def e2eTests(ctx):
+    default = {
+        "skip": False,
+        "reportTracing": False,
+        "suites": [],
+        "features": [],
+        "tikaNeeded": False,
+        "federationServer": False,
+        "failOnUncaughtConsoleError": False,
+        "extraServerEnvironment": {},
+        "skipA11y": False,
+    }
+
+    pipelines = []
+    e2e_volumes = []
+    services = []
     params = {}
     matrices = config["e2e"]
 
     for suite, matrix in matrices.items():
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
+
+        if params["skip"]:
+            continue
 
         # pipeline steps
         steps = skipIfUnchanged(ctx, "e2e-tests")
@@ -671,9 +732,6 @@ def e2eTests(ctx):
 
         if "ocm" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
             steps = skipIfUnchanged(ctx, "drone-ci")
-
-        if params["skip"]:
-            continue
 
         if ("with-tracing" in ctx.build.title.lower()):
             params["reportTracing"] = "true"
@@ -713,6 +771,16 @@ def e2eTests(ctx):
         else:
             steps += restoreOcisCache()
 
+        if "keycloak" in suite:
+            environment["KEYCLOAK"] = "true"
+            environment["KEYCLOAK_HOST"] = "keycloak:8443"
+            e2e_volumes += [{
+                "name": "certs",
+                "temp": {},
+            }]
+            steps += keycloakService()
+            services += postgresService()
+
         if "app-provider" in suite:
             environment["FAIL_ON_UNCAUGHT_CONSOLE_ERR"] = False
 
@@ -749,11 +817,12 @@ def e2eTests(ctx):
             "kind": "pipeline",
             "type": "docker",
             "name": "e2e-tests-%s" % suite,
-            "workspace": e2e_workspace,
+            "workspace": web_workspace,
             "steps": steps,
             "depends_on": ["cache-ocis"],
-            "trigger": e2e_trigger,
+            "trigger": base_trigger,
             "volumes": e2e_volumes,
+            "services": services,
         })
     return pipelines
 
@@ -1167,14 +1236,7 @@ def cacheOcisPipeline(ctx):
             "name": "gopath",
             "temp": {},
         }],
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def restoreOcisCache():
@@ -1380,14 +1442,7 @@ def licenseCheck(ctx):
                 ],
             },
         ],
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def pipelineDependsOn(pipeline, dependant_pipelines):
@@ -1546,12 +1601,7 @@ def genericCachePurge(flush_path):
             },
         ],
         "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
+            "ref": base_trigger["ref"],
             "status": [
                 "success",
                 "failure",
@@ -1860,104 +1910,6 @@ def keycloakService():
                    },
                ],
            }] + waitForServices("keycloak", ["keycloak:8443"])
-
-def e2eTestsOnKeycloak(ctx):
-    e2e_Keycloak_tests = [
-        "journeys",
-        "admin-settings/users.feature:20",
-        "admin-settings/users.feature:43",
-        "admin-settings/users.feature:106",
-        "admin-settings/users.feature:131",
-        "admin-settings/users.feature:185",
-        "admin-settings/spaces.feature",
-        "admin-settings/groups.feature",
-        "admin-settings/general.feature",
-        "keycloak",
-    ]
-
-    e2e_volumes = [
-        {
-            "name": "gopath",
-            "temp": {},
-        },
-        {
-            "name": "certs",
-            "temp": {},
-        },
-    ]
-
-    steps = []
-    if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
-        steps += skipIfUnchanged(ctx, "drone-ci")
-
-    steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-             installPnpm() + \
-             restoreBrowsersCache() + \
-             keycloakService() + \
-             restoreBuildArtifactCache(ctx, "web-dist", "dist")
-    if ctx.build.event == "cron":
-        steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
-    else:
-        steps += restoreOcisCache()
-
-    # configs to setup ocis with keycloak
-    environment = {
-        "PROXY_AUTOPROVISION_ACCOUNTS": "true",
-        "PROXY_ROLE_ASSIGNMENT_DRIVER": "oidc",
-        "OCIS_OIDC_ISSUER": "https://keycloak:8443/realms/oCIS",
-        "PROXY_OIDC_REWRITE_WELLKNOWN": "true",
-        "WEB_OIDC_CLIENT_ID": "web",
-        "PROXY_USER_OIDC_CLAIM": "preferred_username",
-        "PROXY_USER_CS3_CLAIM": "username",
-        "OCIS_ADMIN_USER_ID": "",
-        "OCIS_EXCLUDE_RUN_SERVICES": "idp",
-        "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
-        "GRAPH_USERNAME_MATCH": "none",
-        "KEYCLOAK_DOMAIN": "keycloak:8443",
-    }
-
-    steps += ocisService(environment) + \
-             [
-                 {
-                     "name": "e2e-tests",
-                     "image": OC_CI_NODEJS_IMAGE,
-                     "environment": {
-                         "BASE_URL_OCIS": "ocis:9200",
-                         "HEADLESS": "true",
-                         "RETRY": "1",
-                         "REPORT_TRACING": "with-tracing" in ctx.build.title.lower(),
-                         "KEYCLOAK": "true",
-                         "KEYCLOAK_HOST": "keycloak:8443",
-                         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
-                         "BROWSER": "chromium",
-                         "SKIP_A11Y_TESTS": True,
-                     },
-                     "commands": [
-                         "cd tests/e2e",
-                         "bash run-e2e.sh %s" % " ".join(["cucumber/features/" + tests for tests in e2e_Keycloak_tests]),
-                     ],
-                 },
-             ] + \
-             uploadTracingResult(ctx) + \
-             logTracingResult(ctx)
-
-    return [{
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "e2e-test-on-keycloak",
-        "workspace": web_workspace,
-        "steps": steps,
-        "services": postgresService(),
-        "volumes": e2e_volumes,
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
-    }]
 
 def getOcislatestCommitId(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
