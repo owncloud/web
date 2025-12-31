@@ -15,7 +15,7 @@
     "@ownclouders/design-system": "workspace:*",
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.22",
     "mark.js": "^8.11.1",
     "pinia": "3.0.4",
     "vue3-gettext": "2.4.0",

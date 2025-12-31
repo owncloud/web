@@ -94,7 +94,7 @@
     "focus-trap": "^7.7.0",
     "focus-trap-vue": "^4.1.0",
     "fuse.js": "^7.1.0",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.22",
     "luxon": "^3.7.2",
     "tippy.js": "^6.3.7",
     "vue-inline-svg": "^4.0.1",
