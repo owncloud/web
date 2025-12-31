@@ -105,6 +105,11 @@ export const open = async ({
     }
   } else {
     if (await page.locator(sidebarPanel).count()) {
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        [sidebarPanel],
+        'sidebar panel'
+      )
       await Promise.all([
         page.locator(sidebarPanel).waitFor({ state: 'detached' }),
         close({ page })
