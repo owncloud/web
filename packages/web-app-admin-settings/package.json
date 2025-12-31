@@ -20,7 +20,7 @@
     "axios": "1.13.2",
     "email-validator": "^2.0.4",
     "fuse.js": "7.1.0",
-    "lodash-es": "4.17.21",
+    "lodash-es": "4.17.22",
     "mark.js": "^8.11.1",
     "pinia": "3.0.4",
     "uuid": "13.0.0",

@@ -60,7 +60,7 @@
     "highlight.js": "^11.11.1",
     "html2canvas": "^1.4.1",
     "katex": "^0.16.27",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.22",
     "luxon": "^3.7.2",
     "mark.js": "^8.11.1",
     "marked": "^17.0.1",
