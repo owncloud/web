@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
@@ -6,6 +7,7 @@ import {
   ICollaborator
 } from '../../../e2e/support/objects/app-files/share/collaborator'
 import { ActionViaType } from '../../../e2e/support/objects/app-files/share/actions'
+import { substitute } from '../../../e2e/support/utils/substitute'
 
 const parseShareTable = function (
   usersEnvironment: UsersEnvironment,
@@ -130,12 +132,12 @@ export async function shareResource({
   actorsEnvironment: ActorsEnvironment
   usersEnvironment: UsersEnvironment
   stepUser: string
-  actionType: ActionViaType
   resource: string
   recipient: string
   type: string
   role: string
   resourceType: string
+  actionType: ActionViaType
   expirationDate?: string
   shareType?: string
 }): Promise<void> {
@@ -214,4 +216,84 @@ export async function addUserToProjectSpace({
     role: roleId
   }
   await spacesObject.addMembers({ users: [collaboratorWithRole] })
+}
+
+export async function disablesSyncForShares({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  for (const resource of resources) {
+    await shareObject.disableSync({ resource })
+  }
+}
+
+export async function enablesSyncForShares({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  for (const resource of resources) {
+    await shareObject.enableSync({ resource, via: 'CONTEXT_MENU' })
+  }
+}
+
+export async function shouldSeeSyncStatusForResource({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  expect(await shareObject.resourceIsSynced(resource)).toBe(true)
+}
+
+export async function shouldNotSeeSyncStatusForResource({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  expect(await shareObject.resourceIsSynced(resource)).toBe(false)
+}
+
+export async function userShouldNotSeeShares({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  owner
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  owner: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const isAcceptedSharePresent = await shareObject.isAcceptedSharePresent(
+    resource,
+    substitute(owner)
+  )
+  expect(isAcceptedSharePresent).toBe(false)
 }
