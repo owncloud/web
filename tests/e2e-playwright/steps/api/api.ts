@@ -1,7 +1,8 @@
 import { config } from '../../../e2e/config.js'
-import { UsersEnvironment } from '../../../e2e/support/environment'
+import { UsersEnvironment, SpacesEnvironment } from '../../../e2e/support/environment'
 import { api } from '../../../e2e/support'
 import { ResourceType } from '../../../e2e/support/api/share/share'
+import { Space } from '../../../e2e/support/types'
 
 export async function userHasBeenCreated({
   usersEnvironment,
@@ -136,5 +137,51 @@ export async function userHasCreatedPublicLinkOfResource({
     name: name ? name : 'Unnamed link',
     role: role,
     spaceName: space
+  })
+}
+
+export async function userHasAssignRolesToUsers({
+  usersEnvironment,
+  stepUser,
+  targetUserId,
+  role
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  targetUserId: string
+  role: string
+}) {
+  const admin = usersEnvironment.getUser({ key: stepUser })
+  const user = usersEnvironment.getUser({ key: targetUserId })
+  /**
+   The oCIS API request for assigning roles allows only one role per user,
+    whereas the Keycloak API request can assign multiple roles to a user.
+    If multiple roles are assigned to a user in Keycloak,
+    oCIS map the highest priority role among Keycloak assigned roles.
+    Therefore, we need to unassign the previous role before
+    assigning a new one when using the Keycloak API.
+  */
+  await api.provision.unAssignRole({ admin, user })
+  await api.provision.assignRole({ admin, user, role })
+}
+
+export async function userHasCreatedProjectSpace({
+  usersEnvironment,
+  spacesEnvironment,
+  stepUser,
+  name,
+  id
+}: {
+  usersEnvironment: UsersEnvironment
+  spacesEnvironment: SpacesEnvironment
+  stepUser: string
+  name: string
+  id: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  const spaceId = await api.graph.createSpace({ user, space: { id, name } as unknown as Space })
+  spacesEnvironment.createSpace({
+    key: id || name,
+    space: { name: name, id: spaceId }
   })
 }

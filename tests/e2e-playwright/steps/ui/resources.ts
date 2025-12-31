@@ -1,6 +1,10 @@
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
-import { displayedResourceType } from '../../../e2e/support/objects/app-files/resource/actions'
+import {
+  createResourceTypes,
+  displayedResourceType,
+  searchFilter
+} from '../../../e2e/support/objects/app-files/resource/actions'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -44,20 +48,54 @@ export async function isAbleToEditFileOrFolder({
   return userCanEdit
 }
 
-export async function createDir({
+export async function createResource({
   actorsEnvironment,
   stepUser,
-  directoryName
+  resource,
+  type,
+  content,
+  password
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  directoryName: string
+  resource: string
+  type: string
+  content?: string
+  password?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.create({
-    name: directoryName,
-    type: 'folder'
+    name: resource,
+    type: type as createResourceTypes,
+    content: content,
+    password: password
+  })
+}
+
+export async function searchGloballyWithFilter({
+  actorsEnvironment,
+  stepUser,
+  keyword,
+  filter,
+  command
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  keyword: string
+  filter: string
+  command?: string
+}): Promise<void> {
+  keyword = keyword ?? ''
+  const pressEnter = !!command && command.endsWith('presses enter')
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  // let search indexing to complete
+  await page.waitForTimeout(1000)
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.searchResource({
+    keyword,
+    filter: filter as searchFilter,
+    pressEnter
   })
 }
 
