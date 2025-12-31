@@ -122,7 +122,8 @@ export async function shareResource({
   resourceType,
   recipient,
   role = 'Can view',
-  actions = 'QUICK_ACTION'
+  actions = 'QUICK_ACTION',
+  type = 'user'
 }: {
   actorsEnvironment: ActorsEnvironment
   usersEnvironment: UsersEnvironment
@@ -132,6 +133,7 @@ export async function shareResource({
   recipient: string
   role: string
   actions: ActionViaType
+  type?: CollaboratorType
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
@@ -140,11 +142,10 @@ export async function shareResource({
     role,
     resourceType
   )
-
   await shareObject.create({
     resource,
     recipients: [
-      { collaborator: usersEnvironment.getUser({ key: recipient }), role: roleId, type: 'user' }
+      { collaborator: usersEnvironment.getUser({ key: recipient }), role: roleId, type }
     ],
     via: actions
   })
@@ -169,4 +170,50 @@ export async function removeSharee({
     resource,
     recipients: [{ collaborator: usersEnvironment.getUser({ key: recipient }) }]
   })
+}
+
+export async function disablesSyncForShares({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  for (const resource of resources) {
+    await shareObject.disableSync({ resource })
+  }
+}
+
+export async function enablesSyncForShares({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  for (const resource of resources) {
+    await shareObject.enableSync({ resource, via: 'CONTEXT_MENU' })
+  }
+}
+
+export async function shouldSeeSyncStatusForResource({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<boolean> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  return await shareObject.resourceIsSynced(resource)
 }
