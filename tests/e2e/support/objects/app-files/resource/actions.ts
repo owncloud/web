@@ -1336,10 +1336,8 @@ export interface deleteResourceTrashbinArgs {
   resource: string
 }
 
-export interface deleteTrashbinMultipleResourcesArgs extends Omit<
-  deleteResourceTrashbinArgs,
-  'resource'
-> {
+export interface deleteTrashbinMultipleResourcesArgs
+  extends Omit<deleteResourceTrashbinArgs, 'resource'> {
   resources: string[]
 }
 
