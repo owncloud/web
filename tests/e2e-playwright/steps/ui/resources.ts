@@ -99,7 +99,31 @@ export async function searchGloballyWithFilter({
   })
 }
 
-export async function openResource({
+export async function switchToTilesViewMode({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.switchToTilesViewMode()
+}
+
+export async function shouldSeeResourcesAsTiles({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.expectThatResourcesAreTiles()
+}
+
+export async function openFolder({
   actorsEnvironment,
   stepUser,
   resource

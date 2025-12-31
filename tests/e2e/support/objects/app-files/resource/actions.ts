@@ -350,6 +350,14 @@ export const createPasswordProtectedFolder = async ({
   password: string
 }): Promise<void> => {
   password = substitute(password)
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().ocModal
+  )
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in create new folder modal`
+  ).toHaveLength(0)
   await page.locator(passwordProtectedFolderButton).click()
   await page.locator(passwordProtectedFolderNameInput).fill(resource)
   await page.locator(passwordProtectedFolderPasswordInput).fill(password)
@@ -379,6 +387,14 @@ export const createPasswordProtectedFolder = async ({
 export const createNewFileOrFolder = async (args: createResourceArgs): Promise<void> => {
   const { page, name, type, content, password } = args
   await page.locator(addNewResourceButton).click()
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().tippyBox
+  )
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in create new tippy box`
+  ).toHaveLength(0)
   switch (type) {
     case 'folder': {
       await createNewFolder({ page, resource: name })
@@ -440,6 +456,14 @@ const createDocumentFile = async (
       `The document of type ${type} did not appear in the webUI for ${editorToOpen}. Possible reason could be the app provider service for ${editorToOpen} was not ready yet.`
     )
   }
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().ocModal
+  )
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in create new folder modal`
+  ).toHaveLength(0)
   await page.locator(util.format(createNewOfficeDocumentFileButton, type)).click()
   await page.locator(resourceNameInput).clear()
   await page.locator(resourceNameInput).fill(name)
@@ -568,6 +592,19 @@ export const editTextDocument = async ({
   const isMarkdownMode = await page.locator(textEditor).getAttribute('data-markdown-mode')
   const inputLocator =
     isMarkdownMode === 'true' ? textEditorMarkdownInput : textEditorPlainTextInput
+
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  let violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().textEditor
+  )
+  violations = [
+    ...violations,
+    ...(await a11yObject.getSevereAccessibilityViolations(a11yObject.getSelectors().topBar))
+  ]
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in text editor`
+  ).toHaveLength(0)
 
   await page.locator(inputLocator).fill(content)
   await Promise.all([
@@ -1658,11 +1695,27 @@ export interface switchViewModeArgs {
 
 export const clickViewModeToggle = async (args: switchViewModeArgs): Promise<void> => {
   const { page, target } = args
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().displayOptions
+  )
+  expect(
+    a11yViolations,
+    `Found ${a11yViolations.length} severe accessibility violations in file controls modal`
+  ).toHaveLength(0)
   await page.locator(`.viewmode-switch-buttons .${target}`).click()
 }
 
 export const expectThatResourcesAreTiles = async (args: { page: Page }): Promise<void> => {
   const { page } = args
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().tilesView
+  )
+  expect(
+    a11yViolations,
+    `Found ${a11yViolations.length} severe accessibility violations in file tile view`
+  ).toHaveLength(0)
   const tiles = page.locator(resourcesAsTiles)
   await expect(tiles).toBeVisible()
 }

@@ -30,7 +30,12 @@ export const selectors = {
   uploadMenuDropdown: '#upload-menu-drop',
   appSidebar: '#app-sidebar',
   removeUserModal: '.oc-modal.oc-modal-danger',
-  appSwitcherDropdown: '#app-switcher-dropdown'
+  appSwitcherDropdown: '#app-switcher-dropdown',
+  tippyBox: '.tippy-box',
+  textEditor: '#text-editor-component',
+  topBar: '#oc-topbar',
+  displayOptions: '#files-app-bar-controls-right',
+  ocCard: '.oc-card'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
