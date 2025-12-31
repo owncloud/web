@@ -671,3 +671,65 @@ export async function resourceShouldNotBeLocked({
   const lockLocator = await resourceObject.getLockLocator({ resource })
   expect(await lockLocator.isVisible()).toBe(false)
 }
+
+export async function userRenamesResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  newResourceName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  newResourceName: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.rename({ resource, newName: newResourceName })
+}
+
+export async function userDeletesResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  from,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  from: string
+  actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.delete({
+    folder: from,
+    resourcesWithInfo: [{ name: resource }],
+    via: actionType
+  })
+}
+
+export async function shouldNotSeeVersionPanelForFiles({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resources,
+  to
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resources: string[]
+  to: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    const fileInfo = filesEnvironment.getFile({ name: resource })
+    await resourceObject.checkThatFileVersionPanelIsNotAvailable({
+      folder: to,
+      files: [fileInfo]
+    })
+  }
+}
