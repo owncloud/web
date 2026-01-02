@@ -1,0 +1,20 @@
+{
+  "alice": {
+    "id": "a",
+    "displayName": "a",
+    "password": "a",
+    "email": "a@a.au"
+  },
+  "brian": {
+    "id": "b",
+    "displayName": "b",
+    "password": "b",
+    "email": "b@b.bl"
+  },
+  "carol": {
+    "id": "einstein",
+    "displayName": "Albert Einstein",
+    "password": "relativity",
+    "email": "einstein@example.org"
+  }
+}
