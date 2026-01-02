@@ -111,36 +111,6 @@ export async function userHasSharedResource({
   })
 }
 
-// export async function userHasSharedResources({
-//   usersEnvironment,
-//   stepUser,
-//   resources,
-//   recipient,
-//   type,
-//   role,
-//   resourceType
-// }: {
-//   usersEnvironment: UsersEnvironment
-//   stepUser: string
-//   resources: string[]
-//   recipient: string
-//   type: string
-//   role: string
-//   resourceType: ResourceType
-// }): Promise<void> {
-//   const user = usersEnvironment.getUser({ key: stepUser })
-//   for (const resource of resources) {
-//     await api.share.createShare({
-//       user,
-//       path: resource,
-//       shareType: type,
-//       shareWith: recipient,
-//       role: role,
-//       resourceType: resourceType as ResourceType
-//     })
-//   }
-// }
-
 export async function userHasCreatedPublicLinkOfResource({
   usersEnvironment,
   stepUser,
