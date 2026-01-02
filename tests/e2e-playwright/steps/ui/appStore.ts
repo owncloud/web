@@ -92,3 +92,59 @@ export async function navigateToAppStoreOverview({
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.navigateToAppStoreOverview()
 }
+
+export async function getAppsList({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<Array<string>> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.appStore.AppStore({ page })
+  return await pageObject.getAppsList()
+}
+
+export async function setSearchTerm({
+  actorsEnvironment,
+  stepUser,
+  searchTerm
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  searchTerm: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.appStore.AppStore({ page })
+  await pageObject.setSearchTerm(searchTerm)
+}
+
+export async function selectAppTag({
+  actorsEnvironment,
+  stepUser,
+  tag,
+  app
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  tag: string
+  app: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.appStore.AppStore({ page })
+  await pageObject.selectAppTag({ tag, app })
+}
+
+export async function selectTag({
+  actorsEnvironment,
+  stepUser,
+  tag
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  tag: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.appStore.AppStore({ page })
+  await pageObject.selectTag(tag)
+}
