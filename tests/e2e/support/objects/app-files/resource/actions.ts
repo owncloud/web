@@ -1292,7 +1292,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         waitResponses.push(
           page.waitForResponse(
             (resp) =>
-              resp.url().includes('graph/v1.0/drives') &&
+              resp.url().includes('graph/v1beta1/drives') &&
               resp.status() === 200 &&
               resp.request().method() === 'GET'
           )
