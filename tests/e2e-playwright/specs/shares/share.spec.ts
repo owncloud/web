@@ -276,6 +276,30 @@ test.describe('share', () => {
       actionType: 'SIDEBAR_PANEL'
     })
 
+    // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    // Then "Brian" should not be able to see the following shares
+    //   | resource           | owner                    |
+    //   | folder_to_shared_2 | %user_alice_displayName% |
+    //   | folder_to_shared   | %user_alice_displayName% |
+    expect(
+      await ui.userAbleToSeeShares({
+        actorsEnvironment,
+        stepUser: 'Brian',
+        resource: 'folder_to_shared_2',
+        owner: '%user_alice_displayName%'
+      })
+    ).toBeFalsy()
+
+    expect(
+      await ui.userAbleToSeeShares({
+        actorsEnvironment,
+        stepUser: 'Brian',
+        resource: 'folder_to_shared',
+        owner: '%user_alice_displayName%'
+      })
+    ).toBeFalsy()
+    // And "Brian" logs out
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
   })
 })

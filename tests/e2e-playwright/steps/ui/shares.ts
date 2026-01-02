@@ -6,6 +6,7 @@ import {
   ICollaborator
 } from '../../../e2e/support/objects/app-files/share/collaborator'
 import { ActionViaType } from '../../../e2e/support/objects/app-files/share/actions'
+import { substitute } from '../../../e2e/support/utils/substitute'
 
 const parseShareTable = function (
   usersEnvironment: UsersEnvironment,
@@ -216,4 +217,24 @@ export async function shouldSeeSyncStatusForResource({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   return await shareObject.resourceIsSynced(resource)
+}
+
+export async function userAbleToSeeShares({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  owner
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  owner: string
+}): Promise<boolean> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const isAcceptedSharePresent = await shareObject.isAcceptedSharePresent(
+    resource,
+    substitute(owner)
+  )
+  return isAcceptedSharePresent
 }
