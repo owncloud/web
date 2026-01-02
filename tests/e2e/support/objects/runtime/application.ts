@@ -58,6 +58,13 @@ export class Application {
     }
     await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
     const result = this.#page.locator(notificationItemsMessages)
+    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+    const a11yViolations =
+      await a11yObject.getSevereAccessibilityViolations(notificationItemsMessages)
+    expect(
+      a11yViolations,
+      `Found ${a11yViolations.length} severe accessibility violations in notifications`
+    ).toHaveLength(0)
     const messages = []
     const count = await result.count()
     for (let i = 0; i < count; i++) {

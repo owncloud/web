@@ -1,8 +1,13 @@
 import { config } from '../../../e2e/config.js'
-import { UsersEnvironment, SpacesEnvironment } from '../../../e2e/support/environment'
+import {
+  FilesEnvironment,
+  UsersEnvironment,
+  SpacesEnvironment
+} from '../../../e2e/support/environment'
 import { api } from '../../../e2e/support'
 import { ResourceType } from '../../../e2e/support/api/share/share'
 import { Space } from '../../../e2e/support/types'
+import fs from 'fs'
 
 export async function userHasBeenCreated({
   usersEnvironment,
@@ -123,7 +128,7 @@ export async function userHasCreatedPublicLinkOfResource({
   usersEnvironment: UsersEnvironment
   stepUser: string
   resource: string
-  role: string
+  role?: string
   name?: string
   password?: string
   space?: 'Personal'
@@ -183,5 +188,28 @@ export async function userHasCreatedProjectSpace({
   spacesEnvironment.createSpace({
     key: id || name,
     space: { name: name, id: spaceId }
+  })
+}
+
+export async function uploadFileInPersonalSpace({
+  usersEnvironment,
+  stepUser,
+  filesEnvironment,
+  resource,
+  destination
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  filesEnvironment: FilesEnvironment
+  resource: string
+  destination: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  const fileInfo = filesEnvironment.getFile({ name: resource })
+  const content = fs.readFileSync(fileInfo.path)
+  await api.dav.uploadFileInPersonalSpace({
+    user,
+    pathToFile: destination,
+    content
   })
 }

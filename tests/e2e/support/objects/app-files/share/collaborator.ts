@@ -158,7 +158,13 @@ export default class Collaborator {
     }
     await page.locator(dropdownSelector).click()
     const a11yObject = new objects.a11y.Accessibility({ page })
-    await a11yObject.getSevereAccessibilityViolations('.tippy-box')
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
+      a11yObject.getSelectors().tippyBox
+    )
+    expect(
+      a11yViolations,
+      `Found ${a11yViolations.length} severe accessibility violations in tippy box`
+    ).toHaveLength(0)
     await page.locator(util.format(itemSelector, role)).click()
   }
 
