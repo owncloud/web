@@ -185,11 +185,10 @@ export async function deleteResource({
   from: string
   actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
 }): Promise<void> {
-  const parentFolder = from || null
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.delete({
-    folder: parentFolder,
+    folder: from,
     resourcesWithInfo: [{ name: resource }],
     via: actionType
   })

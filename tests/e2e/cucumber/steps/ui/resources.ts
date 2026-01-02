@@ -463,9 +463,19 @@ export const processDelete = async (
       return acc
     }, {})
 
+  console.log('------deleteInfo-----------')
+  console.log(deleteInfo)
+  console.log('-----------------')
+
   for (const folder of Object.keys(deleteInfo)) {
     files = deleteInfo[folder]
+    console.log('------folder-----------')
+    console.log('folder=' + folder)
+    console.log('-----------------')
     parentFolder = folder !== 'undefined' ? folder : null
+    console.log('------parentFolder-----------')
+    console.log('parentFolder=' + "'" + parentFolder + "'")
+    console.log('-----------------')
     await pageObject.delete({
       folder: parentFolder,
       resourcesWithInfo: files,
