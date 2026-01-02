@@ -35,7 +35,9 @@ export const selectors = {
   textEditor: '#text-editor-component',
   topBar: '#oc-topbar',
   displayOptions: '#files-app-bar-controls-right',
-  ocCard: '.oc-card'
+  ocCard: '.oc-card',
+  appStore: '#app-store',
+  appDetails: '.app-details'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
