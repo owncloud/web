@@ -39,3 +39,27 @@ export async function getAccountPageTitle({
   const accountObject = new objects.account.Account({ page })
   return await accountObject.getTitle()
 }
+
+export async function requestGdprExport({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const accountObject = new objects.account.Account({ page })
+  await accountObject.requestGdprExport()
+}
+
+export async function downloadGdprExport({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment
+  stepUser
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const accountObject = new objects.account.Account({ page })
+  await accountObject.downloadGdprExport()
+}
