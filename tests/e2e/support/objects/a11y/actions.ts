@@ -38,7 +38,9 @@ export const selectors = {
   topBar: '#oc-topbar',
   displayOptions: '#files-app-bar-controls-right',
   ocCard: '.oc-card',
-  body: 'body'
+  body: 'body',
+  appStore: '#app-store',
+  appDetails: '.app-details'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']

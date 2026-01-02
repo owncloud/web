@@ -203,6 +203,7 @@ config = {
             "skip": False,
             "suites": [
                 "user-settings",
+                "app-store",
             ],
         },
     },
