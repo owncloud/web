@@ -67,22 +67,58 @@ export const waitForAppStoreIsVisible = async (args: { page: Page }): Promise<vo
   ).toHaveLength(0)
 }
 
-export const getAppsList = (args: { page: Page }): Promise<string[]> => {
+export const getAppsList = async (args: { page: Page }): Promise<string[]> => {
   const { page } = args
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().appStore
+  )
+  expect(
+    a11yViolations,
+    `Found ${a11yViolations.length} severe accessibility violations in app store page`
+  ).toHaveLength(0)
   return page.locator(selectors.appTileTitle).allTextContents()
 }
 
-export const setSearchTerm = (args: { page: Page; searchTerm: string }): Promise<void> => {
+export const setSearchTerm = async (args: { page: Page; searchTerm: string }): Promise<void> => {
   const { page, searchTerm } = args
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().appStore
+  )
+  expect(
+    a11yViolations,
+    `Found ${a11yViolations.length} severe accessibility violations in app store page`
+  ).toHaveLength(0)
   return page.locator(selectors.appsFilter).fill(searchTerm)
 }
 
-export const selectAppTag = (args: { page: Page; app: string; tag: string }): Promise<void> => {
+export const selectAppTag = async (args: {
+  page: Page
+  app: string
+  tag: string
+}): Promise<void> => {
   const { page, app, tag } = args
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().appStore
+  )
+  expect(
+    a11yViolations,
+    `Found ${a11yViolations.length} severe accessibility violations in app store page`
+  ).toHaveLength(0)
   return page.locator(util.format(selectors.appTag, app, tag)).click()
 }
-export const selectTag = (args: { page: Page; tag: string }): Promise<void> => {
+export const selectTag = async (args: { page: Page; tag: string }): Promise<void> => {
   const { page, tag } = args
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().appStore
+  )
+  expect(
+    a11yViolations,
+    `Found ${a11yViolations.length} severe accessibility violations in app store page`
+  ).toHaveLength(0)
   return page.locator(util.format(selectors.tag, tag)).click()
 }
 
