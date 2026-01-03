@@ -49,7 +49,8 @@ export const getSpacesByType = async ({
   }
 
   const enabledMountpoints = mountpoints.filter(
-    (space) => space.root.deleted?.state !== SpaceDeletedState.Trashed
+    (space) =>
+      !isPersonalSpaceResource(space) || space.root.deleted?.state !== SpaceDeletedState.Trashed
   )
 
   if (driveType !== 'mountpoint' || !configStore.options.routing?.fullShareOwnerPaths) {

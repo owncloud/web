@@ -206,14 +206,23 @@ describe('spaces', () => {
         }
       })
     })
-    it('should filter out trashed spaces', async () => {
+    it('should filter out trashed personal spaces', async () => {
       await new Promise<void>((resolve, reject) => {
         try {
           getWrapper({
             setup: async (instance) => {
               const spaces = [
                 mock<SpaceResource>({ id: '1' }),
-                mock<SpaceResource>({ id: '2', root: { deleted: { state: 'trashed' } } })
+                mock<SpaceResource>({
+                  id: '2',
+                  root: { deleted: { state: 'trashed' } },
+                  driveType: 'personal'
+                }),
+                mock<SpaceResource>({
+                  id: '3',
+                  root: { deleted: { state: 'trashed' } },
+                  driveType: 'project'
+                })
               ]
               const graphClient = mockDeep<Graph>()
               graphClient.drives.listMyDrives.mockResolvedValue(spaces)
@@ -238,7 +247,7 @@ describe('spaces', () => {
                 },
                 expect.anything()
               )
-              expect(instance.spaces.length).toBe(2)
+              expect(instance.spaces.length).toBe(4)
               expect(instance.spacesLoading).toBeFalsy()
               expect(instance.spacesInitialized).toBeTruthy()
               resolve()
