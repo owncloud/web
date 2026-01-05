@@ -25,1148 +25,529 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 
 /**
  * Represents activity.
- * @export
- * @interface Activity
  */
 export interface Activity {
     /**
      * Activity ID.
-     * @type {string}
-     * @memberof Activity
      */
     'id': string;
-    /**
-     * 
-     * @type {ActivityTimes}
-     * @memberof Activity
-     */
     'times': ActivityTimes;
-    /**
-     * 
-     * @type {ActivityTemplate}
-     * @memberof Activity
-     */
     'template': ActivityTemplate;
 }
-/**
- * 
- * @export
- * @interface ActivityTemplate
- */
 export interface ActivityTemplate {
     /**
      * Activity description.
-     * @type {string}
-     * @memberof ActivityTemplate
      */
     'message': string;
     /**
      * Activity description variables.
-     * @type {object}
-     * @memberof ActivityTemplate
      */
     'variables'?: object;
 }
-/**
- * 
- * @export
- * @interface ActivityTimes
- */
 export interface ActivityTimes {
     /**
      * Timestamp of the activity.
-     * @type {string}
-     * @memberof ActivityTimes
      */
     'recordedTime': string;
 }
-/**
- * 
- * @export
- * @interface AppRole
- */
 export interface AppRole {
     /**
      * Specifies whether this app role can be assigned to users and groups (by setting to [\'User\']), to other application\'s (by setting to [\'Application\'], or both (by setting to [\'User\', \'Application\']). App roles supporting assignment to other applications\' service principals are also known as application permissions. The \'Application\' value is only supported for app roles defined on application entities.
-     * @type {Array<string>}
-     * @memberof AppRole
      */
     'allowedMemberTypes'?: Array<string>;
     /**
      * The description for the app role. This is displayed when the app role is being assigned and, if the app role functions as an application permission, during  consent experiences.
-     * @type {string}
-     * @memberof AppRole
      */
     'description'?: string | null;
     /**
      * Display name for the permission that appears in the app role assignment and consent experiences.
-     * @type {string}
-     * @memberof AppRole
      */
     'displayName'?: string | null;
     /**
      * Unique role identifier inside the appRoles collection. When creating a new app role, a new GUID identifier must be provided.
-     * @type {string}
-     * @memberof AppRole
      */
     'id': string;
 }
-/**
- * 
- * @export
- * @interface AppRoleAssignment
- */
 export interface AppRoleAssignment {
     /**
      * The unique identifier for the object. 12345678-9abc-def0-1234-56789abcde. The value of the ID property is often, but not exclusively, in the form of a GUID. The value should be treated as an opaque identifier and not based in being a GUID. Null values are not allowed. Read-only.
-     * @type {string}
-     * @memberof AppRoleAssignment
      */
     'id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppRoleAssignment
-     */
     'deletedDateTime'?: string;
     /**
      * The identifier (id) for the app role which is assigned to the user. Required on create.
-     * @type {string}
-     * @memberof AppRoleAssignment
      */
     'appRoleId': string;
     /**
      * The time when the app role assignment was created. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z. Read-only.
-     * @type {string}
-     * @memberof AppRoleAssignment
      */
     'createdDateTime'?: string | null;
     /**
      * The display name of the user, group, or service principal that was granted the app role assignment. Read-only.
-     * @type {string}
-     * @memberof AppRoleAssignment
      */
     'principalDisplayName'?: string | null;
     /**
      * The unique identifier (id) for the user, security group, or service principal being granted the app role. Security groups with dynamic memberships are supported. Required on create.
-     * @type {string}
-     * @memberof AppRoleAssignment
      */
     'principalId': string | null;
     /**
      * The type of the assigned principal. This can either be User, Group, or ServicePrincipal. Read-only.
-     * @type {string}
-     * @memberof AppRoleAssignment
      */
     'principalType'?: string | null;
     /**
      * The display name of the resource app\'s service principal to which the assignment is made.
-     * @type {string}
-     * @memberof AppRoleAssignment
      */
     'resourceDisplayName'?: string | null;
     /**
      * The unique identifier (id) for the resource service principal for which the assignment is made. Required on create.
-     * @type {string}
-     * @memberof AppRoleAssignment
      */
     'resourceId': string | null;
 }
-/**
- * 
- * @export
- * @interface Application
- */
 export interface Application {
     /**
      * The unique identifier for the object. 12345678-9abc-def0-1234-56789abcde. The value of the ID property is often, but not exclusively, in the form of a GUID. The value should be treated as an opaque identifier and not based in being a GUID. Null values are not allowed. Read-only.
-     * @type {string}
-     * @memberof Application
      */
     'id': string;
     /**
      * The collection of roles defined for the application. With app role assignments, these roles can be assigned to users, groups, or service principals associated with other applications. Not nullable.
-     * @type {Array<AppRole>}
-     * @memberof Application
      */
     'appRoles'?: Array<AppRole>;
     /**
      * The display name for the application.
-     * @type {string}
-     * @memberof Application
      */
     'displayName'?: string | null;
 }
 /**
  * The Audio resource groups audio-related properties on an item into a single structure.  If a DriveItem has a non-null audio facet, the item represents an audio file. The properties of the Audio resource are populated by extracting metadata from the file. 
- * @export
- * @interface Audio
  */
 export interface Audio {
     /**
      * The title of the album for this audio file.
-     * @type {string}
-     * @memberof Audio
      */
     'album'?: string;
     /**
      * The artist named on the album for the audio file.
-     * @type {string}
-     * @memberof Audio
      */
     'albumArtist'?: string;
     /**
      * The performing artist for the audio file.
-     * @type {string}
-     * @memberof Audio
      */
     'artist'?: string;
     /**
      * Bitrate expressed in kbps.
-     * @type {number}
-     * @memberof Audio
      */
     'bitrate'?: number;
     /**
      * The name of the composer of the audio file.
-     * @type {string}
-     * @memberof Audio
      */
     'composers'?: string;
     /**
      * Copyright information for the audio file.
-     * @type {string}
-     * @memberof Audio
      */
     'copyright'?: string;
     /**
      * The number of the disc this audio file came from.
-     * @type {number}
-     * @memberof Audio
      */
     'disc'?: number;
     /**
      * The total number of discs in this album.
-     * @type {number}
-     * @memberof Audio
      */
     'discCount'?: number;
     /**
      * Duration of the audio file, expressed in milliseconds
-     * @type {number}
-     * @memberof Audio
      */
     'duration'?: number;
     /**
      * The genre of this audio file.
-     * @type {string}
-     * @memberof Audio
      */
     'genre'?: string;
     /**
      * Indicates if the file is protected with digital rights management.
-     * @type {boolean}
-     * @memberof Audio
      */
     'hasDrm'?: boolean;
     /**
      * Indicates if the file is encoded with a variable bitrate.
-     * @type {boolean}
-     * @memberof Audio
      */
     'isVariableBitrate'?: boolean;
     /**
      * The title of the audio file.
-     * @type {string}
-     * @memberof Audio
      */
     'title'?: string;
     /**
      * The number of the track on the original disc for this audio file.
-     * @type {number}
-     * @memberof Audio
      */
     'track'?: number;
     /**
      * The total number of tracks on the original disc for this audio file.
-     * @type {number}
-     * @memberof Audio
      */
     'trackCount'?: number;
     /**
      * The year the audio file was recorded.
-     * @type {number}
-     * @memberof Audio
      */
     'year'?: number;
 }
-/**
- * 
- * @export
- * @interface ClassMemberReference
- */
 export interface ClassMemberReference {
-    /**
-     * 
-     * @type {string}
-     * @memberof ClassMemberReference
-     */
     '@odata.id'?: string;
 }
-/**
- * 
- * @export
- * @interface ClassReference
- */
 export interface ClassReference {
-    /**
-     * 
-     * @type {string}
-     * @memberof ClassReference
-     */
     '@odata.id'?: string;
 }
-/**
- * 
- * @export
- * @interface ClassTeacherReference
- */
 export interface ClassTeacherReference {
-    /**
-     * 
-     * @type {string}
-     * @memberof ClassTeacherReference
-     */
     '@odata.id'?: string;
 }
-/**
- * 
- * @export
- * @interface CollectionOfActivities
- */
 export interface CollectionOfActivities {
-    /**
-     * 
-     * @type {Array<Activity>}
-     * @memberof CollectionOfActivities
-     */
     'value'?: Array<Activity>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfAppRoleAssignments
- */
 export interface CollectionOfAppRoleAssignments {
-    /**
-     * 
-     * @type {Array<AppRoleAssignment>}
-     * @memberof CollectionOfAppRoleAssignments
-     */
     'value'?: Array<AppRoleAssignment>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CollectionOfAppRoleAssignments
-     */
     '@odata.nextLink'?: string;
 }
-/**
- * 
- * @export
- * @interface CollectionOfApplications
- */
 export interface CollectionOfApplications {
-    /**
-     * 
-     * @type {Array<Application>}
-     * @memberof CollectionOfApplications
-     */
     'value'?: Array<Application>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfClass
- */
 export interface CollectionOfClass {
-    /**
-     * 
-     * @type {Array<EducationClass>}
-     * @memberof CollectionOfClass
-     */
     'value'?: Array<EducationClass>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfDriveItems
- */
 export interface CollectionOfDriveItems {
-    /**
-     * 
-     * @type {Array<DriveItem>}
-     * @memberof CollectionOfDriveItems
-     */
     'value'?: Array<DriveItem>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CollectionOfDriveItems
-     */
     '@odata.nextLink'?: string;
 }
-/**
- * 
- * @export
- * @interface CollectionOfDriveItems1
- */
 export interface CollectionOfDriveItems1 {
-    /**
-     * 
-     * @type {Array<DriveItem>}
-     * @memberof CollectionOfDriveItems1
-     */
     'value'?: Array<DriveItem>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfDrives
- */
 export interface CollectionOfDrives {
-    /**
-     * 
-     * @type {Array<Drive>}
-     * @memberof CollectionOfDrives
-     */
     'value'?: Array<Drive>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CollectionOfDrives
-     */
     '@odata.nextLink'?: string;
 }
-/**
- * 
- * @export
- * @interface CollectionOfDrives1
- */
 export interface CollectionOfDrives1 {
-    /**
-     * 
-     * @type {Array<Drive>}
-     * @memberof CollectionOfDrives1
-     */
     'value'?: Array<Drive>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfEducationClass
- */
 export interface CollectionOfEducationClass {
-    /**
-     * 
-     * @type {Array<EducationClass>}
-     * @memberof CollectionOfEducationClass
-     */
     'value'?: Array<EducationClass>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfEducationUser
- */
 export interface CollectionOfEducationUser {
-    /**
-     * 
-     * @type {Array<EducationUser>}
-     * @memberof CollectionOfEducationUser
-     */
     'value'?: Array<EducationUser>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfGroup
- */
 export interface CollectionOfGroup {
-    /**
-     * 
-     * @type {Array<Group>}
-     * @memberof CollectionOfGroup
-     */
     'value'?: Array<Group>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CollectionOfGroup
-     */
     '@odata.nextLink'?: string;
 }
-/**
- * 
- * @export
- * @interface CollectionOfPermissions
- */
 export interface CollectionOfPermissions {
-    /**
-     * 
-     * @type {Array<Permission>}
-     * @memberof CollectionOfPermissions
-     */
     'value'?: Array<Permission>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfPermissionsWithAllowedValues
- */
 export interface CollectionOfPermissionsWithAllowedValues {
     /**
      * A list of role definitions that can be chosen for the resource.
-     * @type {Array<UnifiedRoleDefinition>}
-     * @memberof CollectionOfPermissionsWithAllowedValues
      */
     '@libre.graph.permissions.roles.allowedValues'?: Array<UnifiedRoleDefinition>;
     /**
      * A list of actions that can be chosen for a custom role.  Following the CS3 API we can represent the CS3 permissions by mapping them to driveItem properties or relations like this: | [CS3 ResourcePermission](https://cs3org.github.io/cs3apis/#cs3.storage.provider.v1beta1.ResourcePermissions) | action | comment | | ------------------------------------------------------------------------------------------------------------ | ------ | ------- | | `stat` | `libre.graph/driveItem/basic/read` | `basic` because it does not include versions or trashed items | | `get_quota` | `libre.graph/driveItem/quota/read` | read only the `quota` property | | `get_path` | `libre.graph/driveItem/path/read` | read only the `path` property | | `move` | `libre.graph/driveItem/path/update` | allows updating the `path` property of a CS3 resource | | `delete` | `libre.graph/driveItem/standard/delete` | `standard` because deleting is a common update operation | | `list_container` | `libre.graph/driveItem/children/read` | | | `create_container` | `libre.graph/driveItem/children/create` | | | `initiate_file_download` | `libre.graph/driveItem/content/read` | `content` is the property read when initiating a download | | `initiate_file_upload` | `libre.graph/driveItem/upload/create` | `uploads` are a separate property. postprocessing creates the `content` | | `add_grant` | `libre.graph/driveItem/permissions/create` | | | `list_grant` | `libre.graph/driveItem/permissions/read` | | | `update_grant` | `libre.graph/driveItem/permissions/update` | | | `remove_grant` | `libre.graph/driveItem/permissions/delete` | | | `deny_grant` | `libre.graph/driveItem/permissions/deny` | uses a non CRUD action `deny` | | `list_file_versions` | `libre.graph/driveItem/versions/read` | `versions` is a `driveItemVersion` collection | | `restore_file_version` | `libre.graph/driveItem/versions/update` | the only `update` action is restore | | `list_recycle` | `libre.graph/driveItem/deleted/read` | reading a driveItem `deleted` property implies listing | | `restore_recycle_item` | `libre.graph/driveItem/deleted/update` | the only `update` action is restore | | `purge_recycle` | `libre.graph/driveItem/deleted/delete` | allows purging deleted `driveItems` | 
-     * @type {Array<string>}
-     * @memberof CollectionOfPermissionsWithAllowedValues
      */
     '@libre.graph.permissions.actions.allowedValues'?: Array<string>;
-    /**
-     * 
-     * @type {Array<Permission>}
-     * @memberof CollectionOfPermissionsWithAllowedValues
-     */
     'value'?: Array<Permission>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfSchools
- */
 export interface CollectionOfSchools {
-    /**
-     * 
-     * @type {Array<EducationSchool>}
-     * @memberof CollectionOfSchools
-     */
     'value'?: Array<EducationSchool>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfTags
- */
 export interface CollectionOfTags {
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof CollectionOfTags
-     */
     'value'?: Array<string>;
 }
-/**
- * 
- * @export
- * @interface CollectionOfUser
- */
 export interface CollectionOfUser {
-    /**
-     * 
-     * @type {Array<User>}
-     * @memberof CollectionOfUser
-     */
     'value'?: Array<User>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CollectionOfUser
-     */
     '@odata.nextLink'?: string;
 }
-/**
- * 
- * @export
- * @interface CollectionOfUsers
- */
 export interface CollectionOfUsers {
-    /**
-     * 
-     * @type {Array<User>}
-     * @memberof CollectionOfUsers
-     */
     'value'?: Array<User>;
 }
 /**
  * Information about the deleted state of the item. Read-only.
- * @export
- * @interface Deleted
  */
 export interface Deleted {
     /**
      * Represents the state of the deleted item.
-     * @type {string}
-     * @memberof Deleted
      */
     'state'?: string;
 }
 /**
  * The drive represents a space on the storage.
- * @export
- * @interface Drive
  */
 export interface Drive {
     /**
      * The unique identifier for this drive.
-     * @type {string}
-     * @memberof Drive
      */
     'id'?: string;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof Drive
-     */
     'createdBy'?: IdentitySet;
     /**
      * Date and time of item creation. Read-only.
-     * @type {string}
-     * @memberof Drive
      */
     'createdDateTime'?: string;
     /**
      * Provides a user-visible description of the item. Optional.
-     * @type {string}
-     * @memberof Drive
      */
     'description'?: string;
     /**
      * ETag for the item. Read-only.
-     * @type {string}
-     * @memberof Drive
      */
     'eTag'?: string;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof Drive
-     */
     'lastModifiedBy'?: IdentitySet;
     /**
      * Date and time the item was last modified. Read-only.
-     * @type {string}
-     * @memberof Drive
      */
     'lastModifiedDateTime'?: string;
     /**
      * The name of the item. Read-write.
-     * @type {string}
-     * @memberof Drive
      */
     'name': string;
-    /**
-     * 
-     * @type {ItemReference}
-     * @memberof Drive
-     */
     'parentReference'?: ItemReference;
     /**
      * URL that displays the resource in the browser. Read-only.
-     * @type {string}
-     * @memberof Drive
      */
     'webUrl'?: string;
     /**
      * Describes the type of drive represented by this resource. Values are \"personal\" for users home spaces, \"project\", \"virtual\" or \"share\". Read-only.
-     * @type {string}
-     * @memberof Drive
      */
     'driveType'?: string;
     /**
      * The drive alias can be used in clients to make the urls user friendly. Example: \'personal/einstein\'. This will be used to resolve to the correct driveID.
-     * @type {string}
-     * @memberof Drive
      */
     'driveAlias'?: string;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof Drive
-     */
     'owner'?: IdentitySet;
-    /**
-     * 
-     * @type {Quota}
-     * @memberof Drive
-     */
     'quota'?: Quota;
     /**
      * All items contained in the drive. Read-only. Nullable.
-     * @type {Array<DriveItem>}
-     * @memberof Drive
      */
     'items'?: Array<DriveItem>;
-    /**
-     * 
-     * @type {DriveItem}
-     * @memberof Drive
-     */
     'root'?: DriveItem;
     /**
      * A collection of special drive resources.
-     * @type {Array<DriveItem>}
-     * @memberof Drive
      */
     'special'?: Array<DriveItem>;
 }
 /**
  * Represents a resource inside a drive. Read-only.
- * @export
- * @interface DriveItem
  */
 export interface DriveItem {
     /**
      * Read-only.
-     * @type {string}
-     * @memberof DriveItem
      */
     'id'?: string;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof DriveItem
-     */
     'createdBy'?: IdentitySet;
     /**
      * Date and time of item creation. Read-only.
-     * @type {string}
-     * @memberof DriveItem
      */
     'createdDateTime'?: string;
     /**
      * Provides a user-visible description of the item. Optional.
-     * @type {string}
-     * @memberof DriveItem
      */
     'description'?: string;
     /**
      * ETag for the item. Read-only.
-     * @type {string}
-     * @memberof DriveItem
      */
     'eTag'?: string;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof DriveItem
-     */
     'lastModifiedBy'?: IdentitySet;
     /**
      * Date and time the item was last modified. Read-only.
-     * @type {string}
-     * @memberof DriveItem
      */
     'lastModifiedDateTime'?: string;
     /**
      * The name of the item. Read-write.
-     * @type {string}
-     * @memberof DriveItem
      */
     'name'?: string;
-    /**
-     * 
-     * @type {ItemReference}
-     * @memberof DriveItem
-     */
     'parentReference'?: ItemReference;
     /**
      * URL that displays the resource in the browser. Read-only.
-     * @type {string}
-     * @memberof DriveItem
      */
     'webUrl'?: string;
     /**
      * The content stream, if the item represents a file.
-     * @type {string}
-     * @memberof DriveItem
      */
     'content'?: string;
     /**
      * An eTag for the content of the item. This eTag is not changed if only the metadata is changed. Note This property is not returned if the item is a folder. Read-only.
-     * @type {string}
-     * @memberof DriveItem
      */
     'cTag'?: string;
-    /**
-     * 
-     * @type {Deleted}
-     * @memberof DriveItem
-     */
     'deleted'?: Deleted;
-    /**
-     * 
-     * @type {OpenGraphFile}
-     * @memberof DriveItem
-     */
     'file'?: OpenGraphFile;
-    /**
-     * 
-     * @type {FileSystemInfo}
-     * @memberof DriveItem
-     */
     'fileSystemInfo'?: FileSystemInfo;
-    /**
-     * 
-     * @type {Folder}
-     * @memberof DriveItem
-     */
     'folder'?: Folder;
-    /**
-     * 
-     * @type {Image}
-     * @memberof DriveItem
-     */
     'image'?: Image;
-    /**
-     * 
-     * @type {Photo}
-     * @memberof DriveItem
-     */
     'photo'?: Photo;
-    /**
-     * 
-     * @type {GeoCoordinates}
-     * @memberof DriveItem
-     */
     'location'?: GeoCoordinates;
     /**
      * Collection containing ThumbnailSet objects associated with the item. Read-only. Nullable.
-     * @type {Array<ThumbnailSet>}
-     * @memberof DriveItem
      */
     'thumbnails'?: Array<ThumbnailSet>;
     /**
      * If this property is non-null, it indicates that the driveItem is the top-most driveItem in the drive.
-     * @type {object}
-     * @memberof DriveItem
      */
     'root'?: object;
-    /**
-     * 
-     * @type {Trash}
-     * @memberof DriveItem
-     */
     'trash'?: Trash;
-    /**
-     * 
-     * @type {SpecialFolder}
-     * @memberof DriveItem
-     */
     'specialFolder'?: SpecialFolder;
-    /**
-     * 
-     * @type {RemoteItem}
-     * @memberof DriveItem
-     */
     'remoteItem'?: RemoteItem;
     /**
      * Size of the item in bytes. Read-only.
-     * @type {number}
-     * @memberof DriveItem
      */
     'size'?: number;
     /**
      * WebDAV compatible URL for the item. Read-only.
-     * @type {string}
-     * @memberof DriveItem
      */
     'webDavUrl'?: string;
     /**
      * Collection containing Item objects for the immediate children of Item. Only items representing folders have children. Read-only. Nullable.
-     * @type {Array<DriveItem>}
-     * @memberof DriveItem
      */
     'children'?: Array<DriveItem>;
     /**
      * The set of permissions for the item. Read-only. Nullable.
-     * @type {Array<Permission>}
-     * @memberof DriveItem
      */
     'permissions'?: Array<Permission>;
-    /**
-     * 
-     * @type {Audio}
-     * @memberof DriveItem
-     */
     'audio'?: Audio;
-    /**
-     * 
-     * @type {Video}
-     * @memberof DriveItem
-     */
     'video'?: Video;
     /**
      * Indicates if the item is synchronized with the underlying storage provider. Read-only.
-     * @type {boolean}
-     * @memberof DriveItem
      */
     '@client.synchronize'?: boolean;
     /**
      * Properties or facets (see UI.Facet) annotated with this term will not be rendered if the annotation evaluates to true. Users can set this to hide permissions.
-     * @type {boolean}
-     * @memberof DriveItem
      */
     '@UI.Hidden'?: boolean;
 }
-/**
- * 
- * @export
- * @interface DriveItemCreateLink
- */
 export interface DriveItemCreateLink {
-    /**
-     * 
-     * @type {SharingLinkType}
-     * @memberof DriveItemCreateLink
-     */
     'type'?: SharingLinkType;
     /**
      * Optional. A String with format of yyyy-MM-ddTHH:mm:ssZ of DateTime indicates the expiration time of the permission.
-     * @type {string}
-     * @memberof DriveItemCreateLink
      */
     'expirationDateTime'?: string;
     /**
      * Optional.The password of the sharing link that is set by the creator.
-     * @type {string}
-     * @memberof DriveItemCreateLink
      */
     'password'?: string;
     /**
      * Provides a user-visible display name of the link. Optional. Libregraph only.
-     * @type {string}
-     * @memberof DriveItemCreateLink
      */
     'displayName'?: string;
     /**
      * The quicklink property can be assigned to only one link per resource. A quicklink can be used in the clients to provide a one-click copy to clipboard action. Optional. Libregraph only.
-     * @type {boolean}
-     * @memberof DriveItemCreateLink
      */
     '@libre.graph.quickLink'?: boolean;
 }
 
 
-/**
- * 
- * @export
- * @interface DriveItemInvite
- */
 export interface DriveItemInvite {
     /**
      * A collection of recipients who will receive access and the sharing invitation. Currently, only internal users or groups are supported.
-     * @type {Array<DriveRecipient>}
-     * @memberof DriveItemInvite
      */
     'recipients'?: Array<DriveRecipient>;
     /**
      * Specifies the roles that are to be granted to the recipients of the sharing invitation.
-     * @type {Array<string>}
-     * @memberof DriveItemInvite
      */
     'roles'?: Array<string>;
     /**
      * Specifies the actions that are to be granted to the recipients of the sharing invitation, in effect creating a custom role.
-     * @type {Array<string>}
-     * @memberof DriveItemInvite
      */
     '@libre.graph.permissions.actions'?: Array<string>;
     /**
      * Specifies the dateTime after which the permission expires.
-     * @type {string}
-     * @memberof DriveItemInvite
      */
     'expirationDateTime'?: string;
 }
 /**
  * Represents a person, group, or other recipient to share a drive item with using the invite action.  When using invite to add permissions, the `driveRecipient` object would specify the `email`, `alias`, or `objectId` of the recipient. Only one of these values is required; multiple values are not accepted. 
- * @export
- * @interface DriveRecipient
  */
 export interface DriveRecipient {
     /**
      * The unique identifier for the recipient in the directory.
-     * @type {string}
-     * @memberof DriveRecipient
      */
     'objectId'?: string;
     /**
      * When the recipient is referenced by objectId this annotation is used to differentiate `user` and `group` recipients.
-     * @type {string}
-     * @memberof DriveRecipient
      */
     '@libre.graph.recipient.type'?: string;
 }
 /**
  * The drive represents an update to a space on the storage.
- * @export
- * @interface DriveUpdate
  */
 export interface DriveUpdate {
     /**
      * The unique identifier for this drive.
-     * @type {string}
-     * @memberof DriveUpdate
      */
     'id'?: string;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof DriveUpdate
-     */
     'createdBy'?: IdentitySet;
     /**
      * Date and time of item creation. Read-only.
-     * @type {string}
-     * @memberof DriveUpdate
      */
     'createdDateTime'?: string;
     /**
      * Provides a user-visible description of the item. Optional.
-     * @type {string}
-     * @memberof DriveUpdate
      */
     'description'?: string;
     /**
      * ETag for the item. Read-only.
-     * @type {string}
-     * @memberof DriveUpdate
      */
     'eTag'?: string;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof DriveUpdate
-     */
     'lastModifiedBy'?: IdentitySet;
     /**
      * Date and time the item was last modified. Read-only.
-     * @type {string}
-     * @memberof DriveUpdate
      */
     'lastModifiedDateTime'?: string;
     /**
      * The name of the item. Read-write.
-     * @type {string}
-     * @memberof DriveUpdate
      */
     'name'?: string;
-    /**
-     * 
-     * @type {ItemReference}
-     * @memberof DriveUpdate
-     */
     'parentReference'?: ItemReference;
     /**
      * URL that displays the resource in the browser. Read-only.
-     * @type {string}
-     * @memberof DriveUpdate
      */
     'webUrl'?: string;
     /**
      * Describes the type of drive represented by this resource. Values are \"personal\" for users home spaces, \"project\", \"virtual\" or \"share\". Read-only.
-     * @type {string}
-     * @memberof DriveUpdate
      */
     'driveType'?: string;
     /**
      * The drive alias can be used in clients to make the urls user friendly. Example: \'personal/einstein\'. This will be used to resolve to the correct driveID.
-     * @type {string}
-     * @memberof DriveUpdate
      */
     'driveAlias'?: string;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof DriveUpdate
-     */
     'owner'?: IdentitySet;
-    /**
-     * 
-     * @type {Quota}
-     * @memberof DriveUpdate
-     */
     'quota'?: Quota;
     /**
      * All items contained in the drive. Read-only. Nullable.
-     * @type {Array<DriveItem>}
-     * @memberof DriveUpdate
      */
     'items'?: Array<DriveItem>;
-    /**
-     * 
-     * @type {DriveItem}
-     * @memberof DriveUpdate
-     */
     'root'?: DriveItem;
     /**
      * A collection of special drive resources.
-     * @type {Array<DriveItem>}
-     * @memberof DriveUpdate
      */
     'special'?: Array<DriveItem>;
 }
 /**
  * And extension of group representing a class or course
- * @export
- * @interface EducationClass
  */
 export interface EducationClass {
     /**
      * Read-only.
-     * @type {string}
-     * @memberof EducationClass
      */
     'id'?: string;
     /**
      * An optional description for the group. Returned by default.
-     * @type {string}
-     * @memberof EducationClass
      */
     'description'?: string;
     /**
      * The display name for the group. This property is required when a group is created and cannot be cleared during updates. Returned by default. Supports $search and $orderBy.
-     * @type {string}
-     * @memberof EducationClass
      */
-    'displayName': string;
+    'displayName'?: string;
     /**
      * Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), Nullable. Supports $expand.
-     * @type {Array<User>}
-     * @memberof EducationClass
      */
     'members'?: Array<User>;
     /**
      * A list of member references to the members to be added. Up to 20 members can be added with a single request
-     * @type {Set<string>}
-     * @memberof EducationClass
      */
     'members@odata.bind'?: Set<string>;
     /**
      * Classification of the group, i.e. \"class\" or \"course\"
-     * @type {string}
-     * @memberof EducationClass
      */
-    'classification': EducationClassClassificationEnum;
+    'classification'?: EducationClassClassificationEnum;
     /**
      * An external unique ID for the class
-     * @type {string}
-     * @memberof EducationClass
      */
     'externalId'?: string;
 }
@@ -1180,967 +561,518 @@ export type EducationClassClassificationEnum = typeof EducationClassClassificati
 
 /**
  * Represents a school
- * @export
- * @interface EducationSchool
  */
 export interface EducationSchool {
     /**
      * The unique identifier for an entity. Read-only.
-     * @type {string}
-     * @memberof EducationSchool
      */
     'id'?: string;
     /**
      * The organization name
-     * @type {string}
-     * @memberof EducationSchool
      */
     'displayName'?: string;
     /**
      * School number
-     * @type {string}
-     * @memberof EducationSchool
      */
     'schoolNumber'?: string;
     /**
      * Date and time at which the service for this organization is scheduled to be terminated
-     * @type {string}
-     * @memberof EducationSchool
      */
     'terminationDate'?: string | null;
 }
 /**
  * An extension of user with education-specific attributes
- * @export
- * @interface EducationUser
  */
 export interface EducationUser {
     /**
      * Read-only.
-     * @type {string}
-     * @memberof EducationUser
      */
     'id'?: string;
     /**
      * Set to \"true\" when the account is enabled.
-     * @type {boolean}
-     * @memberof EducationUser
      */
     'accountEnabled'?: boolean;
     /**
      * The name displayed in the address book for the user. This value is usually the combination of the user\'s first name, middle initial, and last name. This property is required when a user is created and it cannot be cleared during updates. Returned by default. Supports $orderby.
-     * @type {string}
-     * @memberof EducationUser
      */
     'displayName'?: string;
     /**
      * A collection of drives available for this user. Read-only.
-     * @type {Array<Drive>}
-     * @memberof EducationUser
      */
     'drives'?: Array<Drive>;
-    /**
-     * 
-     * @type {Drive}
-     * @memberof EducationUser
-     */
     'drive'?: Drive;
     /**
      * Identities associated with this account.
-     * @type {Array<ObjectIdentity>}
-     * @memberof EducationUser
      */
     'identities'?: Array<ObjectIdentity>;
     /**
      * The SMTP address for the user, for example, \'jeff@contoso.onowncloud.com\'. Returned by default.
-     * @type {string}
-     * @memberof EducationUser
      */
     'mail'?: string;
     /**
      * Groups that this user is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. Supports $expand.
-     * @type {Array<Group>}
-     * @memberof EducationUser
      */
     'memberOf'?: Array<Group>;
     /**
      * Contains the on-premises SAM account name synchronized from the on-premises directory. Read-only.
-     * @type {string}
-     * @memberof EducationUser
      */
     'onPremisesSamAccountName'?: string;
-    /**
-     * 
-     * @type {PasswordProfile}
-     * @memberof EducationUser
-     */
     'passwordProfile'?: PasswordProfile;
     /**
      * The user\'s surname (family name or last name). Returned by default.
-     * @type {string}
-     * @memberof EducationUser
      */
     'surname'?: string;
     /**
      * The user\'s givenName. Returned by default.
-     * @type {string}
-     * @memberof EducationUser
      */
     'givenName'?: string;
     /**
      * The user`s default role. Such as \"student\" or \"teacher\"
-     * @type {string}
-     * @memberof EducationUser
      */
     'primaryRole'?: string;
     /**
      * The user`s type. This can be either \"Member\" for regular user, \"Guest\" for guest users or \"Federated\" for users imported from a federated instance.
-     * @type {string}
-     * @memberof EducationUser
      */
     'userType'?: string;
-}
-/**
- * 
- * @export
- * @interface EducationUserReference
- */
-export interface EducationUserReference {
     /**
-     * 
-     * @type {string}
-     * @memberof EducationUserReference
+     * A unique identifier for the user assigned by the school or institution.
      */
+    'externalID'?: string;
+}
+export interface EducationUserReference {
     '@odata.id'?: string;
 }
-/**
- * 
- * @export
- * @interface ExportPersonalDataRequest
- */
 export interface ExportPersonalDataRequest {
     /**
      * the path where the file should be created in the users personal space
-     * @type {string}
-     * @memberof ExportPersonalDataRequest
      */
     'storageLocation'?: string;
 }
 /**
  * File system information on client. Read-write.
- * @export
- * @interface FileSystemInfo
  */
 export interface FileSystemInfo {
     /**
      * The UTC date and time the file was created on a client.
-     * @type {string}
-     * @memberof FileSystemInfo
      */
     'createdDateTime'?: string;
     /**
      * The UTC date and time the file was last accessed. Available for the recent file list only.
-     * @type {string}
-     * @memberof FileSystemInfo
      */
     'lastAccessedDateTime'?: string;
     /**
      * The UTC date and time the file was last modified on a client.
-     * @type {string}
-     * @memberof FileSystemInfo
      */
     'lastModifiedDateTime'?: string;
 }
 /**
  * Folder metadata, if the item is a folder. Read-only.
- * @export
- * @interface Folder
  */
 export interface Folder {
     /**
      * Number of children contained immediately within this container.
-     * @type {number}
-     * @memberof Folder
      */
     'childCount'?: number;
-    /**
-     * 
-     * @type {FolderView}
-     * @memberof Folder
-     */
     'view'?: FolderView;
 }
 /**
  * A collection of properties defining the recommended view for the folder.
- * @export
- * @interface FolderView
  */
 export interface FolderView {
     /**
      * The method by which the folder should be sorted.
-     * @type {string}
-     * @memberof FolderView
      */
     'sortBy'?: string;
     /**
      * If true, indicates that items should be sorted in descending order. Otherwise, items should be sorted ascending.
-     * @type {string}
-     * @memberof FolderView
      */
     'sortOrder'?: string;
     /**
      * The type of view that should be used to represent the folder.
-     * @type {string}
-     * @memberof FolderView
      */
     'viewType'?: string;
 }
 /**
  * The GeoCoordinates resource provides geographic coordinates and elevation of a location based on metadata contained within the file. If a DriveItem has a non-null location facet, the item represents a file with a known location associated with it. 
- * @export
- * @interface GeoCoordinates
  */
 export interface GeoCoordinates {
     /**
      * The altitude (height), in feet, above sea level for the item. Read-only.
-     * @type {number}
-     * @memberof GeoCoordinates
      */
     'altitude'?: number;
     /**
      * The latitude, in decimal, for the item. Read-only.
-     * @type {number}
-     * @memberof GeoCoordinates
      */
     'latitude'?: number;
     /**
      * The longitude, in decimal, for the item. Read-only.
-     * @type {number}
-     * @memberof GeoCoordinates
      */
     'longitude'?: number;
 }
-/**
- * 
- * @export
- * @interface Group
- */
 export interface Group {
     /**
      * Read-only.
-     * @type {string}
-     * @memberof Group
      */
     'id'?: string;
     /**
      * An optional description for the group. Returned by default.
-     * @type {string}
-     * @memberof Group
      */
     'description'?: string;
     /**
      * The display name for the group. This property is required when a group is created and cannot be cleared during updates. Returned by default. Supports $search and $orderBy.
-     * @type {string}
-     * @memberof Group
      */
     'displayName'?: string;
     /**
      * Specifies the group types. In MS Graph a group can have multiple types, so this is an array. In libreGraph the possible group types deviate from the MS Graph. The only group type that we currently support is \"ReadOnly\", which is set for groups that cannot be modified on the current instance.
-     * @type {Array<string>}
-     * @memberof Group
      */
     'groupTypes'?: Array<string>;
     /**
      * Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), Nullable. Supports $expand.
-     * @type {Array<User>}
-     * @memberof Group
      */
     'members'?: Array<User>;
     /**
      * A list of member references to the members to be added. Up to 20 members can be added with a single request
-     * @type {Set<string>}
-     * @memberof Group
      */
     'members@odata.bind'?: Set<string>;
 }
 /**
  * Hashes of the file\'s binary content, if available. Read-only.
- * @export
- * @interface Hashes
  */
 export interface Hashes {
     /**
      * The CRC32 value of the file (if available). Read-only.
-     * @type {string}
-     * @memberof Hashes
      */
     'crc32Hash'?: string;
     /**
      * A proprietary hash of the file that can be used to determine if the contents of the file have changed (if available). Read-only.
-     * @type {string}
-     * @memberof Hashes
      */
     'quickXorHash'?: string;
     /**
      * SHA1 hash for the contents of the file (if available). Read-only.
-     * @type {string}
-     * @memberof Hashes
      */
     'sha1Hash'?: string;
     /**
      * SHA256 hash for the contents of the file (if available). Read-only.
-     * @type {string}
-     * @memberof Hashes
      */
     'sha256Hash'?: string;
 }
-/**
- * 
- * @export
- * @interface Identity
- */
 export interface Identity {
     /**
      * The identity\'s display name. Note that this may not always be available or up to date. For example, if a user changes their display name, the API may show the new value in a future response, but the items associated with the user won\'t show up as having changed when using delta.
-     * @type {string}
-     * @memberof Identity
      */
     'displayName': string;
     /**
      * Unique identifier for the identity.
-     * @type {string}
-     * @memberof Identity
      */
     'id'?: string;
     /**
-     * The type of the identity. This can be either \"Member\" for regular user, \"Guest\" for guest users or \"Federated\" for users imported from a federated instance. Can be used by clients to indicate the type of user. For more details, clients should look up and cache the user at the /users enpoint.
-     * @type {string}
-     * @memberof Identity
+     * The type of the identity. This can be either \"Member\" for regular user, \"Guest\" for guest users or \"Federated\" for users imported from a federated instance. Can be used by clients to indicate the type of user. For more details, clients should look up and cache the user at the /users endpoint.
      */
     '@libre.graph.userType'?: string;
 }
 /**
  * Optional. User account.
- * @export
- * @interface IdentitySet
  */
 export interface IdentitySet {
-    /**
-     * 
-     * @type {Identity}
-     * @memberof IdentitySet
-     */
     'application'?: Identity;
-    /**
-     * 
-     * @type {Identity}
-     * @memberof IdentitySet
-     */
     'device'?: Identity;
-    /**
-     * 
-     * @type {Identity}
-     * @memberof IdentitySet
-     */
     'user'?: Identity;
-    /**
-     * 
-     * @type {Identity}
-     * @memberof IdentitySet
-     */
     'group'?: Identity;
 }
 /**
  * Image metadata, if the item is an image. Read-only.
- * @export
- * @interface Image
  */
 export interface Image {
     /**
      * Optional. Height of the image, in pixels. Read-only.
-     * @type {number}
-     * @memberof Image
      */
     'height'?: number;
     /**
      * Optional. Width of the image, in pixels. Read-only.
-     * @type {number}
-     * @memberof Image
      */
     'width'?: number;
 }
-/**
- * 
- * @export
- * @interface ItemReference
- */
 export interface ItemReference {
     /**
      * Unique identifier of the drive instance that contains the item. Read-only.
-     * @type {string}
-     * @memberof ItemReference
      */
     'driveId'?: string;
     /**
      * Identifies the type of drive. See [drive][] resource for values. Read-only.
-     * @type {string}
-     * @memberof ItemReference
      */
     'driveType'?: string;
     /**
      * Unique identifier of the item in the drive. Read-only.
-     * @type {string}
-     * @memberof ItemReference
      */
     'id'?: string;
     /**
      * The name of the item being referenced. Read-only.
-     * @type {string}
-     * @memberof ItemReference
      */
     'name'?: string;
     /**
      * Path that can be used to navigate to the item. Read-only.
-     * @type {string}
-     * @memberof ItemReference
      */
     'path'?: string;
 }
-/**
- * 
- * @export
- * @interface MemberReference
- */
 export interface MemberReference {
-    /**
-     * 
-     * @type {string}
-     * @memberof MemberReference
-     */
     '@odata.id'?: string;
 }
 /**
  * Represents an identity used to sign in to a user account
- * @export
- * @interface ObjectIdentity
  */
 export interface ObjectIdentity {
     /**
      * domain of the Provider issuing the identity
-     * @type {string}
-     * @memberof ObjectIdentity
      */
     'issuer'?: string;
     /**
      * The unique id assigned by the issuer to the account
-     * @type {string}
-     * @memberof ObjectIdentity
      */
     'issuerAssignedId'?: string;
 }
-/**
- * 
- * @export
- * @interface OdataError
- */
 export interface OdataError {
-    /**
-     * 
-     * @type {OdataErrorMain}
-     * @memberof OdataError
-     */
     'error': OdataErrorMain;
 }
-/**
- * 
- * @export
- * @interface OdataErrorDetail
- */
 export interface OdataErrorDetail {
-    /**
-     * 
-     * @type {string}
-     * @memberof OdataErrorDetail
-     */
     'code': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OdataErrorDetail
-     */
     'message': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OdataErrorDetail
-     */
     'target'?: string;
 }
-/**
- * 
- * @export
- * @interface OdataErrorMain
- */
 export interface OdataErrorMain {
-    /**
-     * 
-     * @type {string}
-     * @memberof OdataErrorMain
-     */
     'code': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OdataErrorMain
-     */
     'message': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OdataErrorMain
-     */
     'target'?: string;
-    /**
-     * 
-     * @type {Array<OdataErrorDetail>}
-     * @memberof OdataErrorMain
-     */
     'details'?: Array<OdataErrorDetail>;
     /**
      * The structure of this object is service-specific
-     * @type {object}
-     * @memberof OdataErrorMain
      */
     'innererror'?: object;
 }
 /**
  * File metadata, if the item is a file. Read-only.
- * @export
- * @interface OpenGraphFile
  */
 export interface OpenGraphFile {
-    /**
-     * 
-     * @type {Hashes}
-     * @memberof OpenGraphFile
-     */
     'hashes'?: Hashes;
     /**
      * The MIME type for the file. This is determined by logic on the server and might not be the value provided when the file was uploaded. Read-only.
-     * @type {string}
-     * @memberof OpenGraphFile
      */
     'mimeType'?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OpenGraphFile
-     */
     'processingMetadata'?: boolean;
 }
-/**
- * 
- * @export
- * @interface PasswordChange
- */
 export interface PasswordChange {
-    /**
-     * 
-     * @type {string}
-     * @memberof PasswordChange
-     */
     'currentPassword': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PasswordChange
-     */
     'newPassword': string;
 }
 /**
  * Password Profile associated with a user
- * @export
- * @interface PasswordProfile
  */
 export interface PasswordProfile {
     /**
      * If true the user is required to change their password upon the next login
-     * @type {boolean}
-     * @memberof PasswordProfile
      */
     'forceChangePasswordNextSignIn'?: boolean;
     /**
      * The user\'s password
-     * @type {string}
-     * @memberof PasswordProfile
      */
     'password'?: string;
 }
 /**
  * The Permission resource provides information about a sharing permission granted for a DriveItem resource.  ### Remarks  The Permission resource uses *facets* to provide information about the kind of permission represented by the resource.  Permissions with a `link` facet represent sharing links created on the item. Sharing links contain a unique token that provides access to the item for anyone with the link.  Permissions with a `invitation` facet represent permissions added by inviting specific users or groups to have access to the file. 
- * @export
- * @interface Permission
  */
 export interface Permission {
     /**
      * The unique identifier of the permission among all permissions on the item. Read-only.
-     * @type {string}
-     * @memberof Permission
      */
     'id'?: string;
     /**
      * Indicates whether the password is set for this permission. This property only appears in the response. Optional. Read-only. 
-     * @type {boolean}
-     * @memberof Permission
      */
     'hasPassword'?: boolean;
     /**
      * An optional expiration date which limits the permission in time.
-     * @type {string}
-     * @memberof Permission
      */
     'expirationDateTime'?: string | null;
     /**
      * An optional creation date. Libregraph only.
-     * @type {string}
-     * @memberof Permission
      */
     'createdDateTime'?: string | null;
-    /**
-     * 
-     * @type {SharePointIdentitySet}
-     * @memberof Permission
-     */
     'grantedToV2'?: SharePointIdentitySet;
-    /**
-     * 
-     * @type {SharingLink}
-     * @memberof Permission
-     */
     'link'?: SharingLink;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof Permission
-     */
     'roles'?: Array<string>;
     /**
      * For link type permissions, the details of the identity to whom permission was granted. This could be used to grant access to a an external user that can be identified by email, aka guest accounts.
-     * @type {Array<IdentitySet>}
-     * @memberof Permission
      * @deprecated
      */
     'grantedToIdentities'?: Array<IdentitySet>;
     /**
      * Use this to create a permission with custom actions.
-     * @type {Array<string>}
-     * @memberof Permission
      */
     '@libre.graph.permissions.actions'?: Array<string>;
-    /**
-     * 
-     * @type {SharingInvitation}
-     * @memberof Permission
-     */
     'invitation'?: SharingInvitation;
 }
 /**
  * The photo resource provides photo and camera properties, for example, EXIF metadata, on a driveItem. 
- * @export
- * @interface Photo
  */
 export interface Photo {
     /**
      * Camera manufacturer. Read-only.
-     * @type {string}
-     * @memberof Photo
      */
     'cameraMake'?: string;
     /**
      * Camera model. Read-only.
-     * @type {string}
-     * @memberof Photo
      */
     'cameraModel'?: string;
     /**
      * The denominator for the exposure time fraction from the camera. Read-only.
-     * @type {number}
-     * @memberof Photo
      */
     'exposureDenominator'?: number;
     /**
      * The numerator for the exposure time fraction from the camera. Read-only.
-     * @type {number}
-     * @memberof Photo
      */
     'exposureNumerator'?: number;
     /**
      * The F-stop value from the camera. Read-only.
-     * @type {number}
-     * @memberof Photo
      */
     'fNumber'?: number;
     /**
      * The focal length from the camera. Read-only.
-     * @type {number}
-     * @memberof Photo
      */
     'focalLength'?: number;
     /**
      * The ISO value from the camera. Read-only.
-     * @type {number}
-     * @memberof Photo
      */
     'iso'?: number;
     /**
      * The orientation value from the camera. Read-only.
-     * @type {number}
-     * @memberof Photo
      */
     'orientation'?: number;
     /**
      * Represents the date and time the photo was taken. Read-only.
-     * @type {string}
-     * @memberof Photo
      */
     'takenDateTime'?: string;
 }
 /**
  * Optional. Information about the drive\'s storage space quota. Read-only.
- * @export
- * @interface Quota
  */
 export interface Quota {
     /**
      * Total space consumed by files in the recycle bin, in bytes. Read-only.
-     * @type {number}
-     * @memberof Quota
      */
     'deleted'?: number;
     /**
      * Total space remaining before reaching the quota limit, in bytes. Read-only.
-     * @type {number}
-     * @memberof Quota
      */
     'remaining'?: number;
     /**
      * Enumeration value that indicates the state of the storage space. Either \"normal\", \"nearing\", \"critical\" or \"exceeded\". Read-only.
-     * @type {string}
-     * @memberof Quota
      */
     'state'?: string;
     /**
      * Total allowed storage space, in bytes. Read-only.
-     * @type {number}
-     * @memberof Quota
      */
     'total'?: number;
     /**
      * Total space used, in bytes. Read-only.
-     * @type {number}
-     * @memberof Quota
      */
     'used'?: number;
 }
 /**
  * Remote item data, if the item is shared from a drive other than the one being accessed. Read-only.
- * @export
- * @interface RemoteItem
  */
 export interface RemoteItem {
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof RemoteItem
-     */
     'createdBy'?: IdentitySet;
     /**
      * Date and time of item creation. Read-only.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'createdDateTime'?: string;
-    /**
-     * 
-     * @type {OpenGraphFile}
-     * @memberof RemoteItem
-     */
     'file'?: OpenGraphFile;
-    /**
-     * 
-     * @type {FileSystemInfo}
-     * @memberof RemoteItem
-     */
     'fileSystemInfo'?: FileSystemInfo;
-    /**
-     * 
-     * @type {Folder}
-     * @memberof RemoteItem
-     */
     'folder'?: Folder;
     /**
      * The drive alias can be used in clients to make the urls user friendly. Example: \'personal/einstein\'. This will be used to resolve to the correct driveID.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'driveAlias'?: string;
     /**
      * The relative path of the item in relation to its drive root.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'path'?: string;
     /**
      * Unique identifier for the drive root of this item. Read-only.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'rootId'?: string;
     /**
      * Unique identifier for the remote item in its drive. Read-only.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'id'?: string;
-    /**
-     * 
-     * @type {Image}
-     * @memberof RemoteItem
-     */
     'image'?: Image;
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof RemoteItem
-     */
     'lastModifiedBy'?: IdentitySet;
     /**
      * Date and time the item was last modified. Read-only.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'lastModifiedDateTime'?: string;
     /**
      * Optional. Filename of the remote item. Read-only.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'name'?: string;
     /**
      * ETag for the item. Read-only.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'eTag'?: string;
     /**
      * An eTag for the content of the item. This eTag is not changed if only the metadata is changed. Note This property is not returned if the item is a folder. Read-only.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'cTag'?: string;
-    /**
-     * 
-     * @type {ItemReference}
-     * @memberof RemoteItem
-     */
     'parentReference'?: ItemReference;
     /**
      * The set of permissions for the item. Read-only. Nullable.
-     * @type {Array<Permission>}
-     * @memberof RemoteItem
      */
     'permissions'?: Array<Permission>;
     /**
      * Size of the remote item. Read-only.
-     * @type {number}
-     * @memberof RemoteItem
      */
     'size'?: number;
-    /**
-     * 
-     * @type {SpecialFolder}
-     * @memberof RemoteItem
-     */
     'specialFolder'?: SpecialFolder;
     /**
      * DAV compatible URL for the item.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'webDavUrl'?: string;
     /**
      * URL that displays the resource in the browser. Read-only.
-     * @type {string}
-     * @memberof RemoteItem
      */
     'webUrl'?: string;
 }
 /**
  * This resource is used to represent a set of identities associated with various events for an item, such as created by or last modified by.
- * @export
- * @interface SharePointIdentitySet
  */
 export interface SharePointIdentitySet {
-    /**
-     * 
-     * @type {Identity}
-     * @memberof SharePointIdentitySet
-     */
     'user'?: Identity;
-    /**
-     * 
-     * @type {Identity}
-     * @memberof SharePointIdentitySet
-     */
     'group'?: Identity;
 }
 /**
  * invitation-related data items 
- * @export
- * @interface SharingInvitation
  */
 export interface SharingInvitation {
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof SharingInvitation
-     */
     'invitedBy'?: IdentitySet;
 }
 /**
  * The `SharingLink` resource groups link-related data items into a single structure.  If a `permission` resource has a non-null `sharingLink` facet, the permission represents a sharing link (as opposed to permissions granted to a person or group). 
- * @export
- * @interface SharingLink
  */
 export interface SharingLink {
-    /**
-     * 
-     * @type {SharingLinkType}
-     * @memberof SharingLink
-     */
     'type'?: SharingLinkType;
     /**
      * If `true` then the user can only use this link to view the item on the web, and cannot use it to download the contents of the item.
-     * @type {boolean}
-     * @memberof SharingLink
      */
     'preventsDownload'?: boolean;
     /**
      * A URL that opens the item in the browser on the website.
-     * @type {string}
-     * @memberof SharingLink
      */
     'webUrl'?: string;
     /**
      * Provides a user-visible display name of the link. Optional. Libregraph only.
-     * @type {string}
-     * @memberof SharingLink
      */
     '@libre.graph.displayName'?: string;
     /**
      * The quicklink property can be assigned to only one link per resource. A quicklink can be used in the clients to provide a one-click copy to clipboard action. Optional. Libregraph only.
-     * @type {boolean}
-     * @memberof SharingLink
      */
     '@libre.graph.quickLink'?: boolean;
 }
@@ -2148,21 +1080,15 @@ export interface SharingLink {
 
 /**
  * The sharing link password which should be set. 
- * @export
- * @interface SharingLinkPassword
  */
 export interface SharingLinkPassword {
     /**
      * Password. It may require a password policy.
-     * @type {string}
-     * @memberof SharingLinkPassword
      */
     'password'?: string;
 }
 /**
  * The type of the link created.  | Value          | Display name      | Description                                                     | | -------------- | ----------------- | --------------------------------------------------------------- | | internal       | Internal          | Creates an internal link without any permissions.               | | view           | View              | Creates a read-only link to the driveItem.                      | | upload         | Upload            | Creates a read-write link to the folder driveItem.              | | edit           | Edit              | Creates a read-write link to the driveItem.                     | | createOnly     | File Drop         | Creates an upload-only link to the folder driveItem.            | | blocksDownload | Secure View       | Creates a read-only link that blocks download to the driveItem. | 
- * @export
- * @enum {string}
  */
 
 export const SharingLinkType = {
@@ -2178,470 +1104,293 @@ export type SharingLinkType = typeof SharingLinkType[keyof typeof SharingLinkTyp
 
 
 /**
+ * Provides the last successful sign-in attempt for a user
+ */
+export interface SignInActivity {
+    /**
+     * The date and time of the last successful sign-in for the user.
+     */
+    'lastSuccessfulSignInDateTime'?: string;
+}
+/**
  * If the current item is also available as a special folder, this facet is returned. Read-only
- * @export
- * @interface SpecialFolder
  */
 export interface SpecialFolder {
     /**
      * The unique identifier for this item in the /drive/special collection
-     * @type {string}
-     * @memberof SpecialFolder
      */
     'name'?: string;
 }
-/**
- * 
- * @export
- * @interface TagAssignment
- */
 export interface TagAssignment {
-    /**
-     * 
-     * @type {string}
-     * @memberof TagAssignment
-     */
     'resourceId': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof TagAssignment
-     */
     'tags': Array<string>;
 }
-/**
- * 
- * @export
- * @interface TagUnassignment
- */
 export interface TagUnassignment {
-    /**
-     * 
-     * @type {string}
-     * @memberof TagUnassignment
-     */
     'resourceId': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof TagUnassignment
-     */
     'tags': Array<string>;
 }
 /**
  * The thumbnail resource type represents a thumbnail for an image, video, document, or any item that has a bitmap representation. 
- * @export
- * @interface Thumbnail
  */
 export interface Thumbnail {
     /**
      * The content stream for the thumbnail.
-     * @type {string}
-     * @memberof Thumbnail
      */
     'content'?: string;
     /**
      * The height of the thumbnail, in pixels.
-     * @type {number}
-     * @memberof Thumbnail
      */
     'height'?: number;
     /**
      * The unique identifier of the item that provided the thumbnail. This is only available when a folder thumbnail is requested.
-     * @type {string}
-     * @memberof Thumbnail
      */
     'sourceItemId'?: string;
     /**
      * The URL used to fetch the thumbnail content.
-     * @type {string}
-     * @memberof Thumbnail
      */
     'url'?: string;
     /**
      * The width of the thumbnail, in pixels.
-     * @type {number}
-     * @memberof Thumbnail
      */
     'width'?: number;
 }
 /**
  * The ThumbnailSet resource is a keyed collection of thumbnail resources. It\'s used to represent a set of thumbnails associated with a DriveItem. 
- * @export
- * @interface ThumbnailSet
  */
 export interface ThumbnailSet {
     /**
      * The ID within the item. Read-only.
-     * @type {string}
-     * @memberof ThumbnailSet
      */
     'id'?: string;
-    /**
-     * 
-     * @type {Thumbnail}
-     * @memberof ThumbnailSet
-     */
     'large'?: Thumbnail;
-    /**
-     * 
-     * @type {Thumbnail}
-     * @memberof ThumbnailSet
-     */
     'medium'?: Thumbnail;
-    /**
-     * 
-     * @type {Thumbnail}
-     * @memberof ThumbnailSet
-     */
     'small'?: Thumbnail;
-    /**
-     * 
-     * @type {Thumbnail}
-     * @memberof ThumbnailSet
-     */
     'source'?: Thumbnail;
 }
 /**
  * Metadata for trashed drive Items
- * @export
- * @interface Trash
  */
 export interface Trash {
-    /**
-     * 
-     * @type {IdentitySet}
-     * @memberof Trash
-     */
     'trashedBy'?: IdentitySet;
     /**
      * The UTC date and time the folder was marked as trashed.
-     * @type {string}
-     * @memberof Trash
      */
     'trashedDateTime'?: string;
 }
 /**
  * A role definition is a collection of permissions in libre graph listing the operations that can be performed and the resources against which they can performed. 
- * @export
- * @interface UnifiedRoleDefinition
  */
 export interface UnifiedRoleDefinition {
     /**
      * The description for the unifiedRoleDefinition.
-     * @type {string}
-     * @memberof UnifiedRoleDefinition
      */
     'description'?: string;
     /**
      * The display name for the unifiedRoleDefinition. Required. Supports $filter (`eq`, `in`).
-     * @type {string}
-     * @memberof UnifiedRoleDefinition
      */
     'displayName'?: string;
     /**
      * The unique identifier for the role definition. Key, not nullable, Read-only. Inherited from entity. Supports $filter (`eq`, `in`).
-     * @type {string}
-     * @memberof UnifiedRoleDefinition
      */
     'id'?: string;
     /**
      * List of permissions included in the role.
-     * @type {Array<UnifiedRolePermission>}
-     * @memberof UnifiedRoleDefinition
      */
     'rolePermissions'?: Array<UnifiedRolePermission>;
     /**
      * When presenting a list of roles the weight can be used to order them in a meaningful way. Lower weight gets higher precedence. So content with lower weight will come first. If set, weights should be non-zero, as 0 is interpreted as an unset weight. 
-     * @type {number}
-     * @memberof UnifiedRoleDefinition
      */
     '@libre.graph.weight'?: number;
 }
 /**
  * Represents a collection of allowed resource actions and the conditions that must be met for the action to be allowed. Resource actions are tasks that can be performed on a resource. For example, an application resource may support create, update, delete, and reset password actions. 
- * @export
- * @interface UnifiedRolePermission
  */
 export interface UnifiedRolePermission {
     /**
      * Set of tasks that can be performed on a resource. Required.  The following is the schema for resource actions:  ```    {Namespace}/{Entity}/{PropertySet}/{Action} ```   For example: `libre.graph/applications/credentials/update`   * *{Namespace}* - The services that exposes the task. For example, all tasks in libre graph use the namespace `libre.graph`.  * *{Entity}* - The logical features or components exposed by the service in libre graph. For example, `applications`, `servicePrincipals`, or `groups`.  * *{PropertySet}* - Optional. The specific properties or aspects of the entity for which access is being granted.    For example, `libre.graph/applications/authentication/read` grants the ability to read the reply URL, logout URL,    and implicit flow property on the **application** object in libre graph. The following are reserved names for common property sets:    * `allProperties` - Designates all properties of the entity, including privileged properties.      Examples include `libre.graph/applications/allProperties/read` and `libre.graph/applications/allProperties/update`.    * `basic` - Designates common read properties but excludes privileged ones.      For example, `libre.graph/applications/basic/update` includes the ability to update standard properties like display name.    * `standard` - Designates common update properties but excludes privileged ones.      For example, `libre.graph/applications/standard/read`.  * *{Actions}* - The operations being granted. In most circumstances, permissions should be expressed in terms of CRUD operations or allTasks. Actions include:    * `create` - The ability to create a new instance of the entity.    * `read` - The ability to read a given property set (including allProperties).    * `update` - The ability to update a given property set (including allProperties).    * `delete` - The ability to delete a given entity.    * `allTasks` - Represents all CRUD operations (create, read, update, and delete).   Following the CS3 API we can represent the CS3 permissions by mapping them to driveItem properties or relations like this:  | [CS3 ResourcePermission](https://cs3org.github.io/cs3apis/#cs3.storage.provider.v1beta1.ResourcePermissions) | action | comment |  | ------------------------------------------------------------------------------------------------------------ | ------ | ------- |  | `stat` | `libre.graph/driveItem/basic/read` | `basic` because it does not include versions or trashed items |  | `get_quota` | `libre.graph/driveItem/quota/read` | read only the `quota` property |  | `get_path` | `libre.graph/driveItem/path/read` | read only the `path` property |  | `move` | `libre.graph/driveItem/path/update` | allows updating the `path` property of a CS3 resource |  | `delete` | `libre.graph/driveItem/standard/delete` | `standard` because deleting is a common update operation |  | `list_container` | `libre.graph/driveItem/children/read` | |  | `create_container` | `libre.graph/driveItem/children/create` | |  | `initiate_file_download` | `libre.graph/driveItem/content/read` | `content` is the property read when initiating a download |  | `initiate_file_upload` | `libre.graph/driveItem/upload/create` | `uploads` are a separate property. postprocessing creates the `content` |  | `add_grant` | `libre.graph/driveItem/permissions/create` | |  | `list_grant` | `libre.graph/driveItem/permissions/read` | |  | `update_grant` | `libre.graph/driveItem/permissions/update` | |  | `remove_grant` | `libre.graph/driveItem/permissions/delete` | |  | `deny_grant` | `libre.graph/driveItem/permissions/deny` | uses a non CRUD action `deny` |  | `list_file_versions` | `libre.graph/driveItem/versions/read` | `versions` is a `driveItemVersion` collection |  | `restore_file_version` | `libre.graph/driveItem/versions/update` | the only `update` action is restore |  | `list_recycle` | `libre.graph/driveItem/deleted/read` | reading a driveItem `deleted` property implies listing |  | `restore_recycle_item` | `libre.graph/driveItem/deleted/update` | the only `update` action is restore |  | `purge_recycle` | `libre.graph/driveItem/deleted/delete` | allows purging deleted `driveItems` |   Managing drives would be a different entity. A space manager role could be written as `libre.graph/drive/permission/allTasks`. 
-     * @type {Array<string>}
-     * @memberof UnifiedRolePermission
      */
     'allowedResourceActions'?: Array<string>;
     /**
      * Optional constraints that must be met for the permission to be effective. Not supported for custom roles.  Conditions define constraints that must be met. For example, a requirement that target resource must have a certain property. The following are the supported conditions:  * Drive: `exists @Resource.Drive` - The target resource must be a drive/space * Folder: `exists @Resource.Folder` - The target resource must be a folder * File: `exists @Resource.File` - The target resource must be a file  The following is an example of a role permission with a condition that the target resource is a folder: ```json   \"rolePermissions\": [       {           \"allowedResourceActions\": [               \"libre.graph/applications/basic/update\",               \"libre.graph/applications/credentials/update\"           ],           \"condition\":  \"exists @Resource.File\"       }   ] ``` Conditions aren\'t supported for custom roles. 
-     * @type {string}
-     * @memberof UnifiedRolePermission
      */
     'condition'?: string;
 }
 /**
  * Represents an Active Directory user object.
- * @export
- * @interface User
  */
 export interface User {
     /**
      * Read-only.
-     * @type {string}
-     * @memberof User
      */
     'id'?: string;
     /**
      * Set to \"true\" when the account is enabled.
-     * @type {boolean}
-     * @memberof User
      */
     'accountEnabled'?: boolean;
     /**
      * The apps and app roles which this user has been assigned.
-     * @type {Array<AppRoleAssignment>}
-     * @memberof User
      */
     'appRoleAssignments'?: Array<AppRoleAssignment>;
     /**
      * The name displayed in the address book for the user. This value is usually the combination of the user\'s first name, middle initial, and last name. This property is required when a user is created and it cannot be cleared during updates. Returned by default. Supports $orderby.
-     * @type {string}
-     * @memberof User
      */
     'displayName': string;
     /**
      * A collection of drives available for this user. Read-only.
-     * @type {Array<Drive>}
-     * @memberof User
      */
     'drives'?: Array<Drive>;
-    /**
-     * 
-     * @type {Drive}
-     * @memberof User
-     */
     'drive'?: Drive;
     /**
      * Identities associated with this account.
-     * @type {Array<ObjectIdentity>}
-     * @memberof User
      */
     'identities'?: Array<ObjectIdentity>;
     /**
      * The SMTP address for the user, for example, \'jeff@contoso.onowncloud.com\'. Returned by default.
-     * @type {string}
-     * @memberof User
      */
     'mail'?: string;
     /**
      * Groups that this user is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. Supports $expand.
-     * @type {Array<Group>}
-     * @memberof User
      */
     'memberOf'?: Array<Group>;
     /**
      * Contains the on-premises SAM account name synchronized from the on-premises directory.
-     * @type {string}
-     * @memberof User
      */
     'onPremisesSamAccountName': string;
-    /**
-     * 
-     * @type {PasswordProfile}
-     * @memberof User
-     */
     'passwordProfile'?: PasswordProfile;
     /**
      * The user\'s surname (family name or last name). Returned by default.
-     * @type {string}
-     * @memberof User
      */
     'surname'?: string;
     /**
      * The user\'s givenName. Returned by default.
-     * @type {string}
-     * @memberof User
      */
     'givenName'?: string;
     /**
      * The user`s type. This can be either \"Member\" for regular user, \"Guest\" for guest users or \"Federated\" for users imported from a federated instance.
-     * @type {string}
-     * @memberof User
      */
     'userType'?: string;
     /**
      * Represents the users language setting, ISO-639-1 Code
-     * @type {string}
-     * @memberof User
      */
     'preferredLanguage'?: string;
+    'signInActivity'?: SignInActivity;
+    /**
+     * A unique identifier assigned to the user by the organization.
+     */
+    'externalID'?: string;
 }
 /**
  * Represents updates to an Active Directory user object.
- * @export
- * @interface UserUpdate
  */
 export interface UserUpdate {
     /**
      * Read-only.
-     * @type {string}
-     * @memberof UserUpdate
      */
     'id'?: string;
     /**
      * Set to \"true\" when the account is enabled.
-     * @type {boolean}
-     * @memberof UserUpdate
      */
     'accountEnabled'?: boolean;
     /**
      * The apps and app roles which this user has been assigned.
-     * @type {Array<AppRoleAssignment>}
-     * @memberof UserUpdate
      */
     'appRoleAssignments'?: Array<AppRoleAssignment>;
     /**
      * The name displayed in the address book for the user. This value is usually the combination of the user\'s first name, middle initial, and last name. This property is required when a user is created and it cannot be cleared during updates. Returned by default. Supports $orderby.
-     * @type {string}
-     * @memberof UserUpdate
      */
     'displayName'?: string;
     /**
      * A collection of drives available for this user. Read-only.
-     * @type {Array<Drive>}
-     * @memberof UserUpdate
      */
     'drives'?: Array<Drive>;
-    /**
-     * 
-     * @type {Drive}
-     * @memberof UserUpdate
-     */
     'drive'?: Drive;
     /**
      * Identities associated with this account.
-     * @type {Array<ObjectIdentity>}
-     * @memberof UserUpdate
      */
     'identities'?: Array<ObjectIdentity>;
     /**
      * The SMTP address for the user, for example, \'jeff@contoso.onowncloud.com\'. Returned by default.
-     * @type {string}
-     * @memberof UserUpdate
      */
     'mail'?: string;
     /**
      * Groups that this user is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. Supports $expand.
-     * @type {Array<Group>}
-     * @memberof UserUpdate
      */
     'memberOf'?: Array<Group>;
     /**
      * Contains the on-premises SAM account name synchronized from the on-premises directory.
-     * @type {string}
-     * @memberof UserUpdate
      */
     'onPremisesSamAccountName'?: string;
-    /**
-     * 
-     * @type {PasswordProfile}
-     * @memberof UserUpdate
-     */
     'passwordProfile'?: PasswordProfile;
     /**
      * The user\'s surname (family name or last name). Returned by default.
-     * @type {string}
-     * @memberof UserUpdate
      */
     'surname'?: string;
     /**
      * The user\'s givenName. Returned by default.
-     * @type {string}
-     * @memberof UserUpdate
      */
     'givenName'?: string;
     /**
      * The user`s type. This can be either \"Member\" for regular user, \"Guest\" for guest users or \"Federated\" for users imported from a federated instance.
-     * @type {string}
-     * @memberof UserUpdate
      */
     'userType'?: string;
     /**
      * Represents the users language setting, ISO-639-1 Code
-     * @type {string}
-     * @memberof UserUpdate
      */
     'preferredLanguage'?: string;
+    'signInActivity'?: SignInActivity;
+    /**
+     * A unique identifier assigned to the user by the organization.
+     */
+    'externalID'?: string;
 }
 /**
  * The video resource groups video-related data items into a single structure.  If a driveItem has a non-null video facet, the item represents a video file. The properties of the video resource are populated by extracting metadata from the file. 
- * @export
- * @interface Video
  */
 export interface Video {
     /**
      * Number of audio bits per sample.
-     * @type {number}
-     * @memberof Video
      */
     'audioBitsPerSample'?: number;
     /**
      * Number of audio channels.
-     * @type {number}
-     * @memberof Video
      */
     'audioChannels'?: number;
     /**
      * Name of the audio format (AAC, MP3, etc.).
-     * @type {string}
-     * @memberof Video
      */
     'audioFormat'?: string;
     /**
      * Number of audio samples per second.
-     * @type {number}
-     * @memberof Video
      */
     'audioSamplesPerSecond'?: number;
     /**
      * Bit rate of the video in bits per second.
-     * @type {number}
-     * @memberof Video
      */
     'bitrate'?: number;
     /**
      * Duration of the file in milliseconds.
-     * @type {number}
-     * @memberof Video
      */
     'duration'?: number;
     /**
      * \\\"Four character code\\\" name of the video format.
-     * @type {string}
-     * @memberof Video
      */
     'fourCC'?: string;
     /**
      * Frame rate of the video.
-     * @type {number}
-     * @memberof Video
      */
     'frameRate'?: number;
     /**
      * Height of the video, in pixels.
-     * @type {number}
-     * @memberof Video
      */
     'height'?: number;
     /**
      * Width of the video, in pixels.
-     * @type {number}
-     * @memberof Video
      */
     'width'?: number;
 }
 
 /**
  * ActivitiesApi - axios parameter creator
- * @export
  */
 export const ActivitiesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -2675,8 +1424,8 @@ export const ActivitiesApiAxiosParamCreator = function (configuration?: Configur
                 localVarQueryParameter['kql'] = kql;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -2691,7 +1440,6 @@ export const ActivitiesApiAxiosParamCreator = function (configuration?: Configur
 
 /**
  * ActivitiesApi - functional programming interface
- * @export
  */
 export const ActivitiesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ActivitiesApiAxiosParamCreator(configuration)
@@ -2714,7 +1462,6 @@ export const ActivitiesApiFp = function(configuration?: Configuration) {
 
 /**
  * ActivitiesApi - factory interface
- * @export
  */
 export const ActivitiesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ActivitiesApiFp(configuration)
@@ -2734,9 +1481,6 @@ export const ActivitiesApiFactory = function (configuration?: Configuration, bas
 
 /**
  * ActivitiesApi - object-oriented interface
- * @export
- * @class ActivitiesApi
- * @extends {BaseAPI}
  */
 export class ActivitiesApi extends BaseAPI {
     /**
@@ -2745,7 +1489,6 @@ export class ActivitiesApi extends BaseAPI {
      * @param {string} [kql] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ActivitiesApi
      */
     public getActivities(kql?: string, options?: RawAxiosRequestConfig) {
         return ActivitiesApiFp(this.configuration).getActivities(kql, options).then((request) => request(this.axios, this.basePath));
@@ -2756,7 +1499,6 @@ export class ActivitiesApi extends BaseAPI {
 
 /**
  * ApplicationsApi - axios parameter creator
- * @export
  */
 export const ApplicationsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -2789,8 +1531,8 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -2825,8 +1567,8 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -2841,7 +1583,6 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
 
 /**
  * ApplicationsApi - functional programming interface
- * @export
  */
 export const ApplicationsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ApplicationsApiAxiosParamCreator(configuration)
@@ -2876,7 +1617,6 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
 
 /**
  * ApplicationsApi - factory interface
- * @export
  */
 export const ApplicationsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ApplicationsApiFp(configuration)
@@ -2905,9 +1645,6 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
 
 /**
  * ApplicationsApi - object-oriented interface
- * @export
- * @class ApplicationsApi
- * @extends {BaseAPI}
  */
 export class ApplicationsApi extends BaseAPI {
     /**
@@ -2916,7 +1653,6 @@ export class ApplicationsApi extends BaseAPI {
      * @param {string} applicationId key: id of application
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ApplicationsApi
      */
     public getApplication(applicationId: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).getApplication(applicationId, options).then((request) => request(this.axios, this.basePath));
@@ -2927,7 +1663,6 @@ export class ApplicationsApi extends BaseAPI {
      * @summary Get all applications
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ApplicationsApi
      */
     public listApplications(options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).listApplications(options).then((request) => request(this.axios, this.basePath));
@@ -2938,7 +1673,6 @@ export class ApplicationsApi extends BaseAPI {
 
 /**
  * DriveItemApi - axios parameter creator
- * @export
  */
 export const DriveItemApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -2975,8 +1709,8 @@ export const DriveItemApiAxiosParamCreator = function (configuration?: Configura
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3019,8 +1753,8 @@ export const DriveItemApiAxiosParamCreator = function (configuration?: Configura
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3066,9 +1800,8 @@ export const DriveItemApiAxiosParamCreator = function (configuration?: Configura
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3085,7 +1818,6 @@ export const DriveItemApiAxiosParamCreator = function (configuration?: Configura
 
 /**
  * DriveItemApi - functional programming interface
- * @export
  */
 export const DriveItemApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DriveItemApiAxiosParamCreator(configuration)
@@ -3138,7 +1870,6 @@ export const DriveItemApiFp = function(configuration?: Configuration) {
 
 /**
  * DriveItemApi - factory interface
- * @export
  */
 export const DriveItemApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = DriveItemApiFp(configuration)
@@ -3182,9 +1913,6 @@ export const DriveItemApiFactory = function (configuration?: Configuration, base
 
 /**
  * DriveItemApi - object-oriented interface
- * @export
- * @class DriveItemApi
- * @extends {BaseAPI}
  */
 export class DriveItemApi extends BaseAPI {
     /**
@@ -3194,7 +1922,6 @@ export class DriveItemApi extends BaseAPI {
      * @param {string} itemId key: id of item
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DriveItemApi
      */
     public deleteDriveItem(driveId: string, itemId: string, options?: RawAxiosRequestConfig) {
         return DriveItemApiFp(this.configuration).deleteDriveItem(driveId, itemId, options).then((request) => request(this.axios, this.basePath));
@@ -3207,7 +1934,6 @@ export class DriveItemApi extends BaseAPI {
      * @param {string} itemId key: id of item
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DriveItemApi
      */
     public getDriveItem(driveId: string, itemId: string, options?: RawAxiosRequestConfig) {
         return DriveItemApiFp(this.configuration).getDriveItem(driveId, itemId, options).then((request) => request(this.axios, this.basePath));
@@ -3221,7 +1947,6 @@ export class DriveItemApi extends BaseAPI {
      * @param {DriveItem} driveItem DriveItem properties to update
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DriveItemApi
      */
     public updateDriveItem(driveId: string, itemId: string, driveItem: DriveItem, options?: RawAxiosRequestConfig) {
         return DriveItemApiFp(this.configuration).updateDriveItem(driveId, itemId, driveItem, options).then((request) => request(this.axios, this.basePath));
@@ -3232,7 +1957,6 @@ export class DriveItemApi extends BaseAPI {
 
 /**
  * DrivesApi - axios parameter creator
- * @export
  */
 export const DrivesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -3264,9 +1988,49 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(drive, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Create a new drive of a specific type. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles.
+         * @param {Drive} drive New space property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDriveBeta: async (drive: Drive, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'drive' is not null or undefined
+            assertParamExists('createDriveBeta', 'drive', drive)
+            const localVarPath = `/v1beta1/drives`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3308,12 +2072,55 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
+
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
             }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete a specific space. Alias for \'/v1.0/drives\'.
+         * @param {string} driveId key: id of drive
+         * @param {string} [ifMatch] ETag
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteDriveBeta: async (driveId: string, ifMatch?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('deleteDriveBeta', 'driveId', driveId)
+            const localVarPath = `/v1beta1/drives/{drive-id}`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-    
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (ifMatch != null) {
+                localVarHeaderParameter['If-Match'] = String(ifMatch);
+            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3352,8 +2159,48 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get drive by id. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles
+         * @param {string} driveId key: id of drive
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDriveBeta: async (driveId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('getDriveBeta', 'driveId', driveId)
+            const localVarPath = `/v1beta1/drives/{drive-id}`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3395,9 +2242,53 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(driveUpdate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update the drive. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles
+         * @param {string} driveId key: id of drive
+         * @param {DriveUpdate} driveUpdate New space values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateDriveBeta: async (driveId: string, driveUpdate: DriveUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'driveId' is not null or undefined
+            assertParamExists('updateDriveBeta', 'driveId', driveId)
+            // verify required parameter 'driveUpdate' is not null or undefined
+            assertParamExists('updateDriveBeta', 'driveUpdate', driveUpdate)
+            const localVarPath = `/v1beta1/drives/{drive-id}`
+                .replace(`{${"drive-id"}}`, encodeURIComponent(String(driveId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication openId required
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3414,7 +2305,6 @@ export const DrivesApiAxiosParamCreator = function (configuration?: Configuratio
 
 /**
  * DrivesApi - functional programming interface
- * @export
  */
 export const DrivesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DrivesApiAxiosParamCreator(configuration)
@@ -3434,6 +2324,19 @@ export const DrivesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Create a new drive of a specific type. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles.
+         * @param {Drive} drive New space property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createDriveBeta(drive: Drive, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Drive>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDriveBeta(drive, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DrivesApi.createDriveBeta']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Delete a specific space
          * @param {string} driveId key: id of drive
          * @param {string} [ifMatch] ETag
@@ -3444,6 +2347,20 @@ export const DrivesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDrive(driveId, ifMatch, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DrivesApi.deleteDrive']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Delete a specific space. Alias for \'/v1.0/drives\'.
+         * @param {string} driveId key: id of drive
+         * @param {string} [ifMatch] ETag
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteDriveBeta(driveId: string, ifMatch?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDriveBeta(driveId, ifMatch, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DrivesApi.deleteDriveBeta']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3461,6 +2378,19 @@ export const DrivesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get drive by id. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles
+         * @param {string} driveId key: id of drive
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDriveBeta(driveId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Drive>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDriveBeta(driveId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DrivesApi.getDriveBeta']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Update the drive
          * @param {string} driveId key: id of drive
          * @param {DriveUpdate} driveUpdate New space values
@@ -3473,12 +2403,25 @@ export const DrivesApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['DrivesApi.updateDrive']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @summary Update the drive. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles
+         * @param {string} driveId key: id of drive
+         * @param {DriveUpdate} driveUpdate New space values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateDriveBeta(driveId: string, driveUpdate: DriveUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Drive>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateDriveBeta(driveId, driveUpdate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DrivesApi.updateDriveBeta']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
 /**
  * DrivesApi - factory interface
- * @export
  */
 export const DrivesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = DrivesApiFp(configuration)
@@ -3495,6 +2438,16 @@ export const DrivesApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
+         * @summary Create a new drive of a specific type. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles.
+         * @param {Drive} drive New space property values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createDriveBeta(drive: Drive, options?: RawAxiosRequestConfig): AxiosPromise<Drive> {
+            return localVarFp.createDriveBeta(drive, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Delete a specific space
          * @param {string} driveId key: id of drive
          * @param {string} [ifMatch] ETag
@@ -3503,6 +2456,17 @@ export const DrivesApiFactory = function (configuration?: Configuration, basePat
          */
         deleteDrive(driveId: string, ifMatch?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteDrive(driveId, ifMatch, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete a specific space. Alias for \'/v1.0/drives\'.
+         * @param {string} driveId key: id of drive
+         * @param {string} [ifMatch] ETag
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteDriveBeta(driveId: string, ifMatch?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deleteDriveBeta(driveId, ifMatch, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3516,6 +2480,16 @@ export const DrivesApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
+         * @summary Get drive by id. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles
+         * @param {string} driveId key: id of drive
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDriveBeta(driveId: string, options?: RawAxiosRequestConfig): AxiosPromise<Drive> {
+            return localVarFp.getDriveBeta(driveId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update the drive
          * @param {string} driveId key: id of drive
          * @param {DriveUpdate} driveUpdate New space values
@@ -3525,14 +2499,22 @@ export const DrivesApiFactory = function (configuration?: Configuration, basePat
         updateDrive(driveId: string, driveUpdate: DriveUpdate, options?: RawAxiosRequestConfig): AxiosPromise<Drive> {
             return localVarFp.updateDrive(driveId, driveUpdate, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Update the drive. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles
+         * @param {string} driveId key: id of drive
+         * @param {DriveUpdate} driveUpdate New space values
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateDriveBeta(driveId: string, driveUpdate: DriveUpdate, options?: RawAxiosRequestConfig): AxiosPromise<Drive> {
+            return localVarFp.updateDriveBeta(driveId, driveUpdate, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
 /**
  * DrivesApi - object-oriented interface
- * @export
- * @class DrivesApi
- * @extends {BaseAPI}
  */
 export class DrivesApi extends BaseAPI {
     /**
@@ -3541,10 +2523,20 @@ export class DrivesApi extends BaseAPI {
      * @param {Drive} drive New space property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesApi
      */
     public createDrive(drive: Drive, options?: RawAxiosRequestConfig) {
         return DrivesApiFp(this.configuration).createDrive(drive, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Create a new drive of a specific type. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles.
+     * @param {Drive} drive New space property values
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public createDriveBeta(drive: Drive, options?: RawAxiosRequestConfig) {
+        return DrivesApiFp(this.configuration).createDriveBeta(drive, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3554,10 +2546,21 @@ export class DrivesApi extends BaseAPI {
      * @param {string} [ifMatch] ETag
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesApi
      */
     public deleteDrive(driveId: string, ifMatch?: string, options?: RawAxiosRequestConfig) {
         return DrivesApiFp(this.configuration).deleteDrive(driveId, ifMatch, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete a specific space. Alias for \'/v1.0/drives\'.
+     * @param {string} driveId key: id of drive
+     * @param {string} [ifMatch] ETag
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deleteDriveBeta(driveId: string, ifMatch?: string, options?: RawAxiosRequestConfig) {
+        return DrivesApiFp(this.configuration).deleteDriveBeta(driveId, ifMatch, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3566,10 +2569,20 @@ export class DrivesApi extends BaseAPI {
      * @param {string} driveId key: id of drive
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesApi
      */
     public getDrive(driveId: string, options?: RawAxiosRequestConfig) {
         return DrivesApiFp(this.configuration).getDrive(driveId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get drive by id. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles
+     * @param {string} driveId key: id of drive
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getDriveBeta(driveId: string, options?: RawAxiosRequestConfig) {
+        return DrivesApiFp(this.configuration).getDriveBeta(driveId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3579,10 +2592,21 @@ export class DrivesApi extends BaseAPI {
      * @param {DriveUpdate} driveUpdate New space values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesApi
      */
     public updateDrive(driveId: string, driveUpdate: DriveUpdate, options?: RawAxiosRequestConfig) {
         return DrivesApiFp(this.configuration).updateDrive(driveId, driveUpdate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update the drive. Alias for \'/v1.0/drives\', the difference is that grantedtoV2 is used and roles contain unified roles instead of cs3 roles
+     * @param {string} driveId key: id of drive
+     * @param {DriveUpdate} driveUpdate New space values
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updateDriveBeta(driveId: string, driveUpdate: DriveUpdate, options?: RawAxiosRequestConfig) {
+        return DrivesApiFp(this.configuration).updateDriveBeta(driveId, driveUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3590,7 +2614,6 @@ export class DrivesApi extends BaseAPI {
 
 /**
  * DrivesGetDrivesApi - axios parameter creator
- * @export
  */
 export const DrivesGetDrivesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -3629,8 +2652,8 @@ export const DrivesGetDrivesApiAxiosParamCreator = function (configuration?: Con
                 localVarQueryParameter['$filter'] = $filter;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3675,8 +2698,8 @@ export const DrivesGetDrivesApiAxiosParamCreator = function (configuration?: Con
                 localVarQueryParameter['$filter'] = $filter;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3691,7 +2714,6 @@ export const DrivesGetDrivesApiAxiosParamCreator = function (configuration?: Con
 
 /**
  * DrivesGetDrivesApi - functional programming interface
- * @export
  */
 export const DrivesGetDrivesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DrivesGetDrivesApiAxiosParamCreator(configuration)
@@ -3729,7 +2751,6 @@ export const DrivesGetDrivesApiFp = function(configuration?: Configuration) {
 
 /**
  * DrivesGetDrivesApi - factory interface
- * @export
  */
 export const DrivesGetDrivesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = DrivesGetDrivesApiFp(configuration)
@@ -3761,9 +2782,6 @@ export const DrivesGetDrivesApiFactory = function (configuration?: Configuration
 
 /**
  * DrivesGetDrivesApi - object-oriented interface
- * @export
- * @class DrivesGetDrivesApi
- * @extends {BaseAPI}
  */
 export class DrivesGetDrivesApi extends BaseAPI {
     /**
@@ -3773,7 +2791,6 @@ export class DrivesGetDrivesApi extends BaseAPI {
      * @param {string} [$filter] Filter items by property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesGetDrivesApi
      */
     public listAllDrives($orderby?: string, $filter?: string, options?: RawAxiosRequestConfig) {
         return DrivesGetDrivesApiFp(this.configuration).listAllDrives($orderby, $filter, options).then((request) => request(this.axios, this.basePath));
@@ -3786,7 +2803,6 @@ export class DrivesGetDrivesApi extends BaseAPI {
      * @param {string} [$filter] Filter items by property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesGetDrivesApi
      */
     public listAllDrivesBeta($orderby?: string, $filter?: string, options?: RawAxiosRequestConfig) {
         return DrivesGetDrivesApiFp(this.configuration).listAllDrivesBeta($orderby, $filter, options).then((request) => request(this.axios, this.basePath));
@@ -3797,7 +2813,6 @@ export class DrivesGetDrivesApi extends BaseAPI {
 
 /**
  * DrivesPermissionsApi - axios parameter creator
- * @export
  */
 export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -3835,9 +2850,8 @@ export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: C
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3886,8 +2900,8 @@ export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: C
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3934,8 +2948,8 @@ export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: C
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3979,9 +2993,8 @@ export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: C
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4036,8 +3049,8 @@ export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: C
                 localVarQueryParameter['$select'] = Array.from($select).join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4087,9 +3100,8 @@ export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: C
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4141,9 +3153,8 @@ export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: C
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4160,7 +3171,6 @@ export const DrivesPermissionsApiAxiosParamCreator = function (configuration?: C
 
 /**
  * DrivesPermissionsApi - functional programming interface
- * @export
  */
 export const DrivesPermissionsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DrivesPermissionsApiAxiosParamCreator(configuration)
@@ -4278,7 +3288,6 @@ export const DrivesPermissionsApiFp = function(configuration?: Configuration) {
 
 /**
  * DrivesPermissionsApi - factory interface
- * @export
  */
 export const DrivesPermissionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = DrivesPermissionsApiFp(configuration)
@@ -4375,9 +3384,6 @@ export const DrivesPermissionsApiFactory = function (configuration?: Configurati
 
 /**
  * DrivesPermissionsApi - object-oriented interface
- * @export
- * @class DrivesPermissionsApi
- * @extends {BaseAPI}
  */
 export class DrivesPermissionsApi extends BaseAPI {
     /**
@@ -4388,7 +3394,6 @@ export class DrivesPermissionsApi extends BaseAPI {
      * @param {DriveItemCreateLink} [driveItemCreateLink] In the request body, provide a JSON object with the following parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesPermissionsApi
      */
     public createLink(driveId: string, itemId: string, driveItemCreateLink?: DriveItemCreateLink, options?: RawAxiosRequestConfig) {
         return DrivesPermissionsApiFp(this.configuration).createLink(driveId, itemId, driveItemCreateLink, options).then((request) => request(this.axios, this.basePath));
@@ -4402,7 +3407,6 @@ export class DrivesPermissionsApi extends BaseAPI {
      * @param {string} permId key: id of permission
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesPermissionsApi
      */
     public deletePermission(driveId: string, itemId: string, permId: string, options?: RawAxiosRequestConfig) {
         return DrivesPermissionsApiFp(this.configuration).deletePermission(driveId, itemId, permId, options).then((request) => request(this.axios, this.basePath));
@@ -4416,7 +3420,6 @@ export class DrivesPermissionsApi extends BaseAPI {
      * @param {string} permId key: id of permission
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesPermissionsApi
      */
     public getPermission(driveId: string, itemId: string, permId: string, options?: RawAxiosRequestConfig) {
         return DrivesPermissionsApiFp(this.configuration).getPermission(driveId, itemId, permId, options).then((request) => request(this.axios, this.basePath));
@@ -4430,7 +3433,6 @@ export class DrivesPermissionsApi extends BaseAPI {
      * @param {DriveItemInvite} [driveItemInvite] In the request body, provide a JSON object with the following parameters. To create a custom role submit a list of actions instead of roles.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesPermissionsApi
      */
     public invite(driveId: string, itemId: string, driveItemInvite?: DriveItemInvite, options?: RawAxiosRequestConfig) {
         return DrivesPermissionsApiFp(this.configuration).invite(driveId, itemId, driveItemInvite, options).then((request) => request(this.axios, this.basePath));
@@ -4445,7 +3447,6 @@ export class DrivesPermissionsApi extends BaseAPI {
      * @param {Set<ListPermissionsSelectEnum>} [$select] Select properties to be returned. By default all properties are returned. Select the roles property to fetch the available sharing roles without resolving all the permissions. Combine this with the $filter parameter to fetch the actions applicable to federated users.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesPermissionsApi
      */
     public listPermissions(driveId: string, itemId: string, $filter?: string, $select?: Set<ListPermissionsSelectEnum>, options?: RawAxiosRequestConfig) {
         return DrivesPermissionsApiFp(this.configuration).listPermissions(driveId, itemId, $filter, $select, options).then((request) => request(this.axios, this.basePath));
@@ -4460,7 +3461,6 @@ export class DrivesPermissionsApi extends BaseAPI {
      * @param {SharingLinkPassword} sharingLinkPassword New password value
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesPermissionsApi
      */
     public setPermissionPassword(driveId: string, itemId: string, permId: string, sharingLinkPassword: SharingLinkPassword, options?: RawAxiosRequestConfig) {
         return DrivesPermissionsApiFp(this.configuration).setPermissionPassword(driveId, itemId, permId, sharingLinkPassword, options).then((request) => request(this.axios, this.basePath));
@@ -4475,16 +3475,12 @@ export class DrivesPermissionsApi extends BaseAPI {
      * @param {Permission} permission New property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesPermissionsApi
      */
     public updatePermission(driveId: string, itemId: string, permId: string, permission: Permission, options?: RawAxiosRequestConfig) {
         return DrivesPermissionsApiFp(this.configuration).updatePermission(driveId, itemId, permId, permission, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const ListPermissionsSelectEnum = {
     LibreGraphPermissionsActionsAllowedValues: '@libre.graph.permissions.actions.allowedValues',
     LibreGraphPermissionsRolesAllowedValues: '@libre.graph.permissions.roles.allowedValues',
@@ -4495,7 +3491,6 @@ export type ListPermissionsSelectEnum = typeof ListPermissionsSelectEnum[keyof t
 
 /**
  * DrivesRootApi - axios parameter creator
- * @export
  */
 export const DrivesRootApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -4529,9 +3524,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4573,9 +3567,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4620,8 +3613,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4664,8 +3657,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4704,8 +3697,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4745,9 +3738,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4798,8 +3790,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
                 localVarQueryParameter['$select'] = Array.from($select).join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4845,9 +3837,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4895,9 +3886,8 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4914,7 +3904,6 @@ export const DrivesRootApiAxiosParamCreator = function (configuration?: Configur
 
 /**
  * DrivesRootApi - functional programming interface
- * @export
  */
 export const DrivesRootApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DrivesRootApiAxiosParamCreator(configuration)
@@ -5052,7 +4041,6 @@ export const DrivesRootApiFp = function(configuration?: Configuration) {
 
 /**
  * DrivesRootApi - factory interface
- * @export
  */
 export const DrivesRootApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = DrivesRootApiFp(configuration)
@@ -5163,9 +4151,6 @@ export const DrivesRootApiFactory = function (configuration?: Configuration, bas
 
 /**
  * DrivesRootApi - object-oriented interface
- * @export
- * @class DrivesRootApi
- * @extends {BaseAPI}
  */
 export class DrivesRootApi extends BaseAPI {
     /**
@@ -5175,7 +4160,6 @@ export class DrivesRootApi extends BaseAPI {
      * @param {DriveItem} [driveItem] In the request body, provide a JSON object with the following parameters. For mounting a share the necessary remoteItem id and permission id can be taken from the [sharedWithMe](#/me.drive/ListSharedWithMe) endpoint.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesRootApi
      */
     public createDriveItem(driveId: string, driveItem?: DriveItem, options?: RawAxiosRequestConfig) {
         return DrivesRootApiFp(this.configuration).createDriveItem(driveId, driveItem, options).then((request) => request(this.axios, this.basePath));
@@ -5188,7 +4172,6 @@ export class DrivesRootApi extends BaseAPI {
      * @param {DriveItemCreateLink} [driveItemCreateLink] In the request body, provide a JSON object with the following parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesRootApi
      */
     public createLinkSpaceRoot(driveId: string, driveItemCreateLink?: DriveItemCreateLink, options?: RawAxiosRequestConfig) {
         return DrivesRootApiFp(this.configuration).createLinkSpaceRoot(driveId, driveItemCreateLink, options).then((request) => request(this.axios, this.basePath));
@@ -5201,7 +4184,6 @@ export class DrivesRootApi extends BaseAPI {
      * @param {string} permId key: id of permission
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesRootApi
      */
     public deletePermissionSpaceRoot(driveId: string, permId: string, options?: RawAxiosRequestConfig) {
         return DrivesRootApiFp(this.configuration).deletePermissionSpaceRoot(driveId, permId, options).then((request) => request(this.axios, this.basePath));
@@ -5214,7 +4196,6 @@ export class DrivesRootApi extends BaseAPI {
      * @param {string} permId key: id of permission
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesRootApi
      */
     public getPermissionSpaceRoot(driveId: string, permId: string, options?: RawAxiosRequestConfig) {
         return DrivesRootApiFp(this.configuration).getPermissionSpaceRoot(driveId, permId, options).then((request) => request(this.axios, this.basePath));
@@ -5226,7 +4207,6 @@ export class DrivesRootApi extends BaseAPI {
      * @param {string} driveId key: id of drive
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesRootApi
      */
     public getRoot(driveId: string, options?: RawAxiosRequestConfig) {
         return DrivesRootApiFp(this.configuration).getRoot(driveId, options).then((request) => request(this.axios, this.basePath));
@@ -5239,7 +4219,6 @@ export class DrivesRootApi extends BaseAPI {
      * @param {DriveItemInvite} [driveItemInvite] In the request body, provide a JSON object with the following parameters. To create a custom role submit a list of actions instead of roles.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesRootApi
      */
     public inviteSpaceRoot(driveId: string, driveItemInvite?: DriveItemInvite, options?: RawAxiosRequestConfig) {
         return DrivesRootApiFp(this.configuration).inviteSpaceRoot(driveId, driveItemInvite, options).then((request) => request(this.axios, this.basePath));
@@ -5253,7 +4232,6 @@ export class DrivesRootApi extends BaseAPI {
      * @param {Set<ListPermissionsSpaceRootSelectEnum>} [$select] Select properties to be returned. By default all properties are returned. Select the roles property to fetch the available sharing roles without resolving all the permissions. Combine this with the $filter parameter to fetch the actions applicable to federated users.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesRootApi
      */
     public listPermissionsSpaceRoot(driveId: string, $filter?: string, $select?: Set<ListPermissionsSpaceRootSelectEnum>, options?: RawAxiosRequestConfig) {
         return DrivesRootApiFp(this.configuration).listPermissionsSpaceRoot(driveId, $filter, $select, options).then((request) => request(this.axios, this.basePath));
@@ -5267,7 +4245,6 @@ export class DrivesRootApi extends BaseAPI {
      * @param {SharingLinkPassword} sharingLinkPassword New password value
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesRootApi
      */
     public setPermissionPasswordSpaceRoot(driveId: string, permId: string, sharingLinkPassword: SharingLinkPassword, options?: RawAxiosRequestConfig) {
         return DrivesRootApiFp(this.configuration).setPermissionPasswordSpaceRoot(driveId, permId, sharingLinkPassword, options).then((request) => request(this.axios, this.basePath));
@@ -5281,16 +4258,12 @@ export class DrivesRootApi extends BaseAPI {
      * @param {Permission} permission New property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DrivesRootApi
      */
     public updatePermissionSpaceRoot(driveId: string, permId: string, permission: Permission, options?: RawAxiosRequestConfig) {
         return DrivesRootApiFp(this.configuration).updatePermissionSpaceRoot(driveId, permId, permission, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const ListPermissionsSpaceRootSelectEnum = {
     LibreGraphPermissionsActionsAllowedValues: '@libre.graph.permissions.actions.allowedValues',
     LibreGraphPermissionsRolesAllowedValues: '@libre.graph.permissions.roles.allowedValues',
@@ -5301,7 +4274,6 @@ export type ListPermissionsSpaceRootSelectEnum = typeof ListPermissionsSpaceRoot
 
 /**
  * EducationClassApi - axios parameter creator
- * @export
  */
 export const EducationClassApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -5335,9 +4307,8 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5375,9 +4346,8 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5416,8 +4386,8 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5458,8 +4428,8 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5496,8 +4466,8 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5534,8 +4504,8 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5568,8 +4538,8 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5609,9 +4579,8 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5628,7 +4597,6 @@ export const EducationClassApiAxiosParamCreator = function (configuration?: Conf
 
 /**
  * EducationClassApi - functional programming interface
- * @export
  */
 export const EducationClassApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = EducationClassApiAxiosParamCreator(configuration)
@@ -5744,7 +4712,6 @@ export const EducationClassApiFp = function(configuration?: Configuration) {
 
 /**
  * EducationClassApi - factory interface
- * @export
  */
 export const EducationClassApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = EducationClassApiFp(configuration)
@@ -5836,9 +4803,6 @@ export const EducationClassApiFactory = function (configuration?: Configuration,
 
 /**
  * EducationClassApi - object-oriented interface
- * @export
- * @class EducationClassApi
- * @extends {BaseAPI}
  */
 export class EducationClassApi extends BaseAPI {
     /**
@@ -5848,7 +4812,6 @@ export class EducationClassApi extends BaseAPI {
      * @param {ClassMemberReference} classMemberReference educationUser to be added as member
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassApi
      */
     public addUserToClass(classId: string, classMemberReference: ClassMemberReference, options?: RawAxiosRequestConfig) {
         return EducationClassApiFp(this.configuration).addUserToClass(classId, classMemberReference, options).then((request) => request(this.axios, this.basePath));
@@ -5860,7 +4823,6 @@ export class EducationClassApi extends BaseAPI {
      * @param {EducationClass} educationClass New entity
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassApi
      */
     public createClass(educationClass: EducationClass, options?: RawAxiosRequestConfig) {
         return EducationClassApiFp(this.configuration).createClass(educationClass, options).then((request) => request(this.axios, this.basePath));
@@ -5872,7 +4834,6 @@ export class EducationClassApi extends BaseAPI {
      * @param {string} classId key: id or externalId of class
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassApi
      */
     public deleteClass(classId: string, options?: RawAxiosRequestConfig) {
         return EducationClassApiFp(this.configuration).deleteClass(classId, options).then((request) => request(this.axios, this.basePath));
@@ -5885,7 +4846,6 @@ export class EducationClassApi extends BaseAPI {
      * @param {string} userId key: id or username of the user to unassign from class
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassApi
      */
     public deleteUserFromClass(classId: string, userId: string, options?: RawAxiosRequestConfig) {
         return EducationClassApiFp(this.configuration).deleteUserFromClass(classId, userId, options).then((request) => request(this.axios, this.basePath));
@@ -5897,7 +4857,6 @@ export class EducationClassApi extends BaseAPI {
      * @param {string} classId key: id or externalId of class
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassApi
      */
     public getClass(classId: string, options?: RawAxiosRequestConfig) {
         return EducationClassApiFp(this.configuration).getClass(classId, options).then((request) => request(this.axios, this.basePath));
@@ -5909,7 +4868,6 @@ export class EducationClassApi extends BaseAPI {
      * @param {string} classId key: id or externalId of class
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassApi
      */
     public listClassMembers(classId: string, options?: RawAxiosRequestConfig) {
         return EducationClassApiFp(this.configuration).listClassMembers(classId, options).then((request) => request(this.axios, this.basePath));
@@ -5920,7 +4878,6 @@ export class EducationClassApi extends BaseAPI {
      * @summary list education classes
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassApi
      */
     public listClasses(options?: RawAxiosRequestConfig) {
         return EducationClassApiFp(this.configuration).listClasses(options).then((request) => request(this.axios, this.basePath));
@@ -5933,7 +4890,6 @@ export class EducationClassApi extends BaseAPI {
      * @param {EducationClass} educationClass New property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassApi
      */
     public updateClass(classId: string, educationClass: EducationClass, options?: RawAxiosRequestConfig) {
         return EducationClassApiFp(this.configuration).updateClass(classId, educationClass, options).then((request) => request(this.axios, this.basePath));
@@ -5944,7 +4900,6 @@ export class EducationClassApi extends BaseAPI {
 
 /**
  * EducationClassTeachersApi - axios parameter creator
- * @export
  */
 export const EducationClassTeachersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -5978,9 +4933,8 @@ export const EducationClassTeachersApiAxiosParamCreator = function (configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6023,8 +4977,8 @@ export const EducationClassTeachersApiAxiosParamCreator = function (configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6061,8 +5015,8 @@ export const EducationClassTeachersApiAxiosParamCreator = function (configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6077,7 +5031,6 @@ export const EducationClassTeachersApiAxiosParamCreator = function (configuratio
 
 /**
  * EducationClassTeachersApi - functional programming interface
- * @export
  */
 export const EducationClassTeachersApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = EducationClassTeachersApiAxiosParamCreator(configuration)
@@ -6128,7 +5081,6 @@ export const EducationClassTeachersApiFp = function(configuration?: Configuratio
 
 /**
  * EducationClassTeachersApi - factory interface
- * @export
  */
 export const EducationClassTeachersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = EducationClassTeachersApiFp(configuration)
@@ -6170,9 +5122,6 @@ export const EducationClassTeachersApiFactory = function (configuration?: Config
 
 /**
  * EducationClassTeachersApi - object-oriented interface
- * @export
- * @class EducationClassTeachersApi
- * @extends {BaseAPI}
  */
 export class EducationClassTeachersApi extends BaseAPI {
     /**
@@ -6182,7 +5131,6 @@ export class EducationClassTeachersApi extends BaseAPI {
      * @param {ClassTeacherReference} classTeacherReference educationUser to be added as teacher
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassTeachersApi
      */
     public addTeacherToClass(classId: string, classTeacherReference: ClassTeacherReference, options?: RawAxiosRequestConfig) {
         return EducationClassTeachersApiFp(this.configuration).addTeacherToClass(classId, classTeacherReference, options).then((request) => request(this.axios, this.basePath));
@@ -6195,7 +5143,6 @@ export class EducationClassTeachersApi extends BaseAPI {
      * @param {string} userId key: id or username of the user to unassign as teacher
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassTeachersApi
      */
     public deleteTeacherFromClass(classId: string, userId: string, options?: RawAxiosRequestConfig) {
         return EducationClassTeachersApiFp(this.configuration).deleteTeacherFromClass(classId, userId, options).then((request) => request(this.axios, this.basePath));
@@ -6207,7 +5154,6 @@ export class EducationClassTeachersApi extends BaseAPI {
      * @param {string} classId key: id or externalId of class
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationClassTeachersApi
      */
     public getTeachers(classId: string, options?: RawAxiosRequestConfig) {
         return EducationClassTeachersApiFp(this.configuration).getTeachers(classId, options).then((request) => request(this.axios, this.basePath));
@@ -6218,7 +5164,6 @@ export class EducationClassTeachersApi extends BaseAPI {
 
 /**
  * EducationSchoolApi - axios parameter creator
- * @export
  */
 export const EducationSchoolApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -6252,9 +5197,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6296,9 +5240,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6336,9 +5279,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6381,8 +5323,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6419,8 +5361,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6461,8 +5403,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6499,8 +5441,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6537,8 +5479,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6575,8 +5517,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6609,8 +5551,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6650,9 +5592,8 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -6669,7 +5610,6 @@ export const EducationSchoolApiAxiosParamCreator = function (configuration?: Con
 
 /**
  * EducationSchoolApi - functional programming interface
- * @export
  */
 export const EducationSchoolApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = EducationSchoolApiAxiosParamCreator(configuration)
@@ -6826,7 +5766,6 @@ export const EducationSchoolApiFp = function(configuration?: Configuration) {
 
 /**
  * EducationSchoolApi - factory interface
- * @export
  */
 export const EducationSchoolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = EducationSchoolApiFp(configuration)
@@ -6950,9 +5889,6 @@ export const EducationSchoolApiFactory = function (configuration?: Configuration
 
 /**
  * EducationSchoolApi - object-oriented interface
- * @export
- * @class EducationSchoolApi
- * @extends {BaseAPI}
  */
 export class EducationSchoolApi extends BaseAPI {
     /**
@@ -6962,7 +5898,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {ClassReference} classReference educationClass to be added as member
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public addClassToSchool(schoolId: string, classReference: ClassReference, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).addClassToSchool(schoolId, classReference, options).then((request) => request(this.axios, this.basePath));
@@ -6975,7 +5910,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {EducationUserReference} educationUserReference educationUser to be added as member
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public addUserToSchool(schoolId: string, educationUserReference: EducationUserReference, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).addUserToSchool(schoolId, educationUserReference, options).then((request) => request(this.axios, this.basePath));
@@ -6987,7 +5921,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {EducationSchool} educationSchool New school
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public createSchool(educationSchool: EducationSchool, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).createSchool(educationSchool, options).then((request) => request(this.axios, this.basePath));
@@ -7000,7 +5933,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {string} classId key: id or externalId of the class to unassign from school
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public deleteClassFromSchool(schoolId: string, classId: string, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).deleteClassFromSchool(schoolId, classId, options).then((request) => request(this.axios, this.basePath));
@@ -7012,7 +5944,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {string} schoolId key: id or schoolNumber of school
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public deleteSchool(schoolId: string, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).deleteSchool(schoolId, options).then((request) => request(this.axios, this.basePath));
@@ -7025,7 +5956,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {string} userId key: id or username of the user to unassign from school
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public deleteUserFromSchool(schoolId: string, userId: string, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).deleteUserFromSchool(schoolId, userId, options).then((request) => request(this.axios, this.basePath));
@@ -7037,7 +5967,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {string} schoolId key: id or schoolNumber of school
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public getSchool(schoolId: string, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).getSchool(schoolId, options).then((request) => request(this.axios, this.basePath));
@@ -7049,7 +5978,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {string} schoolId key: id or schoolNumber of school
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public listSchoolClasses(schoolId: string, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).listSchoolClasses(schoolId, options).then((request) => request(this.axios, this.basePath));
@@ -7061,7 +5989,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {string} schoolId key: id or schoolNumber of school
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public listSchoolUsers(schoolId: string, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).listSchoolUsers(schoolId, options).then((request) => request(this.axios, this.basePath));
@@ -7072,7 +5999,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @summary Get a list of schools and their properties
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public listSchools(options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).listSchools(options).then((request) => request(this.axios, this.basePath));
@@ -7085,7 +6011,6 @@ export class EducationSchoolApi extends BaseAPI {
      * @param {EducationSchool} educationSchool New property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationSchoolApi
      */
     public updateSchool(schoolId: string, educationSchool: EducationSchool, options?: RawAxiosRequestConfig) {
         return EducationSchoolApiFp(this.configuration).updateSchool(schoolId, educationSchool, options).then((request) => request(this.axios, this.basePath));
@@ -7096,7 +6021,6 @@ export class EducationSchoolApi extends BaseAPI {
 
 /**
  * EducationUserApi - axios parameter creator
- * @export
  */
 export const EducationUserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -7126,9 +6050,8 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7167,8 +6090,8 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7210,8 +6133,8 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
                 localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7254,8 +6177,8 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
                 localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7295,9 +6218,8 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7314,7 +6236,6 @@ export const EducationUserApiAxiosParamCreator = function (configuration?: Confi
 
 /**
  * EducationUserApi - functional programming interface
- * @export
  */
 export const EducationUserApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = EducationUserApiAxiosParamCreator(configuration)
@@ -7392,7 +6313,6 @@ export const EducationUserApiFp = function(configuration?: Configuration) {
 
 /**
  * EducationUserApi - factory interface
- * @export
  */
 export const EducationUserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = EducationUserApiFp(configuration)
@@ -7455,9 +6375,6 @@ export const EducationUserApiFactory = function (configuration?: Configuration, 
 
 /**
  * EducationUserApi - object-oriented interface
- * @export
- * @class EducationUserApi
- * @extends {BaseAPI}
  */
 export class EducationUserApi extends BaseAPI {
     /**
@@ -7466,7 +6383,6 @@ export class EducationUserApi extends BaseAPI {
      * @param {EducationUser} educationUser New entity
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationUserApi
      */
     public createEducationUser(educationUser: EducationUser, options?: RawAxiosRequestConfig) {
         return EducationUserApiFp(this.configuration).createEducationUser(educationUser, options).then((request) => request(this.axios, this.basePath));
@@ -7478,7 +6394,6 @@ export class EducationUserApi extends BaseAPI {
      * @param {string} userId key: id or username of user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationUserApi
      */
     public deleteEducationUser(userId: string, options?: RawAxiosRequestConfig) {
         return EducationUserApiFp(this.configuration).deleteEducationUser(userId, options).then((request) => request(this.axios, this.basePath));
@@ -7491,7 +6406,6 @@ export class EducationUserApi extends BaseAPI {
      * @param {Set<GetEducationUserExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationUserApi
      */
     public getEducationUser(userId: string, $expand?: Set<GetEducationUserExpandEnum>, options?: RawAxiosRequestConfig) {
         return EducationUserApiFp(this.configuration).getEducationUser(userId, $expand, options).then((request) => request(this.axios, this.basePath));
@@ -7504,7 +6418,6 @@ export class EducationUserApi extends BaseAPI {
      * @param {Set<ListEducationUsersExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationUserApi
      */
     public listEducationUsers($orderby?: Set<ListEducationUsersOrderbyEnum>, $expand?: Set<ListEducationUsersExpandEnum>, options?: RawAxiosRequestConfig) {
         return EducationUserApiFp(this.configuration).listEducationUsers($orderby, $expand, options).then((request) => request(this.axios, this.basePath));
@@ -7517,23 +6430,16 @@ export class EducationUserApi extends BaseAPI {
      * @param {EducationUser} educationUser New property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof EducationUserApi
      */
     public updateEducationUser(userId: string, educationUser: EducationUser, options?: RawAxiosRequestConfig) {
         return EducationUserApiFp(this.configuration).updateEducationUser(userId, educationUser, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const GetEducationUserExpandEnum = {
     MemberOf: 'memberOf'
 } as const;
 export type GetEducationUserExpandEnum = typeof GetEducationUserExpandEnum[keyof typeof GetEducationUserExpandEnum];
-/**
- * @export
- */
 export const ListEducationUsersOrderbyEnum = {
     DisplayName: 'displayName',
     DisplayNameDesc: 'displayName desc',
@@ -7543,9 +6449,6 @@ export const ListEducationUsersOrderbyEnum = {
     OnPremisesSamAccountNameDesc: 'onPremisesSamAccountName desc'
 } as const;
 export type ListEducationUsersOrderbyEnum = typeof ListEducationUsersOrderbyEnum[keyof typeof ListEducationUsersOrderbyEnum];
-/**
- * @export
- */
 export const ListEducationUsersExpandEnum = {
     MemberOf: 'memberOf'
 } as const;
@@ -7554,7 +6457,6 @@ export type ListEducationUsersExpandEnum = typeof ListEducationUsersExpandEnum[k
 
 /**
  * GroupApi - axios parameter creator
- * @export
  */
 export const GroupApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -7590,9 +6492,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7634,12 +6535,11 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
+
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
             }
-
-
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7683,12 +6583,11 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
+
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
             }
-
-
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7737,8 +6636,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7777,8 +6676,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -7820,9 +6719,8 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -7839,7 +6737,6 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
 
 /**
  * GroupApi - functional programming interface
- * @export
  */
 export const GroupApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = GroupApiAxiosParamCreator(configuration)
@@ -7934,7 +6831,6 @@ export const GroupApiFp = function(configuration?: Configuration) {
 
 /**
  * GroupApi - factory interface
- * @export
  */
 export const GroupApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = GroupApiFp(configuration)
@@ -8011,9 +6907,6 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
 
 /**
  * GroupApi - object-oriented interface
- * @export
- * @class GroupApi
- * @extends {BaseAPI}
  */
 export class GroupApi extends BaseAPI {
     /**
@@ -8023,7 +6916,6 @@ export class GroupApi extends BaseAPI {
      * @param {MemberReference} memberReference Object to be added as member
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupApi
      */
     public addMember(groupId: string, memberReference: MemberReference, options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).addMember(groupId, memberReference, options).then((request) => request(this.axios, this.basePath));
@@ -8036,7 +6928,6 @@ export class GroupApi extends BaseAPI {
      * @param {string} [ifMatch] ETag
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupApi
      */
     public deleteGroup(groupId: string, ifMatch?: string, options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).deleteGroup(groupId, ifMatch, options).then((request) => request(this.axios, this.basePath));
@@ -8050,7 +6941,6 @@ export class GroupApi extends BaseAPI {
      * @param {string} [ifMatch] ETag
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupApi
      */
     public deleteMember(groupId: string, directoryObjectId: string, ifMatch?: string, options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).deleteMember(groupId, directoryObjectId, ifMatch, options).then((request) => request(this.axios, this.basePath));
@@ -8064,7 +6954,6 @@ export class GroupApi extends BaseAPI {
      * @param {Set<GetGroupExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupApi
      */
     public getGroup(groupId: string, $select?: Set<GetGroupSelectEnum>, $expand?: Set<GetGroupExpandEnum>, options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).getGroup(groupId, $select, $expand, options).then((request) => request(this.axios, this.basePath));
@@ -8076,7 +6965,6 @@ export class GroupApi extends BaseAPI {
      * @param {string} groupId key: id or name of group
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupApi
      */
     public listMembers(groupId: string, options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).listMembers(groupId, options).then((request) => request(this.axios, this.basePath));
@@ -8089,16 +6977,12 @@ export class GroupApi extends BaseAPI {
      * @param {Group} group New property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupApi
      */
     public updateGroup(groupId: string, group: Group, options?: RawAxiosRequestConfig) {
         return GroupApiFp(this.configuration).updateGroup(groupId, group, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const GetGroupSelectEnum = {
     Id: 'id',
     Description: 'description',
@@ -8106,9 +6990,6 @@ export const GetGroupSelectEnum = {
     Members: 'members'
 } as const;
 export type GetGroupSelectEnum = typeof GetGroupSelectEnum[keyof typeof GetGroupSelectEnum];
-/**
- * @export
- */
 export const GetGroupExpandEnum = {
     Members: 'members'
 } as const;
@@ -8117,7 +6998,6 @@ export type GetGroupExpandEnum = typeof GetGroupExpandEnum[keyof typeof GetGroup
 
 /**
  * GroupsApi - axios parameter creator
- * @export
  */
 export const GroupsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -8149,9 +7029,8 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -8208,8 +7087,8 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8224,7 +7103,6 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
 
 /**
  * GroupsApi - functional programming interface
- * @export
  */
 export const GroupsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = GroupsApiAxiosParamCreator(configuration)
@@ -8263,7 +7141,6 @@ export const GroupsApiFp = function(configuration?: Configuration) {
 
 /**
  * GroupsApi - factory interface
- * @export
  */
 export const GroupsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = GroupsApiFp(configuration)
@@ -8296,9 +7173,6 @@ export const GroupsApiFactory = function (configuration?: Configuration, basePat
 
 /**
  * GroupsApi - object-oriented interface
- * @export
- * @class GroupsApi
- * @extends {BaseAPI}
  */
 export class GroupsApi extends BaseAPI {
     /**
@@ -8307,7 +7181,6 @@ export class GroupsApi extends BaseAPI {
      * @param {Group} group New entity
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
      */
     public createGroup(group: Group, options?: RawAxiosRequestConfig) {
         return GroupsApiFp(this.configuration).createGroup(group, options).then((request) => request(this.axios, this.basePath));
@@ -8322,24 +7195,17 @@ export class GroupsApi extends BaseAPI {
      * @param {Set<ListGroupsExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
      */
     public listGroups($search?: string, $orderby?: Set<ListGroupsOrderbyEnum>, $select?: Set<ListGroupsSelectEnum>, $expand?: Set<ListGroupsExpandEnum>, options?: RawAxiosRequestConfig) {
         return GroupsApiFp(this.configuration).listGroups($search, $orderby, $select, $expand, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const ListGroupsOrderbyEnum = {
     DisplayName: 'displayName',
     DisplayNameDesc: 'displayName desc'
 } as const;
 export type ListGroupsOrderbyEnum = typeof ListGroupsOrderbyEnum[keyof typeof ListGroupsOrderbyEnum];
-/**
- * @export
- */
 export const ListGroupsSelectEnum = {
     Id: 'id',
     Description: 'description',
@@ -8348,9 +7214,6 @@ export const ListGroupsSelectEnum = {
     Members: 'members'
 } as const;
 export type ListGroupsSelectEnum = typeof ListGroupsSelectEnum[keyof typeof ListGroupsSelectEnum];
-/**
- * @export
- */
 export const ListGroupsExpandEnum = {
     Members: 'members'
 } as const;
@@ -8359,7 +7222,6 @@ export type ListGroupsExpandEnum = typeof ListGroupsExpandEnum[keyof typeof List
 
 /**
  * MeChangepasswordApi - axios parameter creator
- * @export
  */
 export const MeChangepasswordApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -8391,9 +7253,8 @@ export const MeChangepasswordApiAxiosParamCreator = function (configuration?: Co
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -8410,7 +7271,6 @@ export const MeChangepasswordApiAxiosParamCreator = function (configuration?: Co
 
 /**
  * MeChangepasswordApi - functional programming interface
- * @export
  */
 export const MeChangepasswordApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MeChangepasswordApiAxiosParamCreator(configuration)
@@ -8433,7 +7293,6 @@ export const MeChangepasswordApiFp = function(configuration?: Configuration) {
 
 /**
  * MeChangepasswordApi - factory interface
- * @export
  */
 export const MeChangepasswordApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MeChangepasswordApiFp(configuration)
@@ -8453,9 +7312,6 @@ export const MeChangepasswordApiFactory = function (configuration?: Configuratio
 
 /**
  * MeChangepasswordApi - object-oriented interface
- * @export
- * @class MeChangepasswordApi
- * @extends {BaseAPI}
  */
 export class MeChangepasswordApi extends BaseAPI {
     /**
@@ -8464,7 +7320,6 @@ export class MeChangepasswordApi extends BaseAPI {
      * @param {PasswordChange} passwordChange Password change request
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeChangepasswordApi
      */
     public changeOwnPassword(passwordChange: PasswordChange, options?: RawAxiosRequestConfig) {
         return MeChangepasswordApiFp(this.configuration).changeOwnPassword(passwordChange, options).then((request) => request(this.axios, this.basePath));
@@ -8475,7 +7330,6 @@ export class MeChangepasswordApi extends BaseAPI {
 
 /**
  * MeDriveApi - axios parameter creator
- * @export
  */
 export const MeDriveApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -8504,8 +7358,8 @@ export const MeDriveApiAxiosParamCreator = function (configuration?: Configurati
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8540,8 +7394,8 @@ export const MeDriveApiAxiosParamCreator = function (configuration?: Configurati
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8576,8 +7430,8 @@ export const MeDriveApiAxiosParamCreator = function (configuration?: Configurati
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8592,7 +7446,6 @@ export const MeDriveApiAxiosParamCreator = function (configuration?: Configurati
 
 /**
  * MeDriveApi - functional programming interface
- * @export
  */
 export const MeDriveApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MeDriveApiAxiosParamCreator(configuration)
@@ -8638,7 +7491,6 @@ export const MeDriveApiFp = function(configuration?: Configuration) {
 
 /**
  * MeDriveApi - factory interface
- * @export
  */
 export const MeDriveApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MeDriveApiFp(configuration)
@@ -8675,9 +7527,6 @@ export const MeDriveApiFactory = function (configuration?: Configuration, basePa
 
 /**
  * MeDriveApi - object-oriented interface
- * @export
- * @class MeDriveApi
- * @extends {BaseAPI}
  */
 export class MeDriveApi extends BaseAPI {
     /**
@@ -8685,7 +7534,6 @@ export class MeDriveApi extends BaseAPI {
      * @summary Get personal space for user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeDriveApi
      */
     public getHome(options?: RawAxiosRequestConfig) {
         return MeDriveApiFp(this.configuration).getHome(options).then((request) => request(this.axios, this.basePath));
@@ -8696,7 +7544,6 @@ export class MeDriveApi extends BaseAPI {
      * @summary Get a list of driveItem objects shared by the current user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeDriveApi
      */
     public listSharedByMe(options?: RawAxiosRequestConfig) {
         return MeDriveApiFp(this.configuration).listSharedByMe(options).then((request) => request(this.axios, this.basePath));
@@ -8707,7 +7554,6 @@ export class MeDriveApi extends BaseAPI {
      * @summary Get a list of driveItem objects shared with the owner of a drive.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeDriveApi
      */
     public listSharedWithMe(options?: RawAxiosRequestConfig) {
         return MeDriveApiFp(this.configuration).listSharedWithMe(options).then((request) => request(this.axios, this.basePath));
@@ -8718,7 +7564,6 @@ export class MeDriveApi extends BaseAPI {
 
 /**
  * MeDriveRootApi - axios parameter creator
- * @export
  */
 export const MeDriveRootApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -8747,8 +7592,8 @@ export const MeDriveRootApiAxiosParamCreator = function (configuration?: Configu
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8763,7 +7608,6 @@ export const MeDriveRootApiAxiosParamCreator = function (configuration?: Configu
 
 /**
  * MeDriveRootApi - functional programming interface
- * @export
  */
 export const MeDriveRootApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MeDriveRootApiAxiosParamCreator(configuration)
@@ -8785,7 +7629,6 @@ export const MeDriveRootApiFp = function(configuration?: Configuration) {
 
 /**
  * MeDriveRootApi - factory interface
- * @export
  */
 export const MeDriveRootApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MeDriveRootApiFp(configuration)
@@ -8804,9 +7647,6 @@ export const MeDriveRootApiFactory = function (configuration?: Configuration, ba
 
 /**
  * MeDriveRootApi - object-oriented interface
- * @export
- * @class MeDriveRootApi
- * @extends {BaseAPI}
  */
 export class MeDriveRootApi extends BaseAPI {
     /**
@@ -8814,7 +7654,6 @@ export class MeDriveRootApi extends BaseAPI {
      * @summary Get root from personal space
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeDriveRootApi
      */
     public homeGetRoot(options?: RawAxiosRequestConfig) {
         return MeDriveRootApiFp(this.configuration).homeGetRoot(options).then((request) => request(this.axios, this.basePath));
@@ -8825,7 +7664,6 @@ export class MeDriveRootApi extends BaseAPI {
 
 /**
  * MeDriveRootChildrenApi - axios parameter creator
- * @export
  */
 export const MeDriveRootChildrenApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -8854,8 +7692,8 @@ export const MeDriveRootChildrenApiAxiosParamCreator = function (configuration?:
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -8870,7 +7708,6 @@ export const MeDriveRootChildrenApiAxiosParamCreator = function (configuration?:
 
 /**
  * MeDriveRootChildrenApi - functional programming interface
- * @export
  */
 export const MeDriveRootChildrenApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MeDriveRootChildrenApiAxiosParamCreator(configuration)
@@ -8892,7 +7729,6 @@ export const MeDriveRootChildrenApiFp = function(configuration?: Configuration) 
 
 /**
  * MeDriveRootChildrenApi - factory interface
- * @export
  */
 export const MeDriveRootChildrenApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MeDriveRootChildrenApiFp(configuration)
@@ -8911,9 +7747,6 @@ export const MeDriveRootChildrenApiFactory = function (configuration?: Configura
 
 /**
  * MeDriveRootChildrenApi - object-oriented interface
- * @export
- * @class MeDriveRootChildrenApi
- * @extends {BaseAPI}
  */
 export class MeDriveRootChildrenApi extends BaseAPI {
     /**
@@ -8921,7 +7754,6 @@ export class MeDriveRootChildrenApi extends BaseAPI {
      * @summary Get children from drive
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeDriveRootChildrenApi
      */
     public homeGetChildren(options?: RawAxiosRequestConfig) {
         return MeDriveRootChildrenApiFp(this.configuration).homeGetChildren(options).then((request) => request(this.axios, this.basePath));
@@ -8932,7 +7764,6 @@ export class MeDriveRootChildrenApi extends BaseAPI {
 
 /**
  * MeDrivesApi - axios parameter creator
- * @export
  */
 export const MeDrivesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -8971,8 +7802,8 @@ export const MeDrivesApiAxiosParamCreator = function (configuration?: Configurat
                 localVarQueryParameter['$filter'] = $filter;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9017,8 +7848,8 @@ export const MeDrivesApiAxiosParamCreator = function (configuration?: Configurat
                 localVarQueryParameter['$filter'] = $filter;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9033,7 +7864,6 @@ export const MeDrivesApiAxiosParamCreator = function (configuration?: Configurat
 
 /**
  * MeDrivesApi - functional programming interface
- * @export
  */
 export const MeDrivesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MeDrivesApiAxiosParamCreator(configuration)
@@ -9071,7 +7901,6 @@ export const MeDrivesApiFp = function(configuration?: Configuration) {
 
 /**
  * MeDrivesApi - factory interface
- * @export
  */
 export const MeDrivesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MeDrivesApiFp(configuration)
@@ -9103,9 +7932,6 @@ export const MeDrivesApiFactory = function (configuration?: Configuration, baseP
 
 /**
  * MeDrivesApi - object-oriented interface
- * @export
- * @class MeDrivesApi
- * @extends {BaseAPI}
  */
 export class MeDrivesApi extends BaseAPI {
     /**
@@ -9115,7 +7941,6 @@ export class MeDrivesApi extends BaseAPI {
      * @param {string} [$filter] Filter items by property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeDrivesApi
      */
     public listMyDrives($orderby?: string, $filter?: string, options?: RawAxiosRequestConfig) {
         return MeDrivesApiFp(this.configuration).listMyDrives($orderby, $filter, options).then((request) => request(this.axios, this.basePath));
@@ -9128,7 +7953,6 @@ export class MeDrivesApi extends BaseAPI {
      * @param {string} [$filter] Filter items by property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeDrivesApi
      */
     public listMyDrivesBeta($orderby?: string, $filter?: string, options?: RawAxiosRequestConfig) {
         return MeDrivesApiFp(this.configuration).listMyDrivesBeta($orderby, $filter, options).then((request) => request(this.axios, this.basePath));
@@ -9139,7 +7963,6 @@ export class MeDrivesApi extends BaseAPI {
 
 /**
  * MeUserApi - axios parameter creator
- * @export
  */
 export const MeUserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -9173,8 +7996,8 @@ export const MeUserApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9210,9 +8033,8 @@ export const MeUserApiAxiosParamCreator = function (configuration?: Configuratio
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -9229,7 +8051,6 @@ export const MeUserApiAxiosParamCreator = function (configuration?: Configuratio
 
 /**
  * MeUserApi - functional programming interface
- * @export
  */
 export const MeUserApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MeUserApiAxiosParamCreator(configuration)
@@ -9265,7 +8086,6 @@ export const MeUserApiFp = function(configuration?: Configuration) {
 
 /**
  * MeUserApi - factory interface
- * @export
  */
 export const MeUserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MeUserApiFp(configuration)
@@ -9295,9 +8115,6 @@ export const MeUserApiFactory = function (configuration?: Configuration, basePat
 
 /**
  * MeUserApi - object-oriented interface
- * @export
- * @class MeUserApi
- * @extends {BaseAPI}
  */
 export class MeUserApi extends BaseAPI {
     /**
@@ -9306,7 +8123,6 @@ export class MeUserApi extends BaseAPI {
      * @param {Set<GetOwnUserExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeUserApi
      */
     public getOwnUser($expand?: Set<GetOwnUserExpandEnum>, options?: RawAxiosRequestConfig) {
         return MeUserApiFp(this.configuration).getOwnUser($expand, options).then((request) => request(this.axios, this.basePath));
@@ -9318,16 +8134,12 @@ export class MeUserApi extends BaseAPI {
      * @param {UserUpdate} [userUpdate] New user values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof MeUserApi
      */
     public updateOwnUser(userUpdate?: UserUpdate, options?: RawAxiosRequestConfig) {
         return MeUserApiFp(this.configuration).updateOwnUser(userUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const GetOwnUserExpandEnum = {
     MemberOf: 'memberOf'
 } as const;
@@ -9336,7 +8148,6 @@ export type GetOwnUserExpandEnum = typeof GetOwnUserExpandEnum[keyof typeof GetO
 
 /**
  * RoleManagementApi - axios parameter creator
- * @export
  */
 export const RoleManagementApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -9369,8 +8180,8 @@ export const RoleManagementApiAxiosParamCreator = function (configuration?: Conf
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9405,8 +8216,8 @@ export const RoleManagementApiAxiosParamCreator = function (configuration?: Conf
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9421,7 +8232,6 @@ export const RoleManagementApiAxiosParamCreator = function (configuration?: Conf
 
 /**
  * RoleManagementApi - functional programming interface
- * @export
  */
 export const RoleManagementApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = RoleManagementApiAxiosParamCreator(configuration)
@@ -9456,7 +8266,6 @@ export const RoleManagementApiFp = function(configuration?: Configuration) {
 
 /**
  * RoleManagementApi - factory interface
- * @export
  */
 export const RoleManagementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = RoleManagementApiFp(configuration)
@@ -9485,9 +8294,6 @@ export const RoleManagementApiFactory = function (configuration?: Configuration,
 
 /**
  * RoleManagementApi - object-oriented interface
- * @export
- * @class RoleManagementApi
- * @extends {BaseAPI}
  */
 export class RoleManagementApi extends BaseAPI {
     /**
@@ -9496,7 +8302,6 @@ export class RoleManagementApi extends BaseAPI {
      * @param {string} roleId key: id of roleDefinition
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoleManagementApi
      */
     public getPermissionRoleDefinition(roleId: string, options?: RawAxiosRequestConfig) {
         return RoleManagementApiFp(this.configuration).getPermissionRoleDefinition(roleId, options).then((request) => request(this.axios, this.basePath));
@@ -9507,7 +8312,6 @@ export class RoleManagementApi extends BaseAPI {
      * @summary List roleDefinitions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoleManagementApi
      */
     public listPermissionRoleDefinitions(options?: RawAxiosRequestConfig) {
         return RoleManagementApiFp(this.configuration).listPermissionRoleDefinitions(options).then((request) => request(this.axios, this.basePath));
@@ -9518,7 +8322,6 @@ export class RoleManagementApi extends BaseAPI {
 
 /**
  * TagsApi - axios parameter creator
- * @export
  */
 export const TagsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -9548,9 +8351,8 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -9587,8 +8389,8 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9624,9 +8426,8 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -9643,7 +8444,6 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
 
 /**
  * TagsApi - functional programming interface
- * @export
  */
 export const TagsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TagsApiAxiosParamCreator(configuration)
@@ -9691,7 +8491,6 @@ export const TagsApiFp = function(configuration?: Configuration) {
 
 /**
  * TagsApi - factory interface
- * @export
  */
 export const TagsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = TagsApiFp(configuration)
@@ -9730,9 +8529,6 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
 
 /**
  * TagsApi - object-oriented interface
- * @export
- * @class TagsApi
- * @extends {BaseAPI}
  */
 export class TagsApi extends BaseAPI {
     /**
@@ -9741,7 +8537,6 @@ export class TagsApi extends BaseAPI {
      * @param {TagAssignment} [tagAssignment] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TagsApi
      */
     public assignTags(tagAssignment?: TagAssignment, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).assignTags(tagAssignment, options).then((request) => request(this.axios, this.basePath));
@@ -9752,7 +8547,6 @@ export class TagsApi extends BaseAPI {
      * @summary Get all known tags
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TagsApi
      */
     public getTags(options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).getTags(options).then((request) => request(this.axios, this.basePath));
@@ -9764,7 +8558,6 @@ export class TagsApi extends BaseAPI {
      * @param {TagUnassignment} [tagUnassignment] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TagsApi
      */
     public unassignTags(tagUnassignment?: TagUnassignment, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).unassignTags(tagUnassignment, options).then((request) => request(this.axios, this.basePath));
@@ -9775,7 +8568,6 @@ export class TagsApi extends BaseAPI {
 
 /**
  * UserApi - axios parameter creator
- * @export
  */
 export const UserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -9809,12 +8601,11 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
+
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
             }
-
-
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9854,9 +8645,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -9907,8 +8697,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -9950,9 +8740,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -9969,7 +8758,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 
 /**
  * UserApi - functional programming interface
- * @export
  */
 export const UserApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration)
@@ -10036,7 +8824,6 @@ export const UserApiFp = function(configuration?: Configuration) {
 
 /**
  * UserApi - factory interface
- * @export
  */
 export const UserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UserApiFp(configuration)
@@ -10091,9 +8878,6 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
 
 /**
  * UserApi - object-oriented interface
- * @export
- * @class UserApi
- * @extends {BaseAPI}
  */
 export class UserApi extends BaseAPI {
     /**
@@ -10103,7 +8887,6 @@ export class UserApi extends BaseAPI {
      * @param {string} [ifMatch] ETag
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
      */
     public deleteUser(userId: string, ifMatch?: string, options?: RawAxiosRequestConfig) {
         return UserApiFp(this.configuration).deleteUser(userId, ifMatch, options).then((request) => request(this.axios, this.basePath));
@@ -10116,7 +8899,6 @@ export class UserApi extends BaseAPI {
      * @param {ExportPersonalDataRequest} [exportPersonalDataRequest] destination the file should be created at
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
      */
     public exportPersonalData(userId: string, exportPersonalDataRequest?: ExportPersonalDataRequest, options?: RawAxiosRequestConfig) {
         return UserApiFp(this.configuration).exportPersonalData(userId, exportPersonalDataRequest, options).then((request) => request(this.axios, this.basePath));
@@ -10130,7 +8912,6 @@ export class UserApi extends BaseAPI {
      * @param {Set<GetUserExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
      */
     public getUser(userId: string, $select?: Set<GetUserSelectEnum>, $expand?: Set<GetUserExpandEnum>, options?: RawAxiosRequestConfig) {
         return UserApiFp(this.configuration).getUser(userId, $select, $expand, options).then((request) => request(this.axios, this.basePath));
@@ -10143,16 +8924,12 @@ export class UserApi extends BaseAPI {
      * @param {UserUpdate} userUpdate New property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserApi
      */
     public updateUser(userId: string, userUpdate: UserUpdate, options?: RawAxiosRequestConfig) {
         return UserApiFp(this.configuration).updateUser(userId, userUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const GetUserSelectEnum = {
     Id: 'id',
     DisplayName: 'displayName',
@@ -10164,9 +8941,6 @@ export const GetUserSelectEnum = {
     Surname: 'surname'
 } as const;
 export type GetUserSelectEnum = typeof GetUserSelectEnum[keyof typeof GetUserSelectEnum];
-/**
- * @export
- */
 export const GetUserExpandEnum = {
     Drive: 'drive',
     Drives: 'drives',
@@ -10178,7 +8952,6 @@ export type GetUserExpandEnum = typeof GetUserExpandEnum[keyof typeof GetUserExp
 
 /**
  * UserAppRoleAssignmentApi - axios parameter creator
- * @export
  */
 export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -10214,9 +8987,8 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10262,12 +9034,11 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
+
             if (ifMatch != null) {
                 localVarHeaderParameter['If-Match'] = String(ifMatch);
             }
-
-
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10306,8 +9077,8 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10322,7 +9093,6 @@ export const UserAppRoleAssignmentApiAxiosParamCreator = function (configuration
 
 /**
  * UserAppRoleAssignmentApi - functional programming interface
- * @export
  */
 export const UserAppRoleAssignmentApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserAppRoleAssignmentApiAxiosParamCreator(configuration)
@@ -10374,7 +9144,6 @@ export const UserAppRoleAssignmentApiFp = function(configuration?: Configuration
 
 /**
  * UserAppRoleAssignmentApi - factory interface
- * @export
  */
 export const UserAppRoleAssignmentApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UserAppRoleAssignmentApiFp(configuration)
@@ -10417,9 +9186,6 @@ export const UserAppRoleAssignmentApiFactory = function (configuration?: Configu
 
 /**
  * UserAppRoleAssignmentApi - object-oriented interface
- * @export
- * @class UserAppRoleAssignmentApi
- * @extends {BaseAPI}
  */
 export class UserAppRoleAssignmentApi extends BaseAPI {
     /**
@@ -10429,7 +9195,6 @@ export class UserAppRoleAssignmentApi extends BaseAPI {
      * @param {AppRoleAssignment} appRoleAssignment New app role assignment value
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserAppRoleAssignmentApi
      */
     public userCreateAppRoleAssignments(userId: string, appRoleAssignment: AppRoleAssignment, options?: RawAxiosRequestConfig) {
         return UserAppRoleAssignmentApiFp(this.configuration).userCreateAppRoleAssignments(userId, appRoleAssignment, options).then((request) => request(this.axios, this.basePath));
@@ -10443,7 +9208,6 @@ export class UserAppRoleAssignmentApi extends BaseAPI {
      * @param {string} [ifMatch] ETag
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserAppRoleAssignmentApi
      */
     public userDeleteAppRoleAssignments(userId: string, appRoleAssignmentId: string, ifMatch?: string, options?: RawAxiosRequestConfig) {
         return UserAppRoleAssignmentApiFp(this.configuration).userDeleteAppRoleAssignments(userId, appRoleAssignmentId, ifMatch, options).then((request) => request(this.axios, this.basePath));
@@ -10455,7 +9219,6 @@ export class UserAppRoleAssignmentApi extends BaseAPI {
      * @param {string} userId key: id of user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UserAppRoleAssignmentApi
      */
     public userListAppRoleAssignments(userId: string, options?: RawAxiosRequestConfig) {
         return UserAppRoleAssignmentApiFp(this.configuration).userListAppRoleAssignments(userId, options).then((request) => request(this.axios, this.basePath));
@@ -10466,7 +9229,6 @@ export class UserAppRoleAssignmentApi extends BaseAPI {
 
 /**
  * UsersApi - axios parameter creator
- * @export
  */
 export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
@@ -10498,9 +9260,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10562,8 +9323,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                 localVarQueryParameter['$expand'] = Array.from($expand).join(COLLECTION_FORMATS.csv);
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -10578,7 +9339,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 
 /**
  * UsersApi - functional programming interface
- * @export
  */
 export const UsersApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
@@ -10618,7 +9378,6 @@ export const UsersApiFp = function(configuration?: Configuration) {
 
 /**
  * UsersApi - factory interface
- * @export
  */
 export const UsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UsersApiFp(configuration)
@@ -10652,9 +9411,6 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
 
 /**
  * UsersApi - object-oriented interface
- * @export
- * @class UsersApi
- * @extends {BaseAPI}
  */
 export class UsersApi extends BaseAPI {
     /**
@@ -10663,7 +9419,6 @@ export class UsersApi extends BaseAPI {
      * @param {User} user New entity
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public createUser(user: User, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).createUser(user, options).then((request) => request(this.axios, this.basePath));
@@ -10679,16 +9434,12 @@ export class UsersApi extends BaseAPI {
      * @param {Set<ListUsersExpandEnum>} [$expand] Expand related entities
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof UsersApi
      */
     public listUsers($search?: string, $filter?: string, $orderby?: Set<ListUsersOrderbyEnum>, $select?: Set<ListUsersSelectEnum>, $expand?: Set<ListUsersExpandEnum>, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).listUsers($search, $filter, $orderby, $select, $expand, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
-/**
- * @export
- */
 export const ListUsersOrderbyEnum = {
     DisplayName: 'displayName',
     DisplayNameDesc: 'displayName desc',
@@ -10698,9 +9449,6 @@ export const ListUsersOrderbyEnum = {
     OnPremisesSamAccountNameDesc: 'onPremisesSamAccountName desc'
 } as const;
 export type ListUsersOrderbyEnum = typeof ListUsersOrderbyEnum[keyof typeof ListUsersOrderbyEnum];
-/**
- * @export
- */
 export const ListUsersSelectEnum = {
     Id: 'id',
     DisplayName: 'displayName',
@@ -10710,9 +9458,6 @@ export const ListUsersSelectEnum = {
     Surname: 'surname'
 } as const;
 export type ListUsersSelectEnum = typeof ListUsersSelectEnum[keyof typeof ListUsersSelectEnum];
-/**
- * @export
- */
 export const ListUsersExpandEnum = {
     Drive: 'drive',
     Drives: 'drives',
