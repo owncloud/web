@@ -18,6 +18,7 @@ Summary
 * Bugfix - Handle file loading error: [#13274](https://github.com/owncloud/web/pull/13274)
 * Bugfix - Use sticky header composable in deleted files: [#13329](https://github.com/owncloud/web/pull/13329)
 * Bugfix - Prevent overlapping search content: [#13406](https://github.com/owncloud/web/pull/13406)
+* Bugfix - Filter only personal trashed spaces: [#13415](https://github.com/owncloud/web/pull/13415)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
@@ -108,6 +109,14 @@ Details
    the icons.
 
    https://github.com/owncloud/web/pull/13406
+
+* Bugfix - Filter only personal trashed spaces: [#13415](https://github.com/owncloud/web/pull/13415)
+
+   Instead of filtering all trashed spaces, we now filter only personal trashed
+   spaces. This fixes the issue where listing spaces with "Include disabled" option
+   toggled did not show disabled spaces.
+
+   https://github.com/owncloud/web/pull/13415
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 
