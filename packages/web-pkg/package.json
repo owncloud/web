@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@casl/ability": "^6.7.5",
-    "@casl/vue": "^2.2.2",
+    "@casl/vue": "^2.2.5",
     "@chevrotain/regexp-to-ast": "^11.1.0",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@ownclouders/design-system": "workspace:^",
