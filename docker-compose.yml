@@ -184,11 +184,17 @@ services:
     command: ['-c', 'coolconfig generate-proof-key ; /start-collabora-online.sh']
     environment:
       DONT_GEN_SSL_CERT: YES
-      extra_params: --o:ssl.enable=false --o:ssl.ssl_verification=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=${OCIS_URL:-https://host.docker.internal:9200}
+      extra_params: |
+        --o:ssl.enable=false \
+        --o:ssl.ssl_verification=false \
+        --o:ssl.termination=true \
+        --o:welcome.enable=false \
+        --o:net.content_security_policy=frame-ancestors ${OCIS_URL:-https://host.docker.internal:9200}
       username: ${COLLABORA_ADMIN_USER:-admin}
       password: ${COLLABORA_ADMIN_PASSWORD:-admin}
     cap_add:
       - MKNOD
+      - SYS_ADMIN
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     healthcheck:
@@ -295,6 +301,10 @@ services:
       - '--entrypoints.ocis.address=:9200'
       - '--entrypoints.ocis-federated.address=:10200'
       - '--entrypoints.collabora.address=:9980'
+      # allow encoded characters which is required for collaboration/Collabora
+      - '--entryPoints.collabora.http.encodedCharacters.allowEncodedSlash=true'
+      - '--entryPoints.collabora.http.encodedCharacters.allowEncodedQuestionMark=true'
+      - '--entryPoints.collabora.http.encodedCharacters.allowEncodedPercent=true'
       - '--entrypoints.wopi.address=:8880'
       - '--entrypoints.collaboration.address=:9300'
       - '--entrypoints.collaboration-oo.address=:9302'
