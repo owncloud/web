@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@casl/ability": "6.7.5",
-    "@casl/vue": "^2.2.2",
+    "@casl/vue": "^2.2.5",
     "@microsoft/fetch-event-source": "2.0.1",
     "@ownclouders/design-system": "workspace:^",
     "@ownclouders/web-client": "workspace:*",
