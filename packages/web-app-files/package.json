@@ -19,7 +19,7 @@
     "axios": "1.13.2",
     "email-validator": "^2.0.4",
     "fuse.js": "7.1.0",
-    "lodash-es": "4.17.21",
+    "lodash-es": "4.17.22",
     "luxon": "3.7.2",
     "mark.js": "^8.11.1",
     "p-queue": "^9.0.1",

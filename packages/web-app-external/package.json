@@ -13,7 +13,7 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "lodash-es": "4.17.21",
+    "lodash-es": "4.17.22",
     "pinia": "3.0.4",
     "qs": "^6.14.1",
     "uuid": "13.0.0",
