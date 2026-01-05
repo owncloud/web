@@ -26,6 +26,7 @@ Summary
 * Enhancement - Add table caption: [#13224](https://github.com/owncloud/web/pull/13224)
 * Enhancement - Use API groups search in admin settings: [#13235](https://github.com/owncloud/web/pull/13235)
 * Enhancement - Embed mode share links with password: [#13296](https://github.com/owncloud/web/pull/13296)
+* Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
 
 Details
 -------
@@ -185,6 +186,13 @@ Details
    existing event continues to be emitted for backward compatibility.
 
    https://github.com/owncloud/web/pull/13296
+
+* Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
+
+   We've updated the single drive operations to use the v1 beta endpoint. This
+   allows us to drop custom hardcoded logic for converting drive permissions.
+
+   https://github.com/owncloud/web/pull/13412
 
 Changelog for ownCloud Web [12.1.0] (2025-10-02)
 =======================================
