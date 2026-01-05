@@ -67,7 +67,7 @@
     "md-editor-v3": "^6.3.1",
     "mermaid": "^11.12.2",
     "oidc-client-ts": "^3.4.1",
-    "p-queue": "^9.0.1",
+    "p-queue": "^9.1.0",
     "password-sheriff": "^2.0.0",
     "pdf-lib": "^1.17.1",
     "pinia": "^3.0.4",
