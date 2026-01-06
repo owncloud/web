@@ -57,7 +57,9 @@ export const selectors = {
   breadcrumb: '#files-breadcrumb',
   previewControlBar: '.preview-controls-action-bar',
   uploadInfoSnackBar: '#upload-info-snackbar',
-  folderViewModal: '.folder-view-modal'
+  folderViewModal: '.folder-view-modal',
+  filesTable: '.files-table',
+  filesAppBarActions: '.files-app-bar-actions'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
