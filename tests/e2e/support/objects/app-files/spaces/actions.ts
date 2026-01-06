@@ -5,6 +5,7 @@ import { sidebar, editor } from '../utils'
 import Collaborator, { ICollaborator } from '../share/collaborator'
 import { createLink } from '../link/actions'
 import { File } from '../../../types'
+import { objects } from '../../..'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
@@ -51,6 +52,19 @@ export const createSpace = async (args: createSpaceArgs): Promise<string> => {
   const { page, name } = args
 
   await page.locator(newSpaceMenuButton).click()
+  const a11yObject = new objects.a11y.Accessibility({ page })
+
+  let violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().ocModal
+  )
+  violations = [
+    ...violations,
+    ...(await a11yObject.getSevereAccessibilityViolations(a11yObject.getSelectors().filesView))
+  ]
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in spaces page`
+  ).toHaveLength(0)
   await page.locator(spaceNameInputField).fill(name)
 
   const postResponsePromise = page.waitForResponse(
@@ -78,8 +92,20 @@ export interface openSpaceArgs {
 
 export const openSpace = async (args: openSpaceArgs): Promise<void> => {
   const { page, id } = args
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  let violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().filesView
+  )
   await page.locator(util.format(spaceIdSelector, id)).click()
   await page.locator(spaceHeaderSelector).waitFor()
+  violations = [
+    ...violations,
+    ...(await a11yObject.getSevereAccessibilityViolations(a11yObject.getSelectors().filesView))
+  ]
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in spaces page`
+  ).toHaveLength(0)
 }
 /**/
 

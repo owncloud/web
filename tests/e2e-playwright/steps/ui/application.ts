@@ -26,3 +26,21 @@ export async function getNotificationMessages({
   const application = new objects.runtime.Application({ page })
   return await application.getNotificationMessages()
 }
+
+export async function waitsForTokenRenewal({
+  actorsEnvironment,
+  stepUser,
+  renewalType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  renewalType: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const application = new objects.runtime.Application({ page })
+
+  if (renewalType === 'iframe') {
+    return await application.waitForTokenRenewalViaIframe()
+  }
+  return await application.waitForTokenRenewalViaRefreshToken()
+}

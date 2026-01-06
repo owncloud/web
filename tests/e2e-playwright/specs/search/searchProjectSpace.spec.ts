@@ -51,7 +51,7 @@ test.describe('Search in the project space', () => {
       id: 'team.1'
     })
 
-    await ui.navigateToProjectSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     await ui.createResource({
       actorsEnvironment,
