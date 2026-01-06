@@ -62,7 +62,9 @@ export const selectors = {
   folderViewModal: '.folder-view-modal',
   ocNotificationSuccessMessage: '.oc-notification-message-success',
   ocModalGenerateNewToken: '.oc-modal.oc-modal-passive',
-  scienceMesh: '.sciencemesh'
+  scienceMesh: '.sciencemesh',
+  filesTable: '.files-table',
+  filesAppBarActions: '.files-app-bar-actions'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
