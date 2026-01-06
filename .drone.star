@@ -196,6 +196,7 @@ config = {
             "suites": [
                 "shares",
                 "search",
+                "runtime",
             ],
         },
         "4": {
