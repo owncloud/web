@@ -11,6 +11,8 @@ Summary
 * Bugfix - Prevent overlapping search content: [#13406](https://github.com/owncloud/web/pull/13406)
 * Bugfix - Filter only personal trashed spaces: [#13415](https://github.com/owncloud/web/pull/13415)
 * Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
+* Enhancement - Add crash page: [#13426](https://github.com/owncloud/web/pull/13426)
+* Enhancement - Catch spaces loading error: [#13426](https://github.com/owncloud/web/pull/13426)
 
 Details
 -------
@@ -39,6 +41,20 @@ Details
    allows us to drop custom hardcoded logic for converting drive permissions.
 
    https://github.com/owncloud/web/pull/13412
+
+* Enhancement - Add crash page: [#13426](https://github.com/owncloud/web/pull/13426)
+
+   We've added a crash page to the application. This page is displayed when the
+   application encounters an error that it cannot recover from.
+
+   https://github.com/owncloud/web/pull/13426
+
+* Enhancement - Catch spaces loading error: [#13426](https://github.com/owncloud/web/pull/13426)
+
+   In case there is any error during spaces loading, the application will now
+   display a crash page instead of showing an infinite loading state.
+
+   https://github.com/owncloud/web/pull/13426
 
 Changelog for ownCloud Web [12.2.0] (2025-11-21)
 =======================================
