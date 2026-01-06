@@ -44,14 +44,15 @@ test.describe('deny share access', () => {
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
 
     await ui.shareResource({
+      role: 'Can view',
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
+      actionType: 'SIDEBAR_PANEL',
       resource: 'folder_to_shared',
-      resourceType: 'folder',
       recipient: 'Brian',
-      role: 'Can view',
-      actions: 'QUICK_ACTION'
+      type: 'user',
+      resourceType: 'folder'
     })
 
     await ui.openResource({
@@ -68,7 +69,8 @@ test.describe('deny share access', () => {
       resourceType: 'folder',
       recipient: 'Brian',
       role: 'Cannot access',
-      actions: 'SIDEBAR_PANEL'
+      actionType: 'SIDEBAR_PANEL',
+      type: 'user'
     })
   })
 

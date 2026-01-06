@@ -63,3 +63,41 @@ export async function downloadGdprExport({
   const accountObject = new objects.account.Account({ page })
   await accountObject.downloadGdprExport()
 }
+
+export async function userMarksNotificationsAsRead({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const application = new objects.runtime.Application({ page })
+  await application.markNotificationsAsRead()
+}
+
+export async function userOpensAccountPage({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const accountObject = new objects.account.Account({ page })
+  await accountObject.openAccountPage()
+}
+
+export async function disableNotificationEvent({
+  actorsEnvironment,
+  stepUser,
+  event
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  event: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const accountObject = new objects.account.Account({ page })
+  await accountObject.disableNotificationEvent(event)
+}

@@ -119,34 +119,47 @@ export async function shareResource({
   usersEnvironment,
   stepUser,
   resource,
-  resourceType,
   recipient,
-  role = 'Can view',
-  actions = 'QUICK_ACTION'
+  type,
+  role,
+  resourceType,
+  actionType,
+  expirationDate,
+  shareType
 }: {
   actorsEnvironment: ActorsEnvironment
   usersEnvironment: UsersEnvironment
   stepUser: string
+  actionType: ActionViaType
   resource: string
-  resourceType: ResourceType
   recipient: string
+  type: string
   role: string
-  actions: ActionViaType
+  resourceType: string
+  expirationDate?: string
+  shareType?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
-  const roleId = await getDynamicRoleIdByName(
-    usersEnvironment.getUser({ key: stepUser }),
-    role,
-    resourceType
-  )
+  const sharer = usersEnvironment.getUser({ key: stepUser })
 
+  const shareRecipient = {
+    collaborator:
+      type === 'group'
+        ? usersEnvironment.getGroup({ key: recipient })
+        : usersEnvironment.getUser({ key: recipient }),
+    role,
+    type: type as CollaboratorType,
+    resourceType,
+    expirationDate,
+    shareType
+  }
+
+  shareRecipient.role = await getDynamicRoleIdByName(sharer, role, resourceType as ResourceType)
   await shareObject.create({
     resource,
-    recipients: [
-      { collaborator: usersEnvironment.getUser({ key: recipient }), role: roleId, type: 'user' }
-    ],
-    via: actions
+    recipients: [shareRecipient],
+    via: actionType
   })
 }
 
@@ -169,4 +182,36 @@ export async function removeSharee({
     resource,
     recipients: [{ collaborator: usersEnvironment.getUser({ key: recipient }) }]
   })
+}
+
+export async function addUserToProjectSpace({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  reciver,
+  role,
+  kind
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  space: string
+  reciver: string
+  role: string
+  kind: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const sharer = usersEnvironment.getUser({ key: stepUser })
+
+  const collaborator =
+    kind === 'user'
+      ? usersEnvironment.getUser({ key: reciver })
+      : usersEnvironment.getGroup({ key: reciver })
+  const roleId = await getDynamicRoleIdByName(sharer, role, 'space' as ResourceType)
+  const collaboratorWithRole = {
+    collaborator,
+    role: roleId
+  }
+  await spacesObject.addMembers({ users: [collaboratorWithRole] })
 }

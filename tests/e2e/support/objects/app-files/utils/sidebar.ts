@@ -23,18 +23,43 @@ const openForResource = async ({
 }): Promise<void> => {
   if (resourceType === 'passwordProtectedFolder') {
     await page.frameLocator(folderModalIframe).locator(actionMenuForCurrentFolderSelector).click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      [folderModalIframe],
+      'account page'
+    )
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'account page'
+    )
     await page
       .frameLocator(folderModalIframe)
       .locator('.oc-files-actions-show-details-trigger')
       .click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'account page'
+    )
   } else {
     await page.locator(util.format(contextMenuButton, resource)).waitFor()
     await page.locator(util.format(contextMenuButton, resource)).click()
     await page.locator(contextMenuContainer).waitFor()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'account page'
+    )
     await page
       .locator(contextMenuContainer)
       .locator('.oc-files-actions-show-details-trigger')
       .click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'account page'
+    )
   }
 }
 
@@ -119,6 +144,11 @@ export const openPanel = async ({
   const backButton = currentPanel.locator('.header__back')
 
   if (await backButton.count()) {
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['sidebarPanel'],
+      'sidebar panel'
+    )
     await Promise.all([
       locatorUtils.waitForEvent(currentPanel, 'transitionend'),
       backButton.click()
@@ -129,10 +159,20 @@ export const openPanel = async ({
       .frameLocator(folderModalIframe)
       .locator(`#sidebar-panel-${name}-select`)
     const nextPanel = page.frameLocator(folderModalIframe).locator(`#sidebar-panel-${name}`)
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['sidebarPanel'],
+      'sidebar panel'
+    )
     await Promise.all([nextPanel.waitFor(), panelSelector.click()])
   } else {
     const panelSelector = page.locator(`#sidebar-panel-${name}-select`)
     const nextPanel = page.locator(`#sidebar-panel-${name}`)
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['sidebarPanel'],
+      'sidebar panel'
+    )
     await Promise.all([nextPanel.waitFor(), panelSelector.click()])
   }
 }
