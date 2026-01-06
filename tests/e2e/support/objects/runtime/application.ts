@@ -79,6 +79,12 @@ export class Application {
     }
     await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
     await this.#page.locator(markNotificationsAsReadButton).click()
+
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      this.#page,
+      [notificationItemsMessages],
+      'notifications'
+    )
     await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
   }
 

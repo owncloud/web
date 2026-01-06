@@ -126,5 +126,6 @@ export const disableNotificationEvent = async (args: {
   event: string
 }): Promise<void> => {
   const { page, event } = args
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['account'], 'account page')
   await page.locator(util.format(notificationEventCheckBox, event)).click()
 }
