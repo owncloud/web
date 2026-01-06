@@ -31,7 +31,6 @@ When(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
 
     for (const space of stepTable.hashes()) {
-      console.log(space)
       await spacesObject.create({ key: space.id || space.name, space: space as unknown as Space })
     }
   }
