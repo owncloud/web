@@ -3,7 +3,49 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v12.1.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v12.2.0...master
+
+Summary
+-------
+
+* Bugfix - Prevent overlapping search content: [#13406](https://github.com/owncloud/web/pull/13406)
+* Bugfix - Filter only personal trashed spaces: [#13415](https://github.com/owncloud/web/pull/13415)
+* Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
+
+Details
+-------
+
+* Bugfix - Prevent overlapping search content: [#13406](https://github.com/owncloud/web/pull/13406)
+
+   We've fixed an issue where the search placeholder and value were overlapping the
+   search scope filter on mobile devices. The placeholder is now hidden on mobile
+   devices, scope filter is represented by an icon instead of text and a correct
+   padding is applied to the search input so that the value ends before reaching
+   the icons.
+
+   https://github.com/owncloud/web/pull/13406
+
+* Bugfix - Filter only personal trashed spaces: [#13415](https://github.com/owncloud/web/pull/13415)
+
+   Instead of filtering all trashed spaces, we now filter only personal trashed
+   spaces. This fixes the issue where listing spaces with "Include disabled" option
+   toggled did not show disabled spaces.
+
+   https://github.com/owncloud/web/pull/13415
+
+* Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
+
+   We've updated the single drive operations to use the v1 beta endpoint. This
+   allows us to drop custom hardcoded logic for converting drive permissions.
+
+   https://github.com/owncloud/web/pull/13412
+
+Changelog for ownCloud Web [12.2.0] (2025-11-21)
+=======================================
+The following sections list the changes in ownCloud web 12.2.0 relevant to
+ownCloud admins and users.
+
+[12.2.0]: https://github.com/owncloud/web/compare/v12.1.0...v12.2.0
 
 Summary
 -------
@@ -17,8 +59,6 @@ Summary
 * Bugfix - External share ID fallback: [#13253](https://github.com/owncloud/web/pull/13253)
 * Bugfix - Handle file loading error: [#13274](https://github.com/owncloud/web/pull/13274)
 * Bugfix - Use sticky header composable in deleted files: [#13329](https://github.com/owncloud/web/pull/13329)
-* Bugfix - Prevent overlapping search content: [#13406](https://github.com/owncloud/web/pull/13406)
-* Bugfix - Filter only personal trashed spaces: [#13415](https://github.com/owncloud/web/pull/13415)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
@@ -26,7 +66,6 @@ Summary
 * Enhancement - Add table caption: [#13224](https://github.com/owncloud/web/pull/13224)
 * Enhancement - Use API groups search in admin settings: [#13235](https://github.com/owncloud/web/pull/13235)
 * Enhancement - Embed mode share links with password: [#13296](https://github.com/owncloud/web/pull/13296)
-* Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
 
 Details
 -------
@@ -101,24 +140,6 @@ Details
 
    https://github.com/owncloud/web/pull/13329
 
-* Bugfix - Prevent overlapping search content: [#13406](https://github.com/owncloud/web/pull/13406)
-
-   We've fixed an issue where the search placeholder and value were overlapping the
-   search scope filter on mobile devices. The placeholder is now hidden on mobile
-   devices, scope filter is represented by an icon instead of text and a correct
-   padding is applied to the search input so that the value ends before reaching
-   the icons.
-
-   https://github.com/owncloud/web/pull/13406
-
-* Bugfix - Filter only personal trashed spaces: [#13415](https://github.com/owncloud/web/pull/13415)
-
-   Instead of filtering all trashed spaces, we now filter only personal trashed
-   spaces. This fixes the issue where listing spaces with "Include disabled" option
-   toggled did not show disabled spaces.
-
-   https://github.com/owncloud/web/pull/13415
-
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 
    If the `root.deleted.state` property of a space is `trashed`, the space is not
@@ -186,13 +207,6 @@ Details
    existing event continues to be emitted for backward compatibility.
 
    https://github.com/owncloud/web/pull/13296
-
-* Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
-
-   We've updated the single drive operations to use the v1 beta endpoint. This
-   allows us to drop custom hardcoded logic for converting drive permissions.
-
-   https://github.com/owncloud/web/pull/13412
 
 Changelog for ownCloud Web [12.1.0] (2025-10-02)
 =======================================
