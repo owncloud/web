@@ -5,7 +5,14 @@ import path from 'path'
 const targetBranch = process.env.DRONE_TARGET_BRANCH || 'master'
 
 // paths that if changed will run all test suites
-const mandatoryPaths = ['tests/e2e/', 'tests/drone/', '.drone.star', '.drone.env', 'package.json']
+const mandatoryPaths = [
+  'tests/e2e/',
+  'tests/e2e-playwright/',
+  'tests/drone/',
+  '.drone.star',
+  '.drone.env',
+  'package.json'
+]
 
 // INFO: 1 and 2 elements are node and script name respectively
 const scriptDir = path.dirname(process.argv[1])
@@ -47,11 +54,22 @@ const allWebPackages = fs
 --------------------
  */
 const testSuitesDir = `${scriptDir}/../e2e/cucumber/features`
-const testSuites = fs.readdirSync(testSuitesDir).filter((entry) => {
-  if (!fs.statSync(path.join(testSuitesDir, entry)).isDirectory()) {
+const testSuitesDirPw = `${scriptDir}/../e2e-playwright/specs`
+// merge test suites from both directories eliminating duplicates
+const mergedTestSuites = Array.from(
+  new Set(fs.readdirSync(testSuitesDir)).union(new Set(fs.readdirSync(testSuitesDirPw)))
+)
+
+const testSuites = mergedTestSuites.filter((entry) => {
+  let suitePath = path.join(testSuitesDir, entry)
+  if (!fs.existsSync(suitePath)) {
+    suitePath = path.join(testSuitesDirPw, entry)
+  }
+
+  if (!fs.statSync(suitePath).isDirectory()) {
     return false
   }
-  const webPackagesFile = path.join(testSuitesDir, entry, 'web-packages.txt')
+  const webPackagesFile = path.join(suitePath, 'web-packages.txt')
   if (fs.existsSync(webPackagesFile)) {
     const content = fs.readFileSync(webPackagesFile, 'utf-8')
     const depPackages = content.split('\n').filter((line) => line && line.startsWith('web-'))
