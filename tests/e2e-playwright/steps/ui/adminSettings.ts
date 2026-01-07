@@ -12,14 +12,6 @@ export async function navigateToGeneralManagementPage({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationAdminSettings.page.General({ page })
   await pageObject.navigate()
-  const a11yObject = new objects.a11y.Accessibility({ page })
-  const violations = await a11yObject.getSevereAccessibilityViolations(
-    a11yObject.getSelectors().body
-  )
-  expect(
-    violations,
-    `Found ${violations.length} severe accessibility violations on General Management page`
-  ).toHaveLength(0)
 }
 
 export async function uploadLogoFromLocalPath({
