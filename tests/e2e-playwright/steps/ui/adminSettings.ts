@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
 
