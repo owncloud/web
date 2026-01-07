@@ -158,11 +158,11 @@ const setAreHiddenFilesShown = (value: InlineFilterOption) => {
   visibilityFilterAnnouncement.value = areHiddenFilesShown.value
     ? $pgettext(
         'Accessibility announcement for screen readers when the user switches to show hidden shares only',
-        'Now showing hidden shares'
+        'Showing hidden shares now'
       )
     : $pgettext(
         'Accessibility announcement for screen readers when the user switches to show visible shares only',
-        'Now showing visible shares'
+        'Visible shares are now showing'
       )
 }
 
