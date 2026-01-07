@@ -129,15 +129,6 @@ config = {
                 "WEB_OIDC_SCOPE": "openid profile email offline_access",
             },
         },
-        "oidc-iframe": {
-            "skip": False,
-            "features": [
-                "cucumber/features/oidc/iframeTokenRenewal.feature",
-            ],
-            "extraServerEnvironment": {
-                "IDP_ACCESS_TOKEN_EXPIRATION": 30,
-            },
-        },
         "ocm": {
             "earlyFail": True,
             "skip": False,
@@ -205,6 +196,15 @@ config = {
                 "user-settings",
                 "app-store",
             ],
+        },
+        "oidc-iframe": {
+            "skip": False,
+            "suites": [
+                "oidc",
+            ],
+            "extraServerEnvironment": {
+                "IDP_ACCESS_TOKEN_EXPIRATION": 30,
+            },
         },
     },
     "build": True,

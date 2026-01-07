@@ -40,7 +40,8 @@ export const selectors = {
   ocCard: '.oc-card',
   body: 'body',
   appStore: '#app-store',
-  appDetails: '.app-details'
+  appDetails: '.app-details',
+  filesView: 'files-view'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
