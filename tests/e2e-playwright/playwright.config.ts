@@ -9,6 +9,9 @@ const reportsDir = path.resolve(__dirname, '../../', config.reportDir)
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  // Set default test timeout to 60 seconds
+  timeout: config.timeout * 1000,
+
   // Look for test files in the following directory, relative to this configuration file.
   testDir: 'specs',
 
