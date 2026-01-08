@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import * as po from './actions'
 import { AxeResults } from 'axe-core'
 
@@ -81,5 +81,23 @@ export class Accessibility {
 
   deselectFileThroughCheckbox(): Promise<void> {
     return po.uncheckFileCheckbox({ page: this.#page })
+  }
+
+  static async assertNoSevereA11yViolations(
+    page: Page,
+    selectors: string[],
+    selectorLabel: string
+  ): Promise<void> {
+    const a11yObject = new Accessibility({ page })
+    const allViolations: AxeResults['violations'] = []
+    for (const selector of selectors) {
+      const include = a11yObject.getSelectors()[selector] || selector
+      const violations = await a11yObject.getSevereAccessibilityViolations(include)
+      allViolations.push(...violations)
+    }
+    expect(
+      allViolations,
+      `Found ${allViolations.length} severe accessibility violations in ${selectorLabel}`
+    ).toHaveLength(0)
   }
 }

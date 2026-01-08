@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test'
+import { Page } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
 import { objects } from '../../..'
@@ -58,12 +58,11 @@ export const openPanelForResource = async ({
 
 const openGlobal = async ({ page }: { page: Page }): Promise<void> => {
   await page.locator('#files-toggle-sidebar').click()
-  const a11yObject = new objects.a11y.Accessibility({ page })
-  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
-  expect(
-    a11yViolations,
-    `Found ${a11yViolations.length} severe accessibility violations in sidebar panel`
-  ).toHaveLength(0)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    [sidebarPanel],
+    'sidebar panel'
+  )
 }
 
 export const open = async ({
@@ -94,12 +93,11 @@ export const open = async ({
 export const close = async ({ page }: { page: Page }): Promise<void> => {
   // await sidebar transitions
   await new Promise((resolve) => setTimeout(resolve, 250))
-  const a11yObject = new objects.a11y.Accessibility({ page })
-  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
-  expect(
-    a11yViolations,
-    `Found ${a11yViolations.length} severe accessibility violations in sidebar panel`
-  ).toHaveLength(0)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    [sidebarPanel],
+    'sidebar panel'
+  )
   const isSubPanelActive = await page.locator(closeSidebarSubPanelBtn).isVisible()
   if (isSubPanelActive) {
     await page.locator(closeSidebarSubPanelBtn).click()
@@ -144,12 +142,11 @@ export const closePasswordProtectedFolder = async ({ page }: { page: Page }): Pr
     .frameLocator(folderModalIframe)
     .locator(closeSidebarSubPanelBtn)
     .isVisible()
-  const a11yObject = new objects.a11y.Accessibility({ page })
-  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
-  expect(
-    a11yViolations,
-    `Found ${a11yViolations.length} severe accessibility violations in sidebar panel`
-  ).toHaveLength(0)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    [sidebarPanel],
+    'sidebar panel'
+  )
   if (isSubPanelActive) {
     await page.frameLocator(folderModalIframe).locator(closeSidebarSubPanelBtn).click()
   } else {

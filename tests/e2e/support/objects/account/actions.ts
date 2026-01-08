@@ -37,19 +37,13 @@ export const getUserInfo = async (args: { page: Page; key: string }): Promise<st
 export const openAccountPage = async (args: { page: Page }): Promise<void> => {
   const { page } = args
   await page.locator(accountMenuButton).click()
-  const a11yObject = new objects.a11y.Accessibility({ page })
-  let violations = await a11yObject.getSevereAccessibilityViolations(
-    a11yObject.getSelectors().accountInfoContainer
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['accountInfoContainer'],
+    'account info modal'
   )
   await page.locator(accountManageButton).click()
-  violations = [
-    ...violations,
-    ...(await a11yObject.getSevereAccessibilityViolations(a11yObject.getSelectors().account))
-  ]
-  expect(
-    violations,
-    `Found ${violations.length} severe accessibility violations in acount page or acount info modal`
-  ).toHaveLength(0)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['account'], 'account page')
 }
 
 export const requestGdprExport = async (args: { page: Page }): Promise<void> => {
@@ -118,26 +112,12 @@ export const changeLanguage = async (args: {
   await Promise.all(promises)
 
   await expect(page.locator(languageValue)).toHaveText(language)
-  const a11yObject = new objects.a11y.Accessibility({ page })
-  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
-    a11yObject.getSelectors().account
-  )
-  expect(
-    a11yViolations,
-    `Found ${a11yViolations.length} severe accessibility violations in account page`
-  ).toHaveLength(0)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['account'], 'account page')
 }
 
 export const getTitle = async (args: { page: Page }): Promise<string> => {
   const { page } = args
-  const a11yObject = new objects.a11y.Accessibility({ page })
-  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
-    a11yObject.getSelectors().account
-  )
-  expect(
-    a11yViolations,
-    `Found ${a11yViolations.length} severe accessibility violations in account page`
-  ).toHaveLength(0)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['account'], 'account page')
   return page.locator(accountPageTitle).textContent()
 }
 

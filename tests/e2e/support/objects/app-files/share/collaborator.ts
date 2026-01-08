@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test'
+import { Page } from '@playwright/test'
 import { startCase } from 'lodash-es'
 import util from 'util'
 import { Group, User } from '../../../types'
@@ -157,14 +157,7 @@ export default class Collaborator {
       itemSelector = Collaborator.collaboratorRoleButton
     }
     await page.locator(dropdownSelector).click()
-    const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
-      a11yObject.getSelectors().tippyBox
-    )
-    expect(
-      a11yViolations,
-      `Found ${a11yViolations.length} severe accessibility violations in tippy box`
-    ).toHaveLength(0)
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'tippy box')
     await page.locator(util.format(itemSelector, role)).click()
   }
 
@@ -202,14 +195,11 @@ export default class Collaborator {
       .first()
       .click()
     await page.locator(util.format(Collaborator.removeCollaboratorButton, collaboratorRow)).click()
-    const a11yObject = new objects.a11y.Accessibility({ page })
-    const violations = await a11yObject.getSevereAccessibilityViolations(
-      a11yObject.getSelectors().removeUserModal
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['removeUserModal'],
+      'files modal'
     )
-    expect(
-      violations,
-      `Found ${violations.length} severe accessibility violations in files modal`
-    ).toHaveLength(0)
 
     await Promise.all([
       page.waitForResponse(

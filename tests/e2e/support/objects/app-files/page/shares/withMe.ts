@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test'
+import { Page } from '@playwright/test'
 import { Actor } from '../../../../../support/types'
 import { objects } from '../../../..'
 
@@ -15,14 +15,11 @@ export class WithMe {
 
   async navigate(): Promise<void> {
     await this.#page.locator(sharesNavSelector).click()
-    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
-    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
-      a11yObject.getSelectors().files
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      this.#page,
+      ['files'],
+      'files page'
     )
-    expect(
-      a11yViolations,
-      `Found ${a11yViolations.length} severe accessibility violations in files page`
-    ).toHaveLength(0)
   }
 
   async openShareWithMeFromInternalLink(actor: Actor): Promise<void> {
