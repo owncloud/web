@@ -1699,6 +1699,11 @@ export const expectThatResourcesAreTiles = async (args: { page: Page }): Promise
 
 export const showHiddenResources = async (page: Page): Promise<void> => {
   await page.locator(filesViewOptionButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'files control tippy box'
+  )
   await page.locator(hiddenFilesToggleButton).click()
   // close the files view option
   await page.locator(filesViewOptionButton).click()
@@ -1706,6 +1711,11 @@ export const showHiddenResources = async (page: Page): Promise<void> => {
 
 export const toggleFlatList = async (page: Page): Promise<void> => {
   await page.locator(filesViewOptionButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'files control tippy box'
+  )
   await page.locator(flatListToggleButton).click()
   // close the files view option
   await page.locator(filesViewOptionButton).click()
@@ -1971,6 +1981,11 @@ export interface changeItemsPerPageArgs {
 export const changeItemsPerPage = async (args: changeItemsPerPageArgs): Promise<void> => {
   const { page, itemsPerPage } = args
   await page.locator(filesViewOptionButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'files control tippy box'
+  )
   await page.locator(itemsPerPageDropDownSelector).click()
   await page.locator(util.format(itemsPerPageDropDownOptionSelector, itemsPerPage)).click()
   // close the files view option

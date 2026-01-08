@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
 import {
@@ -123,7 +124,7 @@ export async function shouldSeeResourcesAsTiles({
   await resourceObject.expectThatResourcesAreTiles()
 }
 
-export async function openFolder({
+export async function openResource({
   actorsEnvironment,
   stepUser,
   resource
@@ -154,4 +155,124 @@ export async function resourceExists({
     keyword: listType as displayedResourceType
   })
   return actualList.includes(resource)
+}
+
+export async function navigateToPageNumber({
+  actorsEnvironment,
+  stepUser,
+  pageNumber
+}: {
+  actorsEnvironment: ActorsEnvironment
+  pageNumber: string
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.changePage({ pageNumber })
+}
+
+export async function expectFooterTextToBe({
+  actorsEnvironment,
+  stepUser,
+  expectedText
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedText: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const actualText = await resourceObject.getFileListFooterText()
+  expect(actualText).toBe(expectedText)
+}
+
+export async function assertToHaveNoOfFiles({
+  actorsEnvironment,
+  stepUser,
+  expectedNumberOfResources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedNumberOfResources: number
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const actualNumberOfResources = await resourceObject.countNumberOfResourcesInThePage()
+  expect(actualNumberOfResources).toBe(expectedNumberOfResources)
+}
+
+export async function showHiddenFiles({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.showHiddenFiles()
+}
+
+export async function getCurrentPageNumber({
+  actorsEnvironment,
+  stepUser,
+  pageNumber
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  pageNumber: string
+}): Promise<string> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  return await resourceObject.getCurrentPageNumber({ pageNumber })
+}
+
+export async function changeItemsPerPage({
+  actorsEnvironment,
+  stepUser,
+  itemsPerPage
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  itemsPerPage: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.changeItemsPerPage({ itemsPerPage })
+}
+
+export async function expectPageNumberNotToBeVisible({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.expectPageNumberNotToBeVisible()
+}
+
+export async function toggleFlatList({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.toggleFlatList()
+}
+
+export async function getFilesList({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<string[]> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  return await resourceObject.getAllFiles()
 }
