@@ -36,7 +36,7 @@ export class Application {
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       this.#page,
       ['body'],
-      'app switcher dropdown'
+      `${name} app page`
     )
   }
 
