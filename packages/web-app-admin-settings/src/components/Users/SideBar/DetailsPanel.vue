@@ -2,7 +2,7 @@
   <div class="oc-mt-xl">
     <div v-if="noUsers" class="oc-flex user-info oc-text-center">
       <oc-icon name="user" size="xxlarge" />
-      <p v-translate>Select a user to view details</p>
+      <p v-translate data-testid="no-user-selected">Select a user to view details</p>
     </div>
     <div v-if="multipleUsers" class="oc-flex group-info">
       <oc-icon name="group" size="xxlarge" />
@@ -105,7 +105,7 @@ const { $gettext } = language
 const currentLanguage = computed(() => {
   return language.current
 })
-const noUsers = computed(() => users.length)
+const noUsers = computed(() => !users.length)
 const multipleUsers = computed(() => users.length > 1)
 const multipleUsersSelectedText = computed(() => {
   return $gettext('%{count} users selected', {
