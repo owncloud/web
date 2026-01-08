@@ -516,6 +516,11 @@ export const fillDocumentContent = async ({
   switch (editor) {
     case 'TextEditor':
       await page.locator(textEditorPlainTextInput).fill(text)
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['saveTextEditorOrViewerButton'],
+        'Text editor Save button is enabled after content change'
+      )
       break
     case 'Collabora':
       await fillCollaboraDocumentContent(page, text)
