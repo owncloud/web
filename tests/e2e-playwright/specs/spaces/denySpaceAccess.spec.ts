@@ -75,8 +75,14 @@ test.describe('deny space access', () => {
     await api.userHasCreatedFolderInSpace({
       usersEnvironment,
       stepUser: 'Alice',
-      spaceName: 'team',
-      folder: 'spaceFolder'
+      spaceName: 'sales',
+      folder: 'f1'
+    })
+    await api.userHasCreatedFolderInSpace({
+      usersEnvironment,
+      stepUser: 'Alice',
+      spaceName: 'sales',
+      folder: 'f2'
     })
 
     // And "Alice" adds the following members to the space "sales" using API

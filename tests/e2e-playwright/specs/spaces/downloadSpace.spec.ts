@@ -1,0 +1,123 @@
+import { test } from '@playwright/test'
+import { config } from '../../../e2e/config.js'
+import {
+  ActorsEnvironment,
+  UsersEnvironment,
+  SpacesEnvironment
+} from '../../../e2e/support/environment/index.js'
+import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
+import * as api from '../../steps/api/api.js'
+import * as ui from '../../steps/ui/index'
+
+test.describe('download space', () => {
+  let actorsEnvironment
+  const usersEnvironment = new UsersEnvironment()
+  const spacesEnvironment = new SpacesEnvironment()
+
+  test.beforeEach(async ({ browser }) => {
+    actorsEnvironment = new ActorsEnvironment({
+      context: {
+        acceptDownloads: config.acceptDownloads,
+        reportDir: config.reportDir,
+        tracingReportDir: config.tracingReportDir,
+        reportHar: config.reportHar,
+        reportTracing: config.reportTracing,
+        reportVideo: config.reportVideo,
+        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
+      },
+      browser: browser
+    })
+
+    await setAccessAndRefreshToken(usersEnvironment)
+  })
+
+  test.afterEach(async () => {
+    // clean up users
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
+  })
+
+  test('download space', async () => {
+    // Given "Admin" creates following users using API
+    //   | id    |
+    //   | Alice |
+    //   | Brian |
+    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+
+    // And "Admin" assigns following roles to the users using API
+    //   | id    | role        |
+    //   | Alice | Space Admin |
+    await api.userHasAssignRolesToUsers({
+      usersEnvironment,
+      stepUser: 'Admin',
+      targetUserId: 'Alice',
+      role: 'Space Admin'
+    })
+
+    // Given "Alice" logs in
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+
+    // And "Alice" creates the following project spaces using API
+    //   | name | id     |
+    //   | team | team.1 |
+    await api.userHasCreatedProjectSpace({
+      usersEnvironment,
+      spacesEnvironment,
+      stepUser: 'Alice',
+      name: 'team',
+      id: 'team.1'
+    })
+
+    // And "Alice" creates the following folder in space "team" using API
+    //   | name        |
+    //   | spaceFolder |
+    await api.userHasCreatedFolderInSpace({
+      usersEnvironment,
+      stepUser: 'Alice',
+      spaceName: 'team',
+      folder: 'spaceFolder'
+    })
+
+    // And "Alice" creates the following file in space "team" using API
+    //   | name                  | content    |
+    //   | spaceFolder/lorem.txt | space team |
+    await api.createFileInsideSpaceBySpaceName({
+      usersEnvironment,
+      stepUser: 'Alice',
+      fileName: 'spaceFolder/lorem.txt',
+      space: 'team'
+    })
+
+    // And "Alice" navigates to the project space "team.1"
+    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+
+    // When "Alice" downloads the space "team.1"
+    await ui.userDownloadsSpace({ actorsEnvironment, stepUser: 'Alice' })
+
+    // And "Alice" adds following users to the project space
+    //   | user     | role     | kind  |
+    //   | Brian    | Can edit | user  |
+    await ui.addMembersToSpace({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      sharee: 'team.1',
+      role: 'Can edit',
+      kind: 'user'
+    })
+
+    // And "Alice" logs out
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    // And "Brian" logs in
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+
+    // And "Brian" navigates to the project space "team.1"
+    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+
+    // When "Alice" downloads the space "team.1"
+    await ui.userDownloadsSpace({ actorsEnvironment, stepUser: 'Brian' })
+    // And "Brian" logs out
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+  })
+})

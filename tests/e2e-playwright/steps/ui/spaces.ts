@@ -187,3 +187,16 @@ export async function manageSpaceUsingContexMenu({
       throw new Error(`${action} not implemented`)
   }
 }
+
+export async function userDownloadsSpace({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const downloadedResource = await spacesObject.downloadSpace()
+  expect(downloadedResource).toContain('download.zip')
+}
