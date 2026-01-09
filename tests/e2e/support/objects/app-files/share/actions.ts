@@ -1,4 +1,4 @@
-import { expect, Page, Locator } from '@playwright/test'
+import { Page, Locator } from '@playwright/test'
 import util from 'util'
 import Collaborator, { ICollaborator, IAccessDetails } from './collaborator'
 import { sidebar } from '../utils'
@@ -76,13 +76,11 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   if (via !== 'URL_NAVIGATION') {
     await openSharingPanel(page, resource, via)
 
-    const violations = await a11yObject.getSevereAccessibilityViolations(
-      a11yObject.getSelectors().appSidebar
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'app sidebar'
     )
-    expect(
-      violations,
-      `Found ${violations.length} severe accessibility violations in app sidebar`
-    ).toHaveLength(0)
   }
   const expirationDate = recipients[0].expirationDate
 
@@ -104,13 +102,7 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   }
   await Collaborator.inviteCollaborators({ page, collaborators: recipients })
 
-  const violations = await a11yObject.getSevereAccessibilityViolations(
-    a11yObject.getSelectors().appSidebar
-  )
-  expect(
-    violations,
-    `Found ${violations.length} severe accessibility violations in app sidebar`
-  ).toHaveLength(0)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['appSidebar'], 'app sidebar')
 
   await sidebar.close({ page })
 }

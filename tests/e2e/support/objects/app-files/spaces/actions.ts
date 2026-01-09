@@ -52,19 +52,11 @@ export const createSpace = async (args: createSpaceArgs): Promise<string> => {
   const { page, name } = args
 
   await page.locator(newSpaceMenuButton).click()
-  const a11yObject = new objects.a11y.Accessibility({ page })
-
-  let violations = await a11yObject.getSevereAccessibilityViolations(
-    a11yObject.getSelectors().ocModal
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal', 'filesView'],
+    'spaces page'
   )
-  violations = [
-    ...violations,
-    ...(await a11yObject.getSevereAccessibilityViolations(a11yObject.getSelectors().filesView))
-  ]
-  expect(
-    violations,
-    `Found ${violations.length} severe accessibility violations in spaces page`
-  ).toHaveLength(0)
   await page.locator(spaceNameInputField).fill(name)
 
   const postResponsePromise = page.waitForResponse(
@@ -92,20 +84,10 @@ export interface openSpaceArgs {
 
 export const openSpace = async (args: openSpaceArgs): Promise<void> => {
   const { page, id } = args
-  const a11yObject = new objects.a11y.Accessibility({ page })
-  let violations = await a11yObject.getSevereAccessibilityViolations(
-    a11yObject.getSelectors().filesView
-  )
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
   await page.locator(util.format(spaceIdSelector, id)).click()
   await page.locator(spaceHeaderSelector).waitFor()
-  violations = [
-    ...violations,
-    ...(await a11yObject.getSevereAccessibilityViolations(a11yObject.getSelectors().filesView))
-  ]
-  expect(
-    violations,
-    `Found ${violations.length} severe accessibility violations in spaces page`
-  ).toHaveLength(0)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
 }
 /**/
 
