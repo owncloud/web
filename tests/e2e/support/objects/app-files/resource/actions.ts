@@ -230,7 +230,17 @@ export const createSpaceFromFolder = async ({
   spaceName: string
 }): Promise<Space> => {
   await page.locator(util.format(resourceNameSelector, folderName)).click({ button: 'right' })
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'contex menu tippy box'
+  )
   await page.locator(createSpaceFromResourceAction).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'create space from folder modal'
+  )
   await page.locator(resourceNameInput).fill(spaceName)
   const [response] = await Promise.all([
     page.waitForResponse(
@@ -299,8 +309,17 @@ export const createSpaceFromSelection = async ({
     select: true
   })
   await page.locator(util.format(resourceNameSelector, resources[0])).click({ button: 'right' })
-
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'contex menu tippy box'
+  )
   await page.locator(createSpaceFromResourceAction).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'create space from folder modal'
+  )
   await page.locator(resourceNameInput).fill(spaceName)
   const [response] = await Promise.all([
     page.waitForResponse(
