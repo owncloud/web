@@ -8,6 +8,7 @@ import { api } from '../../../e2e/support'
 import { ResourceType } from '../../../e2e/support/api/share/share'
 import { Space } from '../../../e2e/support/types'
 import fs from 'fs'
+import { integer } from 'vscode-languageserver-types'
 
 export async function userHasBeenCreated({
   usersEnvironment,
@@ -211,5 +212,69 @@ export async function uploadFileInPersonalSpace({
     user,
     pathToFile: destination,
     content
+  })
+}
+
+export async function createFolderInsideSpaceBySpaceName({
+  usersEnvironment,
+  stepUser,
+  numberOfFolders,
+  space
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  numberOfFolders: integer
+  space: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  for (let i = 1; i <= numberOfFolders; i++) {
+    await api.dav.createFolderInsideSpaceBySpaceName({
+      user,
+      folder: `testFolder${i}`,
+      spaceName: space
+    })
+  }
+}
+export async function createFilesInsideSpaceBySpaceName({
+  usersEnvironment,
+  stepUser,
+  numberOfFiles,
+  space
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  numberOfFiles: integer
+  space: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  for (let i = 1; i <= numberOfFiles; i++) {
+    await api.dav.uploadFileInsideSpaceBySpaceName({
+      user,
+      pathToFile: `testfile${i}.txt`,
+      spaceName: space,
+      content: `This is a test file${i}`
+    })
+  }
+}
+
+export async function createFileInsideSpaceBySpaceName({
+  usersEnvironment,
+  stepUser,
+  fileName,
+  space,
+  content
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  fileName: string
+  space: string
+  content: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.dav.uploadFileInsideSpaceBySpaceName({
+    user,
+    pathToFile: fileName,
+    spaceName: space,
+    content: content
   })
 }
