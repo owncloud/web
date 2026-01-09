@@ -213,3 +213,28 @@ export async function uploadFileInPersonalSpace({
     content
   })
 }
+
+export async function addMembersToTheProjectSpace({
+  usersEnvironment,
+  stepUser,
+  space,
+  shareType,
+  role,
+  sharee
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  space: string
+  shareType: string
+  role: string
+  sharee: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.share.addMembersToTheProjectSpace({
+    user,
+    spaceName: space,
+    shareType: shareType,
+    shareWith: sharee,
+    role: role
+  })
+}

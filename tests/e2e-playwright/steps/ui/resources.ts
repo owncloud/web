@@ -155,3 +155,22 @@ export async function resourceExists({
   })
   return actualList.includes(resource)
 }
+
+export async function resourceDoesNotExists({
+  actorsEnvironment,
+  listType,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  listType: 'search list' | 'files list' | 'Shares' | 'trashbin'
+  stepUser: string
+  resource: string
+}): Promise<boolean> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const actualList = await resourceObject.getDisplayedResources({
+    keyword: listType as displayedResourceType
+  })
+  return actualList.includes(resource)
+}
