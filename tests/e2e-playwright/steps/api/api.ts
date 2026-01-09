@@ -213,3 +213,44 @@ export async function uploadFileInPersonalSpace({
     content
   })
 }
+
+export async function uploadFileInsideSpaceBySpaceName({
+  usersEnvironment,
+  stepUser,
+  space,
+  pathToFile,
+  content,
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  space: string
+  pathToFile: string
+  content?: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.dav.uploadFileInsideSpaceBySpaceName({
+    user,
+    pathToFile: pathToFile,
+    spaceName: space,
+    content: content
+  })
+}
+
+export async function createFolderInsideSpaceBySpaceName({
+  usersEnvironment,
+  stepUser,
+  space,
+  folder,
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  space: string
+  folder: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.dav.createFolderInsideSpaceBySpaceName({
+    user,
+    folder: folder,
+    spaceName: space
+  })
+}
