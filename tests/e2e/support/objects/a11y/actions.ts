@@ -41,7 +41,10 @@ export const selectors = {
   body: 'body',
   appStore: '#app-store',
   appDetails: '.app-details',
-  filesView: 'files-view'
+  filesView: 'files-view',
+  // visible tippy/popover (active)
+  tippyBoxVisible: '.tippy-box[data-state="visible"]',
+  logoWrapper: '.logo-wrapper'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']

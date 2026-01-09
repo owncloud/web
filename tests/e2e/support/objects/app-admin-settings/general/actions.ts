@@ -1,30 +1,63 @@
 import { basename } from 'path'
 import { Page, expect } from '@playwright/test'
+import { objects } from '../../..'
 
 export const uploadLogo = async (path: string, page: Page): Promise<void> => {
   await page.click('#logo-context-btn')
+
+  // wait for the visible context menu and run accessibility scan on that menu
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBoxVisible'],
+    'logo menu'
+  )
 
   const logoInput = page.locator('#logo-upload-input')
   await logoInput.setInputFiles(path)
 
   await page.locator('.oc-notification-message').waitFor()
   await page.reload()
-  const logoImg = page.locator('.logo-wrapper img')
+  const selectors = new objects.a11y.Accessibility({ page }).getSelectors()
+  // run accessibility scan on the logo area after upload
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['logoWrapper'],
+    'logo area after upload'
+  )
+
+  const logoImg = page.locator(`${selectors.logoWrapper} img`)
   const logoSrc = await logoImg.getAttribute('src')
   expect(logoSrc).toContain(basename(path))
 }
 
 export const resetLogo = async (page: Page): Promise<void> => {
-  const imgBefore = page.locator('.logo-wrapper img')
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const selectors = a11yObject.getSelectors()
+
+  const imgBefore = page.locator(`${selectors.logoWrapper} img`)
   const srcBefore = await imgBefore.getAttribute('src')
   await page.click('#logo-context-btn')
+
+  // wait for the visible context menu and run accessibility scan on that menu
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBoxVisible'],
+    'logo menu'
+  )
 
   await page.click('.oc-general-actions-reset-logo-trigger')
 
   await page.locator('.oc-notification-message').waitFor()
   await page.reload()
 
-  const imgAfter = page.locator('.logo-wrapper img')
+  // run accessibility scan on the logo area after reset
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['logoWrapper'],
+    'logo area after reset'
+  )
+
+  const imgAfter = page.locator(`${selectors.logoWrapper} img`)
   const srcAfter = await imgAfter.getAttribute('src')
   expect(srcAfter).not.toEqual(srcBefore)
 }
