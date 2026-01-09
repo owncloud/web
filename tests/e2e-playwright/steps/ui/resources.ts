@@ -5,6 +5,7 @@ import {
   displayedResourceType,
   searchFilter
 } from '../../../e2e/support/objects/app-files/resource/actions'
+import { editor } from '../../../e2e/support/objects/app-files/utils'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -154,4 +155,24 @@ export async function resourceExists({
     keyword: listType as displayedResourceType
   })
   return actualList.includes(resource)
+}
+
+export async function fillContent({actorsEnvironment, stepUser, text, editor}: {actorsEnvironment: ActorsEnvironment, stepUser: string, text: string, editor: string}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.fillDocumentContent({
+    page,
+    text,
+    editor
+  })
+}
+
+export async function saveFile({actorsEnvironment, stepUser}:{actorsEnvironment: ActorsEnvironment, stepUser: string}):Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  await editor.save(page)
+}
+
+export async function closeFileEditor({actorsEnvironment, stepUser}:{actorsEnvironment: ActorsEnvironment, stepUser: string}):Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  await editor.close(page)
 }
