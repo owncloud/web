@@ -88,12 +88,14 @@ test.describe('details', () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource     |
     //   | space-folder |
-    await ui.resourceExists({
-      actorsEnvironment,
-      listType: 'files list',
-      stepUser: 'Alice',
-      resource: 'space-folder'
-    })
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Alice',
+        resource: 'space-folder'
+      })
+    ).toBeTruthy()
 
     // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })

@@ -215,7 +215,7 @@ export async function uploadFileInPersonalSpace({
   })
 }
 
-export async function createFolderInsideSpaceBySpaceName({
+export async function userHasCreatedFoldersInSpace({
   usersEnvironment,
   stepUser,
   numberOfFolders,
@@ -235,6 +235,26 @@ export async function createFolderInsideSpaceBySpaceName({
     })
   }
 }
+
+export async function userHasCreatedFolderInSpace({
+  usersEnvironment,
+  stepUser,
+  spaceName,
+  folder
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  spaceName: string
+  folder: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.dav.createFolderInsideSpaceBySpaceName({
+    user,
+    folder,
+    spaceName
+  })
+}
+
 export async function createFilesInsideSpaceBySpaceName({
   usersEnvironment,
   stepUser,
@@ -336,4 +356,29 @@ export async function userHasDeletedProjectSpace({
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
   await api.graph.deleteSpace({ user, space: { id, name } as unknown as Space })
+}
+
+export async function userHasAddedMembersToSpace({
+  usersEnvironment,
+  stepUser,
+  space,
+  shareType,
+  role,
+  sharee
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  space: string
+  shareType: string
+  role: string
+  sharee: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.share.addMembersToTheProjectSpace({
+    user,
+    spaceName: space,
+    shareType: shareType,
+    shareWith: sharee,
+    role: role
+  })
 }

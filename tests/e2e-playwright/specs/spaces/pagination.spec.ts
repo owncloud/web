@@ -68,7 +68,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // And "Alice" creates 55 folders in space "Developers" using API
-    await api.createFolderInsideSpaceBySpaceName({
+    await api.userHasCreatedFoldersInSpace({
       usersEnvironment,
       stepUser: 'Alice',
       numberOfFolders: 55,
