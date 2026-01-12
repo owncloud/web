@@ -70,7 +70,7 @@ test.describe('Notifications', () => {
     // Given "Admin" creates following groups using API
     //   | id    |
     //   | sales |
-    await api.userHasCreatedGroup({ usersEnvironment, stepUser: 'Admin', groupName: 'sales' })
+    await api.userHasCreatedGroup({ usersEnvironment, stepUser: 'Admin', groupId: 'sales' })
 
     // And "Admin" adds user to the group using API
     //   | user  | group |
