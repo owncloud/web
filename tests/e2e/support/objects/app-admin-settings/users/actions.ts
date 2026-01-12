@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { UsersEnvironment } from '../../../environment'
+import { objects } from '../../..'
 
 const userIdSelector = `[data-item-id="%s"] .users-table-btn-action-dropdown`
 const editActionBtnContextMenu = '.context-menu .oc-users-actions-edit-trigger'
@@ -162,6 +163,11 @@ export const selectUser = async (args: { page: Page; uuid: string }): Promise<vo
     return
   }
   await checkbox.click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    [util.format(userCheckboxSelector, uuid)],
+    `Select user checkbox for user with UUID ${uuid}`
+  )
 }
 
 export const addSelectedUsersToGroups = async (args: {
