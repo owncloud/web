@@ -116,6 +116,35 @@ describe('Groups view', () => {
       )
     })
   })
+
+  describe('provide/inject', () => {
+    it('provides the first selected group', async () => {
+      const selectedGroup = mock<Group>({ id: '1', displayName: 'test-group', groupTypes: [] })
+      const { wrapper } = getWrapper({ selectedGroups: [selectedGroup] })
+      await (wrapper.vm as any).loadResourcesTask.last
+
+      const providedGroup = (wrapper.vm as any).$.provides.group
+      expect(providedGroup.value).toEqual(selectedGroup)
+    })
+
+    it('provides undefined when no group is selected', async () => {
+      const { wrapper } = getWrapper({ selectedGroups: [] })
+      await (wrapper.vm as any).loadResourcesTask.last
+
+      const providedGroup = (wrapper.vm as any).$.provides.group
+      expect(providedGroup.value).toBeUndefined()
+    })
+
+    it('provides the first group when multiple groups are selected', async () => {
+      const firstGroup = mock<Group>({ id: '1', displayName: 'first-group', groupTypes: [] })
+      const secondGroup = mock<Group>({ id: '2', displayName: 'second-group', groupTypes: [] })
+      const { wrapper } = getWrapper({ selectedGroups: [firstGroup, secondGroup] })
+      await (wrapper.vm as any).loadResourcesTask.last
+
+      const providedGroup = (wrapper.vm as any).$.provides.group
+      expect(providedGroup.value).toEqual(firstGroup)
+    })
+  })
 })
 
 function getWrapper({

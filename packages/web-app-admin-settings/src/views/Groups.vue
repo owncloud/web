@@ -42,7 +42,7 @@
                   v-model.trim="filterTerm"
                   :label="$gettext('Search')"
                   autocomplete="off"
-                  @enterKeyDown="filterGroups"
+                  @enter-key-down="filterGroups"
                 />
                 <oc-button
                   id="groups-filter-confirm"
@@ -114,7 +114,10 @@ const { sideBarActivePanel, isSideBarOpen } = useSideBar()
 const router = useRouter()
 const route = useRoute()
 
-provide('group', selectedGroups[0])
+provide(
+  'group',
+  computed(() => unref(selectedGroups)[0])
+)
 
 const filterTerm = ref(queryItemAsString(unref(route).query.q_displayName))
 
