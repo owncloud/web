@@ -97,24 +97,10 @@ test.describe('share', () => {
       actions: 'SIDEBAR_PANEL'
     })
 
-    await ui.uploadResource({
-      actorsEnvironment,
-      filesEnvironment,
-      stepUser: 'Alice',
-      resource: 'lorem.txt',
-      to: 'folder_to_shared'
-    })
-    await ui.uploadResource({
-      actorsEnvironment,
-      filesEnvironment,
-      stepUser: 'Alice',
-      resource: 'lorem-big.txt',
-      to: 'folder_to_shared_2'
-    })
     // And "Brian" navigates to the shared with me page
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" opens folder "folder_to_shared"
-    await ui.openFolder({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
+    await ui.openResource({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource  |
     //   | lorem.txt |
