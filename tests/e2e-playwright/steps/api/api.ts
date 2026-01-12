@@ -307,14 +307,14 @@ export async function createFileInsideSpaceBySpaceName({
 export async function userHasCreatedGroup({
   usersEnvironment,
   stepUser,
-  groupName
+  groupId
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  groupName: string
+  groupId: string
 }) {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  const group = usersEnvironment.getGroup({ key: groupName })
+  const group = usersEnvironment.getGroup({ key: groupId })
   await api.graph.createGroup({ group, admin })
 }
 

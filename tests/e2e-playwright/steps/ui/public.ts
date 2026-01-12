@@ -1,5 +1,9 @@
 import { objects } from '../../../e2e/support'
-import { ActorsEnvironment, LinksEnvironment } from '../../../e2e/support/environment'
+import {
+  ActorsEnvironment,
+  FilesEnvironment,
+  LinksEnvironment
+} from '../../../e2e/support/environment'
 import { substitute } from '../../../e2e/support/utils'
 
 export async function openPublicLink({
@@ -27,16 +31,20 @@ export async function createPublicLink({
   actorsEnvironment,
   stepUser,
   resource,
-  password
+  password,
+  role,
+  name = 'Unnamed link'
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
   password: string
+  role: string
+  name?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const publicObject = new objects.applicationFiles.Link({ page })
-  await publicObject.create({ resource, password: substitute(password) })
+  await publicObject.create({ resource, password: substitute(password), role, name })
 }
 
 export async function anonymousUserOpensPublicLink({
@@ -72,4 +80,53 @@ export async function anonymousUserUnlocksPublicLink({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await pageObject.authenticate({ password: substitute(password) })
+}
+
+export async function uploadResourceInPublicLink({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource,
+  to,
+  option,
+  type
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+  to?: string
+  option?: string
+  type?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.upload({
+    to: to,
+    resources: [filesEnvironment.getFile({ name: resource })],
+    option: option,
+    type: type
+  })
+}
+
+export async function deleteResourceFromPublicLink({
+  actorsEnvironment,
+  stepUser,
+  file,
+  actionType,
+  parentFolder = ''
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  file: string
+  actionType: string
+  parentFolder?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.delete({
+    folder: parentFolder === '' ? null : parentFolder,
+    resourcesWithInfo: [{ name: file }],
+    via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+  })
 }

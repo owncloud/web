@@ -643,7 +643,6 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
 
   await page.locator(resourceUploadButton).click()
 
-  const a11yObject = new objects.a11y.Accessibility({ page })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['uploadMenuDropdown'],
@@ -656,7 +655,11 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
 
   if (option) {
     await uploadAction
-
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['ocModal'],
+      'file already exist modal'
+    )
     switch (option) {
       case 'skip': {
         await page.locator(actionSkipButton).click()
@@ -1302,6 +1305,11 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
               resp.request().method() === 'GET'
           )
         )
+        await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+          page,
+          ['body'],
+          'public link of a resource'
+        )
       }
 
       await Promise.all([...waitResponses, page.locator(deleteButtonBatchAction).click()])
@@ -1358,6 +1366,11 @@ export const deleteResourceTrashbin = async (args: deleteResourceTrashbinArgs): 
     await resourceCheckbox.check()
   }
 
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesView'],
+    'trashbin page'
+  )
   await page.locator(permanentDeleteButton).first().click()
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'DELETE'),
@@ -1455,6 +1468,11 @@ export const restoreTrashBinResource = async (
 
   const resourceNameLocator = page.locator(util.format(resourceNameSelector, resource))
   const itemId = await resourceNameLocator.locator(fileRow).getAttribute('data-item-id')
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesView'],
+    'trashbin page'
+  )
 
   await Promise.all([
     page.waitForResponse(
@@ -1716,7 +1734,6 @@ export interface switchViewModeArgs {
 
 export const clickViewModeToggle = async (args: switchViewModeArgs): Promise<void> => {
   const { page, target } = args
-  const a11yObject = new objects.a11y.Accessibility({ page })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['displayOptions'],
@@ -1727,7 +1744,6 @@ export const clickViewModeToggle = async (args: switchViewModeArgs): Promise<voi
 
 export const expectThatResourcesAreTiles = async (args: { page: Page }): Promise<void> => {
   const { page } = args
-  const a11yObject = new objects.a11y.Accessibility({ page })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tilesView'],
