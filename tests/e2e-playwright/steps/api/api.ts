@@ -341,4 +341,3 @@ export const cleanUpGroup = async (adminUser: User) => {
   await Promise.all(requests)
   store.createdGroupStore.clear()
 }
-

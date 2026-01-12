@@ -70,7 +70,7 @@ export async function createGroups({
   }
 }
 
-export async function groupsExist({
+export async function checkGroupsPresenceById({
   actorsEnvironment,
   stepUser,
   groupIds
@@ -88,6 +88,21 @@ export async function groupsExist({
     }
   }
   return true
+}
+
+export async function groupDisplayNameExists({
+  actorsEnvironment,
+  stepUser,
+  groupDisplayName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  groupDisplayName: string
+}): Promise<boolean> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+  const groups = await groupsObject.getGroupsDisplayName()
+  return groups.includes(groupDisplayName)
 }
 
 export async function deleteGroups({

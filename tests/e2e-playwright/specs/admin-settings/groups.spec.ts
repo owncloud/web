@@ -4,6 +4,7 @@ import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/enviro
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import { objects } from '../../../e2e/support'
 
 test.describe('groups management', () => {
   let actorsEnvironment
@@ -30,6 +31,7 @@ test.describe('groups management', () => {
   test.afterEach(async () => {
     const admin = usersEnvironment.getUser({ key: 'Admin' })
     await api.cleanUpGroup(admin)
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
   })
 
   test('admin creates group', async () => {
@@ -41,14 +43,12 @@ test.describe('groups management', () => {
       groupIds: ['sales', 'security']
     })
     expect(
-      await ui.groupsExist({
+      await ui.checkGroupsPresenceById({
         actorsEnvironment,
         stepUser: 'Admin',
         groupIds: ['sales', 'security']
       })
     ).toBeTruthy()
-
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
   })
 
   test('admin deletes group', async () => {
@@ -66,14 +66,27 @@ test.describe('groups management', () => {
     })
 
     expect(
-      await ui.groupsExist({
+      await ui.checkGroupsPresenceById({
         actorsEnvironment,
         stepUser: 'Admin',
         groupIds: ['sales']
       })
     ).toBeFalsy()
 
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.deleteGroups({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      actionType: 'batch actions',
+      groupsToBeDeleted: ['security', 'finance']
+    })
+
+    expect(
+      await ui.checkGroupsPresenceById({
+        actorsEnvironment,
+        stepUser: 'Admin',
+        groupIds: ['security', 'finance']
+      })
+    ).toBeFalsy()
   })
 
   test('edit groups', async () => {
@@ -91,7 +104,19 @@ test.describe('groups management', () => {
       value: 'a renamed group',
       action: 'context-menu'
     })
-
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
+    expect(
+      await ui.groupDisplayNameExists({
+        actorsEnvironment,
+        stepUser: 'Admin',
+        groupDisplayName: 'sales'
+      })
+    ).toBeFalsy()
+    expect(
+      await ui.groupDisplayNameExists({
+        actorsEnvironment,
+        stepUser: 'Admin',
+        groupDisplayName: 'a renamed group'
+      })
+    ).toBeTruthy()
   })
 })

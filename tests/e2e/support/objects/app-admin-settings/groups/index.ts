@@ -30,6 +30,10 @@ export class Groups {
     return po.getDisplayedGroups({ page: this.#page })
   }
 
+  async getGroupsDisplayName(): Promise<string> {
+    return po.getGroupsDisplayName({ page: this.#page })
+  }
+
   async selectGroup({ key }: { key: string }): Promise<void> {
     await po.selectGroup({ page: this.#page, uuid: this.getUUID({ key }) })
   }
@@ -56,9 +60,5 @@ export class Groups {
     const uuid = this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeGroup({ uuid, attribute: attribute, value: value, page: this.#page })
-  }
-
-  async openEditPanel({ key, action }: { key: string; action: string }): Promise<void> {
-    await po.openEditPanel({ page: this.#page, uuid: this.getUUID({ key }), action })
   }
 }
