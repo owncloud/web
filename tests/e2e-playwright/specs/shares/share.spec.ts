@@ -97,6 +97,24 @@ test.describe('share', () => {
       actions: 'SIDEBAR_PANEL'
     })
 
+    // And "Alice" uploads the following resource
+    // | resource      | to                 |
+    // | lorem.txt     | folder_to_shared   |
+    // | lorem-big.txt | folder_to_shared_2 |
+    await ui.uploadResource({
+      actorsEnvironment,
+      filesEnvironment,
+      stepUser: 'Alice',
+      resource: 'lorem.txt',
+      to: 'folder_to_shared'
+    })
+    await ui.uploadResource({
+      actorsEnvironment,
+      filesEnvironment,
+      stepUser: 'Alice',
+      resource: 'lorem-big.txt',
+      to: 'folder_to_shared_2'
+    })
     // And "Brian" navigates to the shared with me page
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" opens folder "folder_to_shared"
