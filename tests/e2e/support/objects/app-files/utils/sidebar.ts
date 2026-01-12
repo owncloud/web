@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
 import { objects } from '../../..'
@@ -31,6 +31,14 @@ const openForResource = async ({
     await page.locator(util.format(contextMenuButton, resource)).waitFor()
     await page.locator(util.format(contextMenuButton, resource)).click()
     await page.locator(contextMenuContainer).waitFor()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const violations = await a11yObject.getSevereAccessibilityViolations(
+      a11yObject.getSelectors().contextMenuDropDown
+    )
+    expect(
+      violations,
+      `Found ${violations.length} severe accessibility violations in context menu drop`
+    ).toHaveLength(0)
     await page
       .locator(contextMenuContainer)
       .locator('.oc-files-actions-show-details-trigger')
