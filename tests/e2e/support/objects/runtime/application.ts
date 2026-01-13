@@ -33,6 +33,11 @@ export class Application {
       'app switcher dropdown'
     )
     await this.#page.locator(util.format(appSelector, `app.${name}.menuItem`)).click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      this.#page,
+      ['body'],
+      'app switcher dropdown'
+    )
   }
 
   async getNotificationMessages(): Promise<string[]> {

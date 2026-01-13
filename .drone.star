@@ -119,16 +119,6 @@ config = {
                 "WEB_UI_CONFIG_FILE": None,
             },
         },
-        "oidc-refresh-token": {
-            "skip": False,
-            "features": [
-                "cucumber/features/oidc/refreshToken.feature",
-            ],
-            "extraServerEnvironment": {
-                "IDP_ACCESS_TOKEN_EXPIRATION": 30,
-                "WEB_OIDC_SCOPE": "openid profile email offline_access",
-            },
-        },
         "ocm": {
             "earlyFail": True,
             "skip": False,
@@ -204,10 +194,20 @@ config = {
                 "app-store",
             ],
         },
+        "oidc-refresh-token": {
+            "skip": False,
+            "features": [
+                "specs/oidc/refreshToken.spec.ts",
+            ],
+            "extraServerEnvironment": {
+                "IDP_ACCESS_TOKEN_EXPIRATION": 30,
+                "WEB_OIDC_SCOPE": "openid profile email offline_access",
+            },
+        },
         "oidc-iframe": {
             "skip": False,
-            "suites": [
-                "oidc",
+            "feature": [
+                "specs/oidc/iframeTokenRenewal.spec.ts",
             ],
             "extraServerEnvironment": {
                 "IDP_ACCESS_TOKEN_EXPIRATION": 30,

@@ -52,24 +52,20 @@ export const createSpace = async (args: createSpaceArgs): Promise<string> => {
   const { page, name } = args
 
   await page.locator(newSpaceMenuButton).click()
-  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
-    page,
-    ['ocModal', 'filesView'],
-    'spaces page'
-  )
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['ocModal'], 'spaces page')
   await page.locator(spaceNameInputField).fill(name)
 
-  const postResponsePromise = page.waitForResponse(
-    (postResp) =>
-      postResp.status() === 201 &&
-      postResp.request().method() === 'POST' &&
-      postResp.url().endsWith('drives?template=default')
-  )
-
   const [responses] = await Promise.all([
-    postResponsePromise,
+    page.waitForResponse(
+      (postResp) =>
+        postResp.status() === 201 &&
+        postResp.request().method() === 'POST' &&
+        postResp.url().endsWith('drives?template=default')
+    ),
     page.locator(actionConfirmButton).click()
   ])
+
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
 
   const { id } = await responses.json()
   return id
