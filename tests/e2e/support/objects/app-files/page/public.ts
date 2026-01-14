@@ -4,6 +4,7 @@ import util from 'util'
 import path from 'path'
 import * as po from '../resource/actions'
 import { objects } from '../../..'
+import { World } from '../../../../cucumber/environment'
 
 const passwordInput = 'input[type="password"]'
 const fileUploadInput = '//input[@id="files-file-upload-input"]'
@@ -22,7 +23,7 @@ export class Public {
     this.#page = page
   }
 
-  async open({ url }: { url: string }): Promise<void> {
+  async open({ url, world }: { url: string; world: World }): Promise<void> {
     await Promise.all([
       this.#page.waitForResponse(
         (res) =>
@@ -42,18 +43,21 @@ export class Public {
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       this.#page,
       ['body'],
-      'public link page'
+      'public link page',
+      world
     )
   }
 
   async authenticate({
     password,
     passwordProtectedFolder = false,
-    expectToSucceed = true
+    expectToSucceed = true,
+    world
   }: {
     password: string
     passwordProtectedFolder?: boolean
     expectToSucceed?: boolean
+    world?: World
   }): Promise<void> {
     let page: Page | FrameLocator = this.#page
     if (passwordProtectedFolder) {
@@ -62,7 +66,8 @@ export class Public {
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       this.#page,
       ['body'],
-      'public link authenticate page'
+      'public link authenticate page',
+      world
     )
     await page.locator(passwordInput).fill(password)
     await page.locator(publicLinkAuthorizeButton).click()

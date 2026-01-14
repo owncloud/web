@@ -4,6 +4,7 @@ import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { clickResource } from '../resource/actions'
 import { objects } from '../../..'
+import { World } from '../../../../cucumber/environment'
 
 export interface createLinkArgs {
   page: Page
@@ -12,6 +13,7 @@ export interface createLinkArgs {
   name?: string
   space?: boolean
   password?: string
+  world?: World
 }
 
 export interface copyLinkArgs {
@@ -20,6 +22,7 @@ export interface copyLinkArgs {
   resourceType?: string
   name?: string
   via?: string
+  world: World
 }
 
 export type changeNameArgs = {
@@ -27,6 +30,7 @@ export type changeNameArgs = {
   resource?: string
   newName: string
   space?: boolean
+  world: World
 }
 
 export type addExpirationArgs = {
@@ -34,6 +38,7 @@ export type addExpirationArgs = {
   resource: string
   linkName: string
   expireDate: string
+  world: World
 }
 
 export type addPasswordArgs = {
@@ -41,6 +46,7 @@ export type addPasswordArgs = {
   resource: string
   linkName: string
   newPassword: string
+  world: World
 }
 
 export type changeRoleArgs = {
@@ -49,12 +55,14 @@ export type changeRoleArgs = {
   linkName: string
   role: string
   space?: boolean
+  world: World
 }
 
 export type deleteLinkArgs = {
   page: Page
   resourceName: string
   name: string
+  world: World
 }
 
 export type publicLinkAndItsEditButtonVisibilityArgs = {
@@ -62,6 +70,7 @@ export type publicLinkAndItsEditButtonVisibilityArgs = {
   linkName: string
   resource?: string
   space?: boolean
+  world: World
 }
 const publicLinkRoleToggle = `//button[contains(@class, "link-role-dropdown-toggle")]`
 const publicLinkSetRoleButton = `//span[contains(@class,"role-dropdown-list-option-label") and text()='%s']`
@@ -114,14 +123,14 @@ const getRecentLinkName = async (page: Page): Promise<string> => {
 }
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {
-  const { space, page, resource, password, role } = args
+  const { space, page, resource, password, role, world } = args
   if (!space) {
     const resourcePaths = resource.split('/')
     const resourceName = resourcePaths.pop()
     if (resourcePaths.length) {
       await clickResource({ page: page, path: resourcePaths.join('/') })
     }
-    await sidebar.open({ page: page, resource: resourceName })
+    await sidebar.open({ page: page, resource: resourceName, world })
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(addPublicLinkButton).click()
@@ -129,7 +138,8 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
-    'create public link modal'
+    'create public link modal',
+    world
   )
 
   if (role) {
@@ -157,7 +167,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
-  const { page, resource, linkName, role, space } = args
+  const { page, resource, linkName, role, space, world } = args
 
   // clear all popups
   await clearAllPopups(page)
@@ -172,7 +182,7 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
       await clickResource({ page: page, path: resourcePaths.join('/') })
     }
   }
-  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.open({ page: page, resource: resourceName, world })
   await sidebar.openPanel({ page: page, name: shareType })
   await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
 
@@ -192,7 +202,7 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
 }
 
 export const changeName = async (args: changeNameArgs): Promise<string> => {
-  const { page, resource, space, newName } = args
+  const { page, resource, space, newName, world } = args
 
   // clear all popups
   await clearAllPopups(page)
@@ -203,7 +213,7 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
     if (resourcePaths.length) {
       await clickResource({ page: page, path: resourcePaths.join('/') })
     }
-    await sidebar.open({ page: page, resource: resourceName })
+    await sidebar.open({ page: page, resource: resourceName, world })
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(util.format(editPublicLinkButton, 'Unnamed link')).click()
@@ -216,7 +226,7 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
 }
 
 export const fillPassword = async (args: addPasswordArgs): Promise<void> => {
-  const { page, resource, linkName, newPassword } = args
+  const { page, resource, linkName, newPassword, world } = args
 
   // clear all popups
   await clearAllPopups(page)
@@ -226,7 +236,7 @@ export const fillPassword = async (args: addPasswordArgs): Promise<void> => {
   if (resourcePaths.length) {
     await clickResource({ page: page, path: resourcePaths.join('/') })
   }
-  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.open({ page: page, resource: resourceName, world })
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, linkName)).click()
   await page.locator(editPublicLinkAddPasswordButton).click()
@@ -279,13 +289,13 @@ export const setPassword = async (page: Page): Promise<void> => {
 }
 
 export const addExpiration = async (args: addExpirationArgs): Promise<void> => {
-  const { page, resource, linkName, expireDate } = args
+  const { page, resource, linkName, expireDate, world } = args
   const resourcePaths = resource.split('/')
   const resourceName = resourcePaths.pop()
   if (resourcePaths.length) {
     await clickResource({ page: page, path: resourcePaths.join('/') })
   }
-  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.open({ page: page, resource: resourceName, world })
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, linkName)).click()
   await page.locator(editPublicLinkSetExpirationButton).click()
@@ -300,12 +310,12 @@ export const addExpiration = async (args: addExpirationArgs): Promise<void> => {
 }
 
 export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
-  const { page, resourceName, name } = args
+  const { page, resourceName, name, world } = args
 
   // clear all popups
   await clearAllPopups(page)
 
-  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.open({ page: page, resource: resourceName, world })
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, name)).click()
   await page.locator(util.format(deleteLinkButton, name)).click()
@@ -317,7 +327,7 @@ export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
 export const getPublicLinkVisibility = async (
   args: publicLinkAndItsEditButtonVisibilityArgs
 ): Promise<string> => {
-  const { page, linkName, resource, space } = args
+  const { page, linkName, resource, space, world } = args
   let shareType = 'space-share'
   let resourceName = null
   if (!space) {
@@ -328,7 +338,7 @@ export const getPublicLinkVisibility = async (
       await clickResource({ page: page, path: resourcePaths.join('/') })
     }
   }
-  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.open({ page: page, resource: resourceName, world })
   await sidebar.openPanel({ page: page, name: shareType })
   return await page.locator(util.format(publicLink, linkName)).textContent()
 }
@@ -372,8 +382,8 @@ export const clickOnCancelButton = async (page: Page): Promise<void> => {
 }
 
 export const copyLinkToClipboard = async (args: copyLinkArgs): Promise<string> => {
-  const { page, resource, resourceType } = args
-  await sidebar.open({ page: page, resource: resource, resourceType })
+  const { page, resource, resourceType, world } = args
+  await sidebar.open({ page: page, resource: resource, resourceType, world })
   await sidebar.openPanel({ page: page, name: 'sharing', resourceType })
 
   // clear the clipboard

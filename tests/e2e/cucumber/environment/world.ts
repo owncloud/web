@@ -15,6 +15,7 @@ export class World extends CucumberWorld {
   linksEnvironment: environment.LinksEnvironment
   spacesEnvironment: environment.SpacesEnvironment
   usersEnvironment: environment.UsersEnvironment
+  currentStepData: any
 
   constructor(options: WorldOptions) {
     super(options)

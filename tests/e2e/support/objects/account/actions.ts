@@ -2,6 +2,7 @@ import { Page, expect } from '@playwright/test'
 import util from 'util'
 import { config } from '../../../config'
 import { objects } from '../..'
+import { World } from '../../../cucumber/environment'
 
 const accountMenuButton = '.oc-topbar-avatar'
 const quotaValue = '.quota-information-text'
@@ -34,16 +35,22 @@ export const getUserInfo = async (args: { page: Page; key: string }): Promise<st
   return await page.locator(util.format(infoValue, key)).textContent()
 }
 
-export const openAccountPage = async (args: { page: Page }): Promise<void> => {
-  const { page } = args
+export const openAccountPage = async (args: { page: Page; world?: World }): Promise<void> => {
+  const { page, world } = args
   await page.locator(accountMenuButton).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['accountInfoContainer'],
-    'account info modal'
+    'account info modal',
+    world
   )
   await page.locator(accountManageButton).click()
-  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['account'], 'account page')
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['account'],
+    'account page',
+    world
+  )
 }
 
 export const requestGdprExport = async (args: { page: Page }): Promise<void> => {
@@ -90,8 +97,9 @@ export const changeLanguage = async (args: {
   page: Page
   language: string
   isAnonymousUser: boolean
+  world?: World
 }): Promise<void> => {
-  const { page, language, isAnonymousUser } = args
+  const { page, language, isAnonymousUser, world } = args
   await page.locator(languageInput).waitFor()
   await page.locator(languageInput).click()
   await page.locator(languageInput).pressSequentially(language)
@@ -112,12 +120,22 @@ export const changeLanguage = async (args: {
   await Promise.all(promises)
 
   await expect(page.locator(languageValue)).toHaveText(language)
-  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['account'], 'account page')
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['account'],
+    'account page',
+    world
+  )
 }
 
-export const getTitle = async (args: { page: Page }): Promise<string> => {
-  const { page } = args
-  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['account'], 'account page')
+export const getTitle = async (args: { page: Page; world?: World }): Promise<string> => {
+  const { page, world } = args
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['account'],
+    'account page',
+    world
+  )
   return page.locator(accountPageTitle).textContent()
 }
 

@@ -3,6 +3,7 @@ import * as po from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent, resourceIsSynced } from './utils'
 import { ICollaborator, IAccessDetails } from './collaborator'
 import { User } from '../../../types'
+import { World } from '../../../../cucumber/environment'
 export class Share {
   #page: Page
 
@@ -16,12 +17,12 @@ export class Share {
     await this.#page.goto(startUrl)
   }
 
-  async enableSync(args: Omit<po.ShareStatusArgs, 'page'>): Promise<void> {
-    await po.enableSync({ ...args, page: this.#page })
+  async enableSync(args: Omit<po.ShareStatusArgs, 'page'>, world: World): Promise<void> {
+    await po.enableSync({ ...args, page: this.#page }, world)
   }
 
-  async disableSync(args: Omit<po.ShareStatusArgs, 'page'>): Promise<void> {
-    await po.disableSync({ ...args, page: this.#page })
+  async disableSync(args: Omit<po.ShareStatusArgs, 'page'>, world: World): Promise<void> {
+    await po.disableSync({ ...args, page: this.#page }, world)
   }
 
   async syncAll(): Promise<void> {
@@ -62,26 +63,35 @@ export class Share {
   async addExpirationDate({
     resource,
     collaborator,
-    expirationDate
+    expirationDate,
+    world
   }: {
     resource: string
     collaborator: Omit<ICollaborator, 'role'>
     expirationDate: string
+    world: World
   }): Promise<void> {
     const startUrl = this.#page.url()
-    await po.addExpirationDate({ resource, collaborator, expirationDate, page: this.#page })
+    await po.addExpirationDate({ resource, collaborator, expirationDate, page: this.#page, world })
     await this.#page.goto(startUrl)
   }
 
   async getAccessDetails({
     resource,
-    collaborator
+    collaborator,
+    world
   }: {
     resource: string
     collaborator: Omit<ICollaborator, 'role'>
+    world: World
   }): Promise<IAccessDetails> {
     const startUrl = this.#page.url()
-    const accessDetails = await po.getAccessDetails({ resource, collaborator, page: this.#page })
+    const accessDetails = await po.getAccessDetails({
+      resource,
+      collaborator,
+      page: this.#page,
+      world
+    })
     await this.#page.goto(startUrl)
     return accessDetails
   }
@@ -98,7 +108,7 @@ export class Share {
     return po.changeRoleLocator({ page: this.#page, recipient })
   }
 
-  async openSharingPanel(resource: string): Promise<void> {
-    await po.openSharingPanel(this.#page, resource)
+  async openSharingPanel(resource: string, world: World): Promise<void> {
+    await po.openSharingPanel(this.#page, resource, 'SIDEBAR_PANEL', world)
   }
 }

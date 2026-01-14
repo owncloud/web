@@ -6,7 +6,8 @@ import {
   ITestCaseHookParameter,
   AfterAll,
   After,
-  Status
+  Status,
+  AfterStep
 } from '@cucumber/cucumber'
 import pino from 'pino'
 import { Browser, chromium, firefox, webkit } from '@playwright/test'
@@ -19,6 +20,7 @@ import { config } from '../../config'
 import { Group, User, UserState } from '../../support/types'
 import { api, environment, utils, store } from '../../support'
 import { getBrowserLaunchOptions } from '../../support/environment/actor/shared'
+import { AxeResults } from 'axe-core'
 
 export { World }
 
@@ -32,10 +34,17 @@ const logger = pino({
   }
 })
 
+let startTime = 0
+const allViolations = []
+let totalTest = 0
+let failedTest = 0
+let passedTest = 0
+
 setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
 setWorldConstructor(World)
 
 BeforeAll(async (): Promise<void> => {
+  startTime = Date.now()
   const browserConfiguration = getBrowserLaunchOptions()
 
   const browsers: Record<string, () => Promise<Browser>> = {
@@ -56,6 +65,7 @@ BeforeAll(async (): Promise<void> => {
 })
 
 Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
+  // const firstStepLineNumber = pickle
   this.feature = pickle
   this.actorsEnvironment.on('console', (actorId, message): void => {
     const msg = {
@@ -111,6 +121,13 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
   if (!result) {
     return
   }
+  totalTest++
+  // console.log(pickle,result)
+  if (result.status === 'PASSED') {
+    passedTest++
+  } else {
+    failedTest++
+  }
 
   await this.actorsEnvironment.close()
 
@@ -162,17 +179,91 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
   config.reportTracing = willBeRetried || defaults.reportTracing
 })
 
+AfterStep(function (this: World, { result, pickle }: ITestCaseHookParameter) {
+  const stepData = this.currentStepData
+  // console.log(stepData)
+  if (!stepData || !stepData.allViolations) {
+    return
+  }
+  let violations = stepData.allViolations
+  console.log(violations)
+  // when we retry test do not keep duplicates
+  violations = Object.values(
+    violations.reduce((acc, item) => {
+      acc[item.test] = item
+      return acc
+    }, {})
+  )
+  violations.forEach((violation) => {
+    const vioEle = []
+    violation.nodes.forEach((element) => {
+      vioEle.push(element.target)
+    })
+    allViolations.push({
+      test: pickle.name,
+      file: pickle.uri,
+      status: result.status,
+      duration: result.duration,
+      helpUrl: violation.helpUrl,
+      violationsTag: violation.tags,
+      description: violation.description,
+
+      violationCount: violation.nodes.length,
+      elements: vioEle
+    })
+  })
+})
+
 AfterAll(async () => {
   environment.closeSSEConnections()
 
   if (state.browser) {
     await state.browser.close()
   }
+  let totalViolations = 0
+  allViolations.forEach((violation) => {
+    totalViolations = totalViolations + violation.violationCount
+  })
 
   // move failed tracing reports
   const failedDir = path.dirname(config.tracingReportDir) + '/failed'
   if (fs.existsSync(failedDir)) {
     fs.renameSync(failedDir, config.tracingReportDir)
+  }
+  console.log('after all allViolations', allViolations)
+  const report: A11yReportcucumber = {
+    summary: {
+      totalTests: totalTest,
+      totalViolations: totalViolations,
+      totalPasses: passedTest,
+      totalFailure: failedTest,
+      timestamp: new Date().toISOString(),
+      duration: Date.now() - startTime
+    },
+    tests: allViolations
+  }
+
+  try {
+    const outputfile = 'a11y-report-cucumber.json'
+    fs.writeFile('a11y-report-cucumber.json', JSON.stringify(report, null, 2), (err) => {
+      if (err) {
+        console.error('Error writing file:', err)
+      } else {
+        console.log('File has been written')
+      }
+    })
+    console.info(`\n📊 Accessibility Report Generated:`)
+    console.info(`   File: ${outputfile}`)
+    console.info(`   Tests: ${report.summary.totalTests}`)
+    console.info(`   Failed Tests: ${failedTest}`)
+    console.info(`   Violations: ${report.summary.totalViolations}`)
+    if (report.summary.totalViolations > 0) {
+      console.warn(`\n⚠️  Found ${report.summary.totalViolations} accessibility violations`)
+    } else {
+      console.info(`\n✅ No accessibility violations found`)
+    }
+  } catch (error) {
+    console.error('Error writing accessibility report:', error)
   }
 })
 
@@ -294,4 +385,28 @@ const storeKeycloakGroups = async (adminUser: User, usersEnvironment) => {
       usersEnvironment.storeCreatedGroup({ group: { ...dummyGroup, uuid: matchingGroup.id } })
     }
   })
+}
+
+interface A11yReportcucumber {
+  summary: {
+    totalTests: number
+    totalViolations: number
+    totalPasses: number
+    totalFailure: number
+    timestamp: string
+    duration: number
+  }
+  tests: A11yTestResult[]
+}
+interface A11yTestResult {
+  test: string
+  file: string
+  line: number
+  status: string
+  duration: number
+  url?: string
+  violations: AxeResults['violations']
+  violationCount: number
+  passCount: number
+  incompleteCount: number
 }
