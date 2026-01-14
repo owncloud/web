@@ -107,6 +107,11 @@ export default class Collaborator {
       page.waitForResponse((resp) => resp.url().includes('users') && resp.status() === 200),
       collaboratorInputLocator.fill(collaborator.displayName)
     ])
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'account page'
+    )
     await collaboratorInputLocator.focus()
     await page.locator('.vs--open').waitFor()
     await page
@@ -194,6 +199,7 @@ export default class Collaborator {
       .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
       .first()
       .click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'files modal')
     await page.locator(util.format(Collaborator.removeCollaboratorButton, collaboratorRow)).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
@@ -252,6 +258,11 @@ export default class Collaborator {
     await page
       .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
       .click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'account page'
+    )
 
     const panel = page.locator(Collaborator.invitePanel)
     await Promise.all([
@@ -260,6 +271,7 @@ export default class Collaborator {
         .locator(util.format(Collaborator.setExpirationDateCollaboratorButton, collaboratorRow))
         .click()
     ])
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['ocModal'], 'account page')
 
     await Collaborator.setExpirationDate(page, expirationDate)
   }
@@ -288,6 +300,11 @@ export default class Collaborator {
     await page
       .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
       .click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'account page'
+    )
     await Promise.all([
       page.waitForResponse(
         (resp) =>

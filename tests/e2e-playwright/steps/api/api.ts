@@ -278,3 +278,18 @@ export async function createFileInsideSpaceBySpaceName({
     content: content
   })
 }
+
+export async function userHasDeletedProjectSpace({
+  usersEnvironment,
+  stepUser,
+  name,
+  id
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  name: string
+  id: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.graph.deleteSpace({ user, space: { id, name } as unknown as Space })
+}

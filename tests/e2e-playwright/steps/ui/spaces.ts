@@ -1,6 +1,7 @@
-import { ActorsEnvironment } from '../../../e2e/support/environment'
+import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { objects } from '../../../e2e/support'
 import { Space } from '../../../e2e/support/types'
+import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
 
 export async function navigateToPersonalSpacePage({
   actorsEnvironment,
@@ -56,4 +57,70 @@ export async function createProjectSpace({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   await spacesObject.create({ key: id || name, space: { name: name, id: id } as unknown as Space })
+}
+export async function addMembersToSpace({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  sharee,
+  role,
+  kind
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  sharee: string
+  role: string
+  kind: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const sharer = usersEnvironment.getUser({ key: stepUser })
+
+  const collaborator =
+    kind === 'user'
+      ? usersEnvironment.getUser({ key: sharee })
+      : usersEnvironment.getGroup({ key: sharee })
+  const roleId = await getDynamicRoleIdByName(sharer, role, 'space' as ResourceType)
+  const collaboratorWithRole = {
+    collaborator,
+    role: roleId
+  }
+  await spacesObject.addMembers({ users: [collaboratorWithRole] })
+}
+
+export async function addExpirationDate({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  memberName,
+  expirationDate
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  memberName: string
+  expirationDate: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const member = { collaborator: usersEnvironment.getUser({ key: memberName }) }
+  await spacesObject.addExpirationDate({ member, expirationDate })
+}
+
+export async function removeExpirationDate({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  memberName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  memberName: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const member = { collaborator: usersEnvironment.getUser({ key: memberName }) }
+  await spacesObject.removeExpirationDate({ member })
 }
