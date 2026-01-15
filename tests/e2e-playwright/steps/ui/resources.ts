@@ -332,7 +332,7 @@ export async function shouldNotSeeVersionPanelForFiles({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
     const fileInfo = filesEnvironment.getFile({ name: resource })
-    const isVersionPanelVisible = await resourceObject.checkThatFileVersionPanelIsNotAvailable({
+    await resourceObject.checkThatFileVersionPanelIsNotAvailable({
       folder: to,
       files: [fileInfo]
     })

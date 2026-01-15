@@ -71,7 +71,6 @@ export interface createShareArgs extends ShareArgs {
 
 export const createShare = async (args: createShareArgs): Promise<void> => {
   const { page, resource, recipients, via } = args
-  const a11yObject = new objects.a11y.Accessibility({ page })
 
   if (via !== 'URL_NAVIGATION') {
     await openSharingPanel(page, resource, via)
@@ -146,7 +145,11 @@ export const clickActionInContextMenu = async (
 ): Promise<void> => {
   const { page, resource } = args
   await page.locator(util.format(actionMenuDropdownButton, resource)).click()
-
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['.tippy-box'],
+    'context menu dropdown'
+  )
   switch (action) {
     case 'enable-sync':
       await Promise.all([
@@ -171,6 +174,11 @@ export const clickActionInContextMenu = async (
       ])
       break
   }
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['#files-shared-with-me-view'],
+    'Shared with me file list'
+  )
 }
 
 export const changeShareeRole = async (args: ShareArgs): Promise<void> => {
