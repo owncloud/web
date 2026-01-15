@@ -43,11 +43,10 @@ test.describe('details', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" logs in
@@ -62,11 +61,11 @@ test.describe('details', () => {
     // And "Alice" creates the following project spaces
     //   | name | id     |
     //   | team | team.1 |
-    await ui.createProjectSpace({
+    await ui.createProjectSpaces({
       actorsEnvironment,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      names: ['team'],
+      ids: ['team.1']
     })
 
     // When "Alice" waits for token renewal via iframe

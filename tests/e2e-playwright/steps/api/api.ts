@@ -152,50 +152,55 @@ export async function userHasCreatedPublicLinkOfResource({
   })
 }
 
-export async function userHasAssignRolesToUsers({
+export async function userHasAssignedRolesToUsers({
   usersEnvironment,
   stepUser,
-  targetUserId,
-  role
+  users
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  targetUserId: string
-  role: string
-}) {
+  users: Array<{ id: string; role: string }>
+}): Promise<void> {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: targetUserId })
-  /**
-   The oCIS API request for assigning roles allows only one role per user,
-    whereas the Keycloak API request can assign multiple roles to a user.
-    If multiple roles are assigned to a user in Keycloak,
-    oCIS map the highest priority role among Keycloak assigned roles.
-    Therefore, we need to unassign the previous role before
-    assigning a new one when using the Keycloak API.
-  */
-  await api.provision.unAssignRole({ admin, user })
-  await api.provision.assignRole({ admin, user, role })
+  for (const userInfo of users) {
+    const user = usersEnvironment.getUser({ key: userInfo.id })
+    /**
+     The oCIS API request for assigning roles allows only one role per user,
+      whereas the Keycloak API request can assign multiple roles to a user.
+      If multiple roles are assigned to a user in Keycloak,
+      oCIS map the highest priority role among Keycloak assigned roles.
+      Therefore, we need to unassign the previous role before
+      assigning a new one when using the Keycloak API.
+    */
+    await api.provision.unAssignRole({ admin, user })
+    await api.provision.assignRole({ admin, user, role: userInfo.role })
+  }
 }
 
-export async function userHasCreatedProjectSpace({
+export async function userHasCreatedProjectSpaces({
   usersEnvironment,
   spacesEnvironment,
   stepUser,
-  name,
-  id
+  names,
+  ids
 }: {
   usersEnvironment: UsersEnvironment
   spacesEnvironment: SpacesEnvironment
   stepUser: string
-  name: string
-  id: string
+  names: string[]
+  ids: string[]
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
-  const spaceId = await api.graph.createSpace({ user, space: { id, name } as unknown as Space })
-  spacesEnvironment.createSpace({
-    key: id || name,
-    space: { name: name, id: spaceId }
-  })
+  for (let i = 0; i < names.length; i++) {
+    const spaceId = await api.graph.createSpace({
+      user,
+      space: { id: ids[i], name: names[i] } as unknown as Space
+    })
+    spacesEnvironment.createSpace({
+      key: ids[i] || names[i],
+      space: { name: names[i], id: spaceId } as unknown as Space
+    })
+  }
 }
 
 export async function userHasUploadedFilesInPersonalSpace({
@@ -294,13 +299,13 @@ export async function userHasDeletedGroup({
 }
 export async function userHasDeletedProjectSpace({
   usersEnvironment,
+  spacesEnvironment,
   stepUser,
-  name,
   id
 }: {
   usersEnvironment: UsersEnvironment
+  spacesEnvironment: SpacesEnvironment
   stepUser: string
-  name: string
   id: string
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
