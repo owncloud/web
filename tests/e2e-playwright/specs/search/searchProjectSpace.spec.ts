@@ -38,21 +38,20 @@ test.describe('Search in the project space', () => {
       users: ['Alice']
     })
 
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      names: ['team'],
+      ids: ['team.1']
     })
 
     await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })

@@ -42,11 +42,10 @@ test.describe('spaces member expiry', () => {
     // And "Admin" assigns following roles to the users using API
     //  | id    | role        |
     //  | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" logs in
@@ -55,12 +54,12 @@ test.describe('spaces member expiry', () => {
     // And "Alice" creates the following project space using API
     //  | name | id     |
     //  | team | team.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      names: ['team'],
+      ids: ['team.1']
     })
 
     // And "Alice" navigates to the project space "team.1"

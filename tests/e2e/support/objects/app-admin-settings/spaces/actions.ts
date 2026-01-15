@@ -64,6 +64,10 @@ const performAction = async (args: {
       contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'disable':
+      console.log(
+        'contxt menu button selector is: ',
+        contextMenuActionButtonSelector + util.format(contextMenuActionButton, action)
+      )
       contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'restore':
