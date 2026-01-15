@@ -46,7 +46,7 @@ export const createGroup = async (args: { page: Page; key: string }) => {
   return await response.json()
 }
 
-export const getDisplayedGroups = async (args: { page: Page }): Promise<string[]> => {
+export const getDisplayedGroupsIds = async (args: { page: Page }): Promise<string[]> => {
   const { page } = args
   const groups = []
   const result = page.locator(groupTrSelector)

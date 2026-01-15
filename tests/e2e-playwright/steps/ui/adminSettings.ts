@@ -73,17 +73,17 @@ export async function createGroups({
 export async function checkGroupsPresenceById({
   actorsEnvironment,
   stepUser,
-  groupIds
+  expectedGroupIds
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  groupIds: string[]
+  expectedGroupIds: string[]
 }): Promise<boolean> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
-  const groups = await groupsObject.getDisplayedGroups()
-  for (const group of groupIds) {
-    if (!groups.includes(groupsObject.getUUID({ key: group }))) {
+  const actualGroupsIds = await groupsObject.getDisplayedGroupsIds()
+  for (const group of expectedGroupIds) {
+    if (!actualGroupsIds.includes(groupsObject.getUUID({ key: group }))) {
       return false
     }
   }

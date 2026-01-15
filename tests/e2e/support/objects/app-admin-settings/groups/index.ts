@@ -26,8 +26,8 @@ export class Groups {
     })
   }
 
-  getDisplayedGroups(): Promise<string[]> {
-    return po.getDisplayedGroups({ page: this.#page })
+  getDisplayedGroupsIds(): Promise<string[]> {
+    return po.getDisplayedGroupsIds({ page: this.#page })
   }
 
   async getGroupsDisplayName(): Promise<string> {
