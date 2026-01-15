@@ -20,8 +20,7 @@ test.describe('download space', () => {
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // Given "Alice" logs in
@@ -30,11 +29,10 @@ test.describe('download space', () => {
     // And "Alice" creates the following project spaces using API
     //   | name | id     |
     //   | team | team.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       world,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Alice" creates the following folder in space "team" using API

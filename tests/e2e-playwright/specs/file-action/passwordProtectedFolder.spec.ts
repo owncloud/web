@@ -219,8 +219,7 @@ test.describe('password-protected folder operation', () => {
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" has logged in
@@ -238,8 +237,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userCreatesProjectSpace({
       world,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Alice" navigates to the project space "team.1"

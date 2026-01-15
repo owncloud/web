@@ -20,8 +20,7 @@ test.describe('deny space access', () => {
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" logs in
@@ -30,11 +29,10 @@ test.describe('deny space access', () => {
     // And "Alice" creates the following project space using API
     //   | name  | id    |
     //   | sales | sales |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       world,
       stepUser: 'Alice',
-      name: 'sales',
-      id: 'sales'
+      spaces: [{ name: 'sales', id: 'sales' }]
     })
 
     // And "Alice" creates the following folder in space "sales" using API
@@ -55,9 +53,7 @@ test.describe('deny space access', () => {
       world,
       stepUser: 'Alice',
       space: 'sales',
-      shareType: 'user',
-      sharee: 'Brian',
-      role: 'Can edit with versions and trashbin'
+      sharee: [{ user: 'Brian', role: 'Can edit with versions and trashbin', shareType: 'user' }]
     })
 
     // When "Alice" navigates to the project space "sales"
