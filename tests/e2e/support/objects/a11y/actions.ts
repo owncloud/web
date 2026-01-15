@@ -8,7 +8,7 @@ export const selectors = {
   resourceTableEditName: '.resource-table-edit-name',
   resourceIconWrapper: '.oc-resource-icon-wrapper',
   resourceTableCondensedIcon: '.resource-table-condensed',
-  filesSpaceTableCondensed: '#files-space-table.condensed', // '.condensed.files-table',
+  filesSpaceTableCondensed: '#files-space-table.cgstondensed', // '.condensed.files-table',
   resourceTiles: '.resource-tiles',
   tilesView: '#tiles-view',
   cardMediaTop: '.oc-card-media-top',

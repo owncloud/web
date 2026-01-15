@@ -4,11 +4,13 @@ import {
   UsersEnvironment,
   SpacesEnvironment
 } from '../../../e2e/support/environment'
-import { api } from '../../../e2e/support'
+import { api, store } from '../../../e2e/support'
 import { ResourceType } from '../../../e2e/support/api/share/share'
-import { Space } from '../../../e2e/support/types'
+import { Group, Space, User } from '../../../e2e/support/types'
 import fs from 'fs'
 import { integer } from 'vscode-languageserver-types'
+import join from 'join-path'
+import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 
 export async function userHasBeenCreated({
   usersEnvironment,

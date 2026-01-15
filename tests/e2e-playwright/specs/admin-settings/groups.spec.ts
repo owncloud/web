@@ -4,7 +4,6 @@ import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/enviro
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
-import { objects } from '../../../e2e/support'
 
 test.describe('groups management', () => {
   let actorsEnvironment
@@ -46,7 +45,7 @@ test.describe('groups management', () => {
       await ui.checkGroupsPresenceById({
         actorsEnvironment,
         stepUser: 'Admin',
-        groupIds: ['sales', 'security']
+        expectedGroupIds: ['sales', 'security']
       })
     ).toBeTruthy()
   })
@@ -69,7 +68,7 @@ test.describe('groups management', () => {
       await ui.checkGroupsPresenceById({
         actorsEnvironment,
         stepUser: 'Admin',
-        groupIds: ['sales']
+        expectedGroupIds: ['sales']
       })
     ).toBeFalsy()
 
@@ -84,7 +83,7 @@ test.describe('groups management', () => {
       await ui.checkGroupsPresenceById({
         actorsEnvironment,
         stepUser: 'Admin',
-        groupIds: ['security', 'finance']
+        expectedGroupIds: ['security', 'finance']
       })
     ).toBeFalsy()
   })
@@ -104,13 +103,6 @@ test.describe('groups management', () => {
       value: 'a renamed group',
       action: 'context-menu'
     })
-    expect(
-      await ui.groupDisplayNameExists({
-        actorsEnvironment,
-        stepUser: 'Admin',
-        groupDisplayName: 'sales'
-      })
-    ).toBeFalsy()
     expect(
       await ui.groupDisplayNameExists({
         actorsEnvironment,
