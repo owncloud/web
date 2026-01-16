@@ -124,8 +124,8 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3(supports-color@8.1.1)
       ejs:
-        specifier: 3.1.10
-        version: 3.1.10
+        specifier: 4.0.1
+        version: 4.0.1
       eslint:
         specifier: 9.39.1
         version: 9.39.1
@@ -4243,9 +4243,9 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  ejs@3.1.10:
-    resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
-    engines: {node: '>=0.10.0'}
+  ejs@4.0.1:
+    resolution: {integrity: sha512-krvQtxc0btwSm/nvnt1UpnaFDFVJpJ0fdckmALpCgShsr/iGYHTnJiUliZTgmzq/UxTX33TtOQVKaNigMQp/6Q==}
+    engines: {node: '>=0.12.18'}
     hasBin: true
 
   electron-to-chromium@1.5.250:
@@ -10901,7 +10901,7 @@ snapshots:
       minimatch: 9.0.1
       semver: 7.7.3
 
-  ejs@3.1.10:
+  ejs@4.0.1:
     dependencies:
       jake: 10.9.2
 
