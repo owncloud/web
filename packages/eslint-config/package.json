@@ -22,7 +22,7 @@
     "eslint-plugin-n": "^17.23.2",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-unused-imports": "^4.3.0",
-    "eslint-plugin-vue": "^10.6.2",
+    "eslint-plugin-vue": "^10.7.0",
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "globals": "^16.5.0",
     "typescript": "^5.9.3",
