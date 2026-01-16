@@ -192,6 +192,7 @@ config = {
             "suites": [
                 "user-settings",
                 "app-store",
+                "file-action",
             ],
         },
         "oidc-refresh-token": {
