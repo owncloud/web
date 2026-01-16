@@ -63,6 +63,11 @@ const performAction = async (args: {
       contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'disable':
+      console.log('disable action................')
+      console.log(
+        'contxt menu button selector is: ',
+        contextMenuActionButtonSelector + util.format(contextMenuActionButton, action)
+      )
       contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'restore':
@@ -102,6 +107,7 @@ export const disableSpace = async (args: {
   context: string
 }): Promise<void> => {
   const { page, spaceIds, context } = args
+  console.log('disableSpace................')
   await performAction({ page, action: 'disable', context, id: spaceIds[0] })
   await confirmAction({
     page,
