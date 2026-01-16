@@ -16,7 +16,7 @@ import { useMessages, useConfigStore, useResourcesStore } from '../../piniaStore
 export const useFileActionsDisableSync = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
-  const { $gettext, $ngettext } = useGettext()
+  const { $gettext, $ngettext, $pgettext } = useGettext()
 
   const clientService = useClientService()
   const loadingService = useLoadingService()
@@ -81,6 +81,11 @@ export const useFileActionsDisableSync = () => {
       icon: 'spam-3',
       handler: (args) => loadingService.addTask(() => handler(args)),
       label: () => $gettext('Disable sync'),
+      tooltip: () =>
+        $pgettext(
+          'Explanation tooltip for the disable sync action in files shared with me and spaces',
+          'Only affects desktop and mobile clients. You can toggle this setting here, but it will only take effect on those platforms.'
+        ),
       isVisible: ({ space, resources }) => {
         if (
           !isLocationSharesActive(router, 'files-shares-with-me') &&
