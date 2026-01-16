@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { selectUser } from '../users/actions'
+import { objects } from '../../..'
 
 const newGroupBtn = '#create-group-btn'
 const createGroupInput = '#create-group-input-display-name'
@@ -21,6 +22,11 @@ const compareDialogConfirm = '.compare-save-dialog-confirm-btn'
 export const createGroup = async (args: { page: Page; key: string }) => {
   const { page, key } = args
   await page.locator(newGroupBtn).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'Create group modal'
+  )
   await page.locator(createGroupInput).fill(key)
 
   const [response] = await Promise.all([
@@ -31,10 +37,16 @@ export const createGroup = async (args: { page: Page; key: string }) => {
     page.locator(actionConfirmButton).click()
   ])
 
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['body'],
+    'body after creating group'
+  )
+
   return await response.json()
 }
 
-export const getDisplayedGroups = async (args: { page: Page }): Promise<string[]> => {
+export const getDisplayedGroupsIds = async (args: { page: Page }): Promise<string[]> => {
   const { page } = args
   const groups = []
   const result = page.locator(groupTrSelector)
@@ -43,7 +55,24 @@ export const getDisplayedGroups = async (args: { page: Page }): Promise<string[]
   for (let i = 0; i < count; i++) {
     groups.push(await result.nth(i).getAttribute('data-item-id'))
   }
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['groupList'],
+    'displayed groups list'
+  )
   return groups
+}
+
+export const getGroupsDisplayName = async (args: { page: Page }): Promise<string> => {
+  const { page } = args
+  const groups = []
+  const result = page.locator(groupTrSelector)
+
+  const count = await result.count()
+  for (let i = 0; i < count; i++) {
+    groups.push(await result.nth(i).textContent())
+  }
+  return groups.join(', ')
 }
 
 export const selectGroup = async (args: { page: Page; uuid: string }): Promise<void> => {
@@ -55,6 +84,11 @@ export const selectGroup = async (args: { page: Page; uuid: string }): Promise<v
     return
   }
   await checkbox.click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['groupList'],
+    `group list after selecting group ${uuid}`
+  )
 }
 
 export const deleteGroupUsingContextMenu = async (args: {
@@ -63,7 +97,17 @@ export const deleteGroupUsingContextMenu = async (args: {
 }): Promise<void> => {
   const { page, uuid } = args
   await page.locator(util.format(groupIdSelector, uuid)).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['contextMenuContainer'],
+    'delete group modal'
+  )
   await page.locator(deleteBtnContextMenu).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'delete group modal'
+  )
 
   await Promise.all([
     page.waitForResponse(
@@ -74,6 +118,12 @@ export const deleteGroupUsingContextMenu = async (args: {
     ),
     page.locator(actionConfirmButton).click()
   ])
+
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['body'],
+    'body after deleting group'
+  )
 }
 
 export const deleteGrouprUsingBatchAction = async (args: {
@@ -82,6 +132,11 @@ export const deleteGrouprUsingBatchAction = async (args: {
 }): Promise<void> => {
   const { page, groupIds } = args
   await page.locator(deleteBtnBatchAction).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'delete group modal'
+  )
 
   const checkResponses = []
   for (const id of groupIds) {
@@ -96,6 +151,12 @@ export const deleteGrouprUsingBatchAction = async (args: {
   }
 
   await Promise.all([...checkResponses, page.locator(actionConfirmButton).click()])
+
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['body'],
+    'body after deleting group'
+  )
 }
 
 export const changeGroup = async (args: {
@@ -106,6 +167,11 @@ export const changeGroup = async (args: {
 }): Promise<void> => {
   const { page, attribute, value, uuid } = args
   await page.locator(util.format(userInput, attribute)).pressSequentially(value)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['editPanel'],
+    `Edit group sidebar panel while changing ${attribute}`
+  )
 
   await Promise.all([
     page.waitForResponse(
@@ -116,7 +182,13 @@ export const changeGroup = async (args: {
     ),
     page.locator(compareDialogConfirm).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['groupList', 'editPanel'],
+    `body after changing group ${attribute}`
+  )
 }
+
 export const openEditPanel = async (args: {
   page: Page
   uuid: string
@@ -125,15 +197,35 @@ export const openEditPanel = async (args: {
   const { page, uuid, action } = args
   if (await page.locator(editPanel).count()) {
     await page.locator(closeEditPanel).click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['editPanel'],
+      'Edit group modal'
+    )
   }
   switch (action) {
     case 'context-menu':
       await page.locator(util.format(groupIdSelector, uuid)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['contextMenuContainer'],
+        'Edit group modal'
+      )
       await page.locator(editActionBtnContextMenu).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['editPanel'],
+        'Edit group sidebar panel'
+      )
       break
     case 'quick-action':
       await selectUser({ page, uuid })
       await page.locator(util.format(editActionBtnQuickActions, uuid)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['editPanel'],
+        'Edit group sidebar panel'
+      )
       break
     default:
       throw new Error(`${action} not implemented`)

@@ -415,7 +415,7 @@ Then(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.Groups({ page })
-    const groups = await groupsObject.getDisplayedGroups()
+    const groups = await groupsObject.getDisplayedGroupsIds()
 
     for (const { group } of stepTable.hashes()) {
       switch (action) {
