@@ -47,6 +47,11 @@ export const openSharingPanel = async function (
   switch (via) {
     case 'QUICK_ACTION':
       await page.locator(util.format(quickShareButton, item)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['appSidebar'],
+        'account page'
+      )
       break
 
     case 'SIDEBAR_PANEL':
@@ -71,7 +76,6 @@ export interface createShareArgs extends ShareArgs {
 
 export const createShare = async (args: createShareArgs): Promise<void> => {
   const { page, resource, recipients, via } = args
-  const a11yObject = new objects.a11y.Accessibility({ page })
 
   if (via !== 'URL_NAVIGATION') {
     await openSharingPanel(page, resource, via)
@@ -85,7 +89,9 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   const expirationDate = recipients[0].expirationDate
 
   if (expirationDate) {
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'app sidebar')
     await page.locator(showMoreOptionsButton).click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'app sidebar')
     await Promise.all([
       locatorUtils.waitForEvent(page.locator(invitePanel), 'transitionend'),
       page.getByTestId(calendarDatePickerId).click()
@@ -98,11 +104,10 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
       locatorUtils.waitForEvent(page.locator(invitePanel), 'transitionend'),
       page.locator(userTypeFilter).click()
     ])
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'app sidebar')
     await page.locator(userTypeSelector).filter({ hasText: federatedShare }).click()
   }
   await Collaborator.inviteCollaborators({ page, collaborators: recipients })
-
-  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['appSidebar'], 'app sidebar')
 
   await sidebar.close({ page })
 }

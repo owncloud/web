@@ -124,3 +124,66 @@ export async function removeExpirationDate({
   const member = { collaborator: usersEnvironment.getUser({ key: memberName }) }
   await spacesObject.removeExpirationDate({ member })
 }
+
+export async function removeAccessToMember({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  reciver,
+  role
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  reciver: string
+  role: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const member = {
+    collaborator: usersEnvironment.getUser({ key: reciver }),
+    role
+  }
+  await spacesObject.removeAccessToMember({ users: [member] })
+}
+
+export async function navigateToProjectSpaceManagementPage({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationAdminSettings.page.Spaces({ page })
+  await pageObject.navigate()
+}
+
+export async function manageSpaceUsingContexMenu({
+  actorsEnvironment,
+  stepUser,
+  action,
+  space
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  action: string
+  space: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const spaceId = spacesObject.getUUID({ key: space })
+  switch (action) {
+    case 'disables':
+      await spacesObject.disable({ spaceIds: [spaceId], context: 'context-menu' })
+      break
+    case 'deletes':
+      await spacesObject.delete({ spaceIds: [spaceId], context: 'context-menu' })
+      break
+    case 'enables':
+      await spacesObject.enable({ spaceIds: [spaceId], context: 'context-menu' })
+      break
+    default:
+      throw new Error(`${action} not implemented`)
+  }
+}
