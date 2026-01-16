@@ -31,6 +31,11 @@ const openForResource = async ({
     await page.locator(util.format(contextMenuButton, resource)).waitFor()
     await page.locator(util.format(contextMenuButton, resource)).click()
     await page.locator(contextMenuContainer).waitFor()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['.tippy-box'],
+      'context menu dropdown'
+    )
     await page
       .locator(contextMenuContainer)
       .locator('.oc-files-actions-show-details-trigger')
@@ -80,6 +85,11 @@ export const open = async ({
     }
   } else {
     if (await page.locator(sidebarPanel).count()) {
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        [sidebarPanel],
+        'sidebar panel'
+      )
       await Promise.all([
         page.locator(sidebarPanel).waitFor({ state: 'detached' }),
         close({ page })
