@@ -284,6 +284,10 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       })
 
       try {
+        // Return early if the password is required. Let the resolvePublicLink.`verifyPassword` handle that.
+        if (authStore.publicLinkPasswordRequired) {
+          return
+        }
         const loadedSpace = await clientService.webdav.getFileInfo(
           space,
           {},
