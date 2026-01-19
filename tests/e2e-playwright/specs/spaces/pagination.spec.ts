@@ -8,7 +8,6 @@ import {
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { editor } from '../../../e2e/support/objects/app-files/utils/index.js'
 
 test.describe('check files pagination in project space', () => {
   let actorsEnvironment
@@ -133,8 +132,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // And "Alice" closes the file viewer
-    const { page } = actorsEnvironment.getActor({ key: 'Alice' })
-    await editor.close(page)
+    await ui.userClosesTextEditor({ actorsEnvironment, stepUser: 'Alice' })
 
     // Then "Alice" should be on page "2"
     const currentPage = await ui.getCurrentPageNumber({
