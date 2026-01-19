@@ -46,6 +46,8 @@ export const selectors = {
   tippyBoxVisible: '.tippy-box[data-state="visible"]',
   logoWrapper: '.logo-wrapper',
   pageNotFound: '.page-not-found',
+  adminSettingsWrapper: '#admin-settings-wrapper',
+  adminSettingAppBar: '#admin-settings-app-bar',
   createGroupInput: '#create-group-input-display-name',
   actionConfirmButton: '.oc-modal-body-actions-confirm',
   contextMenuContainer: '#oc-files-context-menu',
