@@ -490,7 +490,7 @@ export async function userCreatesGroups({
   }
 }
 
-export async function userShouldSeeGroupIds({
+export async function checkGroupsPresenceById({
   world,
   stepUser,
   expectedGroupIds
@@ -498,13 +498,16 @@ export async function userShouldSeeGroupIds({
   world: World
   stepUser: string
   expectedGroupIds: string[]
-}): Promise<void> {
+}): Promise<boolean> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   const actualGroupsIds = await groupsObject.getDisplayedGroupsIds()
   for (const group of expectedGroupIds) {
-    expect(actualGroupsIds).toContain(groupsObject.getUUID({ key: group }))
+    if (!actualGroupsIds.includes(groupsObject.getUUID({ key: group }))) {
+      return false
+    }
   }
+  return true
 }
 
 export async function userShouldNotSeeGroupIds({
@@ -620,4 +623,92 @@ export async function userAuthenticatesWithOTP({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const generalObject = new objects.applicationAdminSettings.General({ page })
   await generalObject.userAuthenticatesWithOTP({ deviceName })
+}
+
+export async function userDeletesGroup({
+  world,
+  stepUser,
+  actionType,
+  group
+}: {
+  world: World
+  stepUser: string
+  actionType: 'batch actions' | 'context menu'
+  group: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+  const groupIds = []
+
+  switch (actionType) {
+    case 'batch actions':
+      groupIds.push(groupsObject.getUUID({ key: group }))
+      await groupsObject.selectGroup({ key: group })
+      await groupsObject.deleteGroupUsingBatchAction({ groupIds })
+      break
+    case 'context menu':
+      await groupsObject.deleteGroupUsingContextMenu({ key: group })
+      break
+    default:
+      throw new Error(`'${actionType}' not implemented`)
+  }
+}
+
+export async function userRenamesGroup({
+  world,
+  stepUser,
+  attribute,
+  value,
+  user
+}: {
+  world: World
+  stepUser: string
+  attribute: string
+  value: string
+  user: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+
+  await groupsObject.changeGroup({
+    key: user,
+    attribute: attribute,
+    value: value,
+    action: 'context-menu'
+  })
+}
+
+export async function userAddsUserToGroup({
+  world,
+  stepUser,
+  action,
+  groups,
+  user
+}: {
+  world: World
+  stepUser: string
+  action: string
+  groups: string[]
+  user: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  switch (action) {
+    case 'adds':
+      await usersObject.addToGroups({
+        key: user,
+        groups,
+        action: 'context-menu'
+      })
+      break
+    case 'removes':
+      await usersObject.removeFromGroups({
+        key: user,
+        groups,
+        action: 'context-menu'
+      })
+      break
+    default:
+      throw new Error(`'${action}' not implemented`)
+  }
 }
