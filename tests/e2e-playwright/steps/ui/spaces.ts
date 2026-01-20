@@ -420,7 +420,7 @@ export async function deleteSpacesUsingBatchActions({
   await spacesObject.delete({ spaceIds: uuids, context: 'batch-actions' })
 }
 
-export async function updateSpace({
+export async function updateSpaceUsingContextMenu({
   actorsEnvironment,
   stepUser,
   key,
@@ -438,10 +438,10 @@ export async function updateSpace({
   const spaceId = spacesObject.getUUID({ key })
   switch (attribute) {
     case 'name':
-      await spacesObject.rename({ key, value })
+      await spacesObject.renameSpaceUsingContextMenu({ key, value })
       break
     case 'subtitle':
-      await spacesObject.changeSubtitle({ key, value })
+      await spacesObject.changeSubtitleUsingContextMenu({ key, value })
       break
     case 'quota':
       await spacesObject.changeQuota({ spaceIds: [spaceId], value, context: 'context-menu' })
@@ -451,7 +451,7 @@ export async function updateSpace({
   }
 }
 
-export async function changeSpaceQuota({
+export async function changeSpaceQuotaUsingBatchActions({
   actorsEnvironment,
   stepUser,
   spaceIds,
