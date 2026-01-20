@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import { dav, graph, external } from '../../api'
 import { config } from '../../../config'
 import { User } from '../../types'
+import { objects } from '../..'
 
 export interface navigateToDetailsPanelOfResourceArgs {
   page: Page
@@ -90,4 +91,9 @@ export const navigateToNonExistingPage = async ({ page }: { page: Page }) => {
 }
 export const waitForNotFoundPageToBeVisible = async ({ page }: { page: Page }) => {
   await page.locator('.page-not-found').waitFor()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['pageNotFound'],
+    'page-not-found page'
+  )
 }
