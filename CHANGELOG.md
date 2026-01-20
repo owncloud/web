@@ -13,6 +13,7 @@ Summary
 * Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
 * Enhancement - Add crash page: [#13426](https://github.com/owncloud/web/pull/13426)
 * Enhancement - Catch spaces loading error: [#13426](https://github.com/owncloud/web/pull/13426)
+* Enhancement - Drop custom share filters: [#13485](https://github.com/owncloud/web/pull/13485)
 
 Details
 -------
@@ -55,6 +56,17 @@ Details
    display a crash page instead of showing an infinite loading state.
 
    https://github.com/owncloud/web/pull/13426
+
+* Enhancement - Drop custom share filters: [#13485](https://github.com/owncloud/web/pull/13485)
+
+   In the Shares panel, we have dropped the custom filters applied to the
+   recipients autocomplete. The filtering is happening already in the backend, so
+   we don't need to apply any custom filters here. It also makes implementing new
+   filters faster in the future because they need to be implemented only once in
+   the backend. If this change breaks any specific use cases, it will be fixed in
+   the backend.
+
+   https://github.com/owncloud/web/pull/13485
 
 Changelog for ownCloud Web [12.2.0] (2025-11-21)
 =======================================
