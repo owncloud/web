@@ -137,12 +137,12 @@ Feature: spaces management
     And "Alice" navigates to the project spaces management page
     When "Alice" lists the members of project space "team.a" using a sidebar panel
     Then "Alice" should see the following users in the sidebar panel of spaces admin settings
-      | user  | role       |
-      | Admin | Can manage |
-      | Brian | Can edit   |
-      | Carol | Can view   |
-      | David | Can view   |
-      | Edith | Can view   |
+      | user  | role                                  |
+      | Admin | Can manage                            |
+      | Brian | Can edit with trashbin and versions   |
+      | Carol | Can view                              |
+      | David | Can view                              |
+      | Edith | Can view                              |
     And "Alice" logs out
 
 
