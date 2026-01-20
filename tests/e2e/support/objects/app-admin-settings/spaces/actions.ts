@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
+import { objects } from '../../..'
 
 const spaceTrSelector = '.spaces-table tbody > tr'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
@@ -71,6 +72,7 @@ const performAction = async (args: {
     default:
       throw new Error(`${action} not implemented`)
   }
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'space page')
   await page.locator(contextMenuActionButtonSelector).click()
 }
 
@@ -212,7 +214,7 @@ const confirmAction = async (args: {
       )
     )
   }
-
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'account page')
   await page.locator(confirmButton).waitFor()
   await Promise.all([...checkResponses, page.locator(confirmButton).click()])
 }

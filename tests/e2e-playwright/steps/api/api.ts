@@ -279,6 +279,50 @@ export async function createFileInsideSpaceBySpaceName({
   })
 }
 
+export async function userHasCreatedGroup({
+  usersEnvironment,
+  stepUser,
+  groupName
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  groupName: string
+}) {
+  const admin = usersEnvironment.getUser({ key: stepUser })
+  const group = usersEnvironment.getGroup({ key: groupName })
+  await api.graph.createGroup({ group, admin })
+}
+
+export async function addUserToGroup({
+  usersEnvironment,
+  stepUser,
+  groupName,
+  userToAdd
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  groupName: string
+  userToAdd: string
+}) {
+  const admin = usersEnvironment.getUser({ key: stepUser })
+  const group = usersEnvironment.getGroup({ key: groupName })
+  const user = usersEnvironment.getUser({ key: userToAdd })
+  await api.graph.addUserToGroup({ user, group, admin })
+}
+
+export async function userHasDeletedGroup({
+  usersEnvironment,
+  stepUser,
+  name
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  name: string
+}): Promise<void> {
+  const admin = usersEnvironment.getUser({ key: stepUser })
+  const group = usersEnvironment.getGroup({ key: name })
+  await api.graph.deleteGroup({ group, admin })
+}
 export async function userHasDeletedProjectSpace({
   usersEnvironment,
   stepUser,

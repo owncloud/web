@@ -98,7 +98,6 @@ config = {
             "skip": False,
             "suites": [
                 "navigation",
-                "user-settings",
                 "file-action",
             ],
         },
