@@ -75,17 +75,19 @@ export async function userHasCreatedFolders({
 export async function userHasCreatedFile({
   usersEnvironment,
   stepUser,
-  filename
+  filename,
+  content = 'This is a test file'
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
   filename: string
+  content?: string
 }): Promise<void> {
   const user = usersEnvironment.getUser({ key: stepUser })
   await api.dav.uploadFileInPersonalSpace({
     user,
     pathToFile: filename,
-    content: 'This is a test file'
+    content
   })
 }
 
