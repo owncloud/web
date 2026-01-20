@@ -514,19 +514,7 @@ function onSearch(query: string) {
 }
 
 function filterRecipients(recipients: CollaboratorAutoCompleteItem[], query: string) {
-  if (unref(recipients).length < 1) {
-    return []
-  }
-
-  // Allow advanced queries
-  query = unref(query).split(':')[1] || query
-
-  return unref(recipients).filter(
-    (recipient) =>
-      recipient.shareType === ShareTypes.remote.value ||
-      recipient.displayName.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1 ||
-      recipient.mail?.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1
-  )
+  return unref(recipients)
 }
 
 function collaboratorRoleChanged(role: ShareRole) {
