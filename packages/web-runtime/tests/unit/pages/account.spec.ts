@@ -38,10 +38,16 @@ const selectors = {
   groupNames: '[data-testid="group-names"]',
   groupNamesEmpty: '[data-testid="group-names-empty"]',
   gdprExport: '[data-testid="gdpr-export"]',
-  extensionsSection: '.account-page-extensions'
+  extensionsSection: '.account-page-extensions',
+  crossInstanceReferenceRow: '[data-testid="account-cross-instance-reference-row"]',
+  crossInstanceReferenceCopyButton: '[data-testid="account-cross-instance-reference-copy-btn"]'
 }
 
 describe('account page', () => {
+  beforeEach(() => {
+    navigator.clipboard.write = vi.fn()
+  })
+
   describe('public link context', () => {
     it('should render a limited view', async () => {
       const { wrapper } = getWrapper({ isUserContext: false, isPublicLinkContext: true })
@@ -130,6 +136,47 @@ describe('account page', () => {
         const logoutButton = wrapper.find(selectors.logoutButton)
         expect(logoutButton.attributes('href')).toBe('https://account-manager/logout')
       })
+    })
+
+    it('should render the cross-instance reference if set', async () => {
+      const { wrapper } = getWrapper({
+        user: mock<User>({
+          onPremisesSamAccountName: 'some-username',
+          displayName: 'some-displayname',
+          mail: 'some-email',
+          memberOf: [],
+          crossInstanceReference: 'some-cross-instance-reference'
+        })
+      })
+      await blockLoadingState(wrapper)
+      expect(wrapper.find(selectors.crossInstanceReferenceRow).exists()).toBe(true)
+    })
+
+    it('should not render the cross-instance reference if not set', async () => {
+      const { wrapper } = getWrapper()
+      await blockLoadingState(wrapper)
+
+      expect(wrapper.find(selectors.crossInstanceReferenceRow).exists()).toBeFalsy()
+    })
+
+    it('should copy the cross-instance reference to the clipboard when the copy button is clicked', async () => {
+      const { wrapper } = getWrapper({
+        user: mock<User>({
+          onPremisesSamAccountName: 'some-username',
+          displayName: 'some-displayname',
+          mail: 'some-email',
+          memberOf: [],
+          crossInstanceReference: 'some-cross-instance-reference'
+        })
+      })
+
+      await blockLoadingState(wrapper)
+      await wrapper.find(selectors.crossInstanceReferenceCopyButton).trigger('click')
+      expect(navigator.clipboard.write).toHaveBeenCalledWith([
+        new ClipboardItem({
+          'text/plain': new Blob(['some-cross-instance-reference'], { type: 'text/plain' })
+        })
+      ])
     })
   })
 

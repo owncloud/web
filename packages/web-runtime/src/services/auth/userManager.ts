@@ -201,7 +201,9 @@ export class UserManager extends OidcUserManager {
       mail: graphUser.mail,
       memberOf: graphUser.memberOf,
       appRoleAssignments: role ? [role as any] : [], // FIXME
-      preferredLanguage: graphUser.preferredLanguage || ''
+      preferredLanguage: graphUser.preferredLanguage || '',
+      crossInstanceReference: graphUser.crossInstanceReference || '',
+      instances: graphUser.instances || []
     })
 
     if (graphUser.preferredLanguage) {
