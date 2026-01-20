@@ -59,10 +59,10 @@ When(
     const spaceId = spacesObject.getUUID({ key })
     switch (attribute) {
       case 'name':
-        await spacesObject.rename({ key, value })
+        await spacesObject.renameSpaceUsingContextMenu({ key, value })
         break
       case 'subtitle':
-        await spacesObject.changeSubtitle({ key, value })
+        await spacesObject.changeSubtitleUsingContextMenu({ key, value })
         break
       case 'quota':
         await spacesObject.changeQuota({ spaceIds: [spaceId], value, context: 'context-menu' })
