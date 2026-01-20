@@ -32,9 +32,12 @@ test.describe('spaces management', () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
+    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
   })
 
   test.afterEach(async () => {
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
     await api.userHasDeletedProjectSpace({
       usersEnvironment,
       spacesEnvironment,
@@ -44,7 +47,6 @@ test.describe('spaces management', () => {
   })
 
   test('spaces can be created', async () => {
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
     await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
@@ -73,18 +75,15 @@ test.describe('spaces management', () => {
         expectedSpaceIds: ['team.a', 'team.b']
       })
     ).toBeTruthy()
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
     await api.userHasDeletedProjectSpace({
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Admin',
       id: 'team.b'
     })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('spaces can be managed in the admin settings via the context menu', async () => {
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
     await api.userHasAssignedRolesToUsers({
       usersEnvironment,
@@ -106,21 +105,21 @@ test.describe('spaces management', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
     await ui.navigateToProjectSpacesManagementPage({ actorsEnvironment, stepUser: 'Alice' })
-    await ui.updateSpace({
+    await ui.updateSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       key: 'team.a',
       attribute: 'name',
       value: 'team A updated'
     })
-    await ui.updateSpace({
+    await ui.updateSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       key: 'team.b',
       attribute: 'subtitle',
       value: 'Developer team-subtitle'
     })
-    await ui.updateSpace({
+    await ui.updateSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       key: 'team.b',
@@ -144,7 +143,6 @@ test.describe('spaces management', () => {
         expectedSpaceIds: ['team.a', 'team.b']
       })
     ).toBeTruthy()
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Brian', name: 'admin-settings' })
     await ui.navigateToProjectSpacesManagementPage({ actorsEnvironment, stepUser: 'Brian' })
@@ -172,12 +170,10 @@ test.describe('spaces management', () => {
       stepUser: 'Admin',
       id: 'team.b'
     })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
   })
 
   test('multiple spaces can be managed at once in the admin settings via the batch actions', async () => {
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
     await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
@@ -203,7 +199,7 @@ test.describe('spaces management', () => {
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
     })
-    await ui.changeSpaceQuota({
+    await ui.changeSpaceQuotaUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b', 'team.c', 'team.d'],
@@ -226,12 +222,9 @@ test.describe('spaces management', () => {
         expectedSpaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
       })
     ).toBeFalsy()
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('list members via sidebar', async () => {
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'carol' })
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'David' })
@@ -278,8 +271,6 @@ test.describe('spaces management', () => {
         { user: 'Edith', role: 'Can view' }
       ]
     })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'David' })
@@ -287,7 +278,6 @@ test.describe('spaces management', () => {
   })
 
   test('admin user can manage the spaces created by other space admin user', async () => {
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Carol' })
     await api.userHasAssignedRolesToUsers({
@@ -316,7 +306,7 @@ test.describe('spaces management', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
     await ui.navigateToProjectSpacesManagementPage({ actorsEnvironment, stepUser: 'Alice' })
-    await ui.changeSpaceQuota({
+    await ui.changeSpaceQuotaUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b'],
@@ -349,7 +339,6 @@ test.describe('spaces management', () => {
         expectedSpaceIds: ['team.a', 'team.b']
       })
     ).toBeFalsy()
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
     await api.userHasDeletedProjectSpace({
       usersEnvironment,
       spacesEnvironment,
@@ -358,6 +347,5 @@ test.describe('spaces management', () => {
     })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 })
