@@ -61,7 +61,7 @@ test.describe('spaces management', () => {
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpacesManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
     await ui.createProjectSpaces({
       actorsEnvironment,
       stepUser: 'Alice',
@@ -104,7 +104,7 @@ test.describe('spaces management', () => {
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpacesManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
     await ui.updateSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
@@ -145,7 +145,7 @@ test.describe('spaces management', () => {
     ).toBeTruthy()
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Brian', name: 'admin-settings' })
-    await ui.navigateToProjectSpacesManagementPage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Brian' })
     await ui.disableSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Brian',
@@ -188,7 +188,7 @@ test.describe('spaces management', () => {
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpacesManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
     await ui.disableSpacesUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
@@ -254,7 +254,7 @@ test.describe('spaces management', () => {
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpacesManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
     await ui.listMembersOfProjectSpaceUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Alice',
@@ -305,7 +305,7 @@ test.describe('spaces management', () => {
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpacesManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
     await ui.changeSpaceQuotaUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
