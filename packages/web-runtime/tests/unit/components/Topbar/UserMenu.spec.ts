@@ -8,7 +8,7 @@ import {
 } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client'
-import { Quota } from '@ownclouders/web-client/graph/generated'
+import { Instance, Quota } from '@ownclouders/web-client/graph/generated'
 
 const totalQuota = 1000
 const basicQuota = 300
@@ -17,6 +17,12 @@ const dangerQuota = 910
 
 const noEmail = ''
 const email = 'test@test.de'
+
+const selectors = {
+  instanceSwitcher: '[data-testid="instance-switcher"]',
+  instanceSwitcherItem: '[data-testid="instance-switcher-item"]',
+  instanceSwitcherShowAllButton: '[data-testid="instance-switcher-show-all-button"]'
+}
 
 describe('User Menu component', () => {
   describe('when user is not logged in', () => {
@@ -121,13 +127,76 @@ describe('User Menu component', () => {
       expect(output).toContain('https://privacy.url')
     })
   })
+  describe('instance switcher', () => {
+    it('should render instance switcher if there is at least one instance', () => {
+      const wrapper = getMountedWrapper(
+        { used: dangerQuota, total: totalQuota },
+        email,
+        false,
+        true,
+        [mock<Instance>({ url: 'https://instance1.com', primary: true })]
+      )
+      expect(wrapper.find(selectors.instanceSwitcher).exists()).toBe(true)
+    })
+    it('should not render instance switcher if there are no instances', () => {
+      const wrapper = getMountedWrapper(
+        { used: dangerQuota, total: totalQuota },
+        email,
+        false,
+        true
+      )
+      expect(wrapper.find(selectors.instanceSwitcher).exists()).toBeFalsy()
+    })
+    it('should not render more instances than the inline limit', () => {
+      const wrapper = getMountedWrapper(
+        { used: dangerQuota, total: totalQuota },
+        email,
+        false,
+        true,
+        [
+          mock<Instance>({ url: 'https://instance1.com', primary: true }),
+          mock<Instance>({ url: 'https://instance2.com', primary: false }),
+          mock<Instance>({ url: 'https://instance3.com', primary: false }),
+          mock<Instance>({ url: 'https://instance4.com', primary: false })
+        ]
+      )
+      expect(wrapper.find(selectors.instanceSwitcher).exists()).toBe(true)
+      expect(wrapper.findAll(selectors.instanceSwitcherItem).length).toBe(3)
+    })
+    it('should render a button to show all instances if there are more instances than the inline limit', () => {
+      const wrapper = getMountedWrapper(
+        { used: dangerQuota, total: totalQuota },
+        email,
+        false,
+        true,
+        [
+          mock<Instance>({ url: 'https://instance1.com', primary: true }),
+          mock<Instance>({ url: 'https://instance2.com', primary: false }),
+          mock<Instance>({ url: 'https://instance3.com', primary: false }),
+          mock<Instance>({ url: 'https://instance4.com', primary: false })
+        ]
+      )
+      expect(wrapper.find(selectors.instanceSwitcherShowAllButton).exists()).toBe(true)
+    })
+    it('should not render a button to show all instances if there are no more instances than the inline limit', () => {
+      const wrapper = getMountedWrapper(
+        { used: dangerQuota, total: totalQuota },
+        email,
+        false,
+        true,
+        [mock<Instance>({ url: 'https://instance1.com', primary: true })]
+      )
+      expect(wrapper.find(selectors.instanceSwitcherShowAllButton).exists()).toBeFalsy()
+    })
+  })
 })
 
 const getMountedWrapper = (
   quota: Quota,
   userEmail: string,
   noUser = false,
-  areThemeUrlsSet = false
+  areThemeUrlsSet = false,
+  instances = []
 ) => {
   const mocks = {
     ...defaultComponentMocks({
@@ -166,7 +235,8 @@ const getMountedWrapper = (
                     id: '1',
                     onPremisesSamAccountName: 'einstein',
                     displayName: 'Albert Einstein',
-                    mail: userEmail || ''
+                    mail: userEmail || '',
+                    instances
                   }
             },
             spacesState: {
