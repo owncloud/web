@@ -41,15 +41,3 @@ export async function resetLogo({
   const generalObject = new objects.applicationAdminSettings.General({ page })
   await generalObject.resetLogo()
 }
-
-export async function navigateToProjectSpacesManagementPage({
-  actorsEnvironment,
-  stepUser
-}: {
-  actorsEnvironment: ActorsEnvironment
-  stepUser: string
-}): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const pageObject = new objects.applicationAdminSettings.page.Spaces({ page })
-  await pageObject.navigate()
-}
