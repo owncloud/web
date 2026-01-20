@@ -18,7 +18,7 @@ import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from './common';
 import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
@@ -792,6 +792,19 @@ export interface Image {
      */
     'width'?: number;
 }
+/**
+ * An oCIS instance that the user is either a member or a guest of.
+ */
+export interface Instance {
+    /**
+     * The URL of the oCIS instance.
+     */
+    'url'?: string;
+    /**
+     * Whether the instance is the user\'s primary instance.
+     */
+    'primary'?: boolean;
+}
 export interface ItemReference {
     /**
      * Unique identifier of the drive instance that contains the item. Read-only.
@@ -1278,6 +1291,14 @@ export interface User {
      * A unique identifier assigned to the user by the organization.
      */
     'externalID'?: string;
+    /**
+     * A unique reference to the user. This is used to query the user from a different oCIS instance connected to the same identity provider.
+     */
+    'crossInstanceReference'?: string;
+    /**
+     * oCIS instances that the user is either a member or a guest of.
+     */
+    'instances'?: Array<Instance>;
 }
 /**
  * Represents updates to an Active Directory user object.
@@ -1342,6 +1363,14 @@ export interface UserUpdate {
      * A unique identifier assigned to the user by the organization.
      */
     'externalID'?: string;
+    /**
+     * A unique reference to the user. This is used to query the user from a different oCIS instance connected to the same identity provider.
+     */
+    'crossInstanceReference'?: string;
+    /**
+     * oCIS instances that the user is either a member or a guest of.
+     */
+    'instances'?: Array<Instance>;
 }
 /**
  * The video resource groups video-related data items into a single structure.  If a driveItem has a non-null video facet, the item represents a video file. The properties of the video resource are populated by extracting metadata from the file. 
