@@ -23,6 +23,8 @@ Name | Type | Description | Notes
 **preferredLanguage** | **string** | Represents the users language setting, ISO-639-1 Code | [optional] [default to undefined]
 **signInActivity** | [**SignInActivity**](SignInActivity.md) |  | [optional] [default to undefined]
 **externalID** | **string** | A unique identifier assigned to the user by the organization. | [optional] [default to undefined]
+**crossInstanceReference** | **string** | A unique reference to the user. This is used to query the user from a different oCIS instance connected to the same identity provider. | [optional] [default to undefined]
+**instances** | [**Array&lt;Instance&gt;**](Instance.md) | oCIS instances that the user is either a member or a guest of. | [optional] [default to undefined]
 
 ## Example
 
@@ -47,6 +49,8 @@ const instance: User = {
     preferredLanguage,
     signInActivity,
     externalID,
+    crossInstanceReference,
+    instances,
 };
 ```
 
