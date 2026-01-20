@@ -34,7 +34,7 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
   })
 
   test('Open text editor via application menu', async () => {
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'text-editor' })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'text-editor' })
     await ui.userAddsContentInTextEditor({
       actorsEnvironment,
       stepUser: 'Alice',

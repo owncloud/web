@@ -5,4 +5,5 @@
 # List of web packages that affect this test suite.                  #
 ######################################################################
 
-# depends on all web packages
+web-app-files
+web-app-preview
