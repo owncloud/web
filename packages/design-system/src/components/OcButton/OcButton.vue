@@ -2,7 +2,7 @@
   <component
     :is="type"
     v-bind="additionalAttributes"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || null"
     :class="ocButton_buttonClass"
     v-on="handlers"
   >

@@ -12,6 +12,7 @@
         :data-key="index"
         :data-item-id="item.id"
         :aria-hidden="item.isTruncationPlaceholder"
+        :tabindex="item.isTruncationPlaceholder ? -1 : 0"
         :class="[
           'oc-breadcrumb-list-item',
           'oc-flex',
