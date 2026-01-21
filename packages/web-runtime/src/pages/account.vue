@@ -40,6 +40,47 @@
             <span v-else v-text="$gettext('No email has been set up')" />
           </oc-td>
         </oc-tr>
+        <oc-tr
+          v-if="user.crossInstanceReference"
+          class="account-page-info-cross-instance-reference"
+          data-testid="account-cross-instance-reference-row"
+        >
+          <oc-td>{{
+            $pgettext(
+              'The oCIS multi-instance reference term displayed in the account page.',
+              'Cross-instance reference'
+            )
+          }}</oc-td>
+          <oc-td>
+            <span class="cross-instance-reference-wrapper">
+              {{ user.crossInstanceReference }}
+              <oc-button
+                v-oc-tooltip="
+                  $pgettext(
+                    'The tooltip text for the copy oCIS multi-instance reference button.',
+                    'Copy cross-instance reference'
+                  )
+                "
+                appearance="raw"
+                variation="passive"
+                size="small"
+                data-testid="account-cross-instance-reference-copy-btn"
+                @click="copyCrossInstanceReference"
+              >
+                <oc-icon name="file-copy" size="small" />
+                <span
+                  class="oc-invisible-sr"
+                  v-text="
+                    $pgettext(
+                      'The text of the copy oCIS multi-instance reference button visible only to screen readers.',
+                      'Copy cross-instance reference'
+                    )
+                  "
+                />
+              </oc-button>
+            </span>
+          </oc-td>
+        </oc-tr>
         <oc-tr v-if="!!quota" class="account-page-info-quota">
           <oc-td>{{ $gettext('Personal storage') }}</oc-td>
           <oc-td data-testid="quota">
@@ -298,7 +339,8 @@ import {
   useResourcesStore,
   useSpacesStore,
   useUserStore,
-  useSharesStore
+  useSharesStore,
+  useClipboard
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
@@ -333,11 +375,12 @@ export default defineComponent({
     const userStore = useUserStore()
     const authStore = useAuthStore()
     const language = useGettext()
-    const { $gettext } = language
+    const { $gettext, $pgettext } = language
     const clientService = useClientService()
     const resourcesStore = useResourcesStore()
     const appsStore = useAppsStore()
     const sharesStore = useSharesStore()
+    const { copyToClipboard } = useClipboard()
 
     const valuesList = ref<SettingsValue[]>()
     const graphUser = ref<User>()
@@ -756,6 +799,27 @@ export default defineComponent({
       })
     }
 
+    function copyCrossInstanceReference() {
+      if (!unref(user).crossInstanceReference) {
+        const error = new Error('Attempted to copy cross-instance reference while it is not set')
+        console.error(error)
+        captureException(error)
+        return
+      }
+
+      copyToClipboard(unref(user).crossInstanceReference)
+      showMessage({
+        title: $pgettext(
+          'The toast title of the successful copy oCIS multi-instance reference operation.',
+          'Cross-instance reference copied'
+        ),
+        desc: $pgettext(
+          'The toast message of the successful copy oCIS multi-instance reference operation.',
+          'The cross-instance reference has been copied to your clipboard.'
+        )
+      })
+    }
+
     return {
       clientService,
       languageOptions,
@@ -791,7 +855,8 @@ export default defineComponent({
       updateMultiChoiceSettingsValue,
       emailNotificationsValues,
       updateSingleChoiceValue,
-      canConfigureSpecificNotifications
+      canConfigureSpecificNotifications,
+      copyCrossInstanceReference
     }
   }
 })
@@ -812,6 +877,15 @@ export default defineComponent({
       padding-left: var(--oc-space-medium);
       padding-right: var(--oc-space-medium);
     }
+  }
+
+  .cross-instance-reference-wrapper {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--oc-space-xsmall);
+    justify-content: flex-start;
+    position: relative;
   }
 }
 </style>
