@@ -14,6 +14,7 @@ Summary
 * Enhancement - Add crash page: [#13426](https://github.com/owncloud/web/pull/13426)
 * Enhancement - Catch spaces loading error: [#13426](https://github.com/owncloud/web/pull/13426)
 * Enhancement - Drop custom share filters: [#13485](https://github.com/owncloud/web/pull/13485)
+* Enhancement - Add cross-instance reference: [#13499](https://github.com/owncloud/web/pull/13499)
 
 Details
 -------
@@ -67,6 +68,13 @@ Details
    the backend.
 
    https://github.com/owncloud/web/pull/13485
+
+* Enhancement - Add cross-instance reference: [#13499](https://github.com/owncloud/web/pull/13499)
+
+   Added cross-instance reference to the user account page. The cross-instance
+   reference is a unique identifier for the user across different oCIS instances.
+
+   https://github.com/owncloud/web/pull/13499
 
 Changelog for ownCloud Web [12.2.0] (2025-11-21)
 =======================================
