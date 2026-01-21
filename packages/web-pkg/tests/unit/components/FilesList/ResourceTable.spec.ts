@@ -19,7 +19,8 @@ import { computed } from 'vue'
 import { Identity } from '@ownclouders/web-client/graph/generated'
 import { describe } from 'vitest'
 import { useFileActionsRename } from '../../../../src/composables/actions/files'
-import { FileAction } from '../../../../src/composables/actions/types'
+import { useSpaceActionsRename } from '../../../../src/composables/actions'
+import { FileAction, SpaceAction } from '../../../../src/composables/actions/types'
 import { ResourceIndicator } from '../../../../src/helpers/statusIndicators'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({
@@ -44,6 +45,11 @@ vi.mock('../../../../src/composables/actions/files', async (importOriginal) => (
   useFileActions: vi.fn().mockReturnValue({
     getDefaultAction: vi.fn().mockReturnValue({ handler: vi.fn() })
   })
+}))
+
+vi.mock('../../../../src/composables/actions', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useSpaceActionsRename: vi.fn()
 }))
 
 const router = {
@@ -687,6 +693,53 @@ describe('ResourceTable', () => {
       expect(wrapper.find('.resource-table-edit-name').exists()).toBeFalsy()
     })
   })
+
+  describe('getRenameButtonAriaLabel', () => {
+    it('returns "Rename space" for space resources', () => {
+      const spaceResource = mock<SpaceResource>({
+        id: 'space-1',
+        name: 'My Space',
+        path: '/My Space',
+        type: 'space',
+        driveType: 'project',
+        getDomSelector: () => 'space-1',
+        canDownload: () => true
+      })
+      const { wrapper } = getMountedWrapper({ resources: [spaceResource] })
+      const editButton = wrapper.find('.resource-table-edit-name')
+      expect(editButton.attributes('aria-label')).toBe('Rename space')
+    })
+
+    it('returns "Rename folder" for folder resources', () => {
+      const folderResource = mock<Resource>({
+        id: 'folder-1',
+        name: 'My Folder',
+        path: '/My Folder',
+        isFolder: true,
+        type: 'folder',
+        getDomSelector: () => 'folder-1',
+        canDownload: () => true
+      })
+      const { wrapper } = getMountedWrapper({ resources: [folderResource] })
+      const editButton = wrapper.find('.resource-table-edit-name')
+      expect(editButton.attributes('aria-label')).toBe('Rename folder')
+    })
+
+    it('returns "Rename file" for file resources', () => {
+      const fileResource = mock<Resource>({
+        id: 'file-1',
+        name: 'document.txt',
+        path: '/document.txt',
+        isFolder: false,
+        type: 'file',
+        getDomSelector: () => 'file-1',
+        canDownload: () => true
+      })
+      const { wrapper } = getMountedWrapper({ resources: [fileResource] })
+      const editButton = wrapper.find('.resource-table-edit-name')
+      expect(editButton.attributes('aria-label')).toBe('Rename file')
+    })
+  })
 })
 
 function getMountedWrapper({
@@ -717,6 +770,12 @@ function getMountedWrapper({
     mock<FileAction>({ isVisible: () => hasRenameAction })
   ])
   vi.mocked(useFileActionsRename).mockReturnValue(useFileActionsRenameMock)
+
+  const useSpaceActionsRenameMock = mock<ReturnType<typeof useSpaceActionsRename>>()
+  useSpaceActionsRenameMock.actions = computed(() => [
+    mock<SpaceAction>({ isVisible: () => hasRenameAction })
+  ])
+  vi.mocked(useSpaceActionsRename).mockReturnValue(useSpaceActionsRenameMock)
 
   return {
     wrapper: mount(ResourceTable, {
