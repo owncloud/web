@@ -222,8 +222,7 @@ export const useFileActionsRename = () => {
         if (isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }
-        // Disable rename in public link context (e.g., password-protected folders)
-        // See https://github.com/owncloud/web/issues/12365
+
         if (isLocationPublicActive(router, 'files-public-link')) {
           return false
         }
