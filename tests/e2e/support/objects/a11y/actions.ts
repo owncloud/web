@@ -44,7 +44,8 @@ export const selectors = {
   filesView: 'files-view',
   // visible tippy/popover (active)
   tippyBoxVisible: '.tippy-box[data-state="visible"]',
-  logoWrapper: '.logo-wrapper'
+  logoWrapper: '.logo-wrapper',
+  pageNotFound: '.page-not-found'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']

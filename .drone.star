@@ -189,6 +189,7 @@ config = {
             "earlyFail": True,
             "skip": False,
             "suites": [
+                "navigation",
                 "user-settings",
                 "app-store",
             ],
