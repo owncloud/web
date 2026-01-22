@@ -122,7 +122,7 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
       name: 'Unnamed link'
     })
     // And "Anonymous" unlocks the public link with password "%public%"
-    await ui.anonymousUserUnlocksPublicLink({
+    await ui.userUnlocksPublicLink({
       actorsEnvironment,
       password: '%public%',
       stepUser: 'Anonymous'

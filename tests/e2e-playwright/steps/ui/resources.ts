@@ -6,11 +6,16 @@ import {
   SpacesEnvironment
 } from '../../../e2e/support/environment'
 import {
+  ActionViaType,
   createResourceTypes,
   displayedResourceType,
-  searchFilter
+  searchFilter,
+  shortcutType
 } from '../../../e2e/support/objects/app-files/resource/actions'
 import { editor } from '../../../e2e/support/objects/app-files/utils'
+import path from 'path'
+import { Public } from '../../../e2e/support/objects/app-files/page'
+import { Resource } from '../../../e2e/support/objects/app-files/resource'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -481,4 +486,119 @@ export async function restoreDeletedResourceFromTrashbin({
       resource: resource
     })
   }
+}
+export async function userCreatesShortcutForResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  name,
+  type
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  name: string
+  type: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  await resourceObject.createShotcut({
+    resource: resource,
+    name: name,
+    type: type as shortcutType
+  })
+}
+
+export async function userDownloadsResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  type,
+  actionType,
+  from
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  type: string
+  actionType: ActionViaType
+  from?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await processDownload(resourceObject, actionType, resource, type, from)
+}
+
+export const processDownload = async (
+  pageObject: Public | Resource,
+  actionType: ActionViaType,
+  resource: string,
+  type: string,
+  from?: string
+) => {
+  const downloadedResources: string[] = []
+
+  const files = [{ name: resource, type }]
+  const parentFolder = from !== 'undefined' ? from : null
+
+  const downloads = await pageObject.download({
+    folder: parentFolder,
+    resources: files,
+    via: actionType
+  })
+
+  downloads.forEach((download) => {
+    const { name } = path.parse(download.suggestedFilename())
+    downloadedResources.push(name)
+  })
+
+  if (actionType === 'SIDEBAR_PANEL' || actionType === 'PREVIEW_TOPBAR') {
+    expect(downloads.length).toBe(files.length)
+    for (const resource of files) {
+      const fileOrFolderName = path.parse(resource.name).name
+      if (resource.type === 'file') {
+        expect(downloadedResources).toContain(fileOrFolderName)
+      } else {
+        expect(downloadedResources).toContain('download')
+      }
+    }
+  }
+
+  if (actionType === 'BATCH_ACTION') {
+    expect(downloads.length).toBe(1)
+    downloads.forEach((download) => {
+      const { name } = path.parse(download.suggestedFilename())
+      expect(name).toBe('download')
+    })
+  }
+}
+
+export async function userOpensShortcut({
+  actorsEnvironment,
+  stepUser,
+  name
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  name: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openShotcut({ name })
+}
+export async function userCanOpenShortcutWithExternalUrl({
+  actorsEnvironment,
+  stepUser,
+  name,
+  url
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  name: string
+  url: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openShotcut({ name, url })
 }
