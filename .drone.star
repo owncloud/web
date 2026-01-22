@@ -192,6 +192,7 @@ config = {
                 "navigation",
                 "user-settings",
                 "app-store",
+                "file-action",
             ],
         },
         "oidc-refresh-token": {
