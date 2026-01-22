@@ -139,7 +139,7 @@ Feature: spaces management
     Then "Alice" should see the following users in the sidebar panel of spaces admin settings
       | user  | role                                |
       | Admin | Can manage                          |
-      # | Brian | Can edit with versions and trashbin |
+      | Brian | Can edit with versions and trashbin |
       | Carol | Can view                            |
       | David | Can view                            |
       | Edith | Can view                            |
