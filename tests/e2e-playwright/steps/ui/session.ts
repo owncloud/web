@@ -2,7 +2,7 @@ import { config } from '../../../e2e/config.js'
 import { api, objects } from '../../../e2e/support'
 import { User } from '../../../e2e/support/types'
 import { listenSSE } from '../../../e2e/support/environment/sse.js'
-import { test } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
 import { World } from '../../support/world'
 import { Jimp } from 'jimp'
@@ -156,4 +156,26 @@ export async function userWaitsForTokenToExpire({
 
 export async function useServer({ server }: { server: 'LOCAL' | 'FEDERATED' }): Promise<void> {
   config.federatedServer = server === 'FEDERATED'
+}
+
+export async function userFailsToLogin({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const sessionObject = await createNewSession(world, stepUser)
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
+
+  await page.goto(config.baseUrl)
+  await sessionObject.signIn(user.id, user.password)
+  const errorMessage = await sessionObject.getLoginErrorText()
+  expect(errorMessage).not.toBe('')
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['loginErrorMessageLocator'],
+    'login error message'
+  )
 }
