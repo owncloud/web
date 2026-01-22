@@ -94,3 +94,29 @@ export async function userShouldGetSSEEvent({
   const user = usersEnvironment.getCreatedUser({ key: stepUser })
   await waitForSSEEvent(user, event)
 }
+
+export async function userFailsToLogin({
+  usersEnvironment,
+  actorsEnvironment,
+  stepUser
+}: {
+  usersEnvironment: UsersEnvironment
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<boolean> {
+  const sessionObject = await createNewSession(actorsEnvironment, stepUser)
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const user = usersEnvironment.getUser({ key: stepUser })
+
+  await page.goto(config.baseUrl)
+  await page.locator('#oc-login-username').fill(user.id)
+  await page.locator('#oc-login-password').fill(user.password)
+  await page.locator('button[type="submit"]').click()
+
+  try {
+    await page.locator('#oc-login-error-message').waitFor({ timeout: 5000 })
+    return true
+  } catch {
+    return false
+  }
+}
