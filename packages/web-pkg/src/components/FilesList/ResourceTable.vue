@@ -258,6 +258,7 @@ import {
   IncomingShareResource,
   isPasswordProtectedFolderFileResource,
   isProjectSpaceResource,
+  isSpaceResource,
   Resource,
   TrashResource
 } from '@ownclouders/web-client'
@@ -526,7 +527,12 @@ const isResourceInDeleteQueue = (id: string): boolean => {
 }
 
 const getRenameButtonAriaLabel = (resource: Resource): string => {
-  if (resource.isFolder) {
+  if (isSpaceResource(resource)) {
+    return $pgettext(
+      'The label of the rename button in the resource table for spaces',
+      'Rename space'
+    )
+  } else if (resource.isFolder) {
     return $pgettext(
       'The label of the rename button in the resource table for folders',
       'Rename folder'
