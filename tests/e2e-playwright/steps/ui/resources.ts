@@ -2,10 +2,15 @@ import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
 import {
+  ActionViaType,
   createResourceTypes,
   displayedResourceType,
-  searchFilter
+  searchFilter,
+  shortcutType
 } from '../../../e2e/support/objects/app-files/resource/actions'
+import path from 'path'
+import { Public } from '../../../e2e/support/objects/app-files/page'
+import { Resource } from '../../../e2e/support/objects/app-files/resource'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -275,4 +280,136 @@ export async function getFilesList({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   return await resourceObject.getAllFiles()
+}
+export async function userCreatesShortcutForResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  name,
+  type
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  name: string
+  type: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  await resourceObject.createShotcut({
+    resource: resource,
+    name: name,
+    type: type as shortcutType
+  })
+}
+
+export async function userDownloadsResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  type,
+  actionType,
+  from
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  type: string
+  actionType: ActionViaType
+  from?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await processDownload(resourceObject, actionType, resource, from, type)
+}
+
+export const processDownload = async (
+  pageObject: Public | Resource,
+  actionType: string,
+  resource: string,
+  type: string,
+  from?: string
+) => {
+  const downloadedResources: string[] = []
+
+  console.log(from)
+  const files = [{ name: resource, type }]
+  console.log(files)
+  const parentFolder = from !== 'undefined' ? from : null
+
+  let via: ActionViaType = 'SINGLE_SHARE_VIEW'
+  switch (actionType) {
+    case 'batch action':
+      via = 'BATCH_ACTION'
+      break
+    case 'sidebar panel':
+      via = 'SIDEBAR_PANEL'
+      break
+    case 'preview topbar':
+      via = 'PREVIEW_TOPBAR'
+      break
+    default:
+      break
+  }
+
+  const downloads = await pageObject.download({
+    folder: parentFolder,
+    resources: files,
+    via
+  })
+
+  downloads.forEach((download) => {
+    const { name } = path.parse(download.suggestedFilename())
+    downloadedResources.push(name)
+  })
+
+  if (actionType === 'sidebar panel' || actionType === 'preview topbar') {
+    expect(downloads.length).toBe(files.length)
+    for (const resource of files) {
+      const fileOrFolderName = path.parse(resource.name).name
+      if (resource.type === 'file') {
+        expect(downloadedResources).toContain(fileOrFolderName)
+      } else {
+        expect(downloadedResources).toContain('download')
+      }
+    }
+  }
+
+  if (actionType === 'batch action') {
+    expect(downloads.length).toBe(1)
+    downloads.forEach((download) => {
+      const { name } = path.parse(download.suggestedFilename())
+      expect(name).toBe('download')
+    })
+  }
+}
+
+export async function userOpensShortcut({
+  actorsEnvironment,
+  stepUser,
+  name
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  name: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openShotcut({ name })
+}
+export async function userCanOpenShortcutWithExternalUrl({
+  actorsEnvironment,
+  stepUser,
+  name,
+  url
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  name: string
+  url: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openShotcut({ name, url })
 }

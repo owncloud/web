@@ -101,7 +101,7 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
       usersEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: 'lorem.txt',
+      resource: 'filesForUpload/lorem.txt',
       destination: 'lorem.txt'
     })
     // And "Alice" creates a public link of following resource using API
@@ -123,7 +123,7 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
       name: 'Unnamed link'
     })
     // And "Anonymous" unlocks the public link with password "%public%"
-    await ui.anonymousUserUnlocksPublicLink({
+    await ui.userUnlocksPublicLink({
       actorsEnvironment,
       password: '%public%',
       stepUser: 'Anonymous'

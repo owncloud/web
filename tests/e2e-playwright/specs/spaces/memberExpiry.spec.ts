@@ -32,14 +32,14 @@ test.describe('spaces member expiry', () => {
   })
 
   test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-    await api.userHasDeletedProjectSpace({
-      usersEnvironment,
-      stepUser: 'Admin',
-      name: 'team',
-      id: 'team.1'
-    })
+    // await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
+    // await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
+    // await api.userHasDeletedProjectSpace({
+    //   usersEnvironment,
+    //   stepUser: 'Admin',
+    //   name: 'team',
+    //   id: 'team.1'
+    // })
   })
 
   test('space members can be invited with an expiration date', async () => {

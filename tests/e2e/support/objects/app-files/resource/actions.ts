@@ -804,6 +804,11 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
         await sidebar.openPanel({ page, name: 'actions' })
         const downloadResourceSelector =
           resource.type === 'file' ? downloadFileButtonSideBar : downloadFolderButtonSideBar
+        await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+          page,
+          ['sidebarPanel'],
+          'sidebar panel'
+        )
         const [download] = await Promise.all([
           page.waitForEvent('download'),
           page.locator(downloadResourceSelector).click()
@@ -821,6 +826,11 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
       if (resources.length === 1) {
         throw new Error('Single resource cannot be downloaded with batch action')
       }
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['fileAppBar'],
+        'files top bar'
+      )
       const [download] = await Promise.all([
         page.waitForEvent('download'),
         page.locator(downloadButtonBatchAction).click()
@@ -838,6 +848,11 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
           resource.type === 'file'
             ? downloadFileButtonSingleShareView
             : downloadFolderButtonSingleShareView
+        await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+          page,
+          ['fileAppBar'],
+          'files top bar'
+        )
         const [download] = await Promise.all([
           page.waitForEvent('download'),
           page.locator(downloadResourceSelector).click()
@@ -2040,7 +2055,17 @@ export const expectFileToBeSelected = async ({
 export const createShotcut = async (args: shortcutArgs): Promise<void> => {
   const { page, resource, name, type } = args
   await page.locator(addNewResourceButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'create new resource tippy box'
+  )
   await page.locator(createNewShortcutButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'create a shortcut modal'
+  )
 
   switch (type) {
     case 'folder':
@@ -2048,6 +2073,11 @@ export const createShotcut = async (args: shortcutArgs): Promise<void> => {
     case 'file': {
       await page.locator(shortcutResorceInput).fill(resource)
       const searchResult = page.locator('#create-shortcut-modal-contextmenu .oc-resource-name')
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['tippyBox'],
+        'shortcut preview button'
+      )
       await expect(searchResult).toHaveText(resource)
       await searchResult.click()
       break
@@ -2055,9 +2085,19 @@ export const createShotcut = async (args: shortcutArgs): Promise<void> => {
     case 'public link':
       const link = new environment.LinksEnvironment()
       await page.locator(shortcutResorceInput).fill(link.getLink({ name: resource }).url)
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['tippyBox'],
+        'shortcut preview button'
+      )
       break
     case 'website': {
       await page.locator(shortcutResorceInput).fill(resource)
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['tippyBox'],
+        'shortcut preview button'
+      )
       await page.locator('#create-shortcut-modal-contextmenu').click()
       break
     }

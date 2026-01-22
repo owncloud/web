@@ -207,10 +207,25 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(util.format(editPublicLinkButton, 'Unnamed link')).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'edit public link tippy box'
+  )
   await page.locator(editPublicLinkRenameButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'update link modal'
+  )
   await page.locator(editPublicLinkNameInput).fill(newName)
   await page.locator(editPublicLinkRenameConfirm).click()
   const message = await page.locator(linkUpdateDialog).textContent()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['linkUpdateDialog'],
+    'edit public link success message'
+  )
   expect(message.trim()).toBe('Link was updated successfully')
   return await getRecentLinkName(page)
 }
