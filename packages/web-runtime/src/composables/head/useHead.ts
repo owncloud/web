@@ -15,6 +15,11 @@ export const useHead = () => {
 
   const favicon = computed(() => currentTheme.value.logo.favicon)
 
+  // Get brand color directly from theme store (reactive to theme changes)
+  const themeColor = computed(
+    () => currentTheme.value.designTokens.colorPalette['swatch-brand-default']
+  )
+
   _useHead(
     computed(() => {
       return {
@@ -24,6 +29,10 @@ export const useHead = () => {
             content: [getWebVersion(), getBackendVersion({ capabilityStore })]
               .filter(Boolean)
               .join(', ')
+          },
+          {
+            name: 'theme-color',
+            content: unref(themeColor)
           }
         ],
         ...(unref(favicon) && { link: [{ rel: 'icon', href: unref(favicon) }] })
