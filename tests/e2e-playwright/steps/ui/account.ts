@@ -95,3 +95,37 @@ export async function userDisablesNotificationEvents({
     await accountObject.disableNotificationEvent(event)
   }
 }
+
+export async function userShouldHaveQuota({
+  world,
+  stepUser,
+  quota
+}: {
+  world: World
+  stepUser: string
+  quota: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const accountObject = new objects.account.Account({ page })
+  const actualQuota = await accountObject.getQuotaValue()
+  expect(actualQuota).toBe(quota)
+}
+
+export async function userChangesQuotaForUsersUsingBatchAction({
+  world,
+  stepUser,
+  value,
+  users
+}: {
+  world: World
+  stepUser: string
+  value: string
+  users: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  for (const user of users) {
+    await usersObject.selectUser({ key: user })
+  }
+  await usersObject.changeQuotaUsingBatchAction({ value, users })
+}
