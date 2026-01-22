@@ -11,6 +11,7 @@ import fs from 'fs'
 import { integer } from 'vscode-languageserver-types'
 import join from 'join-path'
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
+import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
 
 export async function userHasBeenCreated({
   usersEnvironment,
@@ -431,4 +432,17 @@ export const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   store.createdGroupStore.clear()
+}
+
+export async function userShouldGetSSEEvent({
+  usersEnvironment,
+  stepUser,
+  event
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  event: string
+}): Promise<void> {
+  const user = usersEnvironment.getCreatedUser({ key: stepUser })
+  await waitForSSEEvent(user, event)
 }
