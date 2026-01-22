@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Prevent overlapping search content: [#13406](https://github.com/owncloud/web/pull/13406)
 * Bugfix - Filter only personal trashed spaces: [#13415](https://github.com/owncloud/web/pull/13415)
+* Enhancement - Dynamic theme-color meta tag based on loaded theme: [#5847](https://github.com/owncloud/web/issues/5847)
 * Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
 * Enhancement - Add crash page: [#13426](https://github.com/owncloud/web/pull/13426)
 * Enhancement - Catch spaces loading error: [#13426](https://github.com/owncloud/web/pull/13426)
@@ -36,6 +37,14 @@ Details
    toggled did not show disabled spaces.
 
    https://github.com/owncloud/web/pull/13415
+
+* Enhancement - Dynamic theme-color meta tag based on loaded theme: [#5847](https://github.com/owncloud/web/issues/5847)
+
+   The theme-color meta tag now dynamically uses the brand color from the currently
+   loaded theme instead of a hardcoded value. This improves Safari's tab bar
+   styling to match custom themes and provides a more cohesive branded experience.
+
+   https://github.com/owncloud/web/issues/5847
 
 * Enhancement - Use beta endpoint for single drive operations: [#13412](https://github.com/owncloud/web/pull/13412)
 
