@@ -1908,6 +1908,7 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
   const { page, name, actionType } = args
 
   switch (actionType) {
+    // NOTE: do not check a11y for external editors
     case 'OnlyOffice':
       await Promise.all([
         page.waitForResponse(

@@ -602,3 +602,58 @@ export async function userCanOpenShortcutWithExternalUrl({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openShotcut({ name, url })
 }
+
+export async function userOpensFileInViewer({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  actionType: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  await resourceObject.openFileInViewer({
+    name: resource,
+    actionType: actionType
+  })
+}
+
+export async function userShouldSeeContentInEditor({
+  actorsEnvironment,
+  stepUser,
+  expectedContent,
+  editor
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedContent: string
+  editor: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  const actualFileContent = await pageObject.getDocumentContent({
+    page,
+    editor
+  })
+  expect(actualFileContent.trim()).toBe(expectedContent)
+}
+
+export async function resourceShouldBeLocked({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<boolean> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const lockLocator = resourceObject.getLockLocator({ resource })
+  return lockLocator.isVisible()
+}

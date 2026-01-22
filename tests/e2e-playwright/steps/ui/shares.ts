@@ -215,3 +215,29 @@ export async function addUserToProjectSpace({
   }
   await spacesObject.addMembers({ users: [collaboratorWithRole] })
 }
+
+export async function userShouldBeAbleToManageShareOfFile({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  resource,
+  recipient
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  recipient: string
+}): Promise<boolean> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const changeRole = shareObject.changeRoleLocator(usersEnvironment.getUser({ key: recipient }))
+  const changeShare = shareObject.changeShareLocator(usersEnvironment.getUser({ key: recipient }))
+
+  await shareObject.openSharingPanel(resource)
+
+  const canChangeRole = !(await changeRole.isDisabled())
+  const canChangeShare = !(await changeShare.isDisabled())
+
+  return canChangeRole && canChangeShare
+}
