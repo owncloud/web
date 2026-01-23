@@ -909,8 +909,8 @@ importers:
         specifier: ^6.8.0
         version: 6.8.0
       '@casl/vue':
-        specifier: ^2.2.5
-        version: 2.2.5(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
+        specifier: ^2.2.6
+        version: 2.2.6(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
       '@chevrotain/regexp-to-ast':
         specifier: ^11.1.0
         version: 11.1.0
@@ -1073,8 +1073,8 @@ importers:
         specifier: 6.8.0
         version: 6.8.0
       '@casl/vue':
-        specifier: ^2.2.5
-        version: 2.2.5(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
+        specifier: ^2.2.6
+        version: 2.2.6(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
       '@microsoft/fetch-event-source':
         specifier: 2.0.1
         version: 2.0.1
@@ -1197,8 +1197,8 @@ importers:
         specifier: ^6.8.0
         version: 6.8.0
       '@casl/vue':
-        specifier: ^2.2.5
-        version: 2.2.5(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
+        specifier: ^2.2.6
+        version: 2.2.6(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
       '@ownclouders/design-system':
         specifier: workspace:^
         version: link:../design-system
@@ -1838,8 +1838,8 @@ packages:
   '@casl/ability@6.8.0':
     resolution: {integrity: sha512-Ipt4mzI4gSgnomFdaPjaLgY2MWuXqAEZLrU6qqWBB7khGiBBuuEp6ytYDnq09bRXqcjaeeHiaCvCGFbBA2SpvA==}
 
-  '@casl/vue@2.2.5':
-    resolution: {integrity: sha512-2qFs4ytDkclHfaO0GpDpl6smtM74FIhObIrVV1asMmkWZrEf5tj/CFcsCAnkp2G+/dSTypyIX3dLnPuIoM8Cbw==}
+  '@casl/vue@2.2.6':
+    resolution: {integrity: sha512-2OofMpdFWHPx99oqAYo4/Ym3P5vSUwUJA/XGvlqichiCLvo7GMu0R7yszxMYm80v9VkQ4ETMG1r4GdDDS+rFYg==}
     peerDependencies:
       '@casl/ability': ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.1.0 || ^6.0.0
       vue: ^3.0.0
@@ -8151,7 +8151,7 @@ snapshots:
     dependencies:
       '@ucast/mongo2js': 1.4.0
 
-  '@casl/vue@2.2.5(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))':
+  '@casl/vue@2.2.6(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))':
     dependencies:
       '@casl/ability': 6.8.0
       vue: 3.5.26(typescript@5.9.3)

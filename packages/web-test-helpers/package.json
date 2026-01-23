@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@casl/ability": "^6.8.0",
-    "@casl/vue": "^2.2.5",
+    "@casl/vue": "^2.2.6",
     "@ownclouders/design-system": "workspace:^",
     "@ownclouders/web-client": "workspace:^",
     "@pinia/testing": "^1.0.3",
