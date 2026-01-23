@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import * as po from './actions'
 import { LinksEnvironment } from '../../../environment'
+import { World } from '../../../../cucumber/environment'
 
 export class Link {
   #page: Page
@@ -91,8 +92,8 @@ export class Link {
     })
   }
 
-  async islinkEditButtonVisibile(linkName: string): Promise<boolean> {
-    return await po.getLinkEditButtonVisibility({ page: this.#page, linkName })
+  async islinkEditButtonVisibile(linkName: string, world: World): Promise<boolean> {
+    return await po.getLinkEditButtonVisibility({ page: this.#page, linkName, world })
   }
 
   async checkErrorMessage({ passwordProtectedFolder = false } = {}): Promise<string> {

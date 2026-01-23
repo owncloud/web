@@ -20,6 +20,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.scienceMesh.Federation({ page })
     await pageObject.acceptInvitation(sharer)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -28,6 +34,12 @@ Then(
   async function (this: World, stepUser: any, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.scienceMesh.Federation({ page })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
     for (const info of stepTable.hashes()) {
       info.user = substitute(info.user)
       info.email = substitute(info.email)

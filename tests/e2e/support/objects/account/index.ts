@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test'
 import * as po from './actions'
+import { World } from '../../../cucumber/environment'
 
 export class Account {
   #page: Page
@@ -32,8 +33,8 @@ export class Account {
     await po.changeLanguage({ page: this.#page, language, isAnonymousUser })
   }
 
-  getTitle(): Promise<string> {
-    return po.getTitle({ page: this.#page })
+  getTitle(world?: World): Promise<string> {
+    return po.getTitle({ page: this.#page, world })
   }
 
   async disableNotificationEvent(event: string): Promise<void> {

@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
 import { objects } from '../../..'
+import { World } from '../../../../cucumber/environment'
 
 const sidebarPanel = '#app-sidebar'
 const contextMenuButton =
@@ -81,47 +82,53 @@ export const openPanelForResource = async ({
     .click()
 }
 
-const openGlobal = async ({ page }: { page: Page }): Promise<void> => {
+const openGlobal = async ({ page, world }: { page: Page; world: World }): Promise<void> => {
   await page.locator('#files-toggle-sidebar').click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     [sidebarPanel],
-    'sidebar panel'
+    'sidebar panel',
+    world
   )
 }
 
 export const open = async ({
   page,
   resource,
-  resourceType
+  resourceType,
+  world
 }: {
   page: Page
   resource?: string
   resourceType?: string
+  world: World
 }): Promise<void> => {
   if (resourceType === 'passwordProtectedFolder') {
     if (await page.frameLocator(folderModalIframe).locator(sidebarPanel).count()) {
-      await closePasswordProtectedFolder({ page })
+      await closePasswordProtectedFolder({ page, world })
     }
   } else {
     if (await page.locator(sidebarPanel).count()) {
       await Promise.all([
         page.locator(sidebarPanel).waitFor({ state: 'detached' }),
-        close({ page })
+        close({ page, world })
       ])
     }
   }
 
-  resource ? await openForResource({ page, resource, resourceType }) : await openGlobal({ page })
+  resource
+    ? await openForResource({ page, resource, resourceType })
+    : await openGlobal({ page, world })
 }
 
-export const close = async ({ page }: { page: Page }): Promise<void> => {
+export const close = async ({ page, world }: { page: Page; world: World }): Promise<void> => {
   // await sidebar transitions
   await new Promise((resolve) => setTimeout(resolve, 250))
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     [sidebarPanel],
-    'sidebar panel'
+    'sidebar panel',
+    world
   )
   const isSubPanelActive = await page.locator(closeSidebarSubPanelBtn).isVisible()
   if (isSubPanelActive) {
@@ -177,7 +184,13 @@ export const openPanel = async ({
   }
 }
 
-export const closePasswordProtectedFolder = async ({ page }: { page: Page }): Promise<void> => {
+export const closePasswordProtectedFolder = async ({
+  page,
+  world
+}: {
+  page: Page
+  world: World
+}): Promise<void> => {
   const isSubPanelActive = await page
     .frameLocator(folderModalIframe)
     .locator(closeSidebarSubPanelBtn)
@@ -185,7 +198,8 @@ export const closePasswordProtectedFolder = async ({ page }: { page: Page }): Pr
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     [sidebarPanel],
-    'sidebar panel'
+    'sidebar panel',
+    world
   )
   if (isSubPanelActive) {
     await page.frameLocator(folderModalIframe).locator(closeSidebarSubPanelBtn).click()

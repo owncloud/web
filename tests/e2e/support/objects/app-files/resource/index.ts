@@ -2,6 +2,7 @@ import { Download, Locator, Page, Response } from '@playwright/test'
 import * as po from './actions'
 import { Space } from '../../../types'
 import { showShareIndicator } from './utils'
+import { World } from '../../../../cucumber/environment'
 
 export class Resource {
   #page: Page
@@ -211,20 +212,20 @@ export class Resource {
     await po.clickResourceFromBreadcrumb({ page: this.#page, resource })
   }
 
-  async switchToTilesViewMode(): Promise<void> {
-    await po.clickViewModeToggle({ page: this.#page, target: 'resource-tiles' })
+  async switchToTilesViewMode(world: World): Promise<void> {
+    await po.clickViewModeToggle({ page: this.#page, target: 'resource-tiles', world })
   }
 
-  async expectThatResourcesAreTiles(): Promise<void> {
-    await po.expectThatResourcesAreTiles({ page: this.#page })
+  async expectThatResourcesAreTiles(world: World): Promise<void> {
+    await po.expectThatResourcesAreTiles({ page: this.#page, world })
   }
 
-  async showHiddenFiles(): Promise<void> {
-    await po.showHiddenResources(this.#page)
+  async showHiddenFiles(world: World): Promise<void> {
+    await po.showHiddenResources(this.#page, world)
   }
 
-  async toggleFlatList(): Promise<void> {
-    await po.toggleFlatList(this.#page)
+  async toggleFlatList(world: World): Promise<void> {
+    await po.toggleFlatList(this.#page, world)
   }
 
   async getAllFiles(): Promise<string[]> {
@@ -329,8 +330,8 @@ export class Resource {
     return po.navigateMediaFile({ page: this.#page, navigationType })
   }
 
-  async previewMediaFromSidebarPanel(resource: string): Promise<void> {
-    await po.previewMediaFromSidebarPanel({ page: this.#page, resource })
+  async previewMediaFromSidebarPanel(resource: string, world: World): Promise<void> {
+    await po.previewMediaFromSidebarPanel({ page: this.#page, resource, world })
   }
 
   showShareIndicatorSelector({
@@ -351,47 +352,72 @@ export class Resource {
     return await po.canEditDocumentContent({ page: this.#page, type })
   }
 
-  async getAllAvailableActions({ resource }: { resource: string }): Promise<string[]> {
-    return await po.getAllAvailableActions({ page: this.#page, resource })
+  async getAllAvailableActions({
+    resource,
+    world
+  }: {
+    resource: string
+    world: World
+  }): Promise<string[]> {
+    return await po.getAllAvailableActions({ page: this.#page, resource, world })
   }
 
   getFileThumbnailLocator(resource: string): Locator {
     return po.getFileThumbnailLocator({ page: this.#page, resource })
   }
 
-  async shouldSeeFilePreview({ resource }: { resource: string }): Promise<void> {
-    await po.shouldSeeFilePreview({ page: this.#page, resource })
+  async shouldSeeFilePreview({
+    resource,
+    world
+  }: {
+    resource: string
+    world: World
+  }): Promise<void> {
+    await po.shouldSeeFilePreview({ page: this.#page, resource, world })
   }
 
-  async shouldNotSeeFilePreview({ resource }: { resource: string }): Promise<void> {
-    await po.shouldNotSeeFilePreview({ page: this.#page, resource })
+  async shouldNotSeeFilePreview({
+    resource,
+    world
+  }: {
+    resource: string
+    world: World
+  }): Promise<void> {
+    await po.shouldNotSeeFilePreview({ page: this.#page, resource, world })
   }
 
   async checkActivity({
     resource,
-    activity
+    activity,
+    world
   }: {
     resource: string
     activity: string
+    world: World
   }): Promise<void> {
-    await po.checkActivity({ page: this.#page, resource, activity })
+    await po.checkActivity({ page: this.#page, resource, activity, world })
   }
 
-  async checkEmptyActivity({ resource }: { resource: string }): Promise<void> {
-    await po.checkEmptyActivity({ page: this.#page, resource })
+  async checkEmptyActivity({ resource, world }: { resource: string; world: World }): Promise<void> {
+    await po.checkEmptyActivity({ page: this.#page, resource, world })
   }
 
   async openTemplateFile(resource: string, actionName: string): Promise<void> {
     await po.openTemplateFile({ page: this.#page, resource, webOffice: actionName })
   }
 
-  async createFileFromTemplate(resource: string, webOffice: string, via: string): Promise<void> {
-    await po.createFileFromTemplate({ page: this.#page, resource, webOffice, via })
+  async createFileFromTemplate(
+    resource: string,
+    webOffice: string,
+    via: string,
+    world: World
+  ): Promise<void> {
+    await po.createFileFromTemplate({ page: this.#page, resource, webOffice, via, world })
   }
 
-  async duplicate(resource: string, method: string): Promise<void> {
+  async duplicate(resource: string, method: string, world: World): Promise<void> {
     const startUrl = this.#page.url()
-    await po.duplicateResource({ page: this.#page, resource, method })
+    await po.duplicateResource({ page: this.#page, resource, method, world })
     await this.#page.goto(startUrl)
   }
 

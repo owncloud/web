@@ -1,4 +1,5 @@
 import { config } from '../../../e2e/config.js'
+import { World } from '../../../e2e/cucumber/environment/world.js'
 import { api, objects } from '../../../e2e/support'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { User } from '../../../e2e/support/types'
@@ -59,15 +60,17 @@ export async function logInUser({
 
 export async function logOutUser({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
+  world?: World
 }): Promise<void> {
   const actor = actorsEnvironment.getActor({ key: stepUser })
   const canLogout = !!(await actor.page.locator('#_userMenuButton').count())
 
   const sessionObject = new objects.runtime.Session({ page: actor.page })
-  canLogout && (await sessionObject.logout())
+  canLogout && (await sessionObject.logout(world))
   await actor.close()
 }

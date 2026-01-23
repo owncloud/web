@@ -6,6 +6,7 @@ import { clickResource } from '../resource/actions'
 import { User } from '../../../types'
 import { locatorUtils } from '../../../utils'
 import { objects } from '../../..'
+import { World } from '../../../../cucumber/environment'
 
 const invitePanel = '//*[@id="oc-files-sharing-sidebar"]'
 const quickShareButton =
@@ -30,12 +31,14 @@ export interface ShareArgs {
   resource: string
   recipients: ICollaborator[]
   expirationDate?: string
+  world?: World
 }
 
 export const openSharingPanel = async function (
   page: Page,
   resource: string,
-  via = 'SIDEBAR_PANEL'
+  via = 'SIDEBAR_PANEL',
+  world: World
 ): Promise<void> {
   const folderPaths = resource.split('/')
   const item = folderPaths.pop()
@@ -55,7 +58,7 @@ export const openSharingPanel = async function (
       break
 
     case 'SIDEBAR_PANEL':
-      await sidebar.open({ page, resource: item })
+      await sidebar.open({ page, resource: item, world })
       await sidebar.openPanel({ page, name: 'sharing' })
       await page.locator(invitePanel).waitFor()
       break
@@ -72,18 +75,21 @@ export type ActionViaType = 'SIDEBAR_PANEL' | 'QUICK_ACTION' | 'URL_NAVIGATION'
 
 export interface createShareArgs extends ShareArgs {
   via: ActionViaType
+  world?: World
 }
 
 export const createShare = async (args: createShareArgs): Promise<void> => {
-  const { page, resource, recipients, via } = args
+  const { page, resource, recipients, via, world } = args
+  const a11yObject = new objects.a11y.Accessibility({ page })
 
   if (via !== 'URL_NAVIGATION') {
-    await openSharingPanel(page, resource, via)
+    await openSharingPanel(page, resource, via, world)
 
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['appSidebar'],
-      'app sidebar'
+      'app sidebar',
+      world
     )
   }
   const expirationDate = recipients[0].expirationDate
@@ -107,9 +113,16 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'app sidebar')
     await page.locator(userTypeSelector).filter({ hasText: federatedShare }).click()
   }
-  await Collaborator.inviteCollaborators({ page, collaborators: recipients })
+  await Collaborator.inviteCollaborators({ page, collaborators: recipients, world })
 
-  await sidebar.close({ page })
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['appSidebar'],
+    'app sidebar',
+    world
+  )
+
+  await sidebar.close({ page, world })
 }
 
 /**/
@@ -118,9 +131,16 @@ export interface ShareStatusArgs extends Omit<ShareArgs, 'recipients'> {
   via?: 'STATUS' | 'CONTEXT_MENU'
 }
 
-export const enableSync = async (args: ShareStatusArgs): Promise<void> => {
+export const enableSync = async (args: ShareStatusArgs, world: World): Promise<void> => {
   const { resource, page } = args
-  await clickActionInContextMenu({ page, resource }, 'enable-sync')
+  await clickActionInContextMenu(
+    {
+      page,
+      resource,
+      world: world
+    },
+    'enable-sync'
+  )
 }
 
 export const syncAllShares = async ({ page }: { page: Page }): Promise<void> => {
@@ -140,9 +160,16 @@ export const syncAllShares = async ({ page }: { page: Page }): Promise<void> => 
   await Promise.all([...checkResponses, page.locator(acceptButton).click()])
 }
 
-export const disableSync = async (args: ShareStatusArgs): Promise<void> => {
+export const disableSync = async (args: ShareStatusArgs, world: World): Promise<void> => {
   const { page, resource } = args
-  await clickActionInContextMenu({ page, resource }, 'disable-sync')
+  await clickActionInContextMenu(
+    {
+      page,
+      resource,
+      world: world
+    },
+    'disable-sync'
+  )
 }
 
 export const clickActionInContextMenu = async (
@@ -179,8 +206,8 @@ export const clickActionInContextMenu = async (
 }
 
 export const changeShareeRole = async (args: ShareArgs): Promise<void> => {
-  const { page, resource, recipients } = args
-  await openSharingPanel(page, resource)
+  const { page, resource, recipients, world } = args
+  await openSharingPanel(page, resource, 'SIDEBAR_PANEL', world)
 
   for (const collaborator of recipients) {
     await Promise.all([
@@ -190,7 +217,7 @@ export const changeShareeRole = async (args: ShareArgs): Promise<void> => {
           resp.status() === 200 &&
           resp.request().method() === 'PATCH'
       ),
-      Collaborator.changeCollaboratorRole({ page, collaborator })
+      Collaborator.changeCollaboratorRole({ page, collaborator, world })
     ])
   }
 }
@@ -199,25 +226,26 @@ export const changeShareeRole = async (args: ShareArgs): Promise<void> => {
 
 export interface removeShareeArgs extends ShareArgs {
   removeOwnSpaceAccess?: boolean
+  world?: World
 }
 
 export const removeSharee = async (args: removeShareeArgs): Promise<void> => {
-  const { page, resource, recipients, removeOwnSpaceAccess } = args
-  await openSharingPanel(page, resource)
+  const { page, resource, recipients, removeOwnSpaceAccess, world } = args
+  await openSharingPanel(page, resource, 'SIDEBAR_PANEL', world)
 
   for (const collaborator of recipients) {
-    await Collaborator.removeCollaborator({ page, collaborator, removeOwnSpaceAccess })
+    await Collaborator.removeCollaborator({ page, collaborator, removeOwnSpaceAccess, world })
   }
 }
 
 /**/
 
 export const checkSharee = async (args: ShareArgs): Promise<void> => {
-  const { resource, page, recipients } = args
-  await openSharingPanel(page, resource)
+  const { resource, page, recipients, world } = args
+  await openSharingPanel(page, resource, 'SIDEBAR_PANEL', world)
 
   for (const collaborator of recipients) {
-    await Collaborator.checkCollaborator({ page, collaborator })
+    await Collaborator.checkCollaborator({ page, collaborator, world })
   }
 }
 
@@ -226,9 +254,10 @@ export const addExpirationDate = async (args: {
   resource: string
   collaborator: Omit<ICollaborator, 'role'>
   expirationDate: string
+  world: World
 }): Promise<void> => {
-  const { page, resource, collaborator, expirationDate } = args
-  await openSharingPanel(page, resource)
+  const { page, resource, collaborator, expirationDate, world } = args
+  await openSharingPanel(page, resource, 'SIDEBAR_PANEL', world)
 
   await Promise.all([
     page.waitForResponse(
@@ -237,7 +266,10 @@ export const addExpirationDate = async (args: {
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
     ),
-    Collaborator.setExpirationDateForCollaborator({ page, collaborator, expirationDate })
+    Collaborator.setExpirationDateForCollaborator(
+      { page, collaborator, expirationDate, world },
+      world
+    )
   ])
 }
 
@@ -245,9 +277,10 @@ export const getAccessDetails = async (args: {
   page: Page
   resource: string
   collaborator: Omit<ICollaborator, 'role'>
+  world: World
 }): Promise<IAccessDetails> => {
-  const { page, resource, collaborator } = args
-  await openSharingPanel(page, resource)
+  const { page, resource, collaborator, world } = args
+  await openSharingPanel(page, resource, 'SIDEBAR_PANEL', world)
 
   return Collaborator.getAccessDetails(page, collaborator)
 }

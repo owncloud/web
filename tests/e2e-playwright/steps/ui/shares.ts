@@ -6,6 +6,7 @@ import {
   ICollaborator
 } from '../../../e2e/support/objects/app-files/share/collaborator'
 import { ActionViaType } from '../../../e2e/support/objects/app-files/share/actions'
+import { World } from '../../../e2e/cucumber/environment'
 
 const parseShareTable = function (
   usersEnvironment: UsersEnvironment,
@@ -53,14 +54,16 @@ const parseShareTable = function (
 
 export async function navigateToSharedWithMePage({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.shares.WithMe({ page })
-  await pageObject.navigate()
+  await pageObject.navigate(world)
 }
 
 export async function updateShareeRole({
@@ -159,7 +162,8 @@ export async function shareResource({
   await shareObject.create({
     resource,
     recipients: [shareRecipient],
-    via: actionType
+    via: actionType,
+    world: undefined
   })
 }
 
