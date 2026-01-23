@@ -16,6 +16,7 @@ exports[`User Menu component > when no quota and email is set > the user menu do
           <oc-icon-stub data-v-0550d31b="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Preferences</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li data-v-0550d31b="">
         <oc-button-stub data-v-0550d31b="" id="oc-topbar-account-logout" appearance="raw">
           <oc-icon-stub data-v-0550d31b="" name="logout-box-r" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Log out</span>
@@ -44,6 +45,7 @@ exports[`User Menu component > when no quota and no email is set > the user menu
           <oc-icon-stub data-v-0550d31b="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Preferences</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li data-v-0550d31b="">
         <oc-button-stub data-v-0550d31b="" id="oc-topbar-account-logout" appearance="raw">
           <oc-icon-stub data-v-0550d31b="" name="logout-box-r" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Log out</span>
@@ -78,6 +80,7 @@ exports[`User Menu component > when quota and no email is set > renders a naviga
           <oc-icon-stub data-v-0550d31b="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Preferences</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li data-v-0550d31b="">
         <oc-button-stub data-v-0550d31b="" id="oc-topbar-account-logout" appearance="raw">
           <oc-icon-stub data-v-0550d31b="" name="logout-box-r" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Log out</span>
@@ -111,6 +114,7 @@ exports[`User Menu component > when quota is above 80% and below 90% > renders a
           <oc-icon-stub data-v-0550d31b="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Preferences</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li data-v-0550d31b="">
         <oc-button-stub data-v-0550d31b="" id="oc-topbar-account-logout" appearance="raw">
           <oc-icon-stub data-v-0550d31b="" name="logout-box-r" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Log out</span>
@@ -144,6 +148,7 @@ exports[`User Menu component > when quota is above 90% > renders a danger quota 
           <oc-icon-stub data-v-0550d31b="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Preferences</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li data-v-0550d31b="">
         <oc-button-stub data-v-0550d31b="" id="oc-topbar-account-logout" appearance="raw">
           <oc-icon-stub data-v-0550d31b="" name="logout-box-r" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Log out</span>
@@ -177,6 +182,7 @@ exports[`User Menu component > when quota is below 80% > renders a primary quota
           <oc-icon-stub data-v-0550d31b="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Preferences</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li data-v-0550d31b="">
         <oc-button-stub data-v-0550d31b="" id="oc-topbar-account-logout" appearance="raw">
           <oc-icon-stub data-v-0550d31b="" name="logout-box-r" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Log out</span>
@@ -210,6 +216,7 @@ exports[`User Menu component > when quota is not defined > renders no percentag 
           <oc-icon-stub data-v-0550d31b="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Preferences</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li data-v-0550d31b="">
         <oc-button-stub data-v-0550d31b="" id="oc-topbar-account-logout" appearance="raw">
           <oc-icon-stub data-v-0550d31b="" name="logout-box-r" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Log out</span>
@@ -243,6 +250,7 @@ exports[`User Menu component > when quota is unlimited > renders no percentag of
           <oc-icon-stub data-v-0550d31b="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Preferences</span>
         </oc-button-stub>
       </li>
+      <!--v-if-->
       <li data-v-0550d31b="">
         <oc-button-stub data-v-0550d31b="" id="oc-topbar-account-logout" appearance="raw">
           <oc-icon-stub data-v-0550d31b="" name="logout-box-r" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-0550d31b="">Log out</span>

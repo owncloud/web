@@ -88,6 +88,51 @@
               <span v-text="$gettext('Preferences')" />
             </oc-button>
           </li>
+          <li v-if="inlineInstances.length > 0">
+            <div class="oc-width-1-1" data-testid="instance-switcher">
+              <p class="oc-text-xs oc-text-muted">
+                {{
+                  $pgettext(
+                    'The instance switcher section title in the user menu available when multiple instances are enabled in oCIS',
+                    'Instances'
+                  )
+                }}
+              </p>
+              <oc-list>
+                <li
+                  v-for="instance in inlineInstances"
+                  :key="instance.url"
+                  data-testid="instance-switcher-item"
+                >
+                  <a :href="instance.url" class="instance-link oc-rounded">
+                    <span
+                      :class="[
+                        'instance-indicator',
+                        instance.primary && 'primary',
+                        instance.active && 'current'
+                      ]"
+                    />
+                    {{ instance.url }}
+                  </a>
+                </li>
+                <li v-if="canOpenInstancesModal">
+                  <oc-button
+                    appearance="raw"
+                    data-testid="instance-switcher-show-all-button"
+                    @click="showInstancesModal"
+                  >
+                    <span class="instance-indicator placeholder" />
+                    {{
+                      $pgettext(
+                        'The open instances modal action label in the user menu available when multiple instances are enabled in oCIS',
+                        'Show all instances'
+                      )
+                    }}
+                  </oc-button>
+                </li>
+              </oc-list>
+            </div>
+          </li>
           <li>
             <oc-button id="oc-topbar-account-logout" appearance="raw" @click="logout">
               <oc-icon name="logout-box-r" fill-type="line" class="oc-p-xs" />
@@ -122,6 +167,7 @@ import {
 import { OcDrop } from '@ownclouders/design-system/components'
 import QuotaInformation from '../Account/QuotaInformation.vue'
 import { useGettext } from 'vue3-gettext'
+import { useInstances } from '../../composables/instances'
 
 export default defineComponent({
   components: { QuotaInformation },
@@ -132,6 +178,7 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const authService = useAuthService()
     const { $pgettext } = useGettext()
+    const { inlineInstances, canOpenInstancesModal, showInstancesModal } = useInstances()
 
     const { user } = storeToRefs(userStore)
 
@@ -192,7 +239,10 @@ export default defineComponent({
       loginLink,
       quota,
       footerLinks,
-      logout
+      inlineInstances,
+      logout,
+      showInstancesModal,
+      canOpenInstancesModal
     }
   },
   computed: {
@@ -258,6 +308,33 @@ export default defineComponent({
   a {
     font-size: var(--oc-font-size-medium) !important;
     color: var(--oc-color-text-default);
+  }
+}
+
+.instance-link {
+  align-items: center;
+  display: flex;
+  gap: var(--oc-space-medium);
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.instance-indicator {
+  background-color: var(--oc-color-swatch-passive-default);
+  border-radius: 50%;
+  height: 0.5rem;
+  width: 0.5rem;
+
+  &.primary {
+    background-color: var(--oc-color-swatch-primary-default);
+  }
+
+  &.current {
+    background-color: var(--oc-color-swatch-success-default);
+  }
+
+  &.placeholder {
+    background-color: transparent;
   }
 }
 </style>
