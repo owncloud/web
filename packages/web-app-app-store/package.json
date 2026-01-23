@@ -16,7 +16,7 @@
     "@ownclouders/web-pkg": "workspace:*",
     "axios": "1.13.2",
     "fuse.js": "7.1.0",
-    "lodash-es": "4.17.22",
+    "lodash-es": "4.17.23",
     "mark.js": "^8.11.1",
     "pinia": "3.0.4",
     "vue-concurrency": "5.0.3",

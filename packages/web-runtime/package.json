@@ -28,7 +28,7 @@
     "focus-trap-vue": "^4.1.0",
     "focus-trap": "7.8.0",
     "fuse.js": "7.1.0",
-    "lodash-es": "4.17.22",
+    "lodash-es": "4.17.23",
     "luxon": "3.7.2",
     "mark.js": "8.11.1",
     "oidc-client-ts": "^3.4.1",
