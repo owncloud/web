@@ -2034,6 +2034,8 @@ def logA11yReport():
 def filterTestSuitesToRun(ctx, suites = []):
     if "full-ci" in ctx.build.title.lower() or ctx.build.event == "cron":
         return []
+    if ctx.build.ref.startswith("refs/tags/v"):
+        return []
     if len(suites) and "cucumber/" in suites[0]:
         ENV = "FEATURE_FILES="
     else:
