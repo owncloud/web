@@ -2,7 +2,7 @@ import { execSync } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-const targetBranch = process.env.DRONE_TARGET_BRANCH || 'master'
+const targetBranch = process.env.DRONE_TARGET_BRANCH || 'stable-12.3'
 
 // paths that if changed will run all test suites
 const mandatoryPaths = [
