@@ -82,7 +82,7 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@casl/ability": "^6.7.5",
+    "@casl/ability": "^6.8.0",
     "@microsoft/fetch-event-source": "^2.0.1",
     "axios": "^1.13.2",
     "fast-xml-parser": "^5.3.3",

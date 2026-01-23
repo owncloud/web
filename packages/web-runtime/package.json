@@ -8,7 +8,7 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@casl/ability": "6.7.5",
+    "@casl/ability": "6.8.0",
     "@casl/vue": "^2.2.5",
     "@microsoft/fetch-event-source": "2.0.1",
     "@ownclouders/design-system": "workspace:^",

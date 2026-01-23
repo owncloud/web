@@ -853,8 +853,8 @@ importers:
   packages/web-client:
     dependencies:
       '@casl/ability':
-        specifier: ^6.7.5
-        version: 6.7.5
+        specifier: ^6.8.0
+        version: 6.8.0
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
         version: 2.0.1
@@ -906,11 +906,11 @@ importers:
   packages/web-pkg:
     dependencies:
       '@casl/ability':
-        specifier: ^6.7.5
-        version: 6.7.5
+        specifier: ^6.8.0
+        version: 6.8.0
       '@casl/vue':
         specifier: ^2.2.5
-        version: 2.2.5(@casl/ability@6.7.5)(vue@3.5.26(typescript@5.9.3))
+        version: 2.2.5(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
       '@chevrotain/regexp-to-ast':
         specifier: ^11.1.0
         version: 11.1.0
@@ -1070,11 +1070,11 @@ importers:
   packages/web-runtime:
     dependencies:
       '@casl/ability':
-        specifier: 6.7.5
-        version: 6.7.5
+        specifier: 6.8.0
+        version: 6.8.0
       '@casl/vue':
         specifier: ^2.2.5
-        version: 2.2.5(@casl/ability@6.7.5)(vue@3.5.26(typescript@5.9.3))
+        version: 2.2.5(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
       '@microsoft/fetch-event-source':
         specifier: 2.0.1
         version: 2.0.1
@@ -1194,11 +1194,11 @@ importers:
   packages/web-test-helpers:
     dependencies:
       '@casl/ability':
-        specifier: ^6.7.5
-        version: 6.7.5
+        specifier: ^6.8.0
+        version: 6.8.0
       '@casl/vue':
         specifier: ^2.2.5
-        version: 2.2.5(@casl/ability@6.7.5)(vue@3.5.26(typescript@5.9.3))
+        version: 2.2.5(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
       '@ownclouders/design-system':
         specifier: workspace:^
         version: link:../design-system
@@ -1835,8 +1835,8 @@ packages:
   '@cacheable/utils@2.3.3':
     resolution: {integrity: sha512-JsXDL70gQ+1Vc2W/KUFfkAJzgb4puKwwKehNLuB+HrNKWf91O736kGfxn4KujXCCSuh6mRRL4XEB0PkAFjWS0A==}
 
-  '@casl/ability@6.7.5':
-    resolution: {integrity: sha512-NaOHPi9JMn8Kesh+GRkjNKAYkl4q8qMFAlqw7w2yrE+cBQZSbV9GkBGKvgzs3CdzEc5Yl1cn3JwDxxbBN5gjog==}
+  '@casl/ability@6.8.0':
+    resolution: {integrity: sha512-Ipt4mzI4gSgnomFdaPjaLgY2MWuXqAEZLrU6qqWBB7khGiBBuuEp6ytYDnq09bRXqcjaeeHiaCvCGFbBA2SpvA==}
 
   '@casl/vue@2.2.5':
     resolution: {integrity: sha512-2qFs4ytDkclHfaO0GpDpl6smtM74FIhObIrVV1asMmkWZrEf5tj/CFcsCAnkp2G+/dSTypyIX3dLnPuIoM8Cbw==}
@@ -8121,13 +8121,13 @@ snapshots:
       hashery: 1.4.0
       keyv: 5.5.5
 
-  '@casl/ability@6.7.5':
+  '@casl/ability@6.8.0':
     dependencies:
       '@ucast/mongo2js': 1.4.0
 
-  '@casl/vue@2.2.5(@casl/ability@6.7.5)(vue@3.5.26(typescript@5.9.3))':
+  '@casl/vue@2.2.5(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))':
     dependencies:
-      '@casl/ability': 6.7.5
+      '@casl/ability': 6.8.0
       vue: 3.5.26(typescript@5.9.3)
 
   '@chevrotain/cst-dts-gen@11.0.3':
