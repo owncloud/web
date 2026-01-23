@@ -10,7 +10,7 @@
     "axios": "1.13.2",
     "email-validator": "^2.0.4",
     "fuse.js": "7.1.0",
-    "lodash-es": "4.17.22",
+    "lodash-es": "4.17.23",
     "vue-concurrency": "5.0.3",
     "uuid": "13.0.0",
     "vue-router": "4.6.4",
