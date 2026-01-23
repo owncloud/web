@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [12.3.0] (2026-01-23)
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
 =======================================
-The following sections list the changes in ownCloud web 12.3.0 relevant to
+The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[12.3.0]: https://github.com/owncloud/web/compare/v12.2.0...v12.3.0
+[unreleased]: https://github.com/owncloud/web/compare/v12.2.0...master
 
 Summary
 -------
