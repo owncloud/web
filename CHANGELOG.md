@@ -16,6 +16,7 @@ Summary
 * Enhancement - Catch spaces loading error: [#13426](https://github.com/owncloud/web/pull/13426)
 * Enhancement - Drop custom share filters: [#13485](https://github.com/owncloud/web/pull/13485)
 * Enhancement - Add cross-instance reference: [#13499](https://github.com/owncloud/web/pull/13499)
+* Enhancement - Add instance switcher: [#13500](https://github.com/owncloud/web/pull/13500)
 
 Details
 -------
@@ -84,6 +85,17 @@ Details
    reference is a unique identifier for the user across different oCIS instances.
 
    https://github.com/owncloud/web/pull/13499
+
+* Enhancement - Add instance switcher: [#13500](https://github.com/owncloud/web/pull/13500)
+
+   Added a list of users' instances to the user menu. When multiple instances are
+   enabled in oCIS, the user can switch between instances by clicking on the
+   instance in the list. The list displays maximum 3 instances. If there are more
+   instances, the user can click on a button to open the instances modal. Within
+   the modal, the user can see all instances and switch between them by clicking on
+   the instance or a "Switch" button.
+
+   https://github.com/owncloud/web/pull/13500
 
 Changelog for ownCloud Web [12.2.0] (2025-11-21)
 =======================================
