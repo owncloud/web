@@ -75,7 +75,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .login {
   align-content: center;
-  min-height: 100vh;
+  min-height: 100svh;
   width: 100%;
 }
 
