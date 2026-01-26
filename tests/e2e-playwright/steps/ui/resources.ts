@@ -1,6 +1,10 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
-import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
+import {
+  ActorsEnvironment,
+  FilesEnvironment,
+  SpacesEnvironment
+} from '../../../e2e/support/environment'
 import {
   createResourceTypes,
   displayedResourceType,
@@ -275,4 +279,51 @@ export async function getFilesList({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   return await resourceObject.getAllFiles()
+}
+
+export async function userCreatesSpaceFromFolderUsingContexMenu({
+  actorsEnvironment,
+  spacesEnvironment,
+  stepUser,
+  spaceName,
+  folderName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  spacesEnvironment: SpacesEnvironment
+  stepUser: string
+  spaceName: string
+  folderName: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const space = await resourceObject.createSpaceFromFolder({
+    folderName: folderName,
+    spaceName: spaceName
+  })
+  spacesEnvironment.createSpace({
+    key: space.name,
+    space: { name: space.name, id: space.id }
+  })
+}
+
+export async function userCreatesSpaceFromResourcesUsingContexMenu({
+  actorsEnvironment,
+  spacesEnvironment,
+  stepUser,
+  spaceName,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  spacesEnvironment: SpacesEnvironment
+  stepUser: string
+  spaceName: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const space = await resourceObject.createSpaceFromSelection({ resources, spaceName })
+  spacesEnvironment.createSpace({
+    key: space.name,
+    space: { name: space.name, id: space.id }
+  })
 }
