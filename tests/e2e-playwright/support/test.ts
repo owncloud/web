@@ -4,7 +4,7 @@ import { UsersEnvironment } from '../../e2e/support/environment'
 
 const usersEnvironment = new UsersEnvironment()
 
-export const test = base.extend<{usersEnvironment: UsersEnvironment}>({
+export const test = base.extend<{ usersEnvironment: UsersEnvironment }>({
   usersEnvironment: async ({}, use) => {
     await use(usersEnvironment)
   }

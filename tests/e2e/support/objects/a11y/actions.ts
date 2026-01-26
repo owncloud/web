@@ -8,7 +8,7 @@ export const selectors = {
   resourceTableEditName: '.resource-table-edit-name',
   resourceIconWrapper: '.oc-resource-icon-wrapper',
   resourceTableCondensedIcon: '.resource-table-condensed',
-  filesSpaceTableCondensed: '#files-space-table.cgstondensed', // '.condensed.files-table',
+  filesSpaceTableCondensed: '#files-space-table.condensed', // '.condensed.files-table',
   resourceTiles: '.resource-tiles',
   tilesView: '#tiles-view',
   cardMediaTop: '.oc-card-media-top',
@@ -49,7 +49,8 @@ export const selectors = {
   createGroupInput: '#create-group-input-display-name',
   actionConfirmButton: '.oc-modal-body-actions-confirm',
   contextMenuContainer: '#oc-files-context-menu',
-  groupList: '.group-list'
+  groupList: '.group-list',
+  editPanel: '.sidebar-panel__body-EditPanel:visible'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']

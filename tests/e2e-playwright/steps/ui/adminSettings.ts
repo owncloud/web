@@ -42,7 +42,7 @@ export async function resetLogo({
   await generalObject.resetLogo()
 }
 
-export async function navigateToGroupsManagementPage({
+export async function userNavigatesToGroupsManagementPage({
   actorsEnvironment,
   stepUser
 }: {
@@ -54,7 +54,7 @@ export async function navigateToGroupsManagementPage({
   await groupsObject.navigate()
 }
 
-export async function createGroups({
+export async function userCreatesGroups({
   actorsEnvironment,
   stepUser,
   groupIds
@@ -105,7 +105,7 @@ export async function groupDisplayNameExists({
   return groups.includes(groupDisplayName)
 }
 
-export async function deleteGroups({
+export async function userDeletesGroups({
   actorsEnvironment,
   stepUser,
   actionType,
@@ -137,7 +137,7 @@ export async function deleteGroups({
   }
 }
 
-export async function changeGroup({
+export async function userChangesGroup({
   actorsEnvironment,
   stepUser,
   key,

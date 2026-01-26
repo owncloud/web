@@ -65,7 +65,7 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
       content: 'This is a hidden file.'
     })
     // When "Alice" opens the "files" app
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
     // And "Alice" changes the items per page to "20"
     await ui.changeItemsPerPage({ actorsEnvironment, stepUser: 'Alice', itemsPerPage: '20' })
     // Then "Alice" should see the text "26 items with 223 B in total (11 files including 1 hidden, 15 folders)" at the footer of the page

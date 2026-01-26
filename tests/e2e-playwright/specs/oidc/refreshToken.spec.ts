@@ -50,7 +50,7 @@ test.describe('details', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" opens the "files" app
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
 
     // And "Alice" navigates to the projects space page
     await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
@@ -106,7 +106,7 @@ test.describe('details', () => {
     await actor.closeCurrentTab()
 
     // And "Alice" opens the "files" app
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
 
     // And "Alice" creates the following resources
     //  | resource          | type    | content   |

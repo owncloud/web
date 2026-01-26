@@ -1,7 +1,7 @@
 import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { objects } from '../../../e2e/support'
 
-export async function openApplication({
+export async function userOpensApplication({
   actorsEnvironment,
   stepUser,
   name
