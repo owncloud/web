@@ -1,6 +1,7 @@
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { objects } from '../../../e2e/support'
 import { Space } from '../../../e2e/support/types'
+import { Locator } from '@playwright/test'
 import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
 
 export async function navigateToPersonalSpacePage({
@@ -186,4 +187,62 @@ export async function manageSpaceUsingContexMenu({
     default:
       throw new Error(`${action} not implemented`)
   }
+}
+
+export async function navigateToTrashbin({
+  actorsEnvironment,
+  stepUser,
+  space
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  space?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.trashbin.Overview({ page })
+  await pageObject.navigate()
+  if (space) {
+    const trashbinObject = new objects.applicationFiles.Trashbin({ page })
+    await trashbinObject.open(space)
+  }
+}
+
+export async function getSpaceLocator({
+  actorsEnvironment,
+  stepUser,
+  space
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: string
+  space?: string
+}): Promise<Locator> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  return await spacesObject.getSpaceLocator(space)
+}
+
+export async function changeRoles({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  role,
+  sharee
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  role: string
+  sharee: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const sharer = usersEnvironment.getUser({ key: stepUser })
+
+  const roleId = await getDynamicRoleIdByName(sharer, role, 'space' as ResourceType)
+  const member = {
+    collaborator: usersEnvironment.getUser({ key: sharee }),
+    role: roleId
+  }
+  await spacesObject.changeRoles({ users: [member] })
 }
