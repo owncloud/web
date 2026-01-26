@@ -1,0 +1,475 @@
+import { test } from '../../support/test'
+import { config } from '../../../e2e/config.js'
+import {
+  ActorsEnvironment,
+  UsersEnvironment,
+  FilesEnvironment
+} from '../../../e2e/support/environment/index.js'
+import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
+import * as api from '../../steps/api/api.js'
+import * as ui from '../../steps/ui/index'
+
+test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-users' }, () => {
+  let actorsEnvironment
+  const usersEnvironment = new UsersEnvironment()
+  const filesEnvironment = new FilesEnvironment()
+
+  test.beforeEach(async ({ browser }) => {
+    actorsEnvironment = new ActorsEnvironment({
+      context: {
+        acceptDownloads: config.acceptDownloads,
+        reportDir: config.reportDir,
+        tracingReportDir: config.tracingReportDir,
+        reportHar: config.reportHar,
+        reportTracing: config.reportTracing,
+        reportVideo: config.reportVideo,
+        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
+      },
+      browser: browser
+    })
+
+    await setAccessAndRefreshToken(usersEnvironment)
+
+    // Given "Admin" creates following users using API
+    //   | id    |
+    //   | Alice |
+    //   | Brian |
+    //   | Carol |
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian', 'Carol']
+    })
+
+    // And "Admin" creates following group using API
+    //   | id       |
+    //   | sales    |
+    //   | security |
+    await api.groupsHaveBeenCreated({
+      groupIds: ['sales', 'security'],
+      admin: usersEnvironment.getUser({ key: 'Admin' })
+    })
+
+    // And "Admin" adds user to the group using API
+    //   | user  | group |
+    //   | Brian | sales |
+    await api.addUserToGroup({
+      usersEnvironment,
+      stepUser: 'Admin',
+      userToAdd: [{ user: 'Brian', group: 'sales' }]
+    })
+
+    await setAccessAndRefreshToken(usersEnvironment)
+  })
+
+  test('Alice can share this weeks meal plan with all parents', async () => {
+    // When "Alice" logs in
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+
+    // And "Alice" navigates to the personal space page
+    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+
+    // And "Alice" creates the following resources
+    //   | resource                             | type   |
+    //   | groups/Kindergarten Koalas/meal plan | folder |
+    //   | groups/Pre-Schools Pirates/meal plan | folder |
+    //   | groups/Teddy Bear Daycare/meal plan  | folder |
+    await ui.userCreatesResources({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resources: [
+        { name: 'groups/Kindergarten Koalas/meal plan', type: 'folder' },
+        { name: 'groups/Pre-Schools Pirates/meal plan', type: 'folder' },
+        { name: 'groups/Teddy Bear Daycare/meal plan', type: 'folder' }
+      ]
+    })
+
+    // And "Alice" uploads the following resources
+    //   | resource          | to                                   |
+    //   | PARENT/parent.txt | groups/Kindergarten Koalas/meal plan |
+    //   | lorem.txt         | groups/Kindergarten Koalas/meal plan |
+    //   | lorem-big.txt     | groups/Kindergarten Koalas/meal plan |
+    //   | data.zip          | groups/Pre-Schools Pirates/meal plan |
+    //   | lorem.txt         | groups/Pre-Schools Pirates/meal plan |
+    //   | lorem-big.txt     | groups/Pre-Schools Pirates/meal plan |
+    //   | data.zip          | groups/Teddy Bear Daycare/meal plan  |
+    //   | lorem.txt         | groups/Teddy Bear Daycare/meal plan  |
+    //   | lorem-big.txt     | groups/Teddy Bear Daycare/meal plan  |
+    await ui.uploadResource({
+      actorsEnvironment,
+      filesEnvironment,
+      stepUser: 'Alice',
+      resources: [
+        { name: 'PARENT/parent.txt', to: 'groups/Kindergarten Koalas/meal plan' },
+        { name: 'lorem.txt', to: 'groups/Kindergarten Koalas/meal plan' },
+        { name: 'lorem-big.txt', to: 'groups/Kindergarten Koalas/meal plan' },
+        { name: 'data.zip', to: 'groups/Pre-Schools Pirates/meal plan' },
+        { name: 'lorem.txt', to: 'groups/Pre-Schools Pirates/meal plan' },
+        { name: 'lorem-big.txt', to: 'groups/Pre-Schools Pirates/meal plan' },
+        { name: 'data.zip', to: 'groups/Teddy Bear Daycare/meal plan' },
+        { name: 'lorem.txt', to: 'groups/Teddy Bear Daycare/meal plan' },
+        { name: 'lorem-big.txt', to: 'groups/Teddy Bear Daycare/meal plan' }
+      ]
+    })
+
+    // And "Alice" shares the following resources using the sidebar panel
+    //   | resource                                           | recipient | type  | role                   | resourceType |
+    //   | groups/Pre-Schools Pirates/meal plan               | Brian     | user  | Can edit with trashbin | folder       |
+    //   | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can edit with trashbin | folder       |
+    //   | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | sales     | group | Can view               | file         |
+    //   | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | Carol     | user  | Can view               | file         |
+    //   | groups/Kindergarten Koalas/meal plan               | sales     | group | Can view               | folder       |
+    //   | groups/Kindergarten Koalas/meal plan               | security  | group | Can edit with trashbin | folder       |
+    //   | groups/Kindergarten Koalas/meal plan/lorem.txt     | sales     | group | Can view               | file         |
+    //   | groups/Kindergarten Koalas/meal plan/lorem.txt     | security  | group | Can view               | file         |
+    //   | groups/Teddy Bear Daycare/meal plan                | Brian     | user  | Can edit with trashbin | folder       |
+    //   | groups/Teddy Bear Daycare/meal plan                | Carol     | user  | Can edit with trashbin | folder       |
+    //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Brian     | user  | Can edit with trashbin | file         |
+    //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit with trashbin | file         |
+    await ui.userSharesResources({
+      actorsEnvironment,
+      usersEnvironment,
+      actionType: 'SIDEBAR_PANEL',
+      stepUser: 'Alice',
+      shares: [
+        {
+          resource: 'groups/Pre-Schools Pirates/meal plan',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'groups/Pre-Schools Pirates/meal plan',
+          recipient: 'Carol',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'groups/Pre-Schools Pirates/meal plan/lorem-big.txt',
+          recipient: 'sales',
+          type: 'group',
+          role: 'Can view',
+          resourceType: 'file'
+        },
+        {
+          resource: 'groups/Pre-Schools Pirates/meal plan/lorem-big.txt',
+          recipient: 'Carol',
+          type: 'user',
+          role: 'Can view',
+          resourceType: 'file'
+        },
+        {
+          resource: 'groups/Kindergarten Koalas/meal plan',
+          recipient: 'sales',
+          type: 'group',
+          role: 'Can view',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'groups/Kindergarten Koalas/meal plan',
+          recipient: 'security',
+          type: 'group',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'groups/Kindergarten Koalas/meal plan/lorem.txt',
+          recipient: 'sales',
+          type: 'group',
+          role: 'Can view',
+          resourceType: 'file'
+        },
+        {
+          resource: 'groups/Kindergarten Koalas/meal plan/lorem.txt',
+          recipient: 'security',
+          type: 'group',
+          role: 'Can view',
+          resourceType: 'file'
+        },
+        {
+          resource: 'groups/Teddy Bear Daycare/meal plan',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'groups/Teddy Bear Daycare/meal plan',
+          recipient: 'Carol',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'groups/Teddy Bear Daycare/meal plan/data.zip',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'file'
+        },
+        {
+          resource: 'groups/Teddy Bear Daycare/meal plan/data.zip',
+          recipient: 'Carol',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'file'
+        }
+      ]
+    })
+
+    // # update share
+    // And "Alice" updates following sharee role
+    //   | resource                                           | recipient | type  | role                   | resourceType |
+    //   | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can view               | folder       |
+    //   | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | sales     | group | Can edit with trashbin | file         |
+    //   | groups/Kindergarten Koalas/meal plan               | sales     | group | Can edit with trashbin | folder       |
+    //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit with trashbin | file         |
+    await ui.updateShareeRole({
+      usersEnvironment,
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'groups/Pre-Schools Pirates/meal plan',
+      recipient: 'Carol',
+      type: 'user',
+      role: 'Can view',
+      resourceType: 'folder'
+    })
+    await ui.updateShareeRole({
+      usersEnvironment,
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'groups/Pre-Schools Pirates/meal plan/lorem-big.txt',
+      recipient: 'sales',
+      type: 'group',
+      role: 'Can edit with trashbin',
+      resourceType: 'file'
+    })
+    await ui.updateShareeRole({
+      usersEnvironment,
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'groups/Kindergarten Koalas/meal plan',
+      recipient: 'sales',
+      type: 'group',
+      role: 'Can edit with trashbin',
+      resourceType: 'folder'
+    })
+    await ui.updateShareeRole({
+      usersEnvironment,
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'groups/Teddy Bear Daycare/meal plan/data.zip',
+      recipient: 'Carol',
+      type: 'user',
+      role: 'Can edit with trashbin',
+      resourceType: 'file'
+    })
+    // Then what do we check for to be confident that the above things done by Alice have worked?
+    // When "Brian" logs in
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+
+    // And "Brian" navigates to the shared with me page
+    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+
+    // And "Brian" downloads the following resources using the sidebar panel
+    //   | resource | from      | type |
+    //   | data.zip | meal plan | file |
+    await ui.userDownloadsResource({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      resourceToDownload: [{ resource: 'data.zip', from: 'meal plan', type: 'file' }],
+      actionType: 'SIDEBAR_PANEL'
+    })
+
+    // Then what do we check for to be confident that the above things done by Brian have worked?
+    // Then the downloaded zip should contain... ?
+    // When "Carol" logs in
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Carol' })
+
+    // And "Carol" navigates to the shared with me page
+    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Carol' })
+    // And "Carol" downloads the following resources using the sidebar panel
+    //   | resource      | from      | type   |
+    //   | data.zip      | meal plan | file   |
+    //   | lorem.txt     | meal plan | file   |
+    //   | lorem-big.txt | meal plan | file   |
+    //   | meal plan     |           | folder |
+    // Then what do we check for to be confident that the above things done by Carol have worked?
+    // Then the downloaded files should have content "abc..."
+    await ui.userDownloadsResource({
+      actorsEnvironment,
+      stepUser: 'Carol',
+      resourceToDownload: [
+        { resource: 'data.zip', from: 'meal plan', type: 'file' },
+        { resource: 'lorem.txt', from: 'meal plan', type: 'file' },
+        { resource: 'lorem-big.txt', from: 'meal plan', type: 'file' },
+        { resource: 'meal plan', type: 'folder' }
+      ],
+      actionType: 'SIDEBAR_PANEL'
+    })
+    // And "Carol" logs out
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Carol' })
+
+    // When "Brian" downloads the following resources using the sidebar panel
+    //   | resource      | from      | type   |
+    //   | lorem.txt     | meal plan | file   |
+    //   | lorem-big.txt | meal plan | file   |
+    //   | meal plan     |           | folder |
+    // Then what do we check for to be confident that the above things done by Brian have worked?
+    // Then the downloaded files should have content "abc..."
+    await ui.userDownloadsResource({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      resourceToDownload: [
+        { resource: 'lorem.txt', from: 'meal plan', type: 'file' },
+        { resource: 'lorem-big.txt', from: 'meal plan', type: 'file' },
+        { resource: 'meal plan', type: 'folder' }
+      ],
+      actionType: 'SIDEBAR_PANEL'
+    })
+
+    // And "Brian" logs out
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    // And "Alice" downloads the following resources using the sidebar panel
+    //   | resource            | from                                 | type   |
+    //   | parent.txt          | groups/Kindergarten Koalas/meal plan | file   |
+    //   | lorem.txt           | groups/Kindergarten Koalas/meal plan | file   |
+    //   | lorem-big.txt       | groups/Kindergarten Koalas/meal plan | file   |
+    //   | data.zip            | groups/Pre-Schools Pirates/meal plan | file   |
+    //   | lorem.txt           | groups/Pre-Schools Pirates/meal plan | file   |
+    //   | lorem-big.txt       | groups/Pre-Schools Pirates/meal plan | file   |
+    //   | data.zip            | groups/Teddy Bear Daycare/meal plan  | file   |
+    //   | lorem.txt           | groups/Teddy Bear Daycare/meal plan  | file   |
+    //   | lorem-big.txt       | groups/Teddy Bear Daycare/meal plan  | file   |
+    //   | meal plan           | groups/Kindergarten Koalas           | folder |
+    //   | meal plan           | groups/Pre-Schools Pirates           | folder |
+    //   | meal plan           | groups/Teddy Bear Daycare            | folder |
+    //   | Kindergarten Koalas | groups                               | folder |
+    //   | Pre-Schools Pirates | groups                               | folder |
+    //   | Teddy Bear Daycare  | groups                               | folder |
+    //   | groups              |                                      | folder |
+    await ui.userDownloadsResource({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resourceToDownload: [
+        {
+          resource: 'parent.txt',
+          from: 'groups/Kindergarten Koalas/meal plan',
+          type: 'file'
+        },
+        {
+          resource: 'lorem.txt',
+          from: 'groups/Kindergarten Koalas/meal plan',
+          type: 'file'
+        },
+        {
+          resource: 'lorem-big.txt',
+          from: 'groups/Kindergarten Koalas/meal plan',
+          type: 'file'
+        },
+        {
+          resource: 'data.zip',
+          from: 'groups/Pre-Schools Pirates/meal plan',
+          type: 'file'
+        },
+        {
+          resource: 'lorem.txt',
+          from: 'groups/Pre-Schools Pirates/meal plan',
+          type: 'file'
+        },
+        {
+          resource: 'lorem-big.txt',
+          from: 'groups/Pre-Schools Pirates/meal plan',
+          type: 'file'
+        },
+        {
+          resource: 'data.zip',
+          from: 'groups/Teddy Bear Daycare/meal plan',
+          type: 'file'
+        },
+        {
+          resource: 'lorem.txt',
+          from: 'groups/Teddy Bear Daycare/meal plan',
+          type: 'file'
+        },
+        {
+          resource: 'lorem-big.txt',
+          from: 'groups/Teddy Bear Daycare/meal plan',
+          type: 'file'
+        },
+        {
+          resource: 'meal plan',
+          from: 'groups/Kindergarten Koalas',
+          type: 'folder'
+        },
+        {
+          resource: 'meal plan',
+          from: 'groups/Pre-Schools Pirates',
+          type: 'folder'
+        },
+        {
+          resource: 'meal plan',
+          from: 'groups/Teddy Bear Daycare',
+          type: 'folder'
+        },
+        {
+          resource: 'Kindergarten Koalas',
+          from: 'groups',
+          type: 'folder'
+        },
+        {
+          resource: 'Pre-Schools Pirates',
+          from: 'groups',
+          type: 'folder'
+        },
+        {
+          resource: 'Teddy Bear Daycare',
+          from: 'groups',
+          type: 'folder'
+        },
+        {
+          resource: 'groups',
+          type: 'folder'
+        }
+      ],
+      actionType: 'SIDEBAR_PANEL'
+    })
+    // And "Alice" deletes the following resources using the batch action
+    //   | resource            | from                                 |
+    //   | lorem.txt           | groups/Kindergarten Koalas/meal plan |
+    //   | lorem-big.txt       | groups/Kindergarten Koalas/meal plan |
+    //   | data.zip            | groups/Pre-Schools Pirates/meal plan |
+    //   | lorem.txt           | groups/Pre-Schools Pirates/meal plan |
+    //   | lorem-big.txt       | groups/Pre-Schools Pirates/meal plan |
+    //   | data.zip            | groups/Teddy Bear Daycare/meal plan  |
+    //   | lorem.txt           | groups/Teddy Bear Daycare/meal plan  |
+    //   | lorem-big.txt       | groups/Teddy Bear Daycare/meal plan  |
+    //   | Kindergarten Koalas | groups                               |
+    //   | Pre-Schools Pirates | groups                               |
+    //   | Teddy Bear Daycare  | groups                               |
+    // # Then what do we check for to be confident that the above things done by Alice have worked?
+    // # Then the downloaded files should have content "abc..."
+    await ui.userDeletesResources({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      actionType: 'SIDEBAR_PANEL',
+      resources: [
+        { name: 'lorem.txt', from: 'groups/Kindergarten Koalas/meal plan' },
+        { name: 'lorem-big.txt', from: 'groups/Kindergarten Koalas/meal plan' },
+        { name: 'data.zip', from: 'groups/Pre-Schools Pirates/meal plan' },
+        { name: 'lorem.txt', from: 'groups/Pre-Schools Pirates/meal plan' },
+        { name: 'lorem-big.txt', from: 'groups/Pre-Schools Pirates/meal plan' },
+        { name: 'data.zip', from: 'groups/Teddy Bear Daycare/meal plan' },
+        { name: 'lorem.txt', from: 'groups/Teddy Bear Daycare/meal plan' },
+        { name: 'lorem-big.txt', from: 'groups/Teddy Bear Daycare/meal plan' },
+        { name: 'Kindergarten Koalas', from: 'groups' },
+        { name: 'Pre-Schools Pirates', from: 'groups' },
+        { name: 'Teddy Bear Daycare', from: 'groups' }
+      ]
+    })
+    // And "Alice" logs out
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+  })
+})
