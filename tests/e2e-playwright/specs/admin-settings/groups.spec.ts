@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
@@ -28,8 +29,6 @@ test.describe('groups management', () => {
   })
 
   test.afterEach(async () => {
-    const admin = usersEnvironment.getUser({ key: 'Admin' })
-    await api.cleanUpGroup(admin)
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
   })
 
@@ -51,7 +50,7 @@ test.describe('groups management', () => {
   })
 
   test('admin deletes group', async () => {
-    await api.createGroups({
+    await api.groupsHaveBeenCreated({
       groupIds: ['sales', 'security', 'finance'],
       admin: usersEnvironment.getUser({ key: 'Admin' })
     })
@@ -89,7 +88,7 @@ test.describe('groups management', () => {
   })
 
   test('edit groups', async () => {
-    await api.createGroups({
+    await api.groupsHaveBeenCreated({
       groupIds: ['sales'],
       admin: usersEnvironment.getUser({ key: 'Admin' })
     })

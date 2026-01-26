@@ -387,7 +387,7 @@ export async function userHasAddedMembersToSpace({
   })
 }
 
-export const createGroups = async ({
+export const groupsHaveBeenCreated = async ({
   groupIds,
   admin
 }: {
