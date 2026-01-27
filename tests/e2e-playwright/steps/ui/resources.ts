@@ -1,6 +1,10 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
-import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
+import {
+  ActorsEnvironment,
+  FilesEnvironment,
+  SpacesEnvironment
+} from '../../../e2e/support/environment'
 import {
   ActionViaType,
   createResourceTypes,
@@ -8,9 +12,9 @@ import {
   searchFilter,
   shortcutType
 } from '../../../e2e/support/objects/app-files/resource/actions'
-import path from 'path'
-import { Public } from '../../../e2e/support/objects/app-files/page'
-import { Resource } from '../../../e2e/support/objects/app-files/resource'
+import { Public } from '../../../e2e/support/objects/app-files/page/public'
+import { Resource } from '../../../e2e/support/objects/app-files'
+
 
 export async function uploadResource({
   actorsEnvironment,
@@ -281,18 +285,113 @@ export async function getFilesList({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   return await resourceObject.getAllFiles()
 }
-export async function userCreatesShortcutForResource({
+
+export async function userCreatesSpaceFromFolderUsingContexMenu({
+  actorsEnvironment,
+  spacesEnvironment,
+  stepUser,
+  spaceName,
+  folderName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  spacesEnvironment: SpacesEnvironment
+  stepUser: string
+  spaceName: string
+  folderName: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const space = await resourceObject.createSpaceFromFolder({
+    folderName: folderName,
+    spaceName: spaceName
+  })
+  spacesEnvironment.createSpace({
+    key: space.name,
+    space: { name: space.name, id: space.id }
+  })
+}
+
+export async function userCreatesSpaceFromResourcesUsingContexMenu({
+  actorsEnvironment,
+  spacesEnvironment,
+  stepUser,
+  spaceName,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  spacesEnvironment: SpacesEnvironment
+  stepUser: string
+  spaceName: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const space = await resourceObject.createSpaceFromSelection({ resources, spaceName })
+  spacesEnvironment.createSpace({
+    key: space.name,
+    space: { name: space.name, id: space.id }
+  })
+}
+
+export async function userOpensFileInViewer({
   actorsEnvironment,
   stepUser,
   resource,
-  name,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  actionType: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openFileInViewer({
+    name: resource,
+    actionType: actionType as
+      | 'mediaviewer'
+      | 'pdfviewer'
+      | 'texteditor'
+      | 'Collabora'
+      | 'OnlyOffice'
+  })
+}
+
+export async function userEditsFile({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  content,
   type
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
-  name: string
+  content: string
+  type?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  await resourceObject.editResource({
+    name: resource,
+    type: type,
+    content: content
+  })
+}
+
+export async function userCreatesShortcut({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  type,
+  name
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
   type: string
+  name?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -309,69 +408,71 @@ export async function userDownloadsResource({
   stepUser,
   resource,
   type,
-  actionType,
   from
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
   type: string
-  actionType: ActionViaType
   from?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await processDownload(resourceObject, actionType, resource, from, type)
+  await processDownload(resource, type, from, resourceObject, 'sidebar panel')
 }
 
 export const processDownload = async (
-  pageObject: Public | Resource,
-  actionType: string,
   resource: string,
   type: string,
-  from?: string
+  from: string,
+  pageObject: Public | Resource,
+  actionType: string
 ) => {
+  let downloads, files, parentFolder
   const downloadedResources: string[] = []
+  let downloadInfo;
+  downloadInfo[from]=[{name:resource,type}]
 
-  console.log(from)
-  const files = [{ name: resource, type }]
-  console.log(files)
-  const parentFolder = from !== 'undefined' ? from : null
+  for (const folder of Object.keys(downloadInfo)) {
+    files = downloadInfo[folder]
+    parentFolder = folder !== 'undefined' ? folder : null
 
-  let via: ActionViaType = 'SINGLE_SHARE_VIEW'
-  switch (actionType) {
-    case 'batch action':
-      via = 'BATCH_ACTION'
-      break
-    case 'sidebar panel':
-      via = 'SIDEBAR_PANEL'
-      break
-    case 'preview topbar':
-      via = 'PREVIEW_TOPBAR'
-      break
-    default:
-      break
-  }
+    let via: ActionViaType = 'SINGLE_SHARE_VIEW'
+    switch (actionType) {
+      case 'batch action':
+        via = 'BATCH_ACTION'
+        break
+      case 'sidebar panel':
+        via = 'SIDEBAR_PANEL'
+        break
+      case 'preview topbar':
+        via = 'PREVIEW_TOPBAR'
+        break
+      default:
+        break
+    }
+    
 
-  const downloads = await pageObject.download({
-    folder: parentFolder,
-    resources: files,
-    via
-  })
+    downloads = await pageObject.download({
+      folder: parentFolder,
+      resources: files,
+      via
+    })
 
-  downloads.forEach((download) => {
-    const { name } = path.parse(download.suggestedFilename())
-    downloadedResources.push(name)
-  })
+    downloads.forEach((download) => {
+      const { name } = path.parse(download.suggestedFilename())
+      downloadedResources.push(name)
+    })
 
-  if (actionType === 'sidebar panel' || actionType === 'preview topbar') {
-    expect(downloads.length).toBe(files.length)
-    for (const resource of files) {
-      const fileOrFolderName = path.parse(resource.name).name
-      if (resource.type === 'file') {
-        expect(downloadedResources).toContain(fileOrFolderName)
-      } else {
-        expect(downloadedResources).toContain('download')
+    if (actionType === 'sidebar panel' || actionType === 'preview topbar') {
+      expect(downloads.length).toBe(files.length)
+      for (const resource of files) {
+        const fileOrFolderName = path.parse(resource.name).name
+        if (resource.type === 'file') {
+          expect(downloadedResources).toContain(fileOrFolderName)
+        } else {
+          expect(downloadedResources).toContain('download')
+        }
       }
     }
   }
@@ -396,20 +497,21 @@ export async function userOpensShortcut({
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.openShotcut({ name })
+  await resourceObject.openShotcut({ name: name })
 }
-export async function userCanOpenShortcutWithExternalUrl({
+
+export async function userOpensShortcutWithExternalUrl({
   actorsEnvironment,
   stepUser,
-  name,
-  url
+  url,
+  name
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  name: string
   url: string
+  name: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.openShotcut({ name, url })
+  await resourceObject.openShotcut({ name: name, url: url })
 }

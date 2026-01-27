@@ -2,6 +2,7 @@ import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, LinksEnvironment } from '../../../e2e/support/environment'
 import { editor } from '../../../e2e/support/objects/app-files/utils'
 import { substitute } from '../../../e2e/support/utils'
+import { expect } from '@playwright/test'
 
 export async function openPublicLink({
   actorsEnvironment,
@@ -61,7 +62,7 @@ export async function anonymousUserOpensPublicLink({
   await pageObject.open({ url })
 }
 
-export async function userUnlocksPublicLink({
+export async function anonymousUserUnlocksPublicLink({
   actorsEnvironment,
   stepUser,
   password
@@ -73,4 +74,18 @@ export async function userUnlocksPublicLink({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await pageObject.authenticate({ password: substitute(password) })
+}
+
+export async function userIsInFileViewer({
+  actorsEnvironment,
+  stepUser,
+  fileViewerType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  fileViewerType: 'text-editor'|'pdf-viewer'|'media-viewer'
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType })
+  await expect(fileViewerLocator).toBeVisible()
 }
