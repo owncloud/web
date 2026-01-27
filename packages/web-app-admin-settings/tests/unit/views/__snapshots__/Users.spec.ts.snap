@@ -96,7 +96,7 @@ exports[`Users view > list view > renders list initially 1`] = `
             <thead class="oc-thead">
               <tr class="oc-table-header-row">
                 <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-select oc-pl-s" style="top: 0px;">
-                  <div><span class="oc-table-thead-content"><!-- TODO: check whether we really need the click here --> <!-- eslint-disable vuejs-accessibility/no-static-element-interactions --> <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events --> <span><!-- eslint-enable vuejs-accessibility/no-static-element-interactions --> <input id="oc-checkbox-1" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l"> <label for="oc-checkbox-1" class="oc-cursor-pointer oc-invisible-sr">Select all users</label></span></span></div>
+                  <div><span class="oc-table-thead-content"><span class="oc-ml-s"><input id="oc-checkbox-1" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l"> <label for="oc-checkbox-1" class="oc-cursor-pointer oc-invisible-sr">Select all users</label></span></span></div>
                 </th>
                 <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-avatar" style="top: 0px;">
                   <div><span class="oc-table-thead-content header-text oc-invisible-sr" aria-hidden="true"></span></div>
@@ -123,11 +123,7 @@ exports[`Users view > list view > renders list initially 1`] = `
             </thead>
             <tbody class="has-item-context-menu">
               <tr class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false">
-                <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-select oc-pl-s">
-                  <!-- TODO: check whether we really need the click here -->
-                  <!-- eslint-disable vuejs-accessibility/no-static-element-interactions -->
-                  <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events --> <span><!-- eslint-enable vuejs-accessibility/no-static-element-interactions --> <input id="oc-checkbox-2" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" aria-label="Select Admin" value="[object Object]"> <!--v-if--></span>
-                </td>
+                <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-select oc-pl-s"><span class="oc-ml-s"><input id="oc-checkbox-2" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" aria-label="Select Admin" value="[object Object]"> <!--v-if--></span></td>
                 <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-avatar">
                   <avatar-image width="32" userid="1" user-name="Admin"></avatar-image>
                 </td>
