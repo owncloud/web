@@ -4,11 +4,13 @@ import {
   UsersEnvironment,
   SpacesEnvironment
 } from '../../../e2e/support/environment'
-import { api } from '../../../e2e/support'
+import { api, store } from '../../../e2e/support'
 import { ResourceType } from '../../../e2e/support/api/share/share'
-import { Space } from '../../../e2e/support/types'
+import { Group, Space, User } from '../../../e2e/support/types'
 import fs from 'fs'
 import { integer } from 'vscode-languageserver-types'
+import join from 'join-path'
+import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 
 export async function userHasBeenCreated({
   usersEnvironment,
@@ -383,4 +385,50 @@ export async function userHasAddedMembersToSpace({
     shareWith: sharee,
     role: role
   })
+}
+
+export const groupsHaveBeenCreated = async ({
+  groupIds,
+  admin
+}: {
+  groupIds: string[]
+  admin: User
+}): Promise<Group[]> => {
+  const usersEnvironment = new UsersEnvironment()
+  const createdGroups: Group[] = []
+  for (const id of groupIds) {
+    const group = usersEnvironment.getGroup({ key: id })
+    const body = JSON.stringify({
+      displayName: group.displayName
+    })
+
+    const response = await request({
+      method: 'POST',
+      path: join('graph', 'v1.0', 'groups'),
+      body,
+      user: admin
+    })
+
+    checkResponseStatus(response, 'Failed while creating group')
+
+    const resBody = (await response.json()) as Group
+    usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: resBody.id } })
+    createdGroups.push({ ...group, uuid: resBody.id })
+  }
+  return createdGroups
+}
+
+export const cleanUpGroup = async (adminUser: User) => {
+  if (config.predefinedUsers) {
+    return
+  }
+  const requests: Promise<Group>[] = []
+  store.createdGroupStore.forEach((group) => {
+    if (!group.id.startsWith('keycloak')) {
+      requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
+    }
+  })
+
+  await Promise.all(requests)
+  store.createdGroupStore.clear()
 }

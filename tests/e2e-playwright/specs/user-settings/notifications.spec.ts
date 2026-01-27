@@ -240,7 +240,7 @@ test.describe('Notifications', () => {
     expect(messages).toContain(substitute('%user_alice_displayName% removed you from Space team'))
 
     // When "Alice" opens the "admin-settings" app
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
 
     // And "Alice" navigates to the project spaces management page
     await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
@@ -422,7 +422,7 @@ test.describe('Notifications', () => {
     expect(messages).toHaveLength(0)
 
     // When "Alice" opens the "admin-settings" app
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
 
     // And "Alice" navigates to the project spaces management page
     await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })

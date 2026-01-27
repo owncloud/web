@@ -32,7 +32,7 @@ test.describe('general management', () => {
   })
 
   test('logo can be changed in the admin settings', async () => {
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
     await ui.navigateToGeneralManagementPage({ actorsEnvironment, stepUser: 'Admin' })
     await ui.uploadLogoFromLocalPath({
       actorsEnvironment,
