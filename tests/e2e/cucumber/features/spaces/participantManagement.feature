@@ -25,11 +25,11 @@ Feature: spaces participant management
       | team | team.1 |
     And "Alice" navigates to the project space "team.1"
     And "Alice" adds following users to the project space
-      | user     | role     | kind  |
-      | Brian    | Can edit | user  |
-      | Carol    | Can view | user  |
-      | sales    | Can view | group |
-      | security | Can edit | group |
+      | user     | role                                | kind  |
+      | Brian    | Can edit with versions and trashbin | user  |
+      | Carol    | Can view                            | user  |
+      | sales    | Can view                            | group |
+      | security | Can edit with versions and trashbin | group |
     When "Brian" logs in
     And "Brian" navigates to the project space "team.1"
     And "Brian" creates the following resources

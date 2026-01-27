@@ -25,10 +25,10 @@ Feature: Download
       | localFile                     | to             |
       | filesForUpload/testavatar.jpg | testavatar.jpg |
     And "Alice" shares the following resource using API
-      | resource       | recipient | type | role     | resourceType |
-      | folderPublic   | Brian     | user | Can edit | folder       |
-      | emptyFolder    | Brian     | user | Can edit | folder       |
-      | testavatar.jpg | Brian     | user | Can edit | file         |
+      | resource       | recipient | type | role                                | resourceType |
+      | folderPublic   | Brian     | user | Can edit with versions and trashbin | folder       |
+      | emptyFolder    | Brian     | user | Can edit with versions and trashbin | folder       |
+      | testavatar.jpg | Brian     | user | Can edit with versions and trashbin | file         |
 
     When "Alice" downloads the following resources using the batch action
       | resource       | type   |

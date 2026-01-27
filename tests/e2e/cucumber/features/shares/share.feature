@@ -20,10 +20,10 @@ Feature: share
       | lorem.txt     | folder_to_shared   |
       | lorem-big.txt | folder_to_shared_2 |
     When "Alice" shares the following resource using the sidebar panel
-      | resource           | recipient | type | role                      | resourceType |
-      | folder_to_shared   | Brian     | user | Can edit without versions | folder       |
-      | shared_folder      | Brian     | user | Can edit without versions | folder       |
-      | folder_to_shared_2 | Brian     | user | Can edit without versions | folder       |
+      | resource           | recipient | type | role                   | resourceType |
+      | folder_to_shared   | Brian     | user | Can edit with trashbin | folder       |
+      | shared_folder      | Brian     | user | Can edit with trashbin | folder       |
+      | folder_to_shared_2 | Brian     | user | Can edit with trashbin | folder       |
 
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder_to_shared"
@@ -93,12 +93,12 @@ Feature: share
       | simple.pdf      |
       | testavatar.jpeg |
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role                      | resourceType |
-      | shareToBrian.txt | Brian     | user | Can edit without versions | file         |
-      | shareToBrian.md  | Brian     | user | Can edit without versions | file         |
-      | testavatar.jpeg  | Brian     | user | Can view                  | file         |
-      | simple.pdf       | Brian     | user | Can edit without versions | file         |
-      | sharedFile.txt   | Brian     | user | Can edit without versions | file         |
+      | resource         | recipient | type | role                   | resourceType |
+      | shareToBrian.txt | Brian     | user | Can edit with trashbin | file         |
+      | shareToBrian.md  | Brian     | user | Can edit with trashbin | file         |
+      | testavatar.jpeg  | Brian     | user | Can view               | file         |
+      | simple.pdf       | Brian     | user | Can edit with trashbin | file         |
+      | sharedFile.txt   | Brian     | user | Can edit with trashbin | file         |
     And "Alice" navigates to the shared with others page
     And "Alice" opens the following file in mediaviewer
       | resource        |
@@ -158,10 +158,10 @@ Feature: share
       | mainFolder/lorem.txt | lorem epsum  |
     And "Alice" logs in
     When "Alice" shares the following resource using the sidebar panel
-      | resource   | recipient | type  | role                      | resourceType | expirationDate |
-      | new.txt    | Brian     | user  | Can edit without versions | file         | +5 days        |
-      | myfolder   | sales     | group | Can view                  | folder       | +10 days       |
-      | mainFolder | Brian     | user  | Can edit without versions | folder       |                |
+      | resource   | recipient | type  | role                   | resourceType | expirationDate |
+      | new.txt    | Brian     | user  | Can edit with trashbin | file         | +5 days        |
+      | myfolder   | sales     | group | Can view               | folder       | +10 days       |
+      | mainFolder | Brian     | user  | Can edit with trashbin | folder       |                |
 
     # set expirationDate to existing share
     And "Alice" sets the expiration date of share "mainFolder" of user "Brian" to "+5 days"
@@ -233,9 +233,9 @@ Feature: share
       | testfile.txt             | example text |
       | test-folder/testfile.txt | some text    |
     And "Alice" shares the following resource using API
-      | resource                 | recipient | type | role                      | resourceType |
-      | testfile.txt             | Brian     | user | Can edit without versions | file         |
-      | test-folder/testfile.txt | Brian     | user | Can edit without versions | file         |
+      | resource                 | recipient | type | role                   | resourceType |
+      | testfile.txt             | Brian     | user | Can edit with trashbin | file         |
+      | test-folder/testfile.txt | Brian     | user | Can edit with trashbin | file         |
     And "Brian" logs out
     When "Alice" navigates to the shared with others page
     Then following resources should be displayed in the files list for user "Alice"
@@ -250,8 +250,8 @@ Feature: share
       | name                  |
       | shareFolder/subFolder |
     And "Alice" shares the following resource using API
-      | resource    | recipient | type | role                      | resourceType |
-      | shareFolder | Brian     | user | Can edit without versions | folder       |
+      | resource    | recipient | type | role                   | resourceType |
+      | shareFolder | Brian     | user | Can edit with trashbin | folder       |
     And "Alice" logs in
     Then "Alice" should see user-direct indicator on the folder "shareFolder"
     When "Alice" opens folder "shareFolder"

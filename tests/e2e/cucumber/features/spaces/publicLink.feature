@@ -22,10 +22,10 @@ Feature: spaces public link
       | spaceFolder/shareToBrian.txt          | some text |
       | spaceFolder/subFolder/shareToBrian.md | readme    |
     And "Alice" adds the following members to the space "team" using API
-      | user  | role       | shareType |
-      | Brian | Can edit   | user      |
-      | Carol | Can view   | user      |
-      | David | Can manage | user      |
+      | user  | role                                | shareType |
+      | Brian | Can edit with versions and trashbin | user      |
+      | Carol | Can view                            | user      |
+      | David | Can manage                          | user      |
     And "Alice" navigates to the project space "team.1"
     And "Alice" uploads the following resources via drag-n-drop
       | resource       |

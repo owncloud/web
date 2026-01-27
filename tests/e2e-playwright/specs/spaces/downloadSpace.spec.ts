@@ -103,7 +103,7 @@ test.describe('download space', () => {
       usersEnvironment,
       stepUser: 'Alice',
       sharee: 'Brian',
-      role: 'Can edit',
+      role: 'Can edit with versions and trashbin',
       kind: 'user'
     })
 

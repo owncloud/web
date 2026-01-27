@@ -37,7 +37,7 @@ export const shareRoles: Readonly<{
   'Can manage': string
   'Can edit': string
   'Can edit with versions and trashbin': string
-  'Can edit without versions': string
+  'Can edit with trashbin': string
   'Can view': string
   'Secret File Drop': string
   'Cannot access': string
@@ -48,7 +48,7 @@ export const shareRoles: Readonly<{
   'Can manage': 'manager',
   'Can edit': 'editor',
   'Can edit with versions and trashbin': 'editor',
-  'Can edit without versions': 'editor',
+  'Can edit with trashbin': 'editor',
   'Can view': 'viewer',
   'Secret File Drop': 'uploader',
   'Cannot access': 'denied',
@@ -60,14 +60,14 @@ export const linkShareRoles: Readonly<{
   'Can view': string
   'Can upload': string
   'Can edit': string
-  'Can edit without versions': string
+  'Can edit with trashbin': string
   'Secret File Drop': string
 }> = {
   'Invited people': 'internal',
   'Can view': 'view',
   'Can upload': 'upload',
   'Can edit': 'edit',
-  'Can edit without versions': 'edit',
+  'Can edit with trashbin': 'edit',
   'Secret File Drop': 'createOnly'
 } as const
 
@@ -125,9 +125,9 @@ const getRecipientId = (shareType: string, shareWith: string): string => {
 const dynamicRoles = {}
 const requiredDynamicRoles = [
   'Can view',
-  'Can edit',
+  'Can edit with versions and trashbin',
   'Can edit (file)',
-  'Can edit without versions',
+  'Can edit with trashbin',
   'Can edit without versions (file)'
 ]
 
@@ -140,7 +140,10 @@ export const getDynamicRoleIdByName = async (
     return getRoleId(roleName, resourceType)
   }
 
-  if (resourceType === 'file' && ['Can edit', 'Can edit without versions'].includes(roleName)) {
+  if (
+    resourceType === 'file' &&
+    ['Can edit with versions and trashbin', 'Can edit with trashbin'].includes(roleName)
+  ) {
     roleName = `${roleName} (file)`
   } else if (resourceType === 'space' && !['Can manage'].includes(roleName)) {
     roleName = `${roleName} (space)`

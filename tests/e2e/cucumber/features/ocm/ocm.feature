@@ -40,8 +40,8 @@ Feature: federation management
     And "Alice" opens the "files" app
     And "Alice" shares the following resource using the sidebar panel
       | resource       | recipient | type | role                      | resourceType | shareType |
-      | folderPublic   | Brian     | user | Can edit without versions | folder       | external  |
-      | sampleGif.gif  | Brian     | user | Can edit without versions | file         | external  |
+      | folderPublic   | Brian     | user | Can edit with trashbin | folder       | external  |
+      | sampleGif.gif  | Brian     | user | Can edit with trashbin | file         | external  |
       | testavatar.jpg | Brian     | user | Can view                  | file         | external  |
     And "Alice" checks the following access details of share "folderPublic" for user "Brian"
       | Name   | Brian Murphy |

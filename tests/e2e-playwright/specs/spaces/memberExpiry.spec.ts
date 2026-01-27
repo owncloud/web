@@ -85,7 +85,7 @@ test.describe('spaces member expiry', () => {
       usersEnvironment,
       stepUser: 'Alice',
       sharee: 'Brian',
-      role: 'Can edit',
+      role: 'Can edit with versions and trashbin',
       kind: 'user'
     })
 
