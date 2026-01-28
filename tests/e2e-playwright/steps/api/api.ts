@@ -9,7 +9,7 @@ import { ResourceType } from '../../../e2e/support/api/share/share'
 import { Group, Space, User } from '../../../e2e/support/types'
 import fs from 'fs'
 import { integer } from 'vscode-languageserver-types'
-import join from 'join-path'
+import join from 'path'
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 
 export async function userHasBeenCreated({
@@ -431,4 +431,19 @@ export const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   store.createdGroupStore.clear()
+}
+
+export async function userHasAddedTagsToResource({
+  usersEnvironment,
+  stepUser,
+  resource,
+  tags
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  tags: string
+}): Promise<void> {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.dav.addTagToResource({ user, resource, tags })
 }
