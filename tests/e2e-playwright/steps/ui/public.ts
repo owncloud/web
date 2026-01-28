@@ -1,5 +1,6 @@
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, LinksEnvironment } from '../../../e2e/support/environment'
+import { editor } from '../../../e2e/support/objects/app-files/utils'
 import { substitute } from '../../../e2e/support/utils'
 
 export async function openPublicLink({
@@ -72,4 +73,15 @@ export async function anonymousUserUnlocksPublicLink({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await pageObject.authenticate({ password: substitute(password) })
+}
+
+export async function userClosesFileViewer({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  await editor.close(page)
 }
