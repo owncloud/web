@@ -1,4 +1,5 @@
 import { Locator, Page } from '@playwright/test'
+import { objects } from '../../..'
 
 const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const saveTextEditorOrViewerButton = '#app-save-action'
@@ -11,6 +12,7 @@ export const close = async (page: Page): Promise<void> => {
     page.waitForURL(/.*\/files\/(spaces|shares|link|search)\/.*/),
     page.locator(closeTextEditorOrViewerButton).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['body'], 'Personal Page')
 }
 
 export const save = async (page: Page): Promise<void> => {
@@ -19,6 +21,11 @@ export const save = async (page: Page): Promise<void> => {
     page.waitForResponse((res) => res.request().method() === 'PROPFIND' && res.status() === 207),
     page.locator(saveTextEditorOrViewerButton).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['saveTextEditorOrViewerButton'],
+    'Text editor Save button is disabled after saving'
+  )
 }
 
 export const fileViewerLocator = ({
