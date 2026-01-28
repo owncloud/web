@@ -50,7 +50,11 @@ export const getDisplayedGroupsIds = async (args: { page: Page }): Promise<strin
   const { page } = args
   const groups = []
   const result = page.locator(groupTrSelector)
-
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['adminSettingsWrapper'],
+    'group page'
+  )
   const count = await result.count()
   for (let i = 0; i < count; i++) {
     groups.push(await result.nth(i).getAttribute('data-item-id'))
@@ -99,8 +103,8 @@ export const deleteGroupUsingContextMenu = async (args: {
   await page.locator(util.format(groupIdSelector, uuid)).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
-    ['contextMenuContainer'],
-    'delete group modal'
+    ['tippbBox'],
+    'group contex menu'
   )
   await page.locator(deleteBtnContextMenu).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
@@ -131,6 +135,11 @@ export const deleteGrouprUsingBatchAction = async (args: {
   groupIds: string[]
 }): Promise<void> => {
   const { page, groupIds } = args
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['adminSettingAppBar'],
+    'admin setting app bar'
+  )
   await page.locator(deleteBtnBatchAction).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
@@ -149,7 +158,11 @@ export const deleteGrouprUsingBatchAction = async (args: {
       )
     )
   }
-
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'group delete modal'
+  )
   await Promise.all([...checkResponses, page.locator(actionConfirmButton).click()])
 
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
@@ -184,8 +197,8 @@ export const changeGroup = async (args: {
   ])
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
-    ['groupList', 'editPanel'],
-    `body after changing group ${attribute}`
+    ['appSidebar'],
+    'group contex menu'
   )
 }
 
@@ -208,8 +221,8 @@ export const openEditPanel = async (args: {
       await page.locator(util.format(groupIdSelector, uuid)).click()
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
-        ['contextMenuContainer'],
-        'Edit group modal'
+        ['tippbBox'],
+        'group contex menu'
       )
       await page.locator(editActionBtnContextMenu).click()
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
@@ -230,4 +243,9 @@ export const openEditPanel = async (args: {
     default:
       throw new Error(`${action} not implemented`)
   }
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['appSidebar'],
+    'group contex menu'
+  )
 }

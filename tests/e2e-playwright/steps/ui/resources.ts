@@ -327,3 +327,50 @@ export async function userCreatesSpaceFromResourcesUsingContexMenu({
     space: { name: space.name, id: space.id }
   })
 }
+
+export async function userOpensFileInViewer({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  actionType: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openFileInViewer({
+    name: resource,
+    actionType: actionType as
+      | 'mediaviewer'
+      | 'pdfviewer'
+      | 'texteditor'
+      | 'Collabora'
+      | 'OnlyOffice'
+  })
+}
+
+export async function userEditsFile({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  content,
+  type
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  content: string
+  type?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  await resourceObject.editResource({
+    name: resource,
+    type: type,
+    content: content
+  })
+}
