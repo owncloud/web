@@ -117,7 +117,7 @@ export async function userHasQuota({
   return actualQuota === quota
 }
 
-export async function changeQuotaForUsersUsingBatchAction({
+export async function userChangesQuotaForUsersUsingBatchAction({
   actorsEnvironment,
   stepUser,
   value,
