@@ -102,7 +102,7 @@ test.describe('download space', () => {
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
-      sharee: 'team.1',
+      sharee: 'Brian',
       role: 'Can edit',
       kind: 'user'
     })

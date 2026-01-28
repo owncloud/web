@@ -205,7 +205,7 @@ config = {
         },
         "oidc-iframe": {
             "skip": False,
-            "feature": [
+            "features": [
                 "specs/oidc/iframeTokenRenewal.spec.ts",
             ],
             "extraServerEnvironment": {
@@ -718,6 +718,7 @@ def e2eTestsOnPlaywright(ctx):
             "type": "docker",
             "name": "e2e-pw-%s" % suite,
             "workspace": web_workspace,
+            "environment": environment,
             "steps": steps,
             "depends_on": ["cache-ocis"],
             "trigger": base_trigger,

@@ -40,7 +40,7 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" creates 15 folders in personal space using API
-    for (let i = 0; i < 15; i++) {
+    for (let i = 1; i <= 15; i++) {
       await api.userHasCreatedFolder({
         usersEnvironment,
         stepUser: 'Alice',
@@ -48,11 +48,12 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
       })
     }
     // And "Alice" creates 10 files in personal space using API
-    for (let i = 0; i < 15; i++) {
+    for (let i = 1; i <= 10; i++) {
       await api.userHasCreatedFile({
         usersEnvironment,
         stepUser: 'Alice',
-        filename: `file${i}`
+        filename: `file${i}`,
+        content: `This is a test file${i}`
       })
     }
     // And "Alice" creates the following files into personal space using API
@@ -91,7 +92,7 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
       expectedNumberOfResources: 6
     })
     // When "Alice" changes the items per page to "500"
-    await ui.changeItemsPerPage({ actorsEnvironment, stepUser: 'Alice', itemsPerPage: '20' })
+    await ui.changeItemsPerPage({ actorsEnvironment, stepUser: 'Alice', itemsPerPage: '500' })
 
     // Then "Alice" should not see the pagination in the personal space files view
     await ui.expectPageNumberNotToBeVisible({ actorsEnvironment, stepUser: 'Alice' })

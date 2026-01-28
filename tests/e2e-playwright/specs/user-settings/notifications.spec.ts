@@ -271,7 +271,7 @@ test.describe('Notifications', () => {
     //   | message                         |
     //   | %user_alice_displayName% deleted Space team |
     messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
-    expect(messages).toContain(substitute('%user_alice_displayName% delete Space team'))
+    expect(messages).toContain(substitute('%user_alice_displayName% deleted Space team'))
 
     await api.userHasDeletedGroup({ usersEnvironment, stepUser: 'Admin', name: 'sales' })
   })
@@ -298,7 +298,7 @@ test.describe('Notifications', () => {
     })
 
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" opens the user menu
     await ui.userOpensAccountPage({ actorsEnvironment, stepUser: 'Brian' })
@@ -444,7 +444,7 @@ test.describe('Notifications', () => {
     })
 
     // Then "Carol" should see no notifications
-    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Coral' })
+    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Carol' })
     expect(messages).toHaveLength(0)
   })
 })

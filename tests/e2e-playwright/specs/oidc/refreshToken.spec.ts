@@ -27,6 +27,7 @@ test.describe('details', () => {
   })
 
   test.afterEach(async () => {
+    await setAccessAndRefreshToken(usersEnvironment)
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
