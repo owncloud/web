@@ -9,8 +9,8 @@ import { ResourceType } from '../../../e2e/support/api/share/share'
 import { Group, Space, User } from '../../../e2e/support/types'
 import fs from 'fs'
 import { integer } from 'vscode-languageserver-types'
-import join from 'join-path'
-import { checkResponseStatus, request } from '../../../e2e/support/api/http'
+import { checkResponseStatus, request } from '../../../e2e/support/api/http.js'
+import { join } from 'path'
 
 export async function userHasBeenCreated({
   usersEnvironment,
