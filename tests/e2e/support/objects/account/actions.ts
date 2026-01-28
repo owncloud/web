@@ -20,6 +20,11 @@ export const getQuotaValue = async (args: { page: Page }): Promise<string> => {
   const { page } = args
   await page.reload()
   await page.locator(accountMenuButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['accountInfoContainer'],
+    'account info modal'
+  )
   const quotaText = await page.locator(quotaValue).textContent()
   await page.locator(quotaValue).click()
 
