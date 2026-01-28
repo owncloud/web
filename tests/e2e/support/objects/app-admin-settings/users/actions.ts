@@ -12,8 +12,8 @@ const closeEditPanel = '.sidebar-panel__header .header__close'
 const deleteActionBtn = '.oc-users-actions-delete-trigger'
 const loginDropDown = '.vs__dropdown-menu'
 const dropdownOption = '.vs__dropdown-option'
-const loginInput = '#login-input'
-const compareDialogConfirm = '.compare-save-dialog-confirm-btn'
+const loginToggleWithDropdown = '.vs__dropdown-toggle[aria-label="Login - Search for option"]' // login toggle dropdown selector with dropdown icon
+const compareDialogConfirmButton = '.compare-save-dialog-confirm-btn'
 const addToGroupsBatchAction = '.oc-users-actions-add-to-groups-trigger'
 const removeFromGroupsBatchAction = '.oc-users-actions-remove-from-groups-trigger'
 const groupsModalInput = '.oc-modal .vs__search'
@@ -76,14 +76,31 @@ export const changeAccountEnabled = async (args: {
   value: boolean
 }): Promise<void> => {
   const { page, value, uuid } = args
-  await page.locator(loginInput).waitFor()
-  await page.locator(loginInput).click()
+  await page.locator(loginToggleWithDropdown).waitFor()
+  await page.locator(loginToggleWithDropdown).click()
   await page.locator(loginDropDown).waitFor()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['loginToggleWithDropdownIcon', 'loginDropDown'],
+    'login dropdown to change account enabled status'
+  )
 
   await page
     .locator(dropdownOption)
     .getByText(value === false ? 'Forbidden' : 'Allowed')
     .click()
+
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['loginToggleWithDropdownIcon'],
+    'login toggle after changing account enabled status'
+  )
+
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['compareSaveDialog'],
+    'compare save dialog after changing account enabled status'
+  )
 
   await Promise.all([
     page.waitForResponse(
@@ -92,8 +109,18 @@ export const changeAccountEnabled = async (args: {
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
     ),
-    page.locator(compareDialogConfirm).click()
+    page.locator(compareDialogConfirmButton).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['compareSaveDialog'],
+    'compare save dialog after changing account enabled status'
+  )
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    [`[data-item-id="${uuid}"]`],
+    `user table row for UUID ${uuid} after changing account enabled status`
+  )
 }
 
 export const changeQuota = async (args: {
@@ -103,8 +130,22 @@ export const changeQuota = async (args: {
 }): Promise<void> => {
   const { page, value, uuid } = args
   await page.locator(quotaInput).pressSequentially(value)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['personalQuotaToggleWithDropdown', 'quotaValueDropDown'],
+    'quota dropdown to change quota value'
+  )
   await page.locator(quotaValueDropDown).first().click()
-
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['personalQuotaToggleWithDropdown'],
+    'quota toggle after changing quota value'
+  )
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['compareSaveDialog'],
+    'compare save dialog after changing quota value'
+  )
   await Promise.all([
     page.waitForResponse(
       (resp) =>
@@ -112,8 +153,13 @@ export const changeQuota = async (args: {
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
     ),
-    page.locator(compareDialogConfirm).click()
+    page.locator(compareDialogConfirmButton).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['compareSaveDialog'],
+    'compare save dialog after changing quota value'
+  )
 }
 
 export const changeQuotaUsingBatchAction = async (args: {
@@ -123,7 +169,23 @@ export const changeQuotaUsingBatchAction = async (args: {
 }): Promise<void> => {
   const { page, value, userIds } = args
   await page.locator(editQuotaBtn).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['oc-modal'],
+    'quota edit modal'
+  )
   await page.locator(quotaInputBatchAction).pressSequentially(value, { delay: 100 })
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['batchQuotaToggleWithDropdown', 'quotaValueDropDown'],
+    'quota dropdown to change quota value in batch action'
+  )
+  await page.locator(quotaValueDropDown).first().click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['batchQuotaToggleWithDropdown'],
+    'quota toggle after changing quota value in batch action'
+  )
   await page.locator(quotaInputBatchAction).press('Enter')
 
   const checkResponses = []
@@ -139,6 +201,12 @@ export const changeQuotaUsingBatchAction = async (args: {
   }
 
   await Promise.all([...checkResponses, page.locator(actionConfirmButton).click()])
+
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['body'],
+    'body after changing quota value in batch action'
+  )
 }
 
 export const getDisplayedUsers = async (args: { page: Page }): Promise<string[]> => {
@@ -285,7 +353,7 @@ export const changeUser = async (args: {
           resp.status() === 201 &&
           resp.request().method() === 'POST'
       ),
-      page.locator(compareDialogConfirm).click()
+      page.locator(compareDialogConfirmButton).click()
     ])
   }
 
@@ -296,7 +364,7 @@ export const changeUser = async (args: {
         resp.status() === 200 &&
         resp.request().method() === 'PATCH'
     ),
-    page.locator(compareDialogConfirm).click()
+    page.locator(compareDialogConfirmButton).click()
   ])
 }
 
@@ -331,7 +399,7 @@ export const addUserToGroups = async (args: {
     )
   }
 
-  await Promise.all([...checkResponses, page.locator(compareDialogConfirm).click()])
+  await Promise.all([...checkResponses, page.locator(compareDialogConfirmButton).click()])
 }
 
 export const removeUserFromGroups = async (args: {
@@ -362,7 +430,7 @@ export const removeUserFromGroups = async (args: {
     )
   }
 
-  await Promise.all([...checkResponses, page.locator(compareDialogConfirm).click()])
+  await Promise.all([...checkResponses, page.locator(compareDialogConfirmButton).click()])
 }
 
 export const openEditPanel = async (args: {
@@ -379,14 +447,24 @@ export const openEditPanel = async (args: {
       await page.locator(util.format(userIdSelector, uuid)).click()
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
-        ['tippyBox'],
-        'account page'
+        ['tippyBoxVisible'],
+        'user context menu'
       )
       await page.locator(editActionBtnContextMenu).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['edit'],
+        'user edit modal'
+      )
       break
     case 'quick-action':
       await selectUser({ page, uuid })
       await page.locator(util.format(editActionBtnQuickActions, uuid)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['edit'],
+        'user edit modal'
+      )
       break
     default:
       throw new Error(`${action} not implemented`)
