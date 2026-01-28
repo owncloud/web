@@ -49,6 +49,7 @@ export class DAV {
     this.headers = headers
     this.extraProps = []
     this.#onSetMaintenance = onSetMaintenance
+    this.remoteBasePath = remoteBasePath
   }
 
   public mkcol(path: string, opts: DAVRequestOptions = {}) {
