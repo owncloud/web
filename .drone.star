@@ -642,7 +642,20 @@ def e2eTestsOnPlaywright(ctx):
             steps += filterTestSuitesToRun(ctx, params["features"])
         else:
             print("Error: No suites or features defined for e2e test suite '%s'" % suite)
-            return []
+            pipelines.append({
+                "kind": "pipeline",
+                "type": "docker",
+                "name": "invalid-suite-%s" % suite,
+                "steps": [{
+                    "name": "invalid-suite",
+                    "image": OC_CI_ALPINE_IMAGE,
+                    "commands": [
+                        "echo \"Error: No suites or features defined for e2e test suite '%s'\"" % suite,
+                        "exit 1",
+                    ],
+                }],
+                "trigger": base_trigger,
+            })
 
         steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                  installPnpm() + \
@@ -657,10 +670,10 @@ def e2eTestsOnPlaywright(ctx):
         if "keycloak" in suite:
             environment["KEYCLOAK"] = "true"
             environment["KEYCLOAK_HOST"] = "keycloak:8443"
-            e2e_volumes += [{
+            e2e_volumes.append({
                 "name": "certs",
                 "temp": {},
-            }]
+            })
             steps += keycloakService()
             services += postgresService()
 
@@ -683,7 +696,7 @@ def e2eTestsOnPlaywright(ctx):
             steps += (tikaService() if params["tikaNeeded"] else []) + \
                      ocisService(params["extraServerEnvironment"])
 
-        steps += [{
+        steps.append({
             "name": "e2e-tests",
             "image": OC_CI_NODEJS_IMAGE,
             "environment": environment,
@@ -692,7 +705,7 @@ def e2eTestsOnPlaywright(ctx):
                 "cd tests/e2e",
                 "bash run-e2e.sh --type playwright",
             ],
-        }]
+        })
 
         if not "skip-a11y" in ctx.build.title.lower():
             steps += uploadA11yResult(ctx) + logA11yReport()
@@ -774,7 +787,20 @@ def e2eTests(ctx):
             steps += filterTestSuitesToRun(ctx, params["features"])
         else:
             print("Error: No suites or features defined for e2e test suite '%s'" % suite)
-            return []
+            pipelines.append({
+                "kind": "pipeline",
+                "type": "docker",
+                "name": "invalid-suite-%s" % suite,
+                "steps": [{
+                    "name": "invalid-suite",
+                    "image": OC_CI_ALPINE_IMAGE,
+                    "commands": [
+                        "echo \"Error: No suites or features defined for e2e test suite '%s'\"" % suite,
+                        "exit 1",
+                    ],
+                }],
+                "trigger": base_trigger,
+            })
 
         steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                  installPnpm() + \
@@ -789,10 +815,10 @@ def e2eTests(ctx):
         if "keycloak" in suite:
             environment["KEYCLOAK"] = "true"
             environment["KEYCLOAK_HOST"] = "keycloak:8443"
-            e2e_volumes += [{
+            e2e_volumes.append({
                 "name": "certs",
                 "temp": {},
-            }]
+            })
             steps += keycloakService()
             services += postgresService()
 
