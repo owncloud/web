@@ -286,13 +286,13 @@ export async function createFileInsideSpaceBySpaceName({
   stepUser,
   fileName,
   space,
-  content
+  content = 'This is a test file'
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
   fileName: string
   space: string
-  content: string
+  content?: string
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
   await api.dav.uploadFileInsideSpaceBySpaceName({
