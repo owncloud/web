@@ -10,7 +10,7 @@ import { Group, Space, User } from '../../../e2e/support/types'
 import fs from 'fs'
 import { integer } from 'vscode-languageserver-types'
 import { checkResponseStatus, request } from '../../../e2e/support/api/http.js'
-import join from 'join-path'
+import { join } from 'path'
 
 export async function userHasBeenCreated({
   usersEnvironment,
