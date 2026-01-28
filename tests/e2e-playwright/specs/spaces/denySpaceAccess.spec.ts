@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 import { config } from './../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -91,7 +91,7 @@ test.describe('deny space access', () => {
     await api.userHasAddedMembersToSpace({
       usersEnvironment,
       stepUser: 'Alice',
-      space: 'team',
+      space: 'sales',
       shareType: 'user',
       sharee: 'Brian',
       role: 'Can edit'

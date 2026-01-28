@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 import { config } from './../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -84,7 +84,7 @@ test.describe('create Space shortcut', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: 'lorem.zip',
+      resource: 'lorem.txt',
       to: 'spaceFolder'
     })
 
@@ -141,19 +141,19 @@ test.describe('create Space shortcut', () => {
     // And "Alice" uploads the following resources
     //   | resource          | to             |
     //   | data.zip          | resourceFolder |
-    //   | lorem.txt         | spaceFolder    |
+    //   | lorem.txt         |                |
     await ui.uploadResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
       resource: 'data.zip',
-      to: 'spaceFolder'
+      to: 'resourceFolder'
     })
     await ui.uploadResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: 'lorem.zip',
+      resource: 'lorem.txt',
       to: ''
     })
 

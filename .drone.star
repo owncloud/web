@@ -205,7 +205,7 @@ config = {
         },
         "oidc-iframe": {
             "skip": False,
-            "feature": [
+            "features": [
                 "specs/oidc/iframeTokenRenewal.spec.ts",
             ],
             "extraServerEnvironment": {

@@ -9,8 +9,9 @@ import { ResourceType } from '../../../e2e/support/api/share/share'
 import { Group, Space, User } from '../../../e2e/support/types'
 import fs from 'fs'
 import { integer } from 'vscode-languageserver-types'
-import join from 'join-path'
+
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
+import { join } from 'path'
 
 export async function userHasBeenCreated({
   usersEnvironment,
@@ -360,6 +361,7 @@ export async function userHasDeletedProjectSpace({
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
   await api.graph.deleteSpace({ user, space: { id, name } as unknown as Space })
+  store.createdSpaceStore.clear()
 }
 
 export async function userHasAddedMembersToSpace({
