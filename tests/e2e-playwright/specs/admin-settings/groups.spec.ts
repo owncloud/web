@@ -48,65 +48,65 @@ test.describe('groups management', () => {
     ).toBeTruthy()
   })
 
-  // test('admin deletes group', async ({ usersEnvironment }) => {
-  //   await api.groupsHaveBeenCreated({
-  //     groupIds: ['sales', 'security', 'finance'],
-  //     admin: usersEnvironment.getUser({ key: 'Admin' })
-  //   })
-  //   await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-  //   await ui.userNavigatesToGroupsManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-  //   await ui.userDeletesGroups({
-  //     actorsEnvironment,
-  //     stepUser: 'Admin',
-  //     actionType: 'context menu',
-  //     groupsToBeDeleted: ['sales']
-  //   })
+  test('admin deletes group', async ({ usersEnvironment }) => {
+    await api.groupsHaveBeenCreated({
+      groupIds: ['sales', 'security', 'finance'],
+      admin: usersEnvironment.getUser({ key: 'Admin' })
+    })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
+    await ui.userNavigatesToGroupsManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userDeletesGroups({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      actionType: 'context menu',
+      groupsToBeDeleted: ['sales']
+    })
 
-  //   expect(
-  //     await ui.checkGroupsPresenceById({
-  //       actorsEnvironment,
-  //       stepUser: 'Admin',
-  //       expectedGroupIds: ['sales']
-  //     })
-  //   ).toBeFalsy()
+    expect(
+      await ui.checkGroupsPresenceById({
+        actorsEnvironment,
+        stepUser: 'Admin',
+        expectedGroupIds: ['sales']
+      })
+    ).toBeFalsy()
 
-  //   await ui.userDeletesGroups({
-  //     actorsEnvironment,
-  //     stepUser: 'Admin',
-  //     actionType: 'batch actions',
-  //     groupsToBeDeleted: ['security', 'finance']
-  //   })
+    await ui.userDeletesGroups({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      actionType: 'batch actions',
+      groupsToBeDeleted: ['security', 'finance']
+    })
 
-  //   expect(
-  //     await ui.checkGroupsPresenceById({
-  //       actorsEnvironment,
-  //       stepUser: 'Admin',
-  //       expectedGroupIds: ['security', 'finance']
-  //     })
-  //   ).toBeFalsy()
-  // })
+    expect(
+      await ui.checkGroupsPresenceById({
+        actorsEnvironment,
+        stepUser: 'Admin',
+        expectedGroupIds: ['security', 'finance']
+      })
+    ).toBeFalsy()
+  })
 
-  // test('edit groups', async ({ usersEnvironment }) => {
-  //   await api.groupsHaveBeenCreated({
-  //     groupIds: ['sales'],
-  //     admin: usersEnvironment.getUser({ key: 'Admin' })
-  //   })
-  //   await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-  //   await ui.userNavigatesToGroupsManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-  //   await ui.userChangesGroup({
-  //     actorsEnvironment,
-  //     stepUser: 'Admin',
-  //     key: 'sales',
-  //     attribute: 'displayName',
-  //     value: 'a renamed group',
-  //     action: 'context-menu'
-  //   })
-  //   expect(
-  //     await ui.groupDisplayNameExists({
-  //       actorsEnvironment,
-  //       stepUser: 'Admin',
-  //       groupDisplayName: 'a renamed group'
-  //     })
-  //   ).toBeTruthy()
-  // })
+  test('edit groups', async ({ usersEnvironment }) => {
+    await api.groupsHaveBeenCreated({
+      groupIds: ['sales'],
+      admin: usersEnvironment.getUser({ key: 'Admin' })
+    })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
+    await ui.userNavigatesToGroupsManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userChangesGroup({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      key: 'sales',
+      attribute: 'displayName',
+      value: 'a renamed group',
+      action: 'context-menu'
+    })
+    expect(
+      await ui.groupDisplayNameExists({
+        actorsEnvironment,
+        stepUser: 'Admin',
+        groupDisplayName: 'a renamed group'
+      })
+    ).toBeTruthy()
+  })
 })

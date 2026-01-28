@@ -42,7 +42,7 @@ export async function resetLogo({
   await generalObject.resetLogo()
 }
 
-export async function navigateToUsersManagementPage({
+export async function userNavigatesToUsersManagementPage({
   actorsEnvironment,
   stepUser
 }: {
@@ -54,7 +54,7 @@ export async function navigateToUsersManagementPage({
   await pageObject.navigate()
 }
 
-export async function allowUserLogin({
+export async function userAllowsLoginForUserUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   key
@@ -69,7 +69,7 @@ export async function allowUserLogin({
   await usersObject.allowLogin({ key, action: 'context-menu' })
 }
 
-export async function forbidUserLogin({
+export async function userForbidsLoginForUserUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   key
@@ -84,7 +84,7 @@ export async function forbidUserLogin({
   await usersObject.forbidLogin({ key, action: 'context-menu' })
 }
 
-export async function changeUserQuota({
+export async function userChangesQuotaForUser({
   actorsEnvironment,
   stepUser,
   key,
@@ -101,7 +101,7 @@ export async function changeUserQuota({
   await usersObject.changeQuota({ key, value, action: 'context-menu' })
 }
 
-export async function addUsersToGroupsUsingBatchActions({
+export async function userAddsUsersToGroupsUsingBatchActions({
   actorsEnvironment,
   stepUser,
   groups,
@@ -124,7 +124,7 @@ export async function addUsersToGroupsUsingBatchActions({
   await usersObject.addToGroupsBatchAtion({ userIds, groups })
 }
 
-export async function removeUsersFromGroupsUsingBatchActions({
+export async function userRemovesUsersFromGroupsUsingBatchActions({
   actorsEnvironment,
   stepUser,
   groups,
@@ -147,7 +147,7 @@ export async function removeUsersFromGroupsUsingBatchActions({
   await usersObject.removeFromGroupsBatchAtion({ userIds, groups })
 }
 
-export async function setFilters({
+export async function userSetsFilters({
   actorsEnvironment,
   stepUser,
   filters
@@ -185,7 +185,7 @@ export async function usersShouldBeVisible({
   return true
 }
 
-export async function changeUserNameUsingSidebarPanel({
+export async function userChangesUserNameUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   key,
@@ -201,7 +201,7 @@ export async function changeUserNameUsingSidebarPanel({
   await usersObject.changeUser({ key, attribute: 'userName', value, action: 'context-menu' })
 }
 
-export async function changeUserDisplayNameUsingSidebarPanel({
+export async function userChangesUserDisplayNameUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   key,
@@ -217,7 +217,7 @@ export async function changeUserDisplayNameUsingSidebarPanel({
   await usersObject.changeUser({ key, attribute: 'displayName', value, action: 'context-menu' })
 }
 
-export async function changeUserEmailUsingSidebarPanel({
+export async function userChangesUserEmailUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   key,
@@ -233,7 +233,7 @@ export async function changeUserEmailUsingSidebarPanel({
   await usersObject.changeUser({ key, attribute: 'email', value, action: 'context-menu' })
 }
 
-export async function changeUserPasswordUsingSidebarPanel({
+export async function userChangesUserPasswordUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   key,
@@ -249,7 +249,7 @@ export async function changeUserPasswordUsingSidebarPanel({
   await usersObject.changeUser({ key, attribute: 'password', value, action: 'context-menu' })
 }
 
-export async function changeUserRoleUsingSidebarPanel({
+export async function userChangesUserRoleUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   key,
@@ -265,7 +265,7 @@ export async function changeUserRoleUsingSidebarPanel({
   await usersObject.changeUser({ key, attribute: 'role', value, action: 'context-menu' })
 }
 
-export async function deleteUsersUsingBatchActions({
+export async function userDeletesUsersUsingBatchActions({
   actorsEnvironment,
   stepUser,
   users
@@ -286,7 +286,7 @@ export async function deleteUsersUsingBatchActions({
   await usersObject.deleteUserUsingBatchAction({ userIds })
 }
 
-export async function deleteUsersUsingContextMenu({
+export async function userDeletesUsersUsingContextMenu({
   actorsEnvironment,
   stepUser,
   users
@@ -323,7 +323,7 @@ export async function userShouldHaveInfo({
   return true
 }
 
-export async function createUser({
+export async function userCreatesUser({
   actorsEnvironment,
   stepUser,
   userData
@@ -344,7 +344,7 @@ export async function createUser({
   }
 }
 
-export async function openEditPanelOfUserUsingQuickAction({
+export async function userOpensEditPanelOfUserUsingQuickAction({
   actorsEnvironment,
   stepUser,
   actionUser
@@ -358,7 +358,7 @@ export async function openEditPanelOfUserUsingQuickAction({
   await usersObject.openEditPanel({ key: actionUser, action: 'quick-action' })
 }
 
-export async function openEditPanelOfUserUsingContextMenu({
+export async function userOpensEditPanelOfUserUsingContextMenu({
   actorsEnvironment,
   stepUser,
   actionUser
@@ -389,7 +389,7 @@ export async function userShouldSeeEditPanel({
   }
 }
 
-export async function addUserToGroupsUsingSidebarPanel({
+export async function userAddsUserToGroupsUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   user,
@@ -409,7 +409,7 @@ export async function addUserToGroupsUsingSidebarPanel({
   })
 }
 
-export async function removeUserToGroupsUsingSidebarPanel({
+export async function userRemovesUserFromGroupsUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   user,

@@ -34,8 +34,8 @@ test.describe('users management', () => {
   test('user login can be managed in the admin settings', async () => {
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.forbidUserLogin({
+    await ui.userNavigatesToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userForbidsLoginForUserUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       key: 'Alice'
@@ -48,8 +48,8 @@ test.describe('users management', () => {
       })
     ).toBeTruthy()
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.allowUserLogin({
+    await ui.userNavigatesToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userAllowsLoginForUserUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       key: 'Alice'
@@ -65,8 +65,8 @@ test.describe('users management', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.changeUserQuota({
+    await ui.userNavigatesToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userChangesQuotaForUser({
       actorsEnvironment,
       stepUser: 'Admin',
       key: 'Alice',
@@ -79,7 +79,7 @@ test.describe('users management', () => {
         quota: '500'
       })
     ).toBeTruthy()
-    await ui.changeQuotaForUsersUsingBatchAction({
+    await ui.userChangesQuotaForUsersUsingBatchAction({
       actorsEnvironment,
       stepUser: 'Admin',
       value: '20',
@@ -115,14 +115,14 @@ test.describe('users management', () => {
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.addUsersToGroupsUsingBatchActions({
+    await ui.userNavigatesToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userAddsUsersToGroupsUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Admin',
       groups: ['sales', 'finance'],
       users: ['Alice', 'Brian', 'Carol']
     })
-    await ui.setFilters({
+    await ui.userSetsFilters({
       actorsEnvironment,
       stepUser: 'Admin',
       filters: [{ filter: 'groups', values: ['sales department', 'finance department'] }]
@@ -134,13 +134,13 @@ test.describe('users management', () => {
         expectedUsers: ['Alice', 'Brian']
       })
     ).toBeTruthy()
-    await ui.removeUsersFromGroupsUsingBatchActions({
+    await ui.userRemovesUsersFromGroupsUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Admin',
       groups: ['sales', 'finance'],
       users: ['Alice', 'Brian']
     })
-    await ui.reloadPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userReloadsPage({ actorsEnvironment, stepUser: 'Admin' })
     expect(
       await ui.usersShouldBeVisible({
         actorsEnvironment,
@@ -162,32 +162,32 @@ test.describe('users management', () => {
   test('edit user', async () => {
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.changeUserNameUsingSidebarPanel({
+    await ui.userNavigatesToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userChangesUserNameUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       key: 'Alice',
       value: 'anna'
     })
-    await ui.changeUserDisplayNameUsingSidebarPanel({
+    await ui.userChangesUserDisplayNameUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       key: 'anna',
       value: 'Anna Murphy'
     })
-    await ui.changeUserEmailUsingSidebarPanel({
+    await ui.userChangesUserEmailUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       key: 'anna',
       value: 'anna@example.org'
     })
-    await ui.changeUserPasswordUsingSidebarPanel({
+    await ui.userChangesUserPasswordUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       key: 'anna',
       value: 'password'
     })
-    await ui.changeUserRoleUsingSidebarPanel({
+    await ui.userChangesUserRoleUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       key: 'anna',
@@ -221,14 +221,14 @@ test.describe('users management', () => {
       groupName: 'sales'
     })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.addUserToGroupsUsingSidebarPanel({
+    await ui.userNavigatesToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userAddsUserToGroupsUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       user: 'Alice',
       groups: ['finance', 'security']
     })
-    await ui.removeUserToGroupsUsingSidebarPanel({
+    await ui.userRemovesUserFromGroupsUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       user: 'Alice',
@@ -251,14 +251,14 @@ test.describe('users management', () => {
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Carol' })
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'David' })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.changeUserRoleUsingSidebarPanel({
+    await ui.userNavigatesToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userChangesUserRoleUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Admin',
       key: 'David',
       value: 'Space Admin'
     })
-    await ui.setFilters({
+    await ui.userSetsFilters({
       actorsEnvironment,
       stepUser: 'Admin',
       filters: [{ filter: 'roles', values: ['User', 'Admin'] }]
@@ -277,12 +277,12 @@ test.describe('users management', () => {
         expectedUsers: ['David']
       })
     ).toBeFalsy()
-    await ui.deleteUsersUsingBatchActions({
+    await ui.userDeletesUsersUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
-    await ui.deleteUsersUsingContextMenu({
+    await ui.userDeletesUsersUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Admin',
       users: ['Carol']
@@ -302,8 +302,8 @@ test.describe('users management', () => {
 
   test('admin creates user', async () => {
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.createUser({
+    await ui.userNavigatesToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userCreatesUser({
       actorsEnvironment,
       stepUser: 'Admin',
       userData: [
@@ -335,8 +335,8 @@ test.describe('users management', () => {
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
     await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Carol' })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.openEditPanelOfUserUsingQuickAction({
+    await ui.userNavigatesToUsersManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userOpensEditPanelOfUserUsingQuickAction({
       actorsEnvironment,
       stepUser: 'Admin',
       actionUser: 'Brian'
@@ -347,7 +347,7 @@ test.describe('users management', () => {
         stepUser: 'Admin'
       })
     ).toBeTruthy()
-    await ui.openEditPanelOfUserUsingContextMenu({
+    await ui.userOpensEditPanelOfUserUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Admin',
       actionUser: 'Brian'

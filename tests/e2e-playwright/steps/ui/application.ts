@@ -45,7 +45,7 @@ export async function waitsForTokenRenewal({
   return await application.waitForTokenRenewalViaRefreshToken()
 }
 
-export async function reloadPage({
+export async function userReloadsPage({
   actorsEnvironment,
   stepUser
 }: {
