@@ -19,11 +19,13 @@ export class Users {
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeAccountEnabled({ uuid, value: true, page: this.#page })
   }
+
   async forbidLogin({ key, action }: { key: string; action: string }): Promise<void> {
     const uuid = this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeAccountEnabled({ uuid, value: false, page: this.#page })
   }
+
   async changeQuota({
     key,
     value,
@@ -42,6 +44,7 @@ export class Users {
     const uuid = this.getUUID({ key })
     await po.selectUser({ page: this.#page, uuid })
   }
+
   async changeQuotaUsingBatchAction({
     value,
     users
@@ -55,15 +58,18 @@ export class Users {
     }
     await po.changeQuotaUsingBatchAction({ page: this.#page, value, userIds })
   }
+
   getDisplayedUsers(): Promise<string[]> {
     return po.getDisplayedUsers({ page: this.#page })
   }
+
   async select({ key }: { key: string }): Promise<void> {
     await po.selectUser({
       page: this.#page,
       uuid: this.getUUID({ key })
     })
   }
+
   async addToGroupsBatchAtion({
     userIds,
     groups
@@ -73,6 +79,7 @@ export class Users {
   }): Promise<void> {
     await po.addSelectedUsersToGroups({ page: this.#page, userIds, groups })
   }
+
   async removeFromGroupsBatchAtion({
     userIds,
     groups
@@ -82,9 +89,11 @@ export class Users {
   }): Promise<void> {
     await po.removeSelectedUsersFromGroups({ page: this.#page, userIds, groups })
   }
+
   async filter({ filter, values }: { filter: string; values: string[] }): Promise<void> {
     await po.filterUsers({ page: this.#page, filter, values })
   }
+
   async changeUser({
     key,
     attribute,
@@ -123,6 +132,7 @@ export class Users {
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.addUserToGroups({ page: this.#page, userId: uuid, groups })
   }
+
   async removeFromGroups({
     key,
     groups,

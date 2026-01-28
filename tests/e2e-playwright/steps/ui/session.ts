@@ -109,12 +109,10 @@ export async function userFailsToLogin({
   const user = usersEnvironment.getUser({ key: stepUser })
 
   await page.goto(config.baseUrl)
-  await page.locator('#oc-login-username').fill(user.id)
-  await page.locator('#oc-login-password').fill(user.password)
-  await page.locator('button[type="submit"]').click()
-
+  await sessionObject.signIn(user.id, user.password)
   try {
     await page.locator('#oc-login-error-message').waitFor({ timeout: 5000 })
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['body'], 'login page')
     return true
   } catch {
     return false

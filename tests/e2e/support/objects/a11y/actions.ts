@@ -54,7 +54,13 @@ export const selectors = {
   groupList: '.group-list',
   editPanel: '.sidebar-panel__body-EditPanel:visible',
   breadcrumb: '#files-breadcrumb',
-  previewControlBar: '.preview-controls-action-bar'
+  previewControlBar: '.preview-controls-action-bar',
+  loginToggleWithDropdownIcon: '.vs__dropdown-toggle[aria-label="Login - Search for option"]',
+  compareSaveDialog: '.compare-save-dialog',
+  personalQuotaToggleWithDropdown:
+    '.vs__dropdown-toggle[aria-label="Personal quota - Search for option"]',
+  batchQuotaToggleWithDropdown: '.vs__dropdown-toggle[aria-label="Quota - Search for option"]',
+  quotaValueDropDown: 'ul.vs__dropdown-menu'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
