@@ -1,9 +1,5 @@
 <template>
-  <!-- TODO: check whether we really need the click here -->
-  <!-- eslint-disable vuejs-accessibility/no-static-element-interactions -->
-  <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
-  <span @click="$emit('click', $event)">
-    <!-- eslint-enable vuejs-accessibility/no-static-element-interactions -->
+  <span>
     <input
       :id="id"
       v-model="model"
@@ -13,6 +9,7 @@
       :value="option"
       :disabled="disabled"
       :aria-label="labelHidden ? label : null"
+      @click="$emit('click', $event)"
       @keydown.enter="keydownEnter"
     />
     <label v-if="!labelHidden" :for="id" :class="computedLabelClasses" v-text="label" />
