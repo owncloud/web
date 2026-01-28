@@ -48,7 +48,7 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
       })
     }
     // And "Alice" creates 10 files in personal space using API
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 10; i++) {
       await api.userHasCreatedFile({
         usersEnvironment,
         stepUser: 'Alice',
