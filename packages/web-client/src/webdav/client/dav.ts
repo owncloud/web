@@ -13,6 +13,7 @@ import { buildPropFindBody, buildPropPatchBody } from './builders'
 import { parseError, parseMultiStatus, parseTusHeaders } from './parsers'
 import { WebDavResponseResource } from '../../helpers'
 import { DavHttpError } from '../../errors'
+import { normalize } from 'path'
 
 export interface DAVOptions {
   baseUrl: string
@@ -36,14 +37,19 @@ export class DAV {
   private davPath: string
   private headers: () => Headers
   public extraProps: string[]
+  public remoteBasePath: string
+
   #onSetMaintenance: (value: boolean) => void
 
   constructor({ baseUrl, headers, onSetMaintenance }: DAVOptions) {
+    const remoteBasePath = extractUrlPath(baseUrl)
+
     this.davPath = urlJoin(baseUrl, 'dav')
-    this.client = createClient(this.davPath, {})
+    this.client = createClient(this.davPath, { remoteBasePath: remoteBasePath })
     this.headers = headers
     this.extraProps = []
     this.#onSetMaintenance = onSetMaintenance
+    this.remoteBasePath = remoteBasePath
   }
 
   public mkcol(path: string, opts: DAVRequestOptions = {}) {
@@ -208,7 +214,7 @@ export class DAV {
       let resultBody: WebDavResponseResource[]
       if (result.status === 207) {
         const parsedBody = await result.text()
-        resultBody = await parseMultiStatus(parsedBody)
+        resultBody = await parseMultiStatus(parsedBody, this.remoteBasePath)
       }
 
       this.#onSetMaintenance(false)
@@ -235,4 +241,10 @@ export class DAV {
       )
     }
   }
+}
+
+function extractUrlPath(urlString: string) {
+  const url = new URL(urlString)
+  const path = url.pathname
+  return normalize(path)
 }
