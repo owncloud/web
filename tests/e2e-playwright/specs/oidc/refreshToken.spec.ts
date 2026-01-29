@@ -79,7 +79,7 @@ test.describe('details', () => {
     // And "Alice" creates the following resources
     //   | resource     | type   |
     //   | space-folder | folder |
-    await ui.createResource({
+    await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'space-folder',
@@ -112,7 +112,7 @@ test.describe('details', () => {
     // And "Alice" creates the following resources
     //  | resource          | type    | content   |
     //  | PARENT/parent.txt | txtFile | some text |
-    await ui.createResource({
+    await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'PARENT/parent.txt',

@@ -157,7 +157,7 @@ test.describe('check files pagination in project space', () => {
     // And "Brian" creates the following resources
     //   | resource | type   |
     //   | parent   | folder |
-    await ui.createResource({
+    await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'parent',
@@ -202,7 +202,7 @@ test.describe('check files pagination in project space', () => {
     // And "Edith" creates the following resources
     //   | resource | type   |
     //   | edith    | folder |
-    await ui.createResource({
+    await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Edith',
       resource: 'edith',

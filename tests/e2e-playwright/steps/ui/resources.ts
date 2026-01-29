@@ -59,7 +59,7 @@ export async function isAbleToEditFileOrFolder({
   return userCanEdit
 }
 
-export async function createResource({
+export async function userCreatesResources({
   actorsEnvironment,
   stepUser,
   resource,
@@ -134,7 +134,7 @@ export async function shouldSeeResourcesAsTiles({
   await resourceObject.expectThatResourcesAreTiles()
 }
 
-export async function openResource({
+export async function userOpensResources({
   actorsEnvironment,
   stepUser,
   resource
@@ -670,4 +670,18 @@ export async function resourceShouldNotBeLocked({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const lockLocator = await resourceObject.getLockLocator({ resource })
   expect(await lockLocator.isVisible()).toBe(false)
+}
+
+export async function userNavigatesToFolderViaBreadcrumb({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openFolderViaBreadcrumb(resource)
 }

@@ -51,7 +51,8 @@ export const selectors = {
   actionConfirmButton: '.oc-modal-body-actions-confirm',
   contextMenuContainer: '#oc-files-context-menu',
   groupList: '.group-list',
-  editPanel: '.sidebar-panel__body-EditPanel:visible'
+  editPanel: '.sidebar-panel__body-EditPanel:visible',
+  breadcrumb: '#files-breadcrumb'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
