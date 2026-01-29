@@ -55,11 +55,10 @@ export const selectors = {
   editPanel: '.sidebar-panel__body-EditPanel:visible',
   breadcrumb: '#files-breadcrumb',
   previewControlBar: '.preview-controls-action-bar',
-  loginToggleWithDropdownIcon: '.vs__dropdown-toggle[aria-label="Login - Search for option"]',
+  loginToggleWithDropdown: '.vs__dropdown-toggle:has(input[id="login-input"])',
   compareSaveDialog: '.compare-save-dialog',
-  personalQuotaToggleWithDropdown:
-    '.vs__dropdown-toggle[aria-label="Personal quota - Search for option"]',
-  batchQuotaToggleWithDropdown: '.vs__dropdown-toggle[aria-label="Quota - Search for option"]',
+  personalQuotaToggleWithDropdown: '.vs__dropdown-toggle:has(input[id="quota-select-form"])',
+  batchQuotaToggleWithDropdown: '.vs__dropdown-toggle[aria-label^="Quota"]',
   quotaValueDropDown: 'ul.vs__dropdown-menu'
 }
 
