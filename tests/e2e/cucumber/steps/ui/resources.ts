@@ -345,6 +345,9 @@ When(
     filter: string,
     command: string
   ): Promise<void> {
+    console.log("---------")
+    console.log("command:" + command)
+    console.log("---------")
     keyword = keyword ?? ''
     const pressEnter = !!command && command.endsWith('presses enter')
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
