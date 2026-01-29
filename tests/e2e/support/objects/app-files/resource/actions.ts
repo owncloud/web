@@ -174,6 +174,11 @@ export const clickResource = async ({
       }),
       resource.click()
     ])
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['breadcrumbResourceSelector'],
+      'Breadcrumb updated after navigating into a folder'
+    )
   }
 }
 
@@ -199,6 +204,11 @@ export const clickResourceFromBreadcrumb = async ({
     ),
     page.locator(util.format(breadcrumbResourceNameSelector, folder)).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['fileRow'],
+    'Child folder rows are displayed after navigating via parent breadcrumb'
+  )
   await expect(page.locator(breadcrumbLastResourceNameSelector)).toHaveText(resource)
 }
 
@@ -354,6 +364,11 @@ export const createNewFolder = async ({
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['fileRow'],
+    'New folder row is added to the file list'
+  )
 }
 
 export const createPasswordProtectedFolder = async ({
@@ -586,6 +601,11 @@ export const createResources = async (args: createResourceArgs): Promise<void> =
 
     if (!resourcesExists) {
       await page.locator(addNewResourceButton).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['tippyBoxVisible'],
+        'Tippy box visible after button click'
+      )
       await createNewFolder({ page, resource: path })
     }
     await clickResource({ page, path })

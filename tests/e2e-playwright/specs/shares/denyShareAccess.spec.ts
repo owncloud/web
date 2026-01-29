@@ -55,7 +55,7 @@ test.describe('deny share access', () => {
       resourceType: 'folder'
     })
 
-    await ui.openResource({
+    await ui.userOpensResources({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'folder_to_shared'
@@ -89,7 +89,7 @@ test.describe('deny share access', () => {
     })
 
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.openResource({
+    await ui.userOpensResources({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
@@ -109,7 +109,7 @@ test.describe('deny share access', () => {
       name: 'files'
     })
 
-    await ui.openResource({
+    await ui.userOpensResources({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'folder_to_shared'
@@ -126,7 +126,7 @@ test.describe('deny share access', () => {
     })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Brian', name: 'files' })
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.openResource({
+    await ui.userOpensResources({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared'

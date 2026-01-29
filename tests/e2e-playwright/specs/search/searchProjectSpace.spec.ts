@@ -53,7 +53,7 @@ test.describe('Search in the project space', () => {
 
     await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
-    await ui.createResource({
+    await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'folder(WithSymbols:!;_+-&)',
