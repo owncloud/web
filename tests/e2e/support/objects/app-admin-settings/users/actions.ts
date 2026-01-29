@@ -12,7 +12,7 @@ const closeEditPanel = '.sidebar-panel__header .header__close'
 const deleteActionBtn = '.oc-users-actions-delete-trigger'
 const loginDropDown = '.vs__dropdown-menu'
 const dropdownOption = '.vs__dropdown-option'
-const loginToggleWithDropdown = '.vs__dropdown-toggle[aria-label="Login - Search for option"]' // login toggle dropdown selector with dropdown icon
+const loginToggleWithDropdown = '.vs__dropdown-toggle:has(input[id="login-input"])' // login toggle dropdown selector with dropdown icon
 const compareDialogConfirmButton = '.compare-save-dialog-confirm-btn'
 const addToGroupsBatchAction = '.oc-users-actions-add-to-groups-trigger'
 const removeFromGroupsBatchAction = '.oc-users-actions-remove-from-groups-trigger'
@@ -81,7 +81,7 @@ export const changeAccountEnabled = async (args: {
   await page.locator(loginDropDown).waitFor()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
-    ['loginToggleWithDropdownIcon', 'loginDropDown'],
+    ['loginToggleWithDropdown', 'loginDropDown'],
     'login dropdown to change account enabled status'
   )
 
@@ -92,7 +92,7 @@ export const changeAccountEnabled = async (args: {
 
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
-    ['loginToggleWithDropdownIcon'],
+    ['loginToggleWithDropdown'],
     'login toggle after changing account enabled status'
   )
 
