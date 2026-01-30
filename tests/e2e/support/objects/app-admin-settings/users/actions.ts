@@ -377,6 +377,11 @@ export const openEditPanel = async (args: {
   switch (action) {
     case 'context-menu':
       await page.locator(util.format(userIdSelector, uuid)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['tippyBox'],
+        'account page'
+      )
       await page.locator(editActionBtnContextMenu).click()
       break
     case 'quick-action':
@@ -386,6 +391,11 @@ export const openEditPanel = async (args: {
     default:
       throw new Error(`${action} not implemented`)
   }
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['appSidebar'],
+    'account page'
+  )
 }
 
 export const deleteUserUsingContextMenu = async (args: {

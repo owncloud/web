@@ -714,6 +714,11 @@ export const uploadLargeNumberOfResources = async (args: uploadResourceArgs): Pr
   const { page, resources } = args
   await performUpload(args)
   await page.locator(uploadInfoCloseButton).waitFor()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['.snackbars'],
+    'upload menu dropdown'
+  )
   await page.locator(util.format(uploadInfoLabel, `${resources.length} items uploaded`)).waitFor()
 }
 
@@ -735,6 +740,11 @@ export const uploadResource = async (args: uploadResourceArgs): Promise<void> =>
 export const tryToUploadResource = async (args: uploadResourceArgs): Promise<void> => {
   const { page } = args
   await performUpload({ ...args, expectToFail: true })
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['body'],
+    'upload menu dropdown'
+  )
   await page.locator(uploadErrorCloseButton).click()
 }
 
@@ -746,6 +756,11 @@ export const dropUploadFiles = async (args: uploadResourceArgs): Promise<void> =
   await utils.dragDropFiles(page, resources, filesView)
 
   await page.locator(util.format(uploadInfoLabel, 'Upload complete')).waitFor()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['.snackbars'],
+    'upload menu dropdown'
+  )
   await page.locator(uploadInfoCloseButton).click()
   await Promise.all(
     resources.map((file) =>
