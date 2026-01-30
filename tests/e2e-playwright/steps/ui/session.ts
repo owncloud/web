@@ -3,7 +3,7 @@ import { api, objects } from '../../../e2e/support'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { User } from '../../../e2e/support/types'
 import { listenSSE } from '../../../e2e/support/environment/sse.js'
-import { test } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
 
 async function createNewSession(actorsEnvironment: ActorsEnvironment, stepUser: string) {
@@ -103,18 +103,18 @@ export async function userFailsToLogin({
   usersEnvironment: UsersEnvironment
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-}): Promise<boolean> {
+}): Promise<void> {
   const sessionObject = await createNewSession(actorsEnvironment, stepUser)
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const user = usersEnvironment.getUser({ key: stepUser })
 
   await page.goto(config.baseUrl)
   await sessionObject.signIn(user.id, user.password)
-  try {
-    await page.locator('#oc-login-error-message').waitFor({ timeout: 5000 })
-    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['body'], 'login page')
-    return true
-  } catch {
-    return false
-  }
+  const errorMessage = await sessionObject.getLoginErrorText()
+  expect(errorMessage).not.toBe('')
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['loginErrorMessageLocator'],
+    'login error message'
+  )
 }

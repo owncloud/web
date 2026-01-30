@@ -70,10 +70,10 @@ test.describe('check files pagination in project space', () => {
     //   | user  | group    |
     //   | David | sales    |
     //   | Edith | security |
-    await api.addUserToGroup({
+    await api.usersHaveBeenAddedToGroup({
       usersEnvironment,
       stepUser: 'Admin',
-      userToAdd: [
+      usersToAdd: [
         { user: 'David', group: 'sales' },
         { user: 'Edith', group: 'security' }
       ]

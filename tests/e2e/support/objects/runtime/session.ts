@@ -78,4 +78,10 @@ export class Session {
     )
     await this.#page.locator('#oc-topbar-account-logout').click()
   }
+
+  async getLoginErrorText(): Promise<string> {
+    const locator = this.#page.locator('#oc-login-error-message')
+    await locator.waitFor()
+    return (await locator.textContent()) || ''
+  }
 }

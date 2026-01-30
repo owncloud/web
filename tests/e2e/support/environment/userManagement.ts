@@ -73,11 +73,18 @@ export class UsersEnvironment {
     const store = config.federatedServer ? federatedUserStore : createdUserStore
     const userKey = key.toLowerCase()
 
-    if (!store.has(userKey)) {
-      throw new Error(`user '${userKey}' not found`)
+    if (store.has(userKey)) {
+      return store.delete(userKey)
     }
 
-    return store.delete(userKey)
+    // If not found by key, try to find by user.id
+    for (const [storedKey, storedUser] of store.entries()) {
+      if (storedUser.id.toLowerCase() === userKey) {
+        return store.delete(storedKey)
+      }
+    }
+
+    throw new Error(`user '${userKey}' not found`)
   }
 
   getGroup({ key }: { key: string }): Group {
