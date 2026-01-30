@@ -26,10 +26,6 @@ test.describe('details', () => {
     await setAccessAndRefreshToken(usersEnvironment)
   })
 
-  test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-  })
-
   test('access token renewal via iframe', async () => {
     // Given "Admin" creates following users using API
     //   | id    |

@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from './../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -32,8 +32,6 @@ test.describe('spaces member expiry', () => {
   })
 
   test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
     await api.userHasDeletedProjectSpace({
       usersEnvironment,
       stepUser: 'Admin',

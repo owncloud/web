@@ -71,11 +71,6 @@ test.describe('Search in the project space', () => {
     await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
   })
 
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-  })
-
   test('Search in the project spaces', async () => {
     // search for project space objects
     await ui.searchGloballyWithFilter({

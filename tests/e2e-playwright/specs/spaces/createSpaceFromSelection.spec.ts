@@ -52,7 +52,6 @@ test.describe('create Space shortcut', () => {
   test.afterEach(async () => {
     // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('create Space from folder', async () => {

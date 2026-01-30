@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -30,11 +31,6 @@ test.describe('check files pagination in project space', () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('pagination', async () => {

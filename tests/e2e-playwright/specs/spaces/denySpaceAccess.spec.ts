@@ -31,11 +31,6 @@ test.describe('deny space access', () => {
     await setAccessAndRefreshToken(usersEnvironment)
   })
 
-  test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-  })
-
   test('deny and grant access', async () => {
     // Given "Admin" creates following users using API
     //   | id    |

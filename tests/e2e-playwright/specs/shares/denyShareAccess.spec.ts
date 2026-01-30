@@ -74,12 +74,6 @@ test.describe('deny share access', () => {
     })
   })
 
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-  })
-
   test('deny and grant access', async () => {
     // deny access
     await ui.userOpensApplication({
