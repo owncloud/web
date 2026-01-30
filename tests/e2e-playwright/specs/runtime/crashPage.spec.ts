@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
@@ -31,10 +31,6 @@ test.describe('crash page', () => {
       users: ['Alice']
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-  })
-
-  test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('when spaces loading fails, the crash page is displayed', async () => {

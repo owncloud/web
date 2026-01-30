@@ -64,15 +64,6 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
   })
 
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'David' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Edith' })
-  })
-
   test('batch share a resource to multiple users and groups', async () => {
     // disabling auto accepting to check accepting share
     // And "Brian" disables auto-accepting using API

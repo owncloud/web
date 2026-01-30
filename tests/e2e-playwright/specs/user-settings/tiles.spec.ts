@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from './../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
@@ -39,10 +39,6 @@ test.describe('tiles view', { tag: '@predefined-users' }, () => {
       stepUser: 'Alice',
       folderName: 'tile_folder'
     })
-  })
-
-  test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('Users can navigate web via tiles', async () => {

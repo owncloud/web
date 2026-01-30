@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config'
 import {
   ActorsEnvironment,
@@ -28,10 +28,6 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       browser: browser
     })
     await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('file viewers', async () => {

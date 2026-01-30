@@ -1,5 +1,5 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
+import { expect } from '@playwright/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
@@ -31,7 +31,7 @@ test.describe('groups management', () => {
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
   })
 
-  test('admin creates group', async () => {
+  test('admin creates group', async ({ usersEnvironment }) => {
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
     await ui.userNavigatesToGroupsManagementPage({ actorsEnvironment, stepUser: 'Admin' })
     await ui.userCreatesGroups({

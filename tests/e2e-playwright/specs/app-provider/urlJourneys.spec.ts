@@ -2,7 +2,7 @@
 // This is a minimal test for the integration of ocis with different online office suites like Collabora and OnlyOffice
 // Check that the file can be opened in collabora or onlyoffice using the url. https://github.com/owncloud/web/issues/9897
 
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
@@ -63,11 +63,6 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
     })
     // And "Alice" opens the "files" app
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
-  })
-
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('open office suite files with Collabora and onlyOffice', async () => {
