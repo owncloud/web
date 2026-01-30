@@ -146,12 +146,14 @@ export class Users {
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.removeUserFromGroups({ page: this.#page, userId: uuid, groups })
   }
+
   async deleteUserUsingContextMenu({ key }: { key: string }): Promise<void> {
     await po.deleteUserUsingContextMenu({
       page: this.#page,
       uuid: this.getUUID({ key })
     })
   }
+
   async deleteUserUsingBatchAction({ userIds }: { userIds: string[] }): Promise<void> {
     await po.deleteUserUsingBatchAction({ page: this.#page, userIds })
   }

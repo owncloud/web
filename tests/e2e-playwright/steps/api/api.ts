@@ -40,7 +40,14 @@ export async function deleteUser({
   targetUser: string
 }): Promise<void> {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: targetUser })
+  // Try to get the target user from createdUserStore first (for dynamically created users),
+  // fall back to userStore if not found (for predefined users)
+  let user
+  try {
+    user = usersEnvironment.getCreatedUser({ key: targetUser })
+  } catch {
+    user = usersEnvironment.getUser({ key: targetUser })
+  }
   await api.provision.deleteUser({ user, admin })
 }
 
@@ -433,4 +440,18 @@ export const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   store.createdGroupStore.clear()
+}
+
+export const cleanUpUser = async (adminUser: User) => {
+  if (config.predefinedUsers) {
+    return
+  }
+  const usersEnvironment = new UsersEnvironment()
+  const requests: Promise<void>[] = []
+  store.createdUserStore.forEach((user) => {
+    requests.push(deleteUser({ usersEnvironment, stepUser: 'admin', targetUser: user.id }))
+  })
+
+  await Promise.all(requests)
+  store.createdUserStore.clear()
 }
