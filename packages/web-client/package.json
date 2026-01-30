@@ -85,7 +85,7 @@
     "@casl/ability": "^6.8.0",
     "@microsoft/fetch-event-source": "^2.0.1",
     "axios": "^1.13.2",
-    "fast-xml-parser": "^5.3.3",
+    "fast-xml-parser": "^5.3.4",
     "lodash-es": "^4.17.23",
     "luxon": "^3.7.2",
     "uuid": "^13.0.0",
