@@ -2,6 +2,7 @@ import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/enviro
 import { objects } from '../../../e2e/support'
 import { Space } from '../../../e2e/support/types'
 import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
+import { expect } from '@playwright/test'
 
 export async function navigateToPersonalSpacePage({
   actorsEnvironment,
