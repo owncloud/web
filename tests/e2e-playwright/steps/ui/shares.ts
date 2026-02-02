@@ -215,3 +215,15 @@ export async function addUserToProjectSpace({
   }
   await spacesObject.addMembers({ users: [collaboratorWithRole] })
 }
+
+export async function userEnablesSyncForAllShares({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  await shareObject.syncAll()
+}
