@@ -178,11 +178,18 @@ config = {
         "3": {
             "earlyFail": True,
             "skip": False,
+            "tikaNeeded": True,
             "suites": [
                 "shares",
                 "search",
                 "runtime",
             ],
+            "extraServerEnvironment": {
+                "FRONTEND_FULL_TEXT_SEARCH_ENABLED": True,
+                "SEARCH_EXTRACTOR_TYPE": "tika",
+                "SEARCH_EXTRACTOR_TIKA_TIKA_URL": "http://tika:9998",
+                "SEARCH_EXTRACTOR_CS3SOURCE_INSECURE": True,
+            },
         },
         "4": {
             "earlyFail": True,
