@@ -70,8 +70,8 @@ test.describe('Search', () => {
     })
 
     // And "Alice" shares the following resource using API
-    //   | resource        | recipient | type | role     |
-    //   | fileToShare.txt | Brian     | user | Can edit |
+    //   | resource        | recipient | type | role     | resourceType |
+    //   | fileToShare.txt | Brian     | user | Can edit | file         |
     await api.userHasSharedResource({
       usersEnvironment,
       stepUser: 'Alice',

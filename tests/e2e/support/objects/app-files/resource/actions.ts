@@ -1603,6 +1603,11 @@ export const searchResourceGlobalSearch = async (
   // select the filter if provided
   if (filter) {
     await page.locator(globalSearchDirFilterDropdown).click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'global search filter dropdown'
+    )
     await page
       .locator(
         filter === 'all files' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
@@ -1625,8 +1630,19 @@ export const searchResourceGlobalSearch = async (
     expect(page.locator(loadingSpinner)).not.toBeVisible()
   ])
 
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    [globalSearchOptions],
+    'global search file list'
+  )
+
   if (pressEnter) {
     await page.keyboard.press('Enter')
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      [filesView],
+      'global search file list'
+    )
   }
 }
 

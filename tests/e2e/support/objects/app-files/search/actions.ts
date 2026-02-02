@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test'
 import util from 'util'
+import { objects } from '../../..'
 
 const searchResultMessageSelector = '//p[@class="oc-text-muted"]'
 const selectTagDropdownSelector =
@@ -29,6 +30,11 @@ export const selectTagFilter = async ({
 }): Promise<void> => {
   await page.locator(selectTagDropdownSelector).click()
   await page.locator(util.format(tagFilterChipSelector, tag)).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'Text editor Save button is disabled after saving'
+  )
 }
 
 export const selectMediaTypeFilter = async ({

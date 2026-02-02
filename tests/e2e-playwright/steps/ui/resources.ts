@@ -169,14 +169,14 @@ export async function resourceExists({
   resource
 }: {
   actorsEnvironment: ActorsEnvironment
-  listType: 'search list' | 'files list' | 'Shares' | 'trashbin'
+  listType: displayedResourceType
   stepUser: string
   resource: string
 }): Promise<boolean> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualList = await resourceObject.getDisplayedResources({
-    keyword: listType as displayedResourceType
+    keyword: listType
   })
   return actualList.includes(resource)
 }
