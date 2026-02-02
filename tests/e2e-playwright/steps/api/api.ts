@@ -220,7 +220,6 @@ export async function uploadFileInPersonalSpace({
   })
 }
 
-
 export async function userUploadsFilesInPersonalSpace({
   usersEnvironment,
   stepUser,

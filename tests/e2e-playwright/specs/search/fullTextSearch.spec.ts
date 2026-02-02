@@ -53,12 +53,12 @@ test.describe('Search', () => {
     //   | localFile                   | to              |
     //   | filesForUpload/textfile.txt | fileToShare.txt |
     await api.userUploadsFilesInPersonalSpace({
-      usersEnvironment, 
-      stepUser: 'Alice',  
+      usersEnvironment,
+      stepUser: 'Alice',
       filesEnvironment,
       filesToUpload: [{ localFile: 'filesForUpload/textfile.txt', to: 'fileToShare.txt' }]
     })
-    
+
     // And "Alice" adds the following tags for the following resources using API
     //   | resource        | tags      |
     //   | fileToShare.txt | alice tag |
@@ -85,7 +85,11 @@ test.describe('Search', () => {
     // And "Brian" creates the following folder in personal space using API
     //   | name       |
     //   | testFolder |
-    await api.userHasCreatedFolder({ usersEnvironment, stepUser: 'Brian', folderName: 'testFolder' })
+    await api.userHasCreatedFolder({
+      usersEnvironment,
+      stepUser: 'Brian',
+      folderName: 'testFolder'
+    })
 
     // And "Brian" uploads the following local file into personal space using API
     //   | localFile                   | to                           |
@@ -97,10 +101,12 @@ test.describe('Search', () => {
       usersEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
-      filesToUpload: [{ localFile: 'filesForUpload/textfile.txt', to: 'textfile.txt' },
-                      { localFile: 'filesForUpload/textfile.txt', to: 'fileWithTag.txt' },
-                      { localFile: 'filesForUpload/textfile.txt', to: 'withTag.txt' },
-                      { localFile: 'filesForUpload/textfile.txt', to: 'testFolder/innerTextfile.txt' }]
+      filesToUpload: [
+        { localFile: 'filesForUpload/textfile.txt', to: 'textfile.txt' },
+        { localFile: 'filesForUpload/textfile.txt', to: 'fileWithTag.txt' },
+        { localFile: 'filesForUpload/textfile.txt', to: 'withTag.txt' },
+        { localFile: 'filesForUpload/textfile.txt', to: 'testFolder/innerTextfile.txt' }
+      ]
     })
 
     // And "Brian" creates the following project spaces using API
@@ -123,7 +129,7 @@ test.describe('Search', () => {
       spaceName: 'FullTextSearch',
       folder: 'spaceFolder'
     })
-    
+
     // And "Brian" creates the following file in space "FullTextSearch" using API
     //   | name                          | content                   |
     //   | spaceFolder/spaceTextfile.txt | This is test file. Cheers |
@@ -134,7 +140,7 @@ test.describe('Search', () => {
       space: 'FullTextSearch',
       content: 'This is test file. Cheers'
     })
-    
+
     // And "Brian" adds the following tags for the following resources using API
     //   | resource        | tags  |
     //   | fileWithTag.txt | tag 1 |
@@ -192,13 +198,13 @@ test.describe('Search', () => {
   })
 
   test('Search for content of file', async () => {
-
     // When "Brian" searches "" using the global search and the "all files" filter and presses enter
     await ui.searchGloballyWithFilter({
       actorsEnvironment,
       stepUser: 'Brian',
       keyword: 'Cheers',
-      filter: 'all files'
+      filter: 'all files',
+      command: 'presses enter'
     })
 
     // Then "Brian" should see the message "Search for files" on the search result
@@ -221,7 +227,7 @@ test.describe('Search', () => {
     expect(
       await ui.resourceExists({
         actorsEnvironment,
-        listType: 'search list',
+        listType: 'files list',
         stepUser: 'Brian',
         resource: 'fileToShare.txt'
       })
@@ -244,7 +250,7 @@ test.describe('Search', () => {
     expect(
       await ui.resourceExists({
         actorsEnvironment,
-        listType: 'search list',
+        listType: 'files list',
         stepUser: 'Brian',
         resource: 'fileWithTag.txt'
       })
@@ -252,7 +258,7 @@ test.describe('Search', () => {
     expect(
       await ui.resourceExists({
         actorsEnvironment,
-        listType: 'search list',
+        listType: 'files list',
         stepUser: 'Brian',
         resource: 'withTag.txt'
       })
@@ -263,9 +269,9 @@ test.describe('Search', () => {
       actorsEnvironment,
       stepUser: 'Brian',
       keyword: 'file',
-      filter: 'all files'
+      filter: 'all files',
+      command: 'presses enter'
     })
-
 
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource        |
@@ -328,9 +334,15 @@ test.describe('Search', () => {
         resource: 'spaceFolder/spaceTextfile.txt'
       })
     ).toBeTruthy()
-    
 
     // When "Brian" searches "Cheers" using the global search and the "all files" filter and presses enter
+    await ui.searchGloballyWithFilter({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      keyword: 'Cheers',
+      filter: 'all files',
+      command: 'presses enter'
+    })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource                      |
     //   | textfile.txt                  |
@@ -339,10 +351,65 @@ test.describe('Search', () => {
     //   | fileWithTag.txt               |
     //   | withTag.txt                   |
     //   | spaceFolder/spaceTextfile.txt |
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'textfile.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'testFolder/innerTextfile.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'fileToShare.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'fileWithTag.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'withTag.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'spaceFolder/spaceTextfile.txt'
+      })
+    ).toBeTruthy()
     // When "Brian" opens the following file in texteditor
     //   | resource     |
     //   | textfile.txt |
+    await ui.openResourceInViewer({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      resource: 'textfile.txt',
+      application: 'texteditor'
+    })
     // And "Brian" closes the file viewer
+    await ui.userClosesTextEditor({ actorsEnvironment, stepUser: 'Brian' })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource                      |
     //   | textfile.txt                  |
@@ -351,59 +418,55 @@ test.describe('Search', () => {
     //   | fileWithTag.txt               |
     //   | withTag.txt                   |
     //   | spaceFolder/spaceTextfile.txt |
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'textfile.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'testFolder/innerTextfile.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'fileToShare.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'fileWithTag.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'withTag.txt'
+      })
+    ).toBeTruthy()
+    expect(
+      await ui.resourceExists({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'spaceFolder/spaceTextfile.txt'
+      })
+    ).toBeTruthy()
     // And "Brian" logs out
-
-    // search for project space objects
-    // await ui.searchGloballyWithFilter({
-    //   actorsEnvironment,
-    //   stepUser: 'Alice',
-    //   keyword: "-'s",
-    //   filter: 'all files'
-    // })
-
-    // expect(
-    //   await ui.resourceExists({
-    //     actorsEnvironment,
-    //     listType: 'search list',
-    //     stepUser: 'Alice',
-    //     resource: "new-'single'quotes.txt"
-    //   })
-    // ).toBeTruthy()
-
-    // expect(
-    //   await ui.resourceExists({
-    //     actorsEnvironment,
-    //     listType: 'search list',
-    //     stepUser: 'Alice',
-    //     resource: 'folder(WithSymbols:!;_+-&)'
-    //   })
-    // ).toBeFalsy()
-
-    // await ui.searchGloballyWithFilter({
-    //   actorsEnvironment,
-    //   stepUser: 'Alice',
-    //   keyword: '!;_+-&)',
-    //   filter: 'all files'
-    // })
-
-    // expect(
-    //   await ui.resourceExists({
-    //     actorsEnvironment,
-    //     listType: 'search list',
-    //     stepUser: 'Alice',
-    //     resource: 'folder(WithSymbols:!;_+-&)'
-    //   })
-    // ).toBeTruthy()
-
-    // expect(
-    //   await ui.resourceExists({
-    //     actorsEnvironment,
-    //     listType: 'search list',
-    //     stepUser: 'Alice',
-    //     resource: "new-'single'quotes.txt"
-    //   })
-    // ).toBeFalsy()
-
-    // await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
   })
 })

@@ -143,6 +143,25 @@ export async function openResource({
   await resourceObject.openFolder(resource)
 }
 
+export async function openResourceInViewer({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  application
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  application: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openFileInViewer({
+    name: resource,
+    actionType: application
+  })
+}
+
 export async function resourceExists({
   actorsEnvironment,
   listType,
