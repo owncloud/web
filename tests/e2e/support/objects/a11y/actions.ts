@@ -50,7 +50,18 @@ export const selectors = {
   actionConfirmButton: '.oc-modal-body-actions-confirm',
   contextMenuContainer: '#oc-files-context-menu',
   groupList: '.group-list',
-  editPanel: '.sidebar-panel__body-EditPanel:visible'
+  editPanel: '.sidebar-panel__body-EditPanel:visible',
+  loginInputDropdownToggle: '.vs__dropdown-toggle:has(input[id="login-input"])',
+  compareSaveDialog: '.compare-save-dialog',
+  personalQuotaInputDropdownToggle: '.vs__dropdown-toggle:has(input[id="quota-select-form"])',
+  batchQuotaInputDropdownToggle: '.vs__dropdown-toggle[aria-label^="Quota"]',
+  quotaValueDropDown: 'ul.vs__dropdown-menu',
+  roleDropdownMenu: 'ul.vs__dropdown-menu',
+  groupsDropdownMenu: 'ul.vs__dropdown-menu',
+  notificationContainer: '.oc-notification',
+  usersTable: '.users-table',
+  usersList: '#user-list', //users list with filter options included
+  addUserToGroupForm: 'user-group-select-form'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
