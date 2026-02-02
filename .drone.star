@@ -212,6 +212,9 @@ config = {
                 "NATS_NATS_HOST": "0.0.0.0",
                 "NATS_NATS_PORT": 9233,
                 "FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR": "com.owncloud.api.collaboration.Collabora",
+                "COLLABORA_DOMAIN": "collabora:9980",
+                "ONLYOFFICE_DOMAIN": "onlyoffice:443",
+                "WEB_UI_CONFIG_FILE": None,
             },
         },
         "oidc-refresh-token": {

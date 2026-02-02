@@ -46,11 +46,10 @@ test.describe('lock', { tag: '@sse' }, () => {
     // When "Alice" creates the following resources
     //   | resource | type         | content      |
     //   | test.odt | OpenDocument | some content |
-    await ui.createResource({
-      actorsEnvironment,
+    await api.userHasCreatedFile({
+      usersEnvironment,
       stepUser: 'Alice',
-      resource: 'test.odt',
-      type: 'OpenDocument',
+      filename: 'test.odt',
       content: 'some content'
     })
     // And "Alice" shares the following resource using API
@@ -94,13 +93,11 @@ test.describe('lock', { tag: '@sse' }, () => {
       event: 'file-locked'
     })
     // And for "Alice" file "test.odt" should be locked
-    expect(
-      await ui.resourceShouldBeLocked({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        resource: 'test.odt'
-      })
-    ).toBeTruthy()
+    await ui.resourceShouldBeLocked({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'test.odt'
+    })
 
     // checking that user cannot 'move', 'rename', 'delete' locked file
     // And "Alice" should not be able to edit file "test.odt"
@@ -115,15 +112,13 @@ test.describe('lock', { tag: '@sse' }, () => {
     // checking that user cannot delete or change share of the locked file
     // https://github.com/owncloud/web/issues/10507
     // And "Alice" should not be able to manage share of a file "test.odt" for user "Brian"
-    expect(
-      await ui.userShouldBeAbleToManageShareOfFile({
-        actorsEnvironment,
-        usersEnvironment,
-        stepUser: 'Alice',
-        resource: 'test.odt',
-        recipient: 'Brian'
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotBeAbleToManageShareOfFile({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'test.odt',
+      recipient: 'Brian'
+    })
 
     // checking that sharing and creating link of the locked file is possible
     // And "Alice" creates a public link of following resource using the sidebar panel
@@ -163,23 +158,19 @@ test.describe('lock', { tag: '@sse' }, () => {
       event: 'file-unlocked'
     })
     // And for "Alice" file "test.odt" should not be locked
-    expect(
-      await ui.resourceShouldBeLocked({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        resource: 'test.odt'
-      })
-    ).toBeFalsy()
+    await ui.resourceShouldNotBeLocked({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'test.odt'
+    })
     // And "Alice" should be able to manage share of a file "test.odt" for user "Brian"
-    expect(
-      await ui.userShouldBeAbleToManageShareOfFile({
-        actorsEnvironment,
-        usersEnvironment,
-        stepUser: 'Alice',
-        resource: 'test.odt',
-        recipient: 'Brian'
-      })
-    ).toBeTruthy()
+    await ui.userShouldBeAbleToManageShareOfFile({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'test.odt',
+      recipient: 'Brian'
+    })
     // And "Brian" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
     // And "Alice" logs out

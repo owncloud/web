@@ -651,9 +651,24 @@ export async function resourceShouldBeLocked({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const lockLocator = resourceObject.getLockLocator({ resource })
-  return lockLocator.isVisible()
+  expect(await lockLocator.isVisible()).toBe(true)
+}
+
+export async function resourceShouldNotBeLocked({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const lockLocator = resourceObject.getLockLocator({ resource })
+  expect(await lockLocator.isVisible()).toBe(false)
 }
