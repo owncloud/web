@@ -24,8 +24,8 @@ importers:
   .:
     dependencies:
       '@chevrotain/regexp-to-ast':
-        specifier: ^11.1.0
-        version: 11.1.0
+        specifier: ^11.1.1
+        version: 11.1.1
       crelt:
         specifier: ^1.0.6
         version: 1.0.6
@@ -912,8 +912,8 @@ importers:
         specifier: ^2.2.6
         version: 2.2.6(@casl/ability@6.8.0)(vue@3.5.26(typescript@5.9.3))
       '@chevrotain/regexp-to-ast':
-        specifier: ^11.1.0
-        version: 11.1.0
+        specifier: ^11.1.1
+        version: 11.1.1
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
         version: 2.0.1
@@ -1853,8 +1853,8 @@ packages:
   '@chevrotain/regexp-to-ast@11.0.3':
     resolution: {integrity: sha512-1fMHaBZxLFvWI067AVbGJav1eRY7N8DDvYCTwGBiE/ytKBgP8azTdgyrKyWZ9Mfh09eHWb5PgTSO8wi7U824RA==}
 
-  '@chevrotain/regexp-to-ast@11.1.0':
-    resolution: {integrity: sha512-3rW046uSp36liIAc/5G6A6h3gGbDN1eONpmJQpybIb+G2kSz0BNRc9ziT4DYrCUUbgNLd6bNVROqN9r7ZaajYg==}
+  '@chevrotain/regexp-to-ast@11.1.1':
+    resolution: {integrity: sha512-ctRw1OKSXkOrR8VTvOxrQ5USEc4sNrfwXHa1NuTcR7wre4YbjPcKw+82C2uylg/TEwFRgwLmbhlln4qkmDyteg==}
 
   '@chevrotain/types@11.0.3':
     resolution: {integrity: sha512-gsiM3G8b58kZC2HaWR50gu6Y1440cHiJ+i3JUvcp/35JchYejb2+5MVeJK0iKThYpAa/P2PYFV4hoi44HD+aHQ==}
@@ -8169,7 +8169,7 @@ snapshots:
 
   '@chevrotain/regexp-to-ast@11.0.3': {}
 
-  '@chevrotain/regexp-to-ast@11.1.0': {}
+  '@chevrotain/regexp-to-ast@11.1.1': {}
 
   '@chevrotain/types@11.0.3': {}
 
