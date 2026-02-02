@@ -48,7 +48,7 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Alice',
-        resource: 'New file.txt'
+        resources: ['New file.txt']
       })
     ).toBeTruthy()
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })

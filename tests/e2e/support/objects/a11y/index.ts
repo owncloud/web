@@ -95,9 +95,9 @@ export class Accessibility {
       const violations = await a11yObject.getSevereAccessibilityViolations(include)
       allViolations.push(...violations)
     }
-    // expect(
-    //   allViolations,
-    //   `Found ${allViolations.length} severe accessibility violations in ${selectorLabel}`
-    // ).toHaveLength(0)
+    expect(
+      allViolations,
+      `Found ${allViolations.length} severe accessibility violations in ${selectorLabel}`
+    ).toHaveLength(0)
   }
 }

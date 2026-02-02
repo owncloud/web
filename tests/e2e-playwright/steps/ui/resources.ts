@@ -166,19 +166,24 @@ export async function resourceExists({
   actorsEnvironment,
   listType,
   stepUser,
-  resource
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   listType: displayedResourceType
   stepUser: string
-  resource: string
+  resources: string[]
 }): Promise<boolean> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualList = await resourceObject.getDisplayedResources({
     keyword: listType
   })
-  return actualList.includes(resource)
+  for (const resource of resources) {
+    if (actualList.includes(resource)) {
+      return true
+    }
+  }
+  return false
 }
 
 export async function navigateToPageNumber({

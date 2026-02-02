@@ -197,29 +197,6 @@ export async function userHasCreatedProjectSpace({
   })
 }
 
-export async function uploadFileInPersonalSpace({
-  usersEnvironment,
-  stepUser,
-  filesEnvironment,
-  resource,
-  destination
-}: {
-  usersEnvironment: UsersEnvironment
-  stepUser: string
-  filesEnvironment: FilesEnvironment
-  resource: string
-  destination: string
-}) {
-  const user = usersEnvironment.getUser({ key: stepUser })
-  const fileInfo = filesEnvironment.getFile({ name: resource })
-  const content = fs.readFileSync(fileInfo.path)
-  await api.dav.uploadFileInPersonalSpace({
-    user,
-    pathToFile: destination,
-    content
-  })
-}
-
 export async function userUploadsFilesInPersonalSpace({
   usersEnvironment,
   stepUser,

@@ -112,15 +112,7 @@ test.describe('create Space shortcut', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Alice',
-        resource: 'data.zip'
-      })
-    ).toBe(true)
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Alice',
-        resource: 'lorem.txt'
+        resources: ['data.zip', 'lorem.txt']
       })
     ).toBe(true)
   })
@@ -184,15 +176,7 @@ test.describe('create Space shortcut', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Alice',
-        resource: 'resourceFolder'
-      })
-    ).toBe(true)
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Alice',
-        resource: 'lorem.txt'
+        resources: ['resourceFolder', 'lorem.txt']
       })
     ).toBe(true)
   })

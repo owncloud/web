@@ -160,35 +160,6 @@ test.describe('Search', () => {
 
     // And "Brian" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
-
-    // await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-
-    // await api.userHasCreatedProjectSpace({
-    //   usersEnvironment,
-    //   spacesEnvironment,
-    //   stepUser: 'Alice',
-    //   name: 'team',
-    //   id: 'team.1'
-    // })
-
-    // await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
-
-    // await ui.createResource({
-    //   actorsEnvironment,
-    //   stepUser: 'Alice',
-    //   resource: 'folder(WithSymbols:!;_+-&)',
-    //   type: 'folder'
-    // })
-
-    // await ui.uploadResource({
-    //   actorsEnvironment,
-    //   filesEnvironment,
-    //   stepUser: 'Alice',
-    //   resource: "new-'single'quotes.txt",
-    //   to: 'folder(WithSymbols:!;_+-&)'
-    // })
-
-    // await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
   })
 
   test.afterEach(async () => {
@@ -229,7 +200,7 @@ test.describe('Search', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'fileToShare.txt'
+        resources: ['fileToShare.txt']
       })
     ).toBeTruthy()
 
@@ -252,15 +223,7 @@ test.describe('Search', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'fileWithTag.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'withTag.txt'
+        resources: ['fileWithTag.txt', 'withTag.txt']
       })
     ).toBeTruthy()
 
@@ -281,7 +244,7 @@ test.describe('Search', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'fileWithTag.txt'
+        resources: ['fileWithTag.txt']
       })
     ).toBeTruthy()
 
@@ -299,39 +262,13 @@ test.describe('Search', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'textfile.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'fileWithTag.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'testFolder/innerTextfile.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'fileToShare.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'spaceFolder/spaceTextfile.txt'
+        resources: [
+          'textfile.txt',
+          'fileWithTag.txt',
+          'testFolder/innerTextfile.txt',
+          'fileToShare.txt',
+          'spaceFolder/spaceTextfile.txt'
+        ]
       })
     ).toBeTruthy()
 
@@ -356,47 +293,14 @@ test.describe('Search', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'textfile.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'testFolder/innerTextfile.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'fileToShare.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'fileWithTag.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'withTag.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'spaceFolder/spaceTextfile.txt'
+        resources: [
+          'textfile.txt',
+          'fileWithTag.txt',
+          'testFolder/innerTextfile.txt',
+          'fileToShare.txt',
+          'withTag.txt',
+          'spaceFolder/spaceTextfile.txt'
+        ]
       })
     ).toBeTruthy()
     // When "Brian" opens the following file in texteditor
@@ -423,47 +327,14 @@ test.describe('Search', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'textfile.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'testFolder/innerTextfile.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'fileToShare.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'fileWithTag.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'withTag.txt'
-      })
-    ).toBeTruthy()
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'spaceFolder/spaceTextfile.txt'
+        resources: [
+          'textfile.txt',
+          'testFolder/innerTextfile.txt',
+          'fileToShare.txt',
+          'fileWithTag.txt',
+          'withTag.txt',
+          'spaceFolder/spaceTextfile.txt'
+        ]
       })
     ).toBeTruthy()
     // And "Brian" logs out

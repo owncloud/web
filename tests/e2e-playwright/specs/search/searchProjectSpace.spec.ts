@@ -90,7 +90,7 @@ test.describe('Search in the project space', () => {
         actorsEnvironment,
         listType: 'search list',
         stepUser: 'Alice',
-        resource: "new-'single'quotes.txt"
+        resources: ["new-'single'quotes.txt"]
       })
     ).toBeTruthy()
 
@@ -99,7 +99,7 @@ test.describe('Search in the project space', () => {
         actorsEnvironment,
         listType: 'search list',
         stepUser: 'Alice',
-        resource: 'folder(WithSymbols:!;_+-&)'
+        resources: ['folder(WithSymbols:!;_+-&)']
       })
     ).toBeFalsy()
 
@@ -115,7 +115,7 @@ test.describe('Search in the project space', () => {
         actorsEnvironment,
         listType: 'search list',
         stepUser: 'Alice',
-        resource: 'folder(WithSymbols:!;_+-&)'
+        resources: ['folder(WithSymbols:!;_+-&)']
       })
     ).toBeTruthy()
 
@@ -124,7 +124,7 @@ test.describe('Search in the project space', () => {
         actorsEnvironment,
         listType: 'search list',
         stepUser: 'Alice',
-        resource: "new-'single'quotes.txt"
+        resources: ["new-'single'quotes.txt"]
       })
     ).toBeFalsy()
 

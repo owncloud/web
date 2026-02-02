@@ -99,7 +99,7 @@ test.describe('deny share access', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'folder_to_deny'
+        resources: ['folder_to_deny']
       })
     ).toBeFalsy()
 
@@ -136,7 +136,7 @@ test.describe('deny share access', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'folder_to_deny'
+        resources: ['folder_to_deny']
       })
     ).toBeTruthy()
 

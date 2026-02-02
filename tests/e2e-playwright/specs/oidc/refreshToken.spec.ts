@@ -93,7 +93,7 @@ test.describe('details', () => {
       actorsEnvironment,
       listType: 'files list',
       stepUser: 'Alice',
-      resource: 'space-folder'
+      resources: ['space-folder']
     })
 
     // When "Alice" navigates to new tab

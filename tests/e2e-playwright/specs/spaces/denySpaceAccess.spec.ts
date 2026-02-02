@@ -129,7 +129,7 @@ test.describe('deny space access', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'f1'
+        resources: ['f1']
       })
     ).toBe(false)
 
@@ -141,7 +141,7 @@ test.describe('deny space access', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'f2'
+        resources: ['f2']
       })
     ).toBe(true)
     // allow access - deleting "Cannot access" share
@@ -168,15 +168,7 @@ test.describe('deny space access', () => {
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
-        resource: 'f1'
-      })
-    ).toBe(true)
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'f2'
+        resources: ['f1', 'f2']
       })
     ).toBe(true)
 

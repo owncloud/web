@@ -97,12 +97,11 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
     // And "Alice" uploads the following local file into personal space using API
     //   | localFile                | to        |
     //   | filesForUpload/lorem.txt | lorem.txt |
-    await api.uploadFileInPersonalSpace({
+    await api.userUploadsFilesInPersonalSpace({
       usersEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: 'lorem.txt',
-      destination: 'lorem.txt'
+      filesToUpload: [{ localFile: 'filesForUpload/lorem.txt', to: 'lorem.txt' }]
     })
     // And "Alice" creates a public link of following resource using API
     //   | resource     | password |
