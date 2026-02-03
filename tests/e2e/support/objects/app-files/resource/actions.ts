@@ -1278,7 +1278,17 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
   }
 
   await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'Rename resource tippy box'
+  )
   await page.locator(util.format(filesContextMenuAction, 'rename')).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'Rename resource modal'
+  )
   await page.locator(fileRenameInput).clear()
   await page.locator(fileRenameInput).fill(newName)
   await Promise.all([
@@ -1344,8 +1354,8 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         await sidebar.openPanel({ page, name: 'actions' })
         await objects.a11y.Accessibility.assertNoSevereA11yViolations(
           page,
-          ['#app-sidebar'],
-          'sidebar panel'
+          ['sidebarPanelActions'],
+          'Sidebar actions panel action before deleting resource'
         )
         await Promise.all([
           page.waitForResponse(
@@ -1358,6 +1368,11 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
         ])
         await sidebar.close({ page })
       }
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['sidebarPanelActions', 'filesView'],
+        'Sidebar actions panel before deleting resource and files view after deleting resource'
+      )
       break
     }
 

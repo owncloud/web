@@ -118,6 +118,11 @@ export const open = async ({
   }
 
   resource ? await openForResource({ page, resource, resourceType }) : await openGlobal({ page })
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    [sidebarPanel],
+    'sidebar panel opening'
+  )
 }
 
 export const close = async ({ page }: { page: Page }): Promise<void> => {

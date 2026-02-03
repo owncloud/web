@@ -88,7 +88,7 @@ export async function searchGloballyWithFilter({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   keyword: string
-  filter: string
+  filter: searchFilter
   command?: string
 }): Promise<void> {
   keyword = keyword ?? ''
@@ -99,7 +99,7 @@ export async function searchGloballyWithFilter({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.searchResource({
     keyword,
-    filter: filter as searchFilter,
+    filter: filter,
     pressEnter
   })
 }
@@ -433,9 +433,6 @@ export async function userClosesFileViewer({
   await editor.close(page)
 }
 
-// When "Brian" deletes the following resources using the sidebar panel
-//   | resource      | from               |
-//   | lorem-big.txt | folder_to_shared_2 |
 export async function userDeletesResources({
   actorsEnvironment,
   stepUser,
