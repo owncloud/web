@@ -42,7 +42,7 @@ export async function uploadResource({
   }
 }
 
-export async function isAbleToEditFileOrFolder({
+export async function userShouldNotBeAbleToEditFileOrFolder({
   actorsEnvironment,
   stepUser,
   resource
@@ -50,11 +50,11 @@ export async function isAbleToEditFileOrFolder({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const userCanEdit = await resourceObject.canManageResource({ resource })
-  return userCanEdit
+  expect(userCanEdit).toBe(false)
 }
 
 export async function userCreatesResources({
@@ -505,7 +505,7 @@ export async function userCreatesShortcutForResources({
   }
 }
 
-type resourceToDownload = {
+export type ResourceToDownload = {
   resource: string
   type: string
   from?: string
@@ -519,7 +519,7 @@ export async function userDownloadsResource({
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resourceToDownload: resourceToDownload[]
+  resourceToDownload: ResourceToDownload[]
   actionType: ActionViaType
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
@@ -530,7 +530,7 @@ export async function userDownloadsResource({
 export const processDownload = async (
   pageObject: Public | Resource,
   actionType: ActionViaType,
-  resourceToDownload: resourceToDownload[]
+  resourceToDownload: ResourceToDownload[]
 ) => {
   let downloads, files, parentFolder
   const downloadedResources: string[] = []
@@ -892,4 +892,34 @@ export async function userRestoresResourceVersion({
       openDetailsPanel: fileInfo[folder]['openDetailsPanel']
     })
   }
+}
+export async function userDeletesResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  folder = null,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  folder?: string | null
+  actionType: ActionViaType
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await processDelete(resourceObject, resource, folder, actionType)
+}
+
+export const processDelete = async (
+  pageObject: Public | Resource,
+  resource: string,
+  folder: string,
+  actionType: ActionViaType
+) => {
+  await pageObject.delete({
+    folder: folder,
+    resourcesWithInfo: [{ name: resource }],
+    via: actionType
+  })
 }
