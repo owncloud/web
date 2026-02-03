@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { config } from './../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
@@ -88,14 +88,12 @@ test.describe('details', () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource     |
     //   | space-folder |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Alice',
-        resources: ['space-folder']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Alice',
+      resources: ['space-folder']
+    })
 
     // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })

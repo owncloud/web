@@ -17,7 +17,7 @@ export async function userShouldSeeMessageOnSearchResult({
   return actualMessage === substitute(message)
 }
 
-export async function userSelectTagFromSearchResultFilterChip({
+export async function userFiltersSearchResultWithTag({
   actorsEnvironment,
   stepUser,
   tag

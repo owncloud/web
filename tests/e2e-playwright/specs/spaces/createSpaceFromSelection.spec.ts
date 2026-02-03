@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { config } from './../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -107,14 +107,12 @@ test.describe('create Space shortcut', () => {
     //   | resource  |
     //   | data.zip  |
     //   | lorem.txt |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Alice',
-        resources: ['data.zip', 'lorem.txt']
-      })
-    ).toBe(true)
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Alice',
+      resources: ['data.zip', 'lorem.txt']
+    })
   })
 
   test('create space from resources', async () => {
@@ -171,13 +169,11 @@ test.describe('create Space shortcut', () => {
     //   | resource        |
     //   | resourceFolder  |
     //   | lorem.txt       |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Alice',
-        resources: ['resourceFolder', 'lorem.txt']
-      })
-    ).toBe(true)
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Alice',
+      resources: ['resourceFolder', 'lorem.txt']
+    })
   })
 })

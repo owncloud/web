@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { test } from '@playwright/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
@@ -94,14 +94,13 @@ test.describe('deny share access', () => {
       stepUser: 'Brian',
       resource: 'folder_to_shared'
     })
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resources: ['folder_to_deny']
-      })
-    ).toBeFalsy()
+
+    await ui.userShouldNotSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: ['folder_to_deny']
+    })
 
     await ui.userOpensApplication({
       actorsEnvironment,
@@ -131,14 +130,12 @@ test.describe('deny share access', () => {
       stepUser: 'Brian',
       resource: 'folder_to_shared'
     })
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resources: ['folder_to_deny']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: ['folder_to_deny']
+    })
 
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })

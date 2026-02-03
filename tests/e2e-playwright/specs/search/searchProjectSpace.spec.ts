@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { test } from '@playwright/test'
 import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -85,23 +85,19 @@ test.describe('Search in the project space', () => {
       filter: 'all files'
     })
 
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'search list',
-        stepUser: 'Alice',
-        resources: ["new-'single'quotes.txt"]
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'search list',
+      stepUser: 'Alice',
+      resources: ["new-'single'quotes.txt"]
+    })
 
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'search list',
-        stepUser: 'Alice',
-        resources: ['folder(WithSymbols:!;_+-&)']
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotSeeTheResources({
+      actorsEnvironment,
+      listType: 'search list',
+      stepUser: 'Alice',
+      resources: ['folder(WithSymbols:!;_+-&)']
+    })
 
     await ui.searchGloballyWithFilter({
       actorsEnvironment,
@@ -110,23 +106,19 @@ test.describe('Search in the project space', () => {
       filter: 'all files'
     })
 
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'search list',
-        stepUser: 'Alice',
-        resources: ['folder(WithSymbols:!;_+-&)']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'search list',
+      stepUser: 'Alice',
+      resources: ['folder(WithSymbols:!;_+-&)']
+    })
 
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'search list',
-        stepUser: 'Alice',
-        resources: ["new-'single'quotes.txt"]
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotSeeTheResources({
+      actorsEnvironment,
+      listType: 'search list',
+      stepUser: 'Alice',
+      resources: ["new-'single'quotes.txt"]
+    })
 
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
   })

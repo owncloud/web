@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
@@ -43,14 +43,12 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
     })
     await ui.userSavesTextEditor({ actorsEnvironment, stepUser: 'Alice' })
     await ui.userClosesTextEditor({ actorsEnvironment, stepUser: 'Alice' })
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Alice',
-        resources: ['New file.txt']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Alice',
+      resources: ['New file.txt']
+    })
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

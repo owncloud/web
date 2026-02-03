@@ -162,7 +162,7 @@ export async function openResourceInViewer({
   })
 }
 
-export async function resourceExists({
+export async function userShouldSeeTheResources({
   actorsEnvironment,
   listType,
   stepUser,
@@ -172,18 +172,36 @@ export async function resourceExists({
   listType: displayedResourceType
   stepUser: string
   resources: string[]
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualList = await resourceObject.getDisplayedResources({
     keyword: listType
   })
   for (const resource of resources) {
-    if (actualList.includes(resource)) {
-      return true
-    }
+    expect(actualList).toContain(resource)
   }
-  return false
+}
+
+export async function userShouldNotSeeTheResources({
+  actorsEnvironment,
+  listType,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  listType: displayedResourceType
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const actualList = await resourceObject.getDisplayedResources({
+    keyword: listType
+  })
+  for (const resource of resources) {
+    expect(actualList).not.toContain(resource)
+  }
 }
 
 export async function navigateToPageNumber({

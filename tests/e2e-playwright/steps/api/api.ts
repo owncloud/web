@@ -197,7 +197,7 @@ export async function userHasCreatedProjectSpace({
   })
 }
 
-export async function userUploadsFilesInPersonalSpace({
+export async function userHasUploadedFilesInPersonalSpace({
   usersEnvironment,
   stepUser,
   filesEnvironment,

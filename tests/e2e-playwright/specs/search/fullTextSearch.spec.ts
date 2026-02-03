@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { test } from '@playwright/test'
 import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -52,7 +52,7 @@ test.describe('Search', () => {
     // And "Alice" uploads the following local file into personal space using API
     //   | localFile                   | to              |
     //   | filesForUpload/textfile.txt | fileToShare.txt |
-    await api.userUploadsFilesInPersonalSpace({
+    await api.userHasUploadedFilesInPersonalSpace({
       usersEnvironment,
       stepUser: 'Alice',
       filesEnvironment,
@@ -97,7 +97,7 @@ test.describe('Search', () => {
     //   | filesForUpload/textfile.txt | fileWithTag.txt              |
     //   | filesForUpload/textfile.txt | withTag.txt                  |
     //   | filesForUpload/textfile.txt | testFolder/innerTextfile.txt |
-    await api.userUploadsFilesInPersonalSpace({
+    await api.userHasUploadedFilesInPersonalSpace({
       usersEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
@@ -186,7 +186,7 @@ test.describe('Search', () => {
     })
 
     // When "Brian" selects tag "alice tag" from the search result filter chip
-    await ui.userSelectTagFromSearchResultFilterChip({
+    await ui.userFiltersSearchResultWithTag({
       actorsEnvironment,
       stepUser: 'Brian',
       tag: 'alice tag'
@@ -195,20 +195,18 @@ test.describe('Search', () => {
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource        |
     //   | fileToShare.txt |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resources: ['fileToShare.txt']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: ['fileToShare.txt']
+    })
 
     // When "Brian" clears tags filter
     await ui.userClearsFilter({ actorsEnvironment, stepUser: 'Brian', filter: 'tags' })
 
     // And "Brian" selects tag "tag 1" from the search result filter chip
-    await ui.userSelectTagFromSearchResultFilterChip({
+    await ui.userFiltersSearchResultWithTag({
       actorsEnvironment,
       stepUser: 'Brian',
       tag: 'tag 1'
@@ -218,14 +216,12 @@ test.describe('Search', () => {
     //   | resource        |
     //   | fileWithTag.txt |
     //   | withTag.txt     |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resources: ['fileWithTag.txt', 'withTag.txt']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: ['fileWithTag.txt', 'withTag.txt']
+    })
 
     // When "Brian" searches "file" using the global search and the "all files" filter and presses enter
     await ui.searchGloballyWithFilter({
@@ -239,14 +235,12 @@ test.describe('Search', () => {
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource        |
     //   | fileWithTag.txt |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resources: ['fileWithTag.txt']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: ['fileWithTag.txt']
+    })
 
     // When "Brian" clears tags filter
     await ui.userClearsFilter({ actorsEnvironment, stepUser: 'Brian', filter: 'tags' })
@@ -257,20 +251,18 @@ test.describe('Search', () => {
     //   | testFolder/innerTextfile.txt  |
     //   | fileToShare.txt               |
     //   | spaceFolder/spaceTextfile.txt |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resources: [
-          'textfile.txt',
-          'fileWithTag.txt',
-          'testFolder/innerTextfile.txt',
-          'fileToShare.txt',
-          'spaceFolder/spaceTextfile.txt'
-        ]
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: [
+        'textfile.txt',
+        'fileWithTag.txt',
+        'testFolder/innerTextfile.txt',
+        'fileToShare.txt',
+        'spaceFolder/spaceTextfile.txt'
+      ]
+    })
 
     // When "Brian" searches "Cheers" using the global search and the "all files" filter and presses enter
     await ui.searchGloballyWithFilter({
@@ -288,21 +280,19 @@ test.describe('Search', () => {
     //   | fileWithTag.txt               |
     //   | withTag.txt                   |
     //   | spaceFolder/spaceTextfile.txt |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resources: [
-          'textfile.txt',
-          'fileWithTag.txt',
-          'testFolder/innerTextfile.txt',
-          'fileToShare.txt',
-          'withTag.txt',
-          'spaceFolder/spaceTextfile.txt'
-        ]
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: [
+        'textfile.txt',
+        'fileWithTag.txt',
+        'testFolder/innerTextfile.txt',
+        'fileToShare.txt',
+        'withTag.txt',
+        'spaceFolder/spaceTextfile.txt'
+      ]
+    })
     // When "Brian" opens the following file in texteditor
     //   | resource     |
     //   | textfile.txt |
@@ -322,21 +312,19 @@ test.describe('Search', () => {
     //   | fileWithTag.txt               |
     //   | withTag.txt                   |
     //   | spaceFolder/spaceTextfile.txt |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resources: [
-          'textfile.txt',
-          'testFolder/innerTextfile.txt',
-          'fileToShare.txt',
-          'fileWithTag.txt',
-          'withTag.txt',
-          'spaceFolder/spaceTextfile.txt'
-        ]
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: [
+        'textfile.txt',
+        'testFolder/innerTextfile.txt',
+        'fileToShare.txt',
+        'fileWithTag.txt',
+        'withTag.txt',
+        'spaceFolder/spaceTextfile.txt'
+      ]
+    })
     // And "Brian" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
   })

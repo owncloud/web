@@ -97,7 +97,7 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
     // And "Alice" uploads the following local file into personal space using API
     //   | localFile                | to        |
     //   | filesForUpload/lorem.txt | lorem.txt |
-    await api.userUploadsFilesInPersonalSpace({
+    await api.userHasUploadedFilesInPersonalSpace({
       usersEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
