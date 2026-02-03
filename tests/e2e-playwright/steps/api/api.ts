@@ -26,6 +26,18 @@ export async function userHasBeenCreated({
   const user = usersEnvironment.getUser({ key: userToBeCreated })
   // do not try to create users when using predefined users
   if (!config.predefinedUsers) {
+    // Check if user already exists from previous test run (store was cleared but user persists on server)
+    const existingUserId = await api.graph.getUserId({ user, admin })
+    if (existingUserId) {
+      console.log(
+        `[WARN] User ${user.id} already exists on server (orphaned from previous run). Deleting...`
+      )
+      await api.provision.deleteUser({ user: { ...user, uuid: existingUserId }, admin })
+      // Remove from store if present (in case of retries within same run)
+      if (store.createdUserStore.has(user.id.toLowerCase())) {
+        store.createdUserStore.delete(user.id.toLowerCase())
+      }
+    }
     await api.provision.createUser({ user, admin })
   }
 }
@@ -197,9 +209,36 @@ export async function userHasCreatedProjectSpace({
   id: string
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
+  const spaceKey = id || name
+
+  // Check if space already exists in store (from previous test attempt/retry)
+  if (store.createdSpaceStore.has(spaceKey)) {
+    // Verify space actually exists on server (might have been cleaned up)
+    try {
+      const existingSpaceId = await api.graph.getSpaceIdBySpaceName({
+        user,
+        spaceType: 'project',
+        spaceName: name
+      })
+      console.log(
+        `[DEBUG] Space '${spaceKey}' exists in store and on server. Using existing space.`
+      )
+      return
+    } catch (e) {
+      if (e.message && e.message.includes('Could not find space')) {
+        console.log(
+          `[WARN] Space '${spaceKey}' exists in store but NOT on server (cleaned up). Removing from store and recreating...`
+        )
+        store.createdSpaceStore.delete(spaceKey)
+      } else {
+        throw e
+      }
+    }
+  }
+
   const spaceId = await api.graph.createSpace({ user, space: { id, name } as unknown as Space })
   spacesEnvironment.createSpace({
-    key: id || name,
+    key: spaceKey,
     space: { name: name, id: spaceId }
   })
 }
@@ -405,8 +444,30 @@ export const groupsHaveBeenCreated = async ({
 }): Promise<Group[]> => {
   const usersEnvironment = new UsersEnvironment()
   const createdGroups: Group[] = []
+
+  // First, fetch all existing groups to check for orphans
+  const existingGroups = await api.graph.getGroups(admin)
+
   for (const id of groupIds) {
     const group = usersEnvironment.getGroup({ key: id })
+
+    // Check if group already exists on server (orphaned from previous run)
+    const existingGroup = existingGroups.find((g) => g.displayName === group.displayName)
+    if (existingGroup) {
+      console.log(
+        `[WARN] Group '${group.displayName}' already exists on server (orphaned). Deleting...`
+      )
+      // Delete the orphaned group
+      await api.graph.deleteGroup({
+        group: { ...group, uuid: existingGroup.id },
+        admin
+      })
+      // Remove from store if present
+      if (store.createdGroupStore.has(id.toLowerCase())) {
+        store.createdGroupStore.delete(id.toLowerCase())
+      }
+    }
+
     const body = JSON.stringify({
       displayName: group.displayName
     })

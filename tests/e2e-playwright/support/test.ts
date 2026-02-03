@@ -5,14 +5,22 @@ import { config } from '../../e2e/config.js'
 import { api, store, environment, utils } from '../../e2e/support'
 
 const usersEnvironment = new UsersEnvironment()
+const spacesEnvironment = new environment.SpacesEnvironment()
 
-export const test = base.extend<{ usersEnvironment: UsersEnvironment }>({
+export const test = base.extend<{
+  usersEnvironment: UsersEnvironment
+  spacesEnvironment: environment.SpacesEnvironment
+}>({
   usersEnvironment: async ({}, use) => {
     await use(usersEnvironment)
+  },
+  spacesEnvironment: async ({}, use) => {
+    await use(spacesEnvironment)
   }
 })
 
 test.afterEach(async ({ usersEnvironment }) => {
+  console.log('Cleaning up after test............................................................')
   config.federatedServer = false
   const adminUser = usersEnvironment.getUser({ key: config.adminUsername })
   if (!config.predefinedUsers) {
@@ -49,6 +57,8 @@ test.afterEach(async ({ usersEnvironment }) => {
 })
 
 const cleanUpUser = async (createdUserStore, adminUser: User) => {
+  console.log(`[DEBUG] Starting user cleanup, store size:`, createdUserStore.size)
+  console.log(`[DEBUG] Users in store:`, Array.from(createdUserStore.keys()))
   const requests: Promise<User>[] = []
   for (const [key, user] of createdUserStore.entries()) {
     console.log(`Cleanup user: ${user.id}`)
@@ -58,7 +68,18 @@ const cleanUpUser = async (createdUserStore, adminUser: User) => {
       await cleanupPredefinedUser(key, user)
     }
   }
-  await Promise.all(requests)
+  const results = await Promise.allSettled(requests)
+  const failures = results.filter((r) => r.status === 'rejected')
+  if (failures.length > 0) {
+    console.error(
+      `Failed to cleanup ${failures.length} users:`,
+      failures.map((f: any) => f.reason?.message || f.reason)
+    )
+    // Don't clear the store if cleanup failed, so next test can retry cleanup
+    throw new Error(
+      `User cleanup failed: ${failures.map((f: any) => f.reason?.message || f.reason).join(', ')}`
+    )
+  }
   createdUserStore.clear()
   store.keycloakCreatedUser.clear()
 }
@@ -99,7 +120,17 @@ const cleanUpGroup = async (adminUser: User) => {
     }
   })
 
-  await Promise.all(requests)
+  const results = await Promise.allSettled(requests)
+  const failures = results.filter((r) => r.status === 'rejected')
+  if (failures.length > 0) {
+    console.error(
+      `Failed to cleanup ${failures.length} groups:`,
+      failures.map((f: any) => f.reason?.message || f.reason)
+    )
+    throw new Error(
+      `Group cleanup failed: ${failures.map((f: any) => f.reason?.message || f.reason).join(', ')}`
+    )
+  }
   store.createdGroupStore.clear()
 }
 
@@ -126,6 +157,16 @@ const cleanUpSpaces = async (adminUser: User) => {
         })
     )
   })
-  await Promise.all(requests)
+  const results = await Promise.allSettled(requests)
+  const failures = results.filter((r) => r.status === 'rejected')
+  if (failures.length > 0) {
+    console.error(
+      `Failed to cleanup ${failures.length} spaces:`,
+      failures.map((f: any) => f.reason?.message || f.reason)
+    )
+    throw new Error(
+      `Space cleanup failed: ${failures.map((f: any) => f.reason?.message || f.reason).join(', ')}`
+    )
+  }
   store.createdSpaceStore.clear()
 }
