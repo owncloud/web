@@ -463,8 +463,10 @@ export const processDelete = async (
       return acc
     }, {})
 
+  console.log(deleteInfo)
   for (const folder of Object.keys(deleteInfo)) {
     files = deleteInfo[folder]
+    console.log(folder,files)
     parentFolder = folder !== 'undefined' ? folder : null
     await pageObject.delete({
       folder: parentFolder,

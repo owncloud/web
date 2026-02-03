@@ -1,5 +1,9 @@
 import { objects } from '../../../e2e/support'
-import { ActorsEnvironment, LinksEnvironment } from '../../../e2e/support/environment'
+import {
+  ActorsEnvironment,
+  LinksEnvironment,
+  FilesEnvironment
+} from '../../../e2e/support/environment'
 import { substitute } from '../../../e2e/support/utils'
 
 export async function openPublicLink({
@@ -72,4 +76,64 @@ export async function anonymousUserUnlocksPublicLink({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await pageObject.authenticate({ password: substitute(password) })
+}
+
+export async function userDownloadsPublicLinkResource({
+  actorsEnvironment,
+  stepUser,
+  password,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  password: string
+  stepUser: string
+  actionType: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  // wating for shortcut pr
+  // await processDownload(stepTable, pageObject, actionType)
+}
+
+export async function userUploadsResourceInPublicLink({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource,
+  to,
+  option,
+  type
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  to: string
+  resource: string
+  option: string
+  type: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.upload({
+    to: to,
+    resources: [filesEnvironment.getFile({ name: resource })],
+    option: option,
+    type: type
+  })
+}
+
+export async function userRenamesResourceOfPublicLink({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  newName,
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  newName: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.rename({ resource, newName })
 }

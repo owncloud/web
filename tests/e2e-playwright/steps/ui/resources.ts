@@ -11,6 +11,9 @@ import {
   searchFilter
 } from '../../../e2e/support/objects/app-files/resource/actions'
 import { editor } from '../../../e2e/support/objects/app-files/utils'
+import { ActionViaType } from '../../../e2e/support/objects/app-files/share/actions'
+import { Public } from '../../support/objects/app-files/page/public'
+import { Resource } from '../../support/objects/app-files'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -411,4 +414,34 @@ export async function userClosesTextEditor({
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   await editor.close(page)
+}
+export async function userDeletesResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  folder=null,
+  actionType,
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  folder?: string|null
+  actionType: ActionViaType
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await processDelete(resourceObject, resource,folder,actionType)
+}
+
+export const processDelete = async (
+  pageObject: Public | Resource,
+  resource: string,
+  folder: string,
+  actionType: ActionViaType
+) => {
+  await pageObject.delete({
+    folder: folder,
+    resourcesWithInfo: [{name:resource}],
+    via: actionType
+  })
 }
