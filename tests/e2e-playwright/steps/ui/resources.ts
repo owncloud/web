@@ -87,7 +87,7 @@ export async function searchGloballyWithFilter({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   keyword: string
-  filter: string
+  filter: searchFilter
   command?: string
 }): Promise<void> {
   keyword = keyword ?? ''
@@ -98,7 +98,7 @@ export async function searchGloballyWithFilter({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.searchResource({
     keyword,
-    filter: filter as searchFilter,
+    filter: filter,
     pressEnter
   })
 }
@@ -414,22 +414,22 @@ export async function userClosesFileViewer({
 export async function deleteResource({
   actorsEnvironment,
   stepUser,
-  file,
-  actionType,
+  resource,
+  actionType = 'SIDEBAR_PANEL',
   parentFolder = ''
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  file: string
-  actionType: string
+  resource: string
+  actionType: 'BATCH_ACTION' | 'SIDEBAR_PANEL'
   parentFolder?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.Resource({ page })
   await pageObject.delete({
     folder: parentFolder === '' ? null : parentFolder,
-    resourcesWithInfo: [{ name: file }],
-    via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+    resourcesWithInfo: [{ name: resource }],
+    via: actionType
   })
 }
 
@@ -740,4 +740,20 @@ export async function userNavigatesMediaResource({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.navigateMediaFile(navigationType)
+}
+
+export async function userRenamesResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  as
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  as: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.rename({ resource, newName: as })
 }
