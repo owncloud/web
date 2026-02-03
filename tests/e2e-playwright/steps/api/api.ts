@@ -197,27 +197,27 @@ export async function userHasCreatedProjectSpace({
   })
 }
 
-export async function uploadFileInPersonalSpace({
+export async function userHasUploadedFilesInPersonalSpace({
   usersEnvironment,
   stepUser,
   filesEnvironment,
-  resource,
-  destination
+  filesToUpload
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
   filesEnvironment: FilesEnvironment
-  resource: string
-  destination: string
+  filesToUpload: { localFile: string; to: string }[]
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
-  const fileInfo = filesEnvironment.getFile({ name: resource })
-  const content = fs.readFileSync(fileInfo.path)
-  await api.dav.uploadFileInPersonalSpace({
-    user,
-    pathToFile: destination,
-    content
-  })
+  for (const file of filesToUpload) {
+    const fileInfo = filesEnvironment.getFile({ name: file.localFile.split('/').pop()! })
+    const content = fs.readFileSync(fileInfo.path)
+    await api.dav.uploadFileInPersonalSpace({
+      user,
+      pathToFile: file.to,
+      content
+    })
+  }
 }
 
 export async function userHasCreatedFoldersInSpace({
@@ -433,4 +433,19 @@ export const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   store.createdGroupStore.clear()
+}
+
+export async function userHasAddedTagsToResource({
+  usersEnvironment,
+  stepUser,
+  resource,
+  tags
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  tags: string
+}): Promise<void> {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.dav.addTagToResource({ user, resource, tags })
 }

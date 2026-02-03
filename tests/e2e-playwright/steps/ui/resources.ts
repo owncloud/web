@@ -143,23 +143,65 @@ export async function openResource({
   await resourceObject.openFolder(resource)
 }
 
-export async function resourceExists({
+export async function openResourceInViewer({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  application
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  application: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openFileInViewer({
+    name: resource,
+    actionType: application
+  })
+}
+
+export async function userShouldSeeTheResources({
   actorsEnvironment,
   listType,
   stepUser,
-  resource
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
-  listType: 'search list' | 'files list' | 'Shares' | 'trashbin'
+  listType: displayedResourceType
   stepUser: string
-  resource: string
-}): Promise<boolean> {
+  resources: string[]
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualList = await resourceObject.getDisplayedResources({
-    keyword: listType as displayedResourceType
+    keyword: listType
   })
-  return actualList.includes(resource)
+  for (const resource of resources) {
+    expect(actualList).toContain(resource)
+  }
+}
+
+export async function userShouldNotSeeTheResources({
+  actorsEnvironment,
+  listType,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  listType: displayedResourceType
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const actualList = await resourceObject.getDisplayedResources({
+    keyword: listType
+  })
+  for (const resource of resources) {
+    expect(actualList).not.toContain(resource)
+  }
 }
 
 export async function navigateToPageNumber({

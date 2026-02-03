@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { config } from './../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -124,26 +124,22 @@ test.describe('deny space access', () => {
     // Then following resources should not be displayed in the files list for user "Brian"
     //   | resource |
     //   | f1       |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'f1'
-      })
-    ).toBe(false)
+    await ui.userShouldNotSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: ['f1']
+    })
 
     // But following resources should be displayed in the files list for user "Brian"
     //   | resource |
     //   | f2       |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'f2'
-      })
-    ).toBe(true)
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: ['f2']
+    })
     // allow access - deleting "Cannot access" share
     // When "Alice" removes following sharee
     //   | resource | recipient |
@@ -163,22 +159,12 @@ test.describe('deny space access', () => {
     //   | resource |
     //   | f1       |
     //   | f2       |
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'f1'
-      })
-    ).toBe(true)
-    expect(
-      await ui.resourceExists({
-        actorsEnvironment,
-        listType: 'files list',
-        stepUser: 'Brian',
-        resource: 'f2'
-      })
-    ).toBe(true)
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Brian',
+      resources: ['f1', 'f2']
+    })
 
     // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
