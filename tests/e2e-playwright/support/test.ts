@@ -1,8 +1,10 @@
 import { test as base } from '@playwright/test'
 import { UsersEnvironment } from '../../e2e/support/environment'
-import { Group, User, UserState } from '../../e2e/support/types'
+import { User, UserState } from '../../e2e/support/types'
 import { config } from '../../e2e/config.js'
 import { api, store, environment, utils } from '../../e2e/support'
+import { request } from '../../e2e/support/api/http'
+import { join } from 'path'
 
 const usersEnvironment = new UsersEnvironment()
 const spacesEnvironment = new environment.SpacesEnvironment()
@@ -20,27 +22,22 @@ export const test = base.extend<{
 })
 
 test.afterEach(async ({ usersEnvironment }) => {
-  console.log('Cleaning up after test............................................................')
   config.federatedServer = false
   const adminUser = usersEnvironment.getUser({ key: config.adminUsername })
-  if (!config.predefinedUsers) {
-    // refresh keycloak admin access token
-    if (config.keycloak) {
-      const keycloakAdminUser = usersEnvironment.getUser({ key: config.keycloakAdminUser })
-      await api.keycloak.refreshAccessTokenForKeycloakUser(keycloakAdminUser)
-      await api.keycloak.refreshAccessTokenForKeycloakOcisUser(keycloakAdminUser)
-    } else {
-      await api.token.refreshAccessToken(adminUser)
-    }
 
-    // FIXME: ocm tests
-    // if (isOcm(pickle)) {
-    //   // need to set federatedServer config to true to delete federated oCIS users
-    //   config.federatedServer = true
-    //   await api.token.refreshAccessToken(adminUser)
-    //   await cleanUpUser(store.federatedUserStore, adminUser)
-    //   config.federatedServer = false
-    // }
+  if (!config.predefinedUsers && adminUser) {
+    // refresh keycloak admin access token
+    try {
+      if (config.keycloak) {
+        const keycloakAdminUser = usersEnvironment.getUser({ key: config.keycloakAdminUser })
+        await api.keycloak.refreshAccessTokenForKeycloakUser(keycloakAdminUser)
+        await api.keycloak.refreshAccessTokenForKeycloakOcisUser(keycloakAdminUser)
+      } else {
+        await api.token.refreshAccessToken(adminUser)
+      }
+    } catch (error) {
+      console.warn('Error refreshing token:', error)
+    }
   }
 
   await cleanUpUser(store.createdUserStore, adminUser)
@@ -57,29 +54,27 @@ test.afterEach(async ({ usersEnvironment }) => {
 })
 
 const cleanUpUser = async (createdUserStore, adminUser: User) => {
-  console.log(`[DEBUG] Starting user cleanup, store size:`, createdUserStore.size)
-  console.log(`[DEBUG] Users in store:`, Array.from(createdUserStore.keys()))
+  if (!adminUser) {
+    return
+  }
+
   const requests: Promise<User>[] = []
   for (const [key, user] of createdUserStore.entries()) {
-    console.log(`Cleanup user: ${user.id}`)
     if (!config.predefinedUsers) {
       requests.push(api.provision.deleteUser({ user, admin: adminUser }))
     } else {
       await cleanupPredefinedUser(key, user)
     }
   }
+
   const results = await Promise.allSettled(requests)
   const failures = results.filter((r) => r.status === 'rejected')
   if (failures.length > 0) {
-    console.error(
-      `Failed to cleanup ${failures.length} users:`,
-      failures.map((f: any) => f.reason?.message || f.reason)
-    )
-    // Don't clear the store if cleanup failed, so next test can retry cleanup
     throw new Error(
-      `User cleanup failed: ${failures.map((f: any) => f.reason?.message || f.reason).join(', ')}`
+      `Failed to cleanup users: ${failures.map((f: any) => f.reason?.message || f.reason).join(', ')}`
     )
   }
+
   createdUserStore.clear()
   store.keycloakCreatedUser.clear()
 }
@@ -108,29 +103,26 @@ const cleanupPredefinedUser = async (userKey: string, user: User) => {
 }
 
 const cleanUpGroup = async (adminUser: User) => {
-  console.log('groups:', store.createdGroupStore.keys())
-  if (config.predefinedUsers) {
+  if (config.predefinedUsers || !adminUser) {
     return
   }
-  const requests: Promise<Group>[] = []
-  store.createdGroupStore.forEach((group) => {
-    if (!group.id.startsWith('keycloak')) {
-      console.log(`Cleanup group: ${group.displayName}`)
-      requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
-    }
-  })
 
-  const results = await Promise.allSettled(requests)
-  const failures = results.filter((r) => r.status === 'rejected')
-  if (failures.length > 0) {
-    console.error(
-      `Failed to cleanup ${failures.length} groups:`,
-      failures.map((f: any) => f.reason?.message || f.reason)
-    )
-    throw new Error(
-      `Group cleanup failed: ${failures.map((f: any) => f.reason?.message || f.reason).join(', ')}`
-    )
+  // Get all groups from the server
+  const serverGroups = await api.graph.getGroups(adminUser)
+
+  // Delete groups by their UUID (which stays the same even when renamed)
+  for (const [key, group] of store.createdGroupStore.entries()) {
+    const serverGroup = serverGroups.find((g) => g.id === group.uuid)
+    if (serverGroup) {
+      await request({
+        method: 'DELETE',
+        path: join('graph', 'v1.0', 'groups', serverGroup.id),
+        user: adminUser
+      })
+    }
   }
+
+  // Clear the local store
   store.createdGroupStore.clear()
 }
 
@@ -140,7 +132,6 @@ const cleanUpSpaces = async (adminUser: User) => {
   }
   const requests: Promise<void>[] = []
   store.createdSpaceStore.forEach((space) => {
-    console.log(`Cleanup space: ${space.name}`)
     requests.push(
       api.graph
         .disableSpace({

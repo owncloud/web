@@ -29,9 +29,6 @@ export async function userHasBeenCreated({
     // Check if user already exists from previous test run (store was cleared but user persists on server)
     const existingUserId = await api.graph.getUserId({ user, admin })
     if (existingUserId) {
-      console.log(
-        `[WARN] User ${user.id} already exists on server (orphaned from previous run). Deleting...`
-      )
       await api.provision.deleteUser({ user: { ...user, uuid: existingUserId }, admin })
       // Remove from store if present (in case of retries within same run)
       if (store.createdUserStore.has(user.id.toLowerCase())) {
@@ -220,15 +217,10 @@ export async function userHasCreatedProjectSpace({
         spaceType: 'project',
         spaceName: name
       })
-      console.log(
-        `[DEBUG] Space '${spaceKey}' exists in store and on server. Using existing space.`
-      )
+
       return
     } catch (e) {
       if (e.message && e.message.includes('Could not find space')) {
-        console.log(
-          `[WARN] Space '${spaceKey}' exists in store but NOT on server (cleaned up). Removing from store and recreating...`
-        )
         store.createdSpaceStore.delete(spaceKey)
       } else {
         throw e
@@ -445,6 +437,9 @@ export const groupsHaveBeenCreated = async ({
   const usersEnvironment = new UsersEnvironment()
   const createdGroups: Group[] = []
 
+  // Clear the store first to prevent conflicts between tests in the same file
+  store.createdGroupStore.clear()
+
   // First, fetch all existing groups to check for orphans
   const existingGroups = await api.graph.getGroups(admin)
 
@@ -452,22 +447,26 @@ export const groupsHaveBeenCreated = async ({
     const group = usersEnvironment.getGroup({ key: id })
 
     // Check if group already exists on server (orphaned from previous run)
+    // Look for the group by its original display name
     const existingGroup = existingGroups.find((g) => g.displayName === group.displayName)
     if (existingGroup) {
-      console.log(
-        `[WARN] Group '${group.displayName}' already exists on server (orphaned). Deleting...`
-      )
-      // Delete the orphaned group
-      await api.graph.deleteGroup({
-        group: { ...group, uuid: existingGroup.id },
-        admin
+      // Delete the orphaned group by its actual server ID
+      const response = await request({
+        method: 'DELETE',
+        path: join('graph', 'v1.0', 'groups', existingGroup.id),
+        user: admin
       })
+      // Don't throw error if group doesn't exist (it might have been cleaned up already)
+      if (response.status !== 204 && response.status !== 404) {
+        throw Error(`Failed to delete group: ${group.displayName}, Status: ${response.status}`)
+      }
       // Remove from store if present
       if (store.createdGroupStore.has(id.toLowerCase())) {
         store.createdGroupStore.delete(id.toLowerCase())
       }
     }
 
+    // Now create the group
     const body = JSON.stringify({
       displayName: group.displayName
     })

@@ -27,9 +27,7 @@ test.describe('groups management', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
   })
 
-  test.afterEach(async ({ usersEnvironment }) => {
-    const adminUser = usersEnvironment.getUser({ key: config.adminUsername })
-    await api.cleanUpGroup(adminUser)
+  test.afterEach(async () => {
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
   })
 

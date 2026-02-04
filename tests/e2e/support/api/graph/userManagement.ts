@@ -3,7 +3,7 @@ import { Group, Me, User } from '../../types'
 import join from 'join-path'
 import { config } from '../../../config'
 import { getApplicationEntity } from './utils'
-import { userRoleStore, createdUserStore, createdGroupStore } from '../../store'
+import { userRoleStore, createdGroupStore } from '../../store'
 import { UsersEnvironment } from '../../environment'
 import { setAccessAndRefreshToken } from '../token'
 
@@ -40,9 +40,9 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 
   const usersEnvironment = new UsersEnvironment()
   const resBody = (await response.json()) as User
-  console.log(`[DEBUG] Storing created user: ${user.id} with uuid: ${resBody.id}`)
+
   usersEnvironment.storeCreatedUser(user.id, { ...user, uuid: resBody.id })
-  console.log(`[DEBUG] Store size after adding ${user.id}:`, createdUserStore.size)
+
   await setAccessAndRefreshToken(user)
   return user
 }
@@ -60,7 +60,6 @@ export const getMeInfo = async (user: User): Promise<User> => {
 }
 
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
-  console.log(`[DEBUG] deleteUser called for: ${user.id}`)
   const response = await request({
     method: 'DELETE',
     path: join('graph', 'v1.0', 'users', user.id),
@@ -70,14 +69,11 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   if (response.status !== 204 && response.status !== 404) {
     throw Error(`Failed to delete user: ${user.id}, Status: ${response.status}`)
   }
-  console.log(`[DEBUG] User ${user.id} deleted from server, removing from store`)
+
   const usersEnvironment = new UsersEnvironment()
   try {
     usersEnvironment.removeCreatedUser({ key: user.id })
-    console.log(`[DEBUG] Store size after removing ${user.id}:`, createdUserStore.size)
-  } catch (e) {
-    console.error(`[DEBUG] Error removing ${user.id} from store:`, e.message)
-  }
+  } catch (e) {}
   return user
 }
 
