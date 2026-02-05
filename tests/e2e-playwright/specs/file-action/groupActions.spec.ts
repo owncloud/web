@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
@@ -82,11 +82,6 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'David' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Edith' })
-
-    // clean up groups
-    await api.userHasDeletedGroup({ usersEnvironment, stepUser: 'Admin', name: 'sales' })
-    await api.userHasDeletedGroup({ usersEnvironment, stepUser: 'Admin', name: 'finance' })
-    await api.userHasDeletedGroup({ usersEnvironment, stepUser: 'Admin', name: 'security' })
   })
 
   test('batch share a resource to multiple users and groups', async () => {
@@ -116,21 +111,21 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
         'parentFolder/SubFolder'
       ]
     })
-    // And "Alice" shares the following resource using API
-    //   | resource     | recipient | type | role                      | resourceType |
-    //   | folder1      | Brian     | user | Can edit without versions | folder       |
-    //   | folder2      | Brian     | user | Can edit without versions | folder       |
-    //   | folder3      | Brian     | user | Can edit without versions | folder       |
-    //   | folder4      | Brian     | user | Can edit without versions | folder       |
-    //   | folder5      | Brian     | user | Can edit without versions | folder       |
-    //   | parentFolder | Brian     | user | Can edit without versions | folder       |
+    //  And "Alice" shares the following resource using API
+    // | resource     | recipient | type | role                   | resourceType |
+    // | folder1      | Brian     | user | Can edit with trashbin | folder       |
+    // | folder2      | Brian     | user | Can edit with trashbin | folder       |
+    // | folder3      | Brian     | user | Can edit with trashbin | folder       |
+    // | folder4      | Brian     | user | Can edit with trashbin | folder       |
+    // | folder5      | Brian     | user | Can edit with trashbin | folder       |
+    // | parentFolder | Brian     | user | Can edit with trashbin | folder       |
     await api.userHasSharedResource({
       usersEnvironment,
       stepUser: 'Alice',
       resource: 'folder1',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await api.userHasSharedResource({
@@ -139,7 +134,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'folder2',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await api.userHasSharedResource({
@@ -148,7 +143,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'folder3',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await api.userHasSharedResource({
@@ -157,7 +152,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'folder4',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await api.userHasSharedResource({
@@ -166,7 +161,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'folder5',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await api.userHasSharedResource({
@@ -175,7 +170,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'parentFolder',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     // And "Alice" logs in
@@ -183,14 +178,14 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
 
     // # multiple share
     // And "Alice" shares the following resources using the sidebar panel
-    //   | resource     | recipient | type  | role                      | resourceType |
-    //   | sharedFolder | Brian     | user  | Can edit without versions | folder       |
-    //   | sharedFolder | Carol     | user  | Can edit without versions | folder       |
-    //   | sharedFolder | David     | user  | Can edit without versions | folder       |
-    //   | sharedFolder | Edith     | user  | Can edit without versions | folder       |
-    //   | sharedFolder | sales     | group | Can edit without versions | folder       |
-    //   | sharedFolder | finance   | group | Can edit without versions | folder       |
-    //   | sharedFolder | security  | group | Can edit without versions | folder       |
+    // | resource     | recipient | type  | role                   | resourceType |
+    // | sharedFolder | Brian     | user  | Can edit with trashbin | folder       |
+    // | sharedFolder | Carol     | user  | Can edit with trashbin | folder       |
+    // | sharedFolder | David     | user  | Can edit with trashbin | folder       |
+    // | sharedFolder | Edith     | user  | Can edit with trashbin | folder       |
+    // | sharedFolder | sales     | group | Can edit with trashbin | folder       |
+    // | sharedFolder | finance   | group | Can edit with trashbin | folder       |
+    // | sharedFolder | security  | group | Can edit with trashbin | folder       |
     await ui.shareResource({
       actorsEnvironment,
       usersEnvironment,
@@ -199,7 +194,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'sharedFolder',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await ui.shareResource({
@@ -210,7 +205,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'sharedFolder',
       recipient: 'Carol',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await ui.shareResource({
@@ -221,7 +216,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'sharedFolder',
       recipient: 'David',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await ui.shareResource({
@@ -232,7 +227,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'sharedFolder',
       recipient: 'Edith',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await ui.shareResource({
@@ -243,7 +238,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'sharedFolder',
       recipient: 'sales',
       type: 'group',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await ui.shareResource({
@@ -254,7 +249,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'sharedFolder',
       recipient: 'finance',
       type: 'group',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await ui.shareResource({
@@ -265,7 +260,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       resource: 'sharedFolder',
       recipient: 'security',
       type: 'group',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
 
