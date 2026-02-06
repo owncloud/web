@@ -201,3 +201,76 @@ export async function userDownloadsSpace({
   const downloadedResource = await spacesObject.downloadSpace()
   expect(downloadedResource).toContain('download.zip')
 }
+
+export async function navigateToTrashbin({
+  actorsEnvironment,
+  stepUser,
+  space
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  space?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.trashbin.Overview({ page })
+  await pageObject.navigate()
+  if (space) {
+    const trashbinObject = new objects.applicationFiles.Trashbin({ page })
+    await trashbinObject.open(space)
+  }
+}
+
+export async function userShouldSeeSpace({
+  actorsEnvironment,
+  stepUser,
+  space
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  space?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const spaceLocator = await spacesObject.getSpaceLocator(space)
+  await expect(spaceLocator).toBeVisible()
+}
+
+export async function userShouldNotSeeSpace({
+  actorsEnvironment,
+  stepUser,
+  space
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  space?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const spaceLocator = await spacesObject.getSpaceLocator(space)
+  await expect(spaceLocator).not.toBeVisible()
+}
+
+export async function userChangesMemberRole({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  role,
+  sharee
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  role: string
+  sharee: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const sharer = usersEnvironment.getUser({ key: stepUser })
+
+  const roleId = await getDynamicRoleIdByName(sharer, role, 'space' as ResourceType)
+  const member = {
+    collaborator: usersEnvironment.getUser({ key: sharee }),
+    role: roleId
+  }
+  await spacesObject.changeRoles({ users: [member] })
+}

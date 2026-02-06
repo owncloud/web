@@ -412,3 +412,73 @@ export async function userClosesTextEditor({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   await editor.close(page)
 }
+
+export async function deleteResource({
+  actorsEnvironment,
+  stepUser,
+  file,
+  actionType,
+  parentFolder = ''
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  file: string
+  actionType: string
+  parentFolder?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.Resource({ page })
+  await pageObject.delete({
+    folder: parentFolder === '' ? null : parentFolder,
+    resourcesWithInfo: [{ name: file }],
+    via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+  })
+}
+
+export async function deleteResourceFromTrashbin({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  actionType: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  if (actionType === 'should') {
+    const message = await resourceObject.deleteTrashBin({ resource: resource })
+    const paths = resource.split('/')
+    expect(message).toBe(`"${paths[paths.length - 1]}" was deleted successfully`)
+  } else {
+    await resourceObject.expectThatDeleteTrashBinButtonIsNotVisible({ resource: resource })
+  }
+}
+
+export async function restoreDeletedResourceFromTrashbin({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  actionType: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  if (actionType === 'should') {
+    const message = await resourceObject.restoreTrashBin({
+      resource: resource
+    })
+    const paths = resource.split('/')
+    expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
+  } else {
+    await resourceObject.expectThatRestoreTrashBinButtonIsNotVisible({
+      resource: resource
+    })
+  }
+}
