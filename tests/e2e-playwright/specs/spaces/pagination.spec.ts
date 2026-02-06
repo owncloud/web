@@ -126,7 +126,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // When "Alice" opens file "testfile45.txt"
-    await ui.openResource({
+    await ui.userOpensResources({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testfile45.txt'
