@@ -76,7 +76,7 @@ test.describe('internal link share', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
-      resource: 'simple.pdf',
+      resources: ['simple.pdf'],
       to: 'myfolder'
     })
     await ui.updateShareeRole({
