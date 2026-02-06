@@ -16,6 +16,8 @@ import { editor } from '../../../e2e/support/objects/app-files/utils'
 import path from 'path'
 import { Public } from '../../../e2e/support/objects/app-files/page'
 import { Resource } from '../../../e2e/support/objects/app-files/resource'
+import { config } from '../../../e2e/config'
+import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -515,14 +517,14 @@ export async function userDownloadsResource({
   stepUser,
   resource,
   type,
-  actionType,
+  actionType = 'SIDEBAR_PANEL',
   from
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
   type: string
-  actionType: ActionViaType
+  actionType?: ActionViaType
   from?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
@@ -601,4 +603,73 @@ export async function userCanOpenShortcutWithExternalUrl({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openShotcut({ name, url })
+}
+
+export async function userUploadsSmallFilesInPersonalSpace({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  numberOfFiles
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  numberOfFiles: number
+}): Promise<void> {
+  const files = []
+  for (let i = 0; i < numberOfFiles; i++) {
+    const file = `file${i}.txt`
+    runtimeFs.createFile(file, 'test content')
+
+    files.push(
+      filesEnvironment.getFile({
+        name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), file)
+      })
+    )
+  }
+
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.uploadLargeNumberOfResources({ resources: files })
+}
+
+export async function userTriesToUploadResources({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource,
+  error,
+  to
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+  error: string
+  to: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.tryToUpload({
+    to: to,
+    resources: [filesEnvironment.getFile({ name: resource })],
+    error: error
+  })
+}
+
+export async function userUploadsResourceViaDragNDrop({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const resources = [filesEnvironment.getFile({ name: resource })]
+  await resourceObject.dropUpload({ resources })
 }
