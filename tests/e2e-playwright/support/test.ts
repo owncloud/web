@@ -14,3 +14,5 @@ test.afterEach(async ({ usersEnvironment }) => {
   const admin = usersEnvironment.getUser({ key: 'Admin' })
   await cleanUpGroup(admin)
 })
+
+export { expect } from '@playwright/test'

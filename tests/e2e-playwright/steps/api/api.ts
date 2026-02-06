@@ -449,3 +449,14 @@ export async function userHasAddedTagsToResource({
   const user = usersEnvironment.getUser({ key: stepUser })
   await api.dav.addTagToResource({ user, resource, tags })
 }
+
+export async function userDisablesAutoAccepting({
+  usersEnvironment,
+  stepUser
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+}): Promise<void> {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.settings.configureAutoAcceptShare({ user, state: false })
+}

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../../support/test'
 import { config } from './../../../e2e/config.js'
 import {
   ActorsEnvironment,
