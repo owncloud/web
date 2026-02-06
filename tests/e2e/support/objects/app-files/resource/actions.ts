@@ -2286,6 +2286,11 @@ export const duplicateResource = async ({
   switch (method) {
     case 'dropdown-menu': {
       await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['tippyBoxVisible', 'filesAppBarActions'],
+        'file context menu'
+      )
       await Promise.all([
         waitForResourceDuplicationResponse(page, resource),
         page.locator(util.format(filesContextMenuAction, 'duplicate')).click()
@@ -2294,6 +2299,11 @@ export const duplicateResource = async ({
     }
     case 'batch-action': {
       await page.locator(util.format(checkBox, resource)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['filesAppBarActions'],
+        'files app bar'
+      )
       await Promise.all([
         waitForResourceDuplicationResponse(page, resource),
         selectBatchAction(page, 'duplicate')

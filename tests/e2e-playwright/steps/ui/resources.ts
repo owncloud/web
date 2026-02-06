@@ -412,3 +412,85 @@ export async function userClosesTextEditor({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   await editor.close(page)
 }
+
+export async function userDuplicatesResources({
+  actorsEnvironment,
+  stepUser,
+  method,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  method: string
+  resources: { resource: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const info of resources) {
+    await resourceObject.duplicate(info.resource, method)
+  }
+}
+
+export async function userCopiesOrMovesResources({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  method,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: string
+  method: string
+  resources: { resource: string; to: string; option?: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  // drag-n-drop always does MOVE
+  if (method.includes('drag-drop')) {
+    expect(actionType).toBe('moves')
+  }
+
+  for (const { resource, to, option } of resources) {
+    await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
+      resource,
+      newLocation: to,
+      method,
+      option: option ?? undefined
+    })
+  }
+}
+
+export async function userCopiesOrMovesMultipleResources({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  newLocation,
+  method,
+  stepTable
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: string
+  newLocation: string
+  method: string
+  stepTable: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  // drag-n-drop always does MOVE
+  if (method.includes('drag-drop')) {
+    expect(actionType).toBe('moves')
+  }
+
+  const resources = [].concat(...stepTable)
+  await resourceObject[actionType === 'copies' ? 'copyMultipleResources' : 'moveMultipleResources'](
+    {
+      newLocation,
+      method,
+      resources
+    }
+  )
+}
