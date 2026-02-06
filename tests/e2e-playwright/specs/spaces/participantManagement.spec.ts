@@ -258,7 +258,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // And "Anonymous" unlocks the public link with password "%public%"
-    await ui.anonymousUserUnlocksPublicLink({
+    await ui.userUnlocksPublicLink({
       actorsEnvironment,
       password: '%public%',
       stepUser: 'Anonymous'

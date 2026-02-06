@@ -4,7 +4,9 @@ import {
   FilesEnvironment,
   LinksEnvironment
 } from '../../../e2e/support/environment'
+import { editor } from '../../../e2e/support/objects/app-files/utils'
 import { substitute } from '../../../e2e/support/utils'
+import { expect } from '@playwright/test'
 
 export async function openPublicLink({
   actorsEnvironment,
@@ -68,7 +70,7 @@ export async function anonymousUserOpensPublicLink({
   await pageObject.open({ url })
 }
 
-export async function anonymousUserUnlocksPublicLink({
+export async function userUnlocksPublicLink({
   actorsEnvironment,
   stepUser,
   password
@@ -129,4 +131,18 @@ export async function deleteResourceFromPublicLink({
     resourcesWithInfo: [{ name: file }],
     via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
   })
+}
+
+export async function userIsInFileViewer({
+  actorsEnvironment,
+  stepUser,
+  fileViewerType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  fileViewerType: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType })
+  await expect(fileViewerLocator).toBeVisible()
 }
