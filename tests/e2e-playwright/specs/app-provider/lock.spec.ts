@@ -53,15 +53,15 @@ test.describe('lock', { tag: '@sse' }, () => {
       content: 'some content'
     })
     // And "Alice" shares the following resource using API
-    //   | resource | recipient | type | role     | resourceType |
-    //   | test.odt | Brian     | user | Can edit | file         |
+    // | resource | recipient | type | role                                | resourceType |
+    // | test.odt | Brian     | user | Can edit with versions and trashbin | file         |
     await api.userHasSharedResource({
       usersEnvironment,
       stepUser: 'Alice',
       resource: 'test.odt',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit',
+      role: 'Can edit with versions and trashbin',
       resourceType: 'file'
     })
     // And "Brian" logs in
