@@ -26,6 +26,15 @@ export async function userHasBeenCreated({
   const user = usersEnvironment.getUser({ key: userToBeCreated })
   // do not try to create users when using predefined users
   if (!config.predefinedUsers) {
+    // Check if user already exists from previous test run (store was cleared but user persists on server)
+    const existingUserId = await api.graph.getUserId({ user, admin })
+    if (existingUserId) {
+      await api.provision.deleteUser({ user: { ...user, uuid: existingUserId }, admin })
+      // Remove from store if present (in case of retries within same run)
+      if (store.createdUserStore.has(user.id.toLowerCase())) {
+        store.createdUserStore.delete(user.id.toLowerCase())
+      }
+    }
     await api.provision.createUser({ user, admin })
   }
 }
@@ -40,7 +49,14 @@ export async function deleteUser({
   targetUser: string
 }): Promise<void> {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: targetUser })
+  // Try to get the target user from createdUserStore first (for dynamically created users),
+  // fall back to userStore if not found (for predefined users)
+  let user
+  try {
+    user = usersEnvironment.getCreatedUser({ key: targetUser })
+  } catch {
+    user = usersEnvironment.getUser({ key: targetUser })
+  }
   await api.provision.deleteUser({ user, admin })
 }
 
@@ -190,9 +206,31 @@ export async function userHasCreatedProjectSpace({
   id: string
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
+  const spaceKey = id || name
+
+  // Check if space already exists in store (from previous test attempt/retry)
+  if (store.createdSpaceStore.has(spaceKey)) {
+    // Verify space actually exists on server (might have been cleaned up)
+    try {
+      const existingSpaceId = await api.graph.getSpaceIdBySpaceName({
+        user,
+        spaceType: 'project',
+        spaceName: name
+      })
+
+      return
+    } catch (e) {
+      if (e.message && e.message.includes('Could not find space')) {
+        store.createdSpaceStore.delete(spaceKey)
+      } else {
+        throw e
+      }
+    }
+  }
+
   const spaceId = await api.graph.createSpace({ user, space: { id, name } as unknown as Space })
   spacesEnvironment.createSpace({
-    key: id || name,
+    key: spaceKey,
     space: { name: name, id: spaceId }
   })
 }
@@ -398,8 +436,37 @@ export const groupsHaveBeenCreated = async ({
 }): Promise<Group[]> => {
   const usersEnvironment = new UsersEnvironment()
   const createdGroups: Group[] = []
+
+  // Clear the store first to prevent conflicts between tests in the same file
+  store.createdGroupStore.clear()
+
+  // First, fetch all existing groups to check for orphans
+  const existingGroups = await api.graph.getGroups(admin)
+
   for (const id of groupIds) {
     const group = usersEnvironment.getGroup({ key: id })
+
+    // Check if group already exists on server (orphaned from previous run)
+    // Look for the group by its original display name
+    const existingGroup = existingGroups.find((g) => g.displayName === group.displayName)
+    if (existingGroup) {
+      // Delete the orphaned group by its actual server ID
+      const response = await request({
+        method: 'DELETE',
+        path: join('graph', 'v1.0', 'groups', existingGroup.id),
+        user: admin
+      })
+      // Don't throw error if group doesn't exist (it might have been cleaned up already)
+      if (response.status !== 204 && response.status !== 404) {
+        throw Error(`Failed to delete group: ${group.displayName}, Status: ${response.status}`)
+      }
+      // Remove from store if present
+      if (store.createdGroupStore.has(id.toLowerCase())) {
+        store.createdGroupStore.delete(id.toLowerCase())
+      }
+    }
+
+    // Now create the group
     const body = JSON.stringify({
       displayName: group.displayName
     })
@@ -433,6 +500,20 @@ export const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   store.createdGroupStore.clear()
+}
+
+export const cleanUpUser = async (adminUser: User) => {
+  if (config.predefinedUsers) {
+    return
+  }
+  const usersEnvironment = new UsersEnvironment()
+  const requests: Promise<void>[] = []
+  store.createdUserStore.forEach((user) => {
+    requests.push(deleteUser({ usersEnvironment, stepUser: 'admin', targetUser: user.id }))
+  })
+
+  await Promise.all(requests)
+  store.createdUserStore.clear()
 }
 
 export async function userHasAddedTagsToResource({

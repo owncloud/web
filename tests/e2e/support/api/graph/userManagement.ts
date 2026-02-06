@@ -3,7 +3,7 @@ import { Group, Me, User } from '../../types'
 import join from 'join-path'
 import { config } from '../../../config'
 import { getApplicationEntity } from './utils'
-import { userRoleStore } from '../../store'
+import { userRoleStore, createdGroupStore } from '../../store'
 import { UsersEnvironment } from '../../environment'
 import { setAccessAndRefreshToken } from '../token'
 
@@ -40,7 +40,9 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 
   const usersEnvironment = new UsersEnvironment()
   const resBody = (await response.json()) as User
+
   usersEnvironment.storeCreatedUser(user.id, { ...user, uuid: resBody.id })
+
   await setAccessAndRefreshToken(user)
   return user
 }
@@ -67,8 +69,11 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   if (response.status !== 204 && response.status !== 404) {
     throw Error(`Failed to delete user: ${user.id}, Status: ${response.status}`)
   }
+
   const usersEnvironment = new UsersEnvironment()
-  usersEnvironment.removeCreatedUser({ key: user.id })
+  try {
+    usersEnvironment.removeCreatedUser({ key: user.id })
+  } catch (e) {}
   return user
 }
 
@@ -122,11 +127,19 @@ export const deleteGroup = async ({
   const usersEnvironment = new UsersEnvironment()
   const groupId = usersEnvironment.getCreatedGroup({ key: group.id }).uuid
 
-  await request({
+  const response = await request({
     method: 'DELETE',
     path: join('graph', 'v1.0', 'groups', groupId),
     user: admin
   })
+  // do not throw error if group is not found
+  if (response.status !== 204 && response.status !== 404) {
+    throw Error(`Failed to delete group: ${group.displayName}, Status: ${response.status}`)
+  }
+  // Remove from createdGroupStore after successful deletion
+  if (response.status === 204) {
+    createdGroupStore.delete(group.id.toLowerCase())
+  }
   return group
 }
 

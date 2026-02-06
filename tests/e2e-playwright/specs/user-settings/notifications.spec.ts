@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from './../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -55,9 +56,6 @@ test.describe('Notifications', () => {
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Carol' })
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
     await api.userHasDeletedProjectSpace({
       usersEnvironment,
       stepUser: 'Admin',
