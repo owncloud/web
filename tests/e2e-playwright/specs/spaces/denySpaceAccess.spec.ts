@@ -94,7 +94,7 @@ test.describe('deny space access', () => {
       space: 'sales',
       shareType: 'user',
       sharee: 'Brian',
-      role: 'Can edit'
+      role: 'Can edit with versions and trashbin'
     })
 
     // When "Alice" navigates to the project space "sales"

@@ -56,8 +56,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | OpenDocument.odt | OpenDocument | Edited OpenDocument Content |
     And "Brian" closes the file viewer
     When "Alice" updates following sharee role
-      | resource         | recipient | type | role                      | resourceType |
-      | OpenDocument.odt | Brian     | user | Can edit without versions | file         |
+      | resource         | recipient | type | role                   | resourceType |
+      | OpenDocument.odt | Brian     | user | Can edit with trashbin | file         |
     And "Alice" opens the following file in Collabora
       | resource         |
       | OpenDocument.odt |
@@ -121,8 +121,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
     And "Brian" closes the file viewer
     When "Alice" updates following sharee role
-      | resource           | recipient | type | role                      | resourceType |
-      | MicrosoftWord.docx | Brian     | user | Can edit without versions | file         |
+      | resource           | recipient | type | role                   | resourceType |
+      | MicrosoftWord.docx | Brian     | user | Can edit with trashbin | file         |
     And "Alice" opens the following file in OnlyOffice
       | resource           |
       | MicrosoftWord.docx |
@@ -272,5 +272,5 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     Then following resources should not be displayed in the files list for user "Alice"
       | resource          |
       | Template (2).docx |
-    
+
     And "Alice" logs out

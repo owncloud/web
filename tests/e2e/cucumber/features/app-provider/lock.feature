@@ -16,8 +16,8 @@ Feature: lock
       | resource | type         | content      |
       | test.odt | OpenDocument | some content |
     And "Alice" shares the following resource using API
-      | resource | recipient | type | role     | resourceType |
-      | test.odt | Brian     | user | Can edit | file         |
+      | resource | recipient | type | role                                | resourceType |
+      | test.odt | Brian     | user | Can edit with versions and trashbin | file         |
     And "Brian" logs in
     And "Brian" navigates to the shared with me page
     When "Brian" opens the following file in Collabora

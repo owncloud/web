@@ -125,7 +125,7 @@ test.describe('Notifications', () => {
       resource: 'folder_to_shared',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
     await ui.shareResource({
@@ -136,7 +136,7 @@ test.describe('Notifications', () => {
       resource: 'share_to_group',
       recipient: 'sales',
       type: 'group',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
 
@@ -184,7 +184,7 @@ test.describe('Notifications', () => {
       usersEnvironment,
       stepUser: 'Alice',
       sharee: 'Brian',
-      role: 'Can edit',
+      role: 'Can edit with versions and trashbin',
       kind: 'user'
     })
 
@@ -193,7 +193,7 @@ test.describe('Notifications', () => {
       usersEnvironment,
       stepUser: 'Alice',
       sharee: 'Carol',
-      role: 'Can edit',
+      role: 'Can edit with versions and trashbin',
       kind: 'user'
     })
 
@@ -225,7 +225,7 @@ test.describe('Notifications', () => {
       usersEnvironment,
       stepUser: 'Alice',
       reciver: 'Carol',
-      role: 'Can edit without versions'
+      role: 'Can edit with trashbin'
     })
 
     // And "Carol" logs in
@@ -365,7 +365,7 @@ test.describe('Notifications', () => {
       resource: 'folder_to_shared',
       recipient: 'Brian',
       type: 'user',
-      role: 'Can edit without versions',
+      role: 'Can edit with trashbin',
       resourceType: 'folder'
     })
 
@@ -393,7 +393,7 @@ test.describe('Notifications', () => {
       stepUser: 'Alice',
       space: 'team.1',
       reciver: 'Brian',
-      role: 'Can edit',
+      role: 'Can edit with versions and trashbin',
       kind: 'user'
     })
     await ui.addUserToProjectSpace({
@@ -402,7 +402,7 @@ test.describe('Notifications', () => {
       stepUser: 'Alice',
       space: 'team.1',
       reciver: 'Carol',
-      role: 'Can edit',
+      role: 'Can edit with versions and trashbin',
       kind: 'user'
     })
 
@@ -414,7 +414,7 @@ test.describe('Notifications', () => {
       usersEnvironment,
       stepUser: 'Alice',
       reciver: 'Carol',
-      role: 'Can edit'
+      role: 'Can edit with versions and trashbin'
     })
 
     // Then "Alice" should see no notifications

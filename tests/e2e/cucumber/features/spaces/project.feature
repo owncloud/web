@@ -56,8 +56,8 @@ Feature: spaces.personal
 
     # borrowed from share.feature
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role                      | resourceType |
-      | folder_to_shared | Brian     | user | Can edit without versions | folder       |
+      | resource         | recipient | type | role                   | resourceType |
+      | folder_to_shared | Brian     | user | Can edit with trashbin | folder       |
 
     # team.2
     And "Alice" navigates to the project space "team.2"
@@ -145,9 +145,9 @@ Feature: spaces.personal
       | resource     | to     | option  |
       | textfile.txt | parent | replace |
     And "Alice" adds following users to the project space
-      | user  | role     | kind |
-      | Carol | Can view | user |
-      | Brian | Can edit | user |
+      | user  | role                                | kind |
+      | Carol | Can view                            | user |
+      | Brian | Can edit with versions and trashbin | user |
     And "Alice" logs out
 
     When "Carol" logs in

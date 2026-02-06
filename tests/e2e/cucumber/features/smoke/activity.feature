@@ -26,11 +26,11 @@ Feature: Users can see all activities of the resources and spaces
       | localFile                   | to                        |
       | filesForUpload/textfile.txt | sharedFolder/textfile.txt |
     And "Alice" shares the following resource using API
-      | resource     | recipient | type | role                      | resourceType |
-      | sharedFolder | Brian     | user | Can edit without versions | folder       |
+      | resource     | recipient | type | role                   | resourceType |
+      | sharedFolder | Brian     | user | Can edit with trashbin | folder       |
     And "Alice" creates a public link of following resource using API
-      | resource     | role                      | password |
-      | sharedFolder | Can edit without versions | %public% |
+      | resource     | role                   | password |
+      | sharedFolder | Can edit with trashbin | %public% |
 
     When "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"

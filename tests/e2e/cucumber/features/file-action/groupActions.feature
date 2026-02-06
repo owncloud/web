@@ -36,25 +36,25 @@ Feature: Group actions
       | folder5                |
       | parentFolder/SubFolder |
     And "Alice" shares the following resource using API
-      | resource     | recipient | type | role                      | resourceType |
-      | folder1      | Brian     | user | Can edit without versions | folder       |
-      | folder2      | Brian     | user | Can edit without versions | folder       |
-      | folder3      | Brian     | user | Can edit without versions | folder       |
-      | folder4      | Brian     | user | Can edit without versions | folder       |
-      | folder5      | Brian     | user | Can edit without versions | folder       |
-      | parentFolder | Brian     | user | Can edit without versions | folder       |
+      | resource     | recipient | type | role                   | resourceType |
+      | folder1      | Brian     | user | Can edit with trashbin | folder       |
+      | folder2      | Brian     | user | Can edit with trashbin | folder       |
+      | folder3      | Brian     | user | Can edit with trashbin | folder       |
+      | folder4      | Brian     | user | Can edit with trashbin | folder       |
+      | folder5      | Brian     | user | Can edit with trashbin | folder       |
+      | parentFolder | Brian     | user | Can edit with trashbin | folder       |
     And "Alice" logs in
 
     # multiple share
     And "Alice" shares the following resources using the sidebar panel
-      | resource     | recipient | type  | role                      | resourceType |
-      | sharedFolder | Brian     | user  | Can edit without versions | folder       |
-      | sharedFolder | Carol     | user  | Can edit without versions | folder       |
-      | sharedFolder | David     | user  | Can edit without versions | folder       |
-      | sharedFolder | Edith     | user  | Can edit without versions | folder       |
-      | sharedFolder | sales     | group | Can edit without versions | folder       |
-      | sharedFolder | finance   | group | Can edit without versions | folder       |
-      | sharedFolder | security  | group | Can edit without versions | folder       |
+      | resource     | recipient | type  | role                   | resourceType |
+      | sharedFolder | Brian     | user  | Can edit with trashbin | folder       |
+      | sharedFolder | Carol     | user  | Can edit with trashbin | folder       |
+      | sharedFolder | David     | user  | Can edit with trashbin | folder       |
+      | sharedFolder | Edith     | user  | Can edit with trashbin | folder       |
+      | sharedFolder | sales     | group | Can edit with trashbin | folder       |
+      | sharedFolder | finance   | group | Can edit with trashbin | folder       |
+      | sharedFolder | security  | group | Can edit with trashbin | folder       |
 
     And "Brian" navigates to the shared with me page
 
