@@ -606,7 +606,6 @@ export const editTextDocument = async ({
   const inputLocator =
     isMarkdownMode === 'true' ? textEditorMarkdownInput : textEditorPlainTextInput
 
-  const a11yObject = new objects.a11y.Accessibility({ page })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['textEditor', 'topBar'],

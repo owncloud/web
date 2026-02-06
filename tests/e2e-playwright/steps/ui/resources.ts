@@ -412,3 +412,45 @@ export async function userClosesTextEditor({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   await editor.close(page)
 }
+
+export async function userOpensFileInViewer({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  actionType: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openFileInViewer({
+    name: resource,
+    actionType: actionType
+  })
+}
+
+export async function userEditsFile({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  content,
+  type
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  content: string
+  type?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  await resourceObject.editResource({
+    name: resource,
+    type: type,
+    content: content
+  })
+}
