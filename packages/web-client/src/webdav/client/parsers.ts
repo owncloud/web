@@ -3,6 +3,7 @@ import { XMLParser } from 'fast-xml-parser'
 import { WebDavResponseResource, WebDavResponseTusSupport } from '../../helpers'
 import { urlJoin } from '../../utils'
 import { DavErrorCode } from '../constants'
+import { join, normalize } from 'path'
 
 export const parseTusHeaders = (headers: Headers) => {
   const result: WebDavResponseTusSupport = {}
@@ -25,12 +26,13 @@ export const parseTusHeaders = (headers: Headers) => {
   return result
 }
 
-export const parseMultiStatus = async (xmlBody: string) => {
+export const parseMultiStatus = async (xmlBody: string, remoteBasePath: string) => {
   const parseFileName = (name: string) => {
     const decoded = decodeURIComponent(name)
-    if (name?.startsWith('/dav/')) {
+    const prefix = normalize(join(remoteBasePath, 'dav'))
+    if (name?.startsWith(prefix)) {
       // strip out '/dav/' from the beginning
-      return urlJoin(decoded.replace('/dav/', ''), {
+      return urlJoin(decoded.replace(prefix, ''), {
         leadingSlash: true,
         trailingSlash: false
       })
