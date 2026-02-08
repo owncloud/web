@@ -483,8 +483,8 @@ importers:
         specifier: workspace:^
         version: link:../web-pkg
       axios:
-        specifier: 1.13.2
-        version: 1.13.2(debug@4.4.3)
+        specifier: 1.13.5
+        version: 1.13.5(debug@4.4.3)
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -529,8 +529,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.13.2
-        version: 1.13.2(debug@4.4.3)
+        specifier: 1.13.5
+        version: 1.13.5(debug@4.4.3)
       fuse.js:
         specifier: 7.1.0
         version: 7.1.0
@@ -634,8 +634,8 @@ importers:
         specifier: ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0
         version: 14.1.0(vue@3.5.26(typescript@5.9.3))
       axios:
-        specifier: 1.13.2
-        version: 1.13.2(debug@4.4.3)
+        specifier: 1.13.5
+        version: 1.13.5(debug@4.4.3)
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -692,8 +692,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.13.2
-        version: 1.13.2(debug@4.4.3)
+        specifier: 1.13.5
+        version: 1.13.5(debug@4.4.3)
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -859,8 +859,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       axios:
-        specifier: ^1.13.2
-        version: 1.13.2(debug@4.4.3)
+        specifier: ^1.13.5
+        version: 1.13.5(debug@4.4.3)
       fast-xml-parser:
         specifier: ^5.3.3
         version: 5.3.3
@@ -954,8 +954,8 @@ importers:
         specifier: ^14.1.0
         version: 14.1.0(vue@3.5.26(typescript@5.9.3))
       axios:
-        specifier: ^1.13.2
-        version: 1.13.2(debug@4.4.3)
+        specifier: ^1.13.5
+        version: 1.13.5(debug@4.4.3)
       deepmerge:
         specifier: ^4.3.1
         version: 4.3.1
@@ -1112,8 +1112,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.5.26(typescript@5.9.3))
       axios:
-        specifier: 1.13.2
-        version: 1.13.2(debug@4.4.3)
+        specifier: 1.13.5
+        version: 1.13.5(debug@4.4.3)
       deepmerge:
         specifier: 4.3.1
         version: 4.3.1
@@ -1215,8 +1215,8 @@ importers:
         specifier: ^2.4.6
         version: 2.4.6
       axios:
-        specifier: 1.13.2
-        version: 1.13.2(debug@4.4.3)
+        specifier: 1.13.5
+        version: 1.13.5(debug@4.4.3)
       vitest-mock-extended:
         specifier: 3.1.0
         version: 3.1.0(typescript@5.9.3)(vitest@4.0.18(@types/node@25.0.10)(happy-dom@20.0.10)(jsdom@27.2.0)(sass@1.94.1)(terser@5.46.0)(yaml@2.8.1))
@@ -3585,8 +3585,8 @@ packages:
     resolution: {integrity: sha512-ilYanEU8vxxBexpJd8cWM4ElSQq4QctCLKih0TSfjIfCQTeyH/6zVrmIJfLPrKTKJRbiG+cfnZbQIjAlJmF1jQ==}
     engines: {node: '>=4'}
 
-  axios@1.13.2:
-    resolution: {integrity: sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==}
+  axios@1.13.5:
+    resolution: {integrity: sha512-cz4ur7Vb0xS4/KUN0tPWe44eqxrIu31me+fbang3ijiNscE129POzipJJA6zniq2C/Z6sJCjMimjS8Lc/GAs8Q==}
 
   babel-core@7.0.0-bridge.0:
     resolution: {integrity: sha512-poPX9mZH/5CSanm50Q+1toVci6pv5KSRv/5TWCwtzQS5XEwn40BcCrgIeMFWP9CKKIniKXNxoIOnOq4VVlGXhg==}
@@ -4680,8 +4680,8 @@ packages:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
 
-  form-data@4.0.4:
-    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
+  form-data@4.0.5:
+    resolution: {integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==}
     engines: {node: '>= 6'}
 
   formdata-polyfill@4.0.10:
@@ -4763,11 +4763,13 @@ packages:
 
   glob@10.5.0:
     resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@11.1.0:
     resolution: {integrity: sha512-vuNwKSaKiqm7g0THUBu2x7ckSs3XJLXE+2ssL7/MfTGPLLcrJQ/4Uq1CjPTtO5cCIiRxqvN6Twy1qOwhL0Xjcw==}
     engines: {node: 20 || >=22}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@13.0.0:
@@ -4776,7 +4778,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   global-dirs@3.0.1:
     resolution: {integrity: sha512-NBcGGFbBA9s1VzD41QXDG+3++t9Mn5t1FpLdhESY6oKY4gYTFpX4wO3sqGUa0Srjtbfj3szX0RnemmrVRUdULA==}
@@ -10177,10 +10179,10 @@ snapshots:
 
   axe-core@4.11.0: {}
 
-  axios@1.13.2(debug@4.4.3):
+  axios@1.13.5(debug@4.4.3):
     dependencies:
       follow-redirects: 1.15.11(debug@4.4.3)
-      form-data: 4.0.4
+      form-data: 4.0.5
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
@@ -11446,7 +11448,7 @@ snapshots:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
-  form-data@4.0.4:
+  form-data@4.0.5:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
