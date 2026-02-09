@@ -45,7 +45,7 @@ export async function userClearsFilter({
   await searchObject.clearFilter({ filter })
 }
 
-export async function userEnablesOptionToSearchTitleOnly({
+export async function userEnablesTitleOnlySearch({
   actorsEnvironment,
   stepUser
 }: {
@@ -57,7 +57,7 @@ export async function userEnablesOptionToSearchTitleOnly({
   await searchObject.toggleSearchTitleOnly({ enableOrDisable: 'enable' })
 }
 
-export async function userSelectsMediaTypeFromSearchResultFilterChip({
+export async function userFiltersSearchByMediaType({
   actorsEnvironment,
   stepUser,
   mediaType
@@ -71,7 +71,7 @@ export async function userSelectsMediaTypeFromSearchResultFilterChip({
   await searchObject.selectMediaTypeFilter({ mediaType })
 }
 
-export async function userSelectsLastModifiedFromSearchResultFilterChip({
+export async function userFiltersSearchByLastModifiedDate({
   actorsEnvironment,
   stepUser,
   lastModified

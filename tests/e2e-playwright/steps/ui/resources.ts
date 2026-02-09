@@ -18,6 +18,11 @@ import { Public } from '../../../e2e/support/objects/app-files/page'
 import { Resource } from '../../../e2e/support/objects/app-files/resource'
 import { config } from '../../../e2e/config'
 
+const FileActionType = {
+  batchAction: 'BATCH_ACTION',
+  sidebarPanel: 'SIDEBAR_PANEL'
+} as const
+
 export async function uploadResource({
   actorsEnvironment,
   filesEnvironment,
@@ -415,7 +420,7 @@ export async function deleteResource({
   actorsEnvironment,
   stepUser,
   resource,
-  actionType = 'SIDEBAR_PANEL',
+  actionType = FileActionType.sidebarPanel,
   parentFolder = ''
 }: {
   actorsEnvironment: ActorsEnvironment
