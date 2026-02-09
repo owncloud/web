@@ -529,3 +529,57 @@ export async function userShouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
     expect(actualMemberList[shareRole as keyof typeof actualMemberList]).toContain(member.user)
   }
 }
+
+export async function userUpdatesSpace({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  attribute,
+  key,
+  value
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  attribute: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+
+  switch (attribute) {
+    case 'name':
+      await spacesObject.changeName({ key, value })
+      break
+    case 'subtitle':
+      await spacesObject.changeSubtitle({ key, value })
+      break
+    case 'description':
+      await spacesObject.changeDescription({ value })
+      break
+    case 'quota':
+      await spacesObject.changeQuota({ key, value })
+      break
+    case 'image':
+      await spacesObject.changeSpaceImage({
+        key,
+        resource: filesEnvironment.getFile({ name: value })
+      })
+      break
+    default:
+      throw new Error(`${attribute} not implemented`)
+  }
+}
+
+export async function userNavigatesToSharedWithMePage({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.shares.WithMe({ page })
+  await pageObject.navigate()
+}
