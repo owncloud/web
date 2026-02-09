@@ -603,26 +603,6 @@ export async function userCanOpenShortcutWithExternalUrl({
   await resourceObject.openShotcut({ name, url })
 }
 
-export async function userOpensFileInViewer({
-  actorsEnvironment,
-  stepUser,
-  resource,
-  actionType
-}: {
-  actorsEnvironment: ActorsEnvironment
-  stepUser: string
-  resource: string
-  actionType: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
-}): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const resourceObject = new objects.applicationFiles.Resource({ page })
-
-  await resourceObject.openFileInViewer({
-    name: resource,
-    actionType: actionType
-  })
-}
-
 export async function userShouldSeeContentInEditor({
   actorsEnvironment,
   stepUser,

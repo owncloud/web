@@ -71,11 +71,11 @@ test.describe('lock', { tag: '@sse' }, () => {
     // When "Brian" opens the following file in Collabora
     //   | resource |
     //   | test.odt |
-    await ui.userOpensFileInViewer({
+    await ui.openResourceInViewer({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'test.odt',
-      actionType: 'Collabora'
+      application: 'Collabora'
     })
     // Then "Brian" should see the content "some content" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
