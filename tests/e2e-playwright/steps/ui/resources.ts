@@ -602,3 +602,54 @@ export async function userCanOpenShortcutWithExternalUrl({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openShotcut({ name, url })
 }
+
+export async function userRenamesResource({
+  actorsEnvironment,
+  stepUser,
+  newName,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  newName: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.rename({ resource, newName })
+}
+
+export async function userShouldNotSeeVersionPanelForFiles({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource,
+  to
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+  to: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const fileInfo = stepTable.hashes().reduce<Record<string, File[]>>((acc, stepRow) => {
+    const { to, resource } = stepRow
+
+    if (!acc[to]) {
+      acc[to] = []
+    }
+
+    acc[to].push(filesEnvironment.getFile({ name: resource }))
+
+    return acc
+  }, {})
+
+  for (const folder of Object.keys(fileInfo)) {
+    await resourceObject.checkThatFileVersionPanelIsNotAvailable({
+      folder,
+      files: [filesEnvironment.getFile({ name: resource })]
+    })
+  }
+}

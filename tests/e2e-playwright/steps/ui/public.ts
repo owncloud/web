@@ -41,7 +41,7 @@ export async function createPublicLink({
   stepUser: string
   resource: string
   password: string
-  role: string
+  role?: string
   name?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
@@ -145,4 +145,21 @@ export async function userIsInFileViewer({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType })
   await expect(fileViewerLocator).toBeVisible()
+}
+export async function userDropsResources({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+
+  const resources = [filesEnvironment.getFile({ name: resource })]
+  await pageObject.dropUpload({ resources })
 }
