@@ -852,3 +852,44 @@ export async function userUploadsResourceViaDragNDrop({
   const resources = [filesEnvironment.getFile({ name: resource })]
   await resourceObject.dropUpload({ resources })
 }
+
+export async function userRestoresResourceVersion({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource,
+  to,
+  version,
+  openDetailsPanel
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+  to: string
+  version: number
+  openDetailsPanel: boolean
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  const fileInfo: Record<string, any> = {}
+  if (!fileInfo[to]) {
+    fileInfo[to] = []
+  }
+
+  fileInfo[to].push(filesEnvironment.getFile({ name: resource }))
+
+  if (version !== 1) {
+    throw new Error('restoring is only supported for the most recent version')
+  }
+  fileInfo[to]['openDetailsPanel'] = openDetailsPanel
+
+  for (const folder of Object.keys(fileInfo)) {
+    await resourceObject.restoreVersion({
+      folder,
+      files: fileInfo[folder],
+      openDetailsPanel: fileInfo[folder]['openDetailsPanel']
+    })
+  }
+}

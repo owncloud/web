@@ -1296,6 +1296,11 @@ export const restoreResourceVersion = async (args: resourceVersionArgs) => {
     ),
     page.locator(versionRevertButton).first().click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['appSidebar', 'filesView'],
+    'Files view with opened sidebar after restoring to a previous version of a resource'
+  )
 }
 
 /**/

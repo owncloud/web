@@ -1,0 +1,259 @@
+import { test } from '@playwright/test'
+import { config } from '../../../e2e/config.js'
+import {
+  ActorsEnvironment,
+  UsersEnvironment,
+  SpacesEnvironment,
+  FilesEnvironment
+} from '../../../e2e/support/environment'
+import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
+import * as api from '../../steps/api/api.js'
+import * as ui from '../../steps/ui/index'
+
+test.describe('Navigate web directly through urls', () => {
+  let actorsEnvironment: ActorsEnvironment
+  const usersEnvironment = new UsersEnvironment()
+  const spacesEnvironment = new SpacesEnvironment()
+  const filesEnvironment = new FilesEnvironment()
+
+  test.beforeEach(async ({ browser }) => {
+    actorsEnvironment = new ActorsEnvironment({
+      context: {
+        acceptDownloads: config.acceptDownloads,
+        reportDir: config.reportDir,
+        tracingReportDir: config.tracingReportDir,
+        reportHar: config.reportHar,
+        reportTracing: config.reportTracing,
+        reportVideo: config.reportVideo,
+        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
+      },
+      browser: browser
+    })
+
+    await setAccessAndRefreshToken(usersEnvironment)
+    // Given "Admin" creates following user using API
+    //   | id    |
+    //   | Alice |
+    //   | Brian |
+    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    // And "Admin" assigns following roles to the users using API
+    //   | id    | role        |
+    //   | Alice | Space Admin |
+    await api.userHasAssignRolesToUsers({
+      usersEnvironment,
+      stepUser: 'Admin',
+      targetUserId: 'Alice',
+      role: 'Space Admin'
+    })
+    // And "Alice" creates the following folders in personal space using API
+    //   | name   |
+    //   | FOLDER |
+    await api.userHasCreatedFolder({
+      usersEnvironment,
+      stepUser: 'Alice',
+      folderName: 'FOLDER'
+    })
+    // And "Alice" creates the following files into personal space using API
+    //   | pathToFile                    | content      |
+    //   | FOLDER/file_inside_folder.txt | example text |
+    await api.userHasCreatedFile({
+      usersEnvironment,
+      stepUser: 'Alice',
+      filename: 'FOLDER/file_inside_folder.txt',
+      content: 'example text'
+    })
+    // And "Alice" creates the following files into personal space using API
+    //   | pathToFile | content      |
+    //   | lorem.txt  | some content |
+    //   | test.odt   | some content |
+    await api.userHasCreatedFile({
+      usersEnvironment,
+      stepUser: 'Alice',
+      filename: 'lorem.txt',
+      content: 'some content'
+    })
+    await api.userHasCreatedFile({
+      usersEnvironment,
+      stepUser: 'Alice',
+      filename: 'test.odt',
+      content: 'some content'
+    })
+    // And "Alice" creates the following files into personal space using API
+    //   | pathToFile | content     |
+    //   | lorem.txt  | new content |
+    await api.userHasCreatedFile({
+      usersEnvironment,
+      stepUser: 'Alice',
+      filename: 'lorem.txt',
+      content: 'new content'
+    })
+    // And "Alice" creates the following project space using API
+    //   | name        | id     |
+    //   | Development | team.1 |
+    await api.userHasCreatedProjectSpace({
+      usersEnvironment,
+      spacesEnvironment,
+      stepUser: 'Alice',
+      name: 'Development',
+      id: 'team.1'
+    })
+    // And "Alice" creates the following file in space "Development" using API
+    //   | name              | content                   |
+    //   | spaceTextfile.txt | This is test file. Cheers |
+    await api.createFileInsideSpaceBySpaceName({
+      usersEnvironment,
+      stepUser: 'Alice',
+      fileName: 'spaceTextfile.txt',
+      space: 'Development',
+      content: 'This is test file. Cheers'
+    })
+    // And "Alice" logs in
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+  })
+
+  test.afterEach(async () => {
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
+  })
+
+  test('pagination', async () => {
+    // When "Alice" navigates to "versions" details panel of file "lorem.txt" of space "personal" through the URL
+    await ui.userNavigatesToDetailsPanelOfResourceViaUrl({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'lorem.txt',
+      detailsPanel: 'versions',
+      space: 'personal'
+    })
+    // Then "Alice" restores following resources version
+    //   | resource  | to | version | openDetailsPanel |
+    //   | lorem.txt | /  | 1       | false            |
+    await ui.userRestoresResourceVersion({
+      actorsEnvironment,
+      filesEnvironment,
+      stepUser: 'Alice',
+      resource: 'lorem.txt',
+      to: '/',
+      version: 1,
+      openDetailsPanel: false
+    })
+
+    // When "Alice" navigates to "sharing" details panel of file "lorem.txt" of space "personal" through the URL
+    await ui.userNavigatesToDetailsPanelOfResourceViaUrl({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'lorem.txt',
+      detailsPanel: 'sharing',
+      space: 'personal'
+    })
+    // Then "Alice" shares the following resource using the direct url navigation
+    //   | resource  | recipient | type | role     | resourceType |
+    //   | lorem.txt | Brian     | user | Can view | file         |
+    await ui.shareResource({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      actionType: 'URL_NAVIGATION',
+      resource: 'lorem.txt',
+      recipient: 'Brian',
+      type: 'user',
+      role: 'Can view',
+      resourceType: 'file'
+    })
+
+    // file that has respective editor will open in the respective editor
+    // When "Alice" opens the file "lorem.txt" of space "personal" through the URL
+    await ui.userOpensResourceOfSpaceViaUrl({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'lorem.txt',
+      space: 'personal'
+    })
+
+    // Then "Alice" is in a text-editor
+    await ui.userIsInFileViewer({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      fileViewerType: 'text-editor'
+    })
+
+    // And "Alice" closes the file viewer
+    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+
+    // file without the respective editor will show the file in the file list
+    // When "Alice" opens the file "test.odt" of space "personal" through the URL
+    await ui.userOpensResourceOfSpaceViaUrl({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'test.odt',
+      space: 'personal'
+    })
+    // Then following resources should be displayed in the files list for user "Alice"
+    //   | resource  |
+    //   | FOLDER    |
+    //   | lorem.txt |
+    //   | test.odt  |
+    await ui.userShouldSeeTheResources({
+      actorsEnvironment,
+      listType: 'files list',
+      stepUser: 'Alice',
+      resources: ['FOLDER', 'lorem.txt', 'test.odt']
+    })
+    // When "Alice" opens the folder "FOLDER" of space "personal" through the URL
+    await ui.userOpensResourceOfSpaceViaUrl({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'FOLDER',
+      space: 'personal'
+    })
+    // And "Alice" opens the following file in texteditor
+    //   | resource               |
+    //   | file_inside_folder.txt |
+    await ui.openResourceInViewer({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'file_inside_folder.txt',
+      application: 'texteditor'
+    })
+    // Then "Alice" is in a text-editor
+    await ui.userIsInFileViewer({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      fileViewerType: 'text-editor'
+    })
+    // And "Alice" closes the file viewer
+    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    // When "Alice" opens space "Development" through the URL
+    await ui.userOpensSpaceViaUrl({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      space: 'Development'
+    })
+    // And "Alice" opens the following file in texteditor
+    //   | resource          |
+    //   | spaceTextfile.txt |
+    await ui.openResourceInViewer({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'spaceTextfile.txt',
+      application: 'texteditor'
+    })
+    // Then "Alice" is in a text-editor
+    await ui.userIsInFileViewer({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      fileViewerType: 'text-editor'
+    })
+    // And "Alice" closes the file viewer
+    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    // And "Alice" logs out
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+  })
+})
