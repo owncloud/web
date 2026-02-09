@@ -198,6 +198,7 @@ config = {
                 "navigation",
                 "user-settings",
                 "app-store",
+                "file-action",
             ],
         },
         "app-provider": {

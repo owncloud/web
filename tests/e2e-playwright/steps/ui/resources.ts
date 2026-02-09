@@ -510,57 +510,76 @@ export async function userCreatesShortcutForResource({
   })
 }
 
+type resourceToDownload = {
+  resource: string
+  type: string
+  from?: string
+}
+
 export async function userDownloadsResource({
   actorsEnvironment,
   stepUser,
-  resource,
-  type,
-  actionType,
-  from
+  resourceToDownload,
+  actionType
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resource: string
-  type: string
+  resourceToDownload: resourceToDownload[]
   actionType: ActionViaType
-  from?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await processDownload(resourceObject, actionType, resource, type, from)
+  await processDownload(resourceObject, actionType, resourceToDownload)
 }
 
 export const processDownload = async (
   pageObject: Public | Resource,
   actionType: ActionViaType,
-  resource: string,
-  type: string,
-  from?: string
+  resourceToDownload: resourceToDownload[]
 ) => {
+  let downloads, files, parentFolder
   const downloadedResources: string[] = []
 
-  const files = [{ name: resource, type }]
-  const parentFolder = from !== 'undefined' ? from : null
+  const downloadInfo = resourceToDownload.reduce<Record<string, { name: string; type: string }[]>>(
+    (acc, stepRow) => {
+      const { resource, from, type } = stepRow
+      const resourceInfo = {
+        name: resource,
+        type: type
+      }
+      if (!acc[from]) {
+        acc[from] = []
+      }
+      acc[from].push(resourceInfo)
+      return acc
+    },
+    {}
+  )
 
-  const downloads = await pageObject.download({
-    folder: parentFolder,
-    resources: files,
-    via: actionType
-  })
+  for (const folder of Object.keys(downloadInfo)) {
+    files = downloadInfo[folder]
+    parentFolder = folder !== 'undefined' ? folder : null
 
-  downloads.forEach((download) => {
-    const { name } = path.parse(download.suggestedFilename())
-    downloadedResources.push(name)
-  })
+    downloads = await pageObject.download({
+      folder: parentFolder,
+      resources: files,
+      via: actionType
+    })
 
-  if (actionType === 'SIDEBAR_PANEL' || actionType === 'PREVIEW_TOPBAR') {
-    expect(downloads.length).toBe(files.length)
-    for (const resource of files) {
-      const fileOrFolderName = path.parse(resource.name).name
-      if (resource.type === 'file') {
-        expect(downloadedResources).toContain(fileOrFolderName)
-      } else {
-        expect(downloadedResources).toContain('download')
+    downloads.forEach((download) => {
+      const { name } = path.parse(download.suggestedFilename())
+      downloadedResources.push(name)
+    })
+
+    if (actionType === 'SIDEBAR_PANEL' || actionType === 'PREVIEW_TOPBAR') {
+      expect(downloads.length).toBe(files.length)
+      for (const resource of files) {
+        const fileOrFolderName = path.parse(resource.name).name
+        if (resource.type === 'file') {
+          expect(downloadedResources).toContain(fileOrFolderName)
+        } else {
+          expect(downloadedResources).toContain('download')
+        }
       }
     }
   }
