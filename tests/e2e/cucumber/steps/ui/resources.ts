@@ -213,6 +213,15 @@ When(
       return acc
     }, {})
     for (const folder of Object.keys(fileInfo)) {
+      console.log('--folder---')
+      console.log(fileInfo)
+      console.log('------------')
+      console.log('--fileInfo[folder]---')
+      console.log(fileInfo[folder])
+      console.log('------------')
+      console.log("--fileInfo[folder]['openDetailsPanel']---")
+      console.log(fileInfo[folder]['openDetailsPanel'])
+      console.log('------------')
       await resourceObject.restoreVersion({
         folder,
         files: fileInfo[folder],

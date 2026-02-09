@@ -16,6 +16,7 @@ import { editor } from '../../../e2e/support/objects/app-files/utils'
 import path from 'path'
 import { Public } from '../../../e2e/support/objects/app-files/page'
 import { Resource } from '../../../e2e/support/objects/app-files/resource'
+import { integer } from 'vscode-languageserver-types'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -651,4 +652,69 @@ export async function resourceShouldNotBeLocked({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const lockLocator = await resourceObject.getLockLocator({ resource })
   expect(await lockLocator.isVisible()).toBe(false)
+}
+
+export async function userRestoresResourceVersion({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource,
+  to,
+  version,
+  openDetailsPanel
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+  to: string
+  version: number
+  openDetailsPanel: boolean
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  const fileInfo: Record<string, any> = {}
+  if (!fileInfo[to]) {
+    fileInfo[to] = []
+  }
+
+  fileInfo[to].push(filesEnvironment.getFile({ name: resource }))
+
+  if (version !== 1) {
+    throw new Error('restoring is only supported for the most recent version')
+  }
+  fileInfo[to]['openDetailsPanel'] = openDetailsPanel
+
+  for (const folder of Object.keys(fileInfo)) {
+    console.log('--folder---')
+    console.log(fileInfo)
+    console.log('------------')
+    console.log('--fileInfo[folder]---')
+    console.log(fileInfo[folder])
+    console.log('------------')
+    console.log("--fileInfo[folder]['openDetailsPanel']---")
+    console.log(fileInfo[folder]['openDetailsPanel'])
+    console.log('------------')
+    await resourceObject.restoreVersion({
+      folder,
+      files: fileInfo[folder],
+      openDetailsPanel: fileInfo[folder]['openDetailsPanel']
+    })
+  }
+
+  //   console.log("--to---")
+  //   console.log(to)
+  //   console.log("------------")
+  //   console.log("--[filesEnvironment.getFile({ name: resource })]---")
+  //   console.log(filesEnvironment.getFile({ name: resource }))
+  //   console.log("------openDetailsPanel------")
+  //   console.log("openDetailsPanel")
+  //   console.log(openDetailsPanel)
+  //   console.log("------------")
+  // await resourceObject.restoreVersion({
+  //   folder: to,
+  //   files: [filesEnvironment.getFile({ name: resource })],
+  //   openDetailsPanel: openDetailsPanel
+  // })
 }

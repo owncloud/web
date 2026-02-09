@@ -140,9 +140,20 @@ export async function userIsInFileViewer({
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  fileViewerType: string
+  fileViewerType: 'text-editor' | 'pdf-viewer' | 'media-viewer'
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType })
   await expect(fileViewerLocator).toBeVisible()
+}
+
+export async function userClosesFileViewer({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  await editor.close(page)
 }
