@@ -138,43 +138,37 @@ test.describe('share', () => {
     //   | name               |
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
-    await ui.disablesSyncForShares({
+    await ui.userDisablesSyncForShares({
       actorsEnvironment,
       stepUser: 'Brian',
       resources: ['folder_to_shared', 'folder_to_shared_2']
     })
     // Then "Brian" should not see a sync status for the folder "folder_to_shared"
-    await ui.shouldNotSeeSyncStatusForResource({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      resource: 'folder_to_shared'
-    })
-
     // And "Brian" should not see a sync status for the folder "folder_to_shared_2"
-    await ui.shouldNotSeeSyncStatusForResource({
+    await ui.shareShouldNotHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
-      resource: 'folder_to_shared_2'
+      resources: ['folder_to_shared', 'folder_to_shared_2']
     })
 
     // When "Brian" enables the sync for the following share using the context menu
     //   | name               |
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
-    await ui.enablesSyncForShares({
+    await ui.userEnablesSyncForShares({
       actorsEnvironment,
       stepUser: 'Brian',
       resources: ['folder_to_shared', 'folder_to_shared_2']
     })
 
     // Then "Brian" should see a sync status for the folder "folder_to_shared"
-    await ui.shouldSeeSyncStatusForResource({
+    await ui.shareShouldHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
     })
     // And "Brian" should see a sync status for the folder "folder_to_shared_2"
-    await ui.shouldSeeSyncStatusForResource({
+    await ui.shareShouldHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared_2'
@@ -279,14 +273,14 @@ test.describe('share', () => {
     //   | resource           | owner                    |
     //   | folder_to_shared_2 | %user_alice_displayName% |
     //   | folder_to_shared   | %user_alice_displayName% |
-    await ui.userShouldNotSeeShares({
+    await ui.userShouldNotSeeShare({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared_2',
       owner: '%user_alice_displayName%'
     })
 
-    await ui.userShouldNotSeeShares({
+    await ui.userShouldNotSeeShare({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared',
