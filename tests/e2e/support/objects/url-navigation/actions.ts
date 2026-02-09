@@ -31,6 +31,7 @@ export const navigateToDetailsPanelOfResource = async (
 }
 
 export const openResourceViaUrl = async (args: openResourceViaUrlArgs) => {
+  // accessibility check is not added here as the page opens inside iframe.
   const { page, resource, user, space, editorName, client = '' } = args
   const fileId = await getTheFileIdOfSpaceFile(user, space, resource)
   let fullUrl

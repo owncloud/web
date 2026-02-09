@@ -16,6 +16,7 @@ import { editor } from '../../../e2e/support/objects/app-files/utils'
 import path from 'path'
 import { Public } from '../../../e2e/support/objects/app-files/page'
 import { Resource } from '../../../e2e/support/objects/app-files/resource'
+import { config } from '../../../e2e/config'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -70,7 +71,7 @@ export async function createResource({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
-  type: string
+  type: createResourceTypes
   content?: string
   password?: string
 }): Promise<void> {
@@ -78,7 +79,7 @@ export async function createResource({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.create({
     name: resource,
-    type: type as createResourceTypes,
+    type: type,
     content: content,
     password: password
   })
@@ -635,7 +636,7 @@ export async function resourceShouldBeLocked({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const lockLocator = await resourceObject.getLockLocator({ resource })
-  expect(await lockLocator.isVisible()).toBe(true)
+  expect(lockLocator).toBeVisible()
 }
 
 export async function resourceShouldNotBeLocked({
@@ -650,5 +651,7 @@ export async function resourceShouldNotBeLocked({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const lockLocator = await resourceObject.getLockLocator({ resource })
-  expect(await lockLocator.isVisible()).toBe(false)
+
+  // can take more than 5 seconds for lock to be released in case of OnlyOffice
+  expect(lockLocator).not.toBeVisible({ timeout: config.timeout * 1000 })
 }
