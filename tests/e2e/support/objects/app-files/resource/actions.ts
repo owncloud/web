@@ -2211,8 +2211,13 @@ export interface expectFileToBeLockedArgs {
   resource: string
 }
 
-export const getLockLocator = (args: expectFileToBeLockedArgs): Locator => {
+export const getLockLocator = async (args: expectFileToBeLockedArgs): Promise<Locator> => {
   const { page, resource } = args
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesSpaceTable'],
+    'files table with lock icons'
+  )
   return page.locator(util.format(resourceLockIcon, resource))
 }
 

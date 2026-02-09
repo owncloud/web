@@ -2,6 +2,8 @@ import { config } from '../../../e2e/config.js'
 import { api, objects } from '../../../e2e/support'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { User } from '../../../e2e/support/types'
+import { listenSSE } from '../../../e2e/support/environment/sse.js'
+import { test } from '@playwright/test'
 
 async function createNewSession(actorsEnvironment: ActorsEnvironment, stepUser: string) {
   const { page } = await actorsEnvironment.createActor({
@@ -45,6 +47,13 @@ export async function logInUser({
 
   await page.goto(config.baseUrl)
   await sessionObject.login(user)
+
+  if (test.info().tags.length > 0) {
+    // listen to SSE events when running scenarios with '@sse' tag
+    if (test.info().tags.includes('@sse')) {
+      void listenSSE(config.baseUrl, user)
+    }
+  }
 
   await page.locator('#web-content').waitFor()
 

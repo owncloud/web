@@ -12,6 +12,7 @@ import { integer } from 'vscode-languageserver-types'
 
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 import { join } from 'path'
+import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
 
 export async function userHasBeenCreated({
   usersEnvironment,
@@ -448,4 +449,17 @@ export async function userHasAddedTagsToResource({
 }): Promise<void> {
   const user = usersEnvironment.getUser({ key: stepUser })
   await api.dav.addTagToResource({ user, resource, tags })
+}
+
+export async function userShouldGetSSEEvent({
+  usersEnvironment,
+  stepUser,
+  event
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  event: string
+}): Promise<void> {
+  const user = usersEnvironment.getCreatedUser({ key: stepUser })
+  await waitForSSEEvent(user, event)
 }

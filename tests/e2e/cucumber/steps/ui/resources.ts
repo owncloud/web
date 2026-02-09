@@ -915,7 +915,7 @@ Then(
   async function (this: World, stepUser: string, file: string, actionType: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const lockLocator = resourceObject.getLockLocator({ resource: file })
+    const lockLocator = await resourceObject.getLockLocator({ resource: file })
 
     actionType === 'should'
       ? await expect(lockLocator).toBeVisible()

@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
@@ -214,4 +215,58 @@ export async function addUserToProjectSpace({
     role: roleId
   }
   await spacesObject.addMembers({ users: [collaboratorWithRole] })
+}
+
+export async function userShouldBeAbleToManageShareOfFile({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  resource,
+  recipient
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  recipient: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const changeRole = shareObject.changeRoleLocator(usersEnvironment.getUser({ key: recipient }))
+  const changeShare = shareObject.changeShareLocator(usersEnvironment.getUser({ key: recipient }))
+
+  await shareObject.openSharingPanel(resource)
+
+  const canChangeRole = !(await changeRole.isDisabled())
+  const canChangeShare = !(await changeShare.isDisabled())
+
+  expect(canChangeRole).toBe(true)
+  expect(canChangeShare).toBe(true)
+}
+
+export async function userShouldNotBeAbleToManageShareOfFile({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  resource,
+  recipient
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  recipient: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const changeRole = shareObject.changeRoleLocator(usersEnvironment.getUser({ key: recipient }))
+  const changeShare = shareObject.changeShareLocator(usersEnvironment.getUser({ key: recipient }))
+
+  await shareObject.openSharingPanel(resource)
+
+  const canChangeRole = !(await changeRole.isDisabled())
+  const canChangeShare = !(await changeShare.isDisabled())
+
+  expect(canChangeRole).toBe(false)
+  expect(canChangeShare).toBe(false)
 }

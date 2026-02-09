@@ -321,8 +321,8 @@ export class Resource {
     await po.openShotcut({ page: this.#page, name: name, url: url })
   }
 
-  getLockLocator(args: Omit<po.expectFileToBeLockedArgs, 'page'>): Locator {
-    return po.getLockLocator({ ...args, page: this.#page })
+  async getLockLocator(args: Omit<po.expectFileToBeLockedArgs, 'page'>): Promise<Locator> {
+    return await po.getLockLocator({ ...args, page: this.#page })
   }
 
   navigateMediaFile(navigationType: string): Promise<void> {

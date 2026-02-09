@@ -41,7 +41,7 @@ export async function createPublicLink({
   stepUser: string
   resource: string
   password: string
-  role: string
+  role?: string
   name?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
