@@ -274,7 +274,7 @@ export async function userShouldNotBeAbleToManageShareOfFile({
   expect(canChangeShare).toBe(false)
 }
 
-export async function disablesSyncForShares({
+export async function userDisablesSyncForShares({
   actorsEnvironment,
   stepUser,
   resources
@@ -290,7 +290,7 @@ export async function disablesSyncForShares({
   }
 }
 
-export async function enablesSyncForShares({
+export async function userEnablesSyncForShares({
   actorsEnvironment,
   stepUser,
   resources
@@ -306,7 +306,7 @@ export async function enablesSyncForShares({
   }
 }
 
-export async function shouldSeeSyncStatusForResource({
+export async function shareShouldHaveSyncStatus({
   actorsEnvironment,
   stepUser,
   resource
@@ -320,7 +320,7 @@ export async function shouldSeeSyncStatusForResource({
   expect(await shareObject.resourceIsSynced(resource)).toBe(true)
 }
 
-export async function shouldNotSeeSyncStatusForResource({
+export async function shareShouldNotHaveSyncStatus({
   actorsEnvironment,
   stepUser,
   resource
@@ -334,7 +334,7 @@ export async function shouldNotSeeSyncStatusForResource({
   expect(await shareObject.resourceIsSynced(resource)).toBe(false)
 }
 
-export async function userShouldNotSeeShares({
+export async function userShouldNotSeeShare({
   actorsEnvironment,
   stepUser,
   resource,

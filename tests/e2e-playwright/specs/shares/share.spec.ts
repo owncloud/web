@@ -64,7 +64,7 @@ test.describe('share', () => {
     //   | folder_to_shared   | Brian     | user | Can edit with trashbin | folder       |
     //   | shared_folder      | Brian     | user | Can edit with trashbin | folder       |
     //   | folder_to_shared_2 | Brian     | user | Can edit with trashbin | folder       |
-    await ui.shareResource({
+    await ui.userSharesResource({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -76,7 +76,7 @@ test.describe('share', () => {
       actionType: 'SIDEBAR_PANEL'
     })
 
-    await ui.shareResource({
+    await ui.userSharesResource({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -88,7 +88,7 @@ test.describe('share', () => {
       actionType: 'SIDEBAR_PANEL'
     })
 
-    await ui.shareResource({
+    await ui.userSharesResource({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -108,20 +108,19 @@ test.describe('share', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: 'lorem.txt',
-      to: 'folder_to_shared'
-    })
-    await ui.uploadResource({
-      actorsEnvironment,
-      filesEnvironment,
-      stepUser: 'Alice',
-      resource: 'lorem-big.txt',
-      to: 'folder_to_shared_2'
+      resources: [
+        { name: 'lorem.txt', to: 'folder_to_shared' },
+        { name: 'lorem-big.txt', to: 'folder_to_shared_2' }
+      ]
     })
     // And "Brian" navigates to the shared with me page
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" opens folder "folder_to_shared"
-    await ui.openResource({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
+    await ui.userOpensResources({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      resource: 'folder_to_shared'
+    })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource  |
     //   | lorem.txt |
@@ -138,20 +137,20 @@ test.describe('share', () => {
     //   | name               |
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
-    await ui.disablesSyncForShares({
+    await ui.userDisablesSyncForShares({
       actorsEnvironment,
       stepUser: 'Brian',
       resources: ['folder_to_shared', 'folder_to_shared_2']
     })
     // Then "Brian" should not see a sync status for the folder "folder_to_shared"
-    await ui.shouldNotSeeSyncStatusForResource({
+    await ui.shareShouldNotHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
     })
 
     // And "Brian" should not see a sync status for the folder "folder_to_shared_2"
-    await ui.shouldNotSeeSyncStatusForResource({
+    await ui.shareShouldNotHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared_2'
@@ -161,20 +160,20 @@ test.describe('share', () => {
     //   | name               |
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
-    await ui.enablesSyncForShares({
+    await ui.userEnablesSyncForShares({
       actorsEnvironment,
       stepUser: 'Brian',
       resources: ['folder_to_shared', 'folder_to_shared_2']
     })
 
     // Then "Brian" should see a sync status for the folder "folder_to_shared"
-    await ui.shouldSeeSyncStatusForResource({
+    await ui.shareShouldHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
     })
     // And "Brian" should see a sync status for the folder "folder_to_shared_2"
-    await ui.shouldSeeSyncStatusForResource({
+    await ui.shareShouldHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared_2'
@@ -197,16 +196,10 @@ test.describe('share', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
-      resource: 'simple.pdf',
-      to: 'folder_to_shared'
-    })
-
-    await ui.uploadResource({
-      actorsEnvironment,
-      filesEnvironment,
-      stepUser: 'Brian',
-      resource: 'testavatar.jpeg',
-      to: 'folder_to_shared_2'
+      resources: [
+        { name: 'simple.pdf', to: 'folder_to_shared' },
+        { name: 'testavatar.jpeg', to: 'folder_to_shared_2' }
+      ]
     })
 
     // When "Brian" deletes the following resources using the sidebar panel
@@ -229,9 +222,7 @@ test.describe('share', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: 'PARENT/simple.pdf',
-      to: 'folder_to_shared',
-      option: 'replace'
+      resources: [{ name: 'simple.pdf', to: 'folder_to_shared', option: 'replace' }]
     })
     // And "Brian" should not see the version panel for the file
     //   | resource   | to               |
@@ -279,14 +270,14 @@ test.describe('share', () => {
     //   | resource           | owner                    |
     //   | folder_to_shared_2 | %user_alice_displayName% |
     //   | folder_to_shared   | %user_alice_displayName% |
-    await ui.userShouldNotSeeShares({
+    await ui.userShouldNotSeeShare({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared_2',
       owner: '%user_alice_displayName%'
     })
 
-    await ui.userShouldNotSeeShares({
+    await ui.userShouldNotSeeShare({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'folder_to_shared',
