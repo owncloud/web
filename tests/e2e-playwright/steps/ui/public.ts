@@ -241,3 +241,20 @@ export async function userRenamesPublicLinkResources({
     await pageObject.rename({ resource: resource.resource, newName: resource.newName })
   }
 }
+export async function userDropsResources({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+
+  const resources = [filesEnvironment.getFile({ name: resource })]
+  await pageObject.dropUpload({ resources })
+}
