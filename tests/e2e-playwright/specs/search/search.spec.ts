@@ -3,7 +3,6 @@ import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
   UsersEnvironment,
-  SpacesEnvironment,
   FilesEnvironment
 } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
@@ -13,7 +12,6 @@ import * as ui from '../../steps/ui/index'
 test.describe('Search', { tag: '@predefined-users' }, () => {
   let actorsEnvironment
   const usersEnvironment = new UsersEnvironment()
-  const spacesEnvironment = new SpacesEnvironment()
   const filesEnvironment = new FilesEnvironment()
 
   test.beforeEach(async ({ browser }) => {
@@ -318,7 +316,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       command: 'presses enter'
     })
     // And "Alice" enables the option to search title only
-    await ui.userEnablesOptionToSearchTitleOnly({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesTitleOnlySearch({ actorsEnvironment, stepUser: 'Alice' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | strängéनेपालीName |
     await ui.userShouldSeeTheResources({
@@ -358,6 +356,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
 
     // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
   })
 
@@ -513,9 +512,9 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       command: 'presses enter'
     })
     // And "Alice" enables the option to search title only
-    await ui.userEnablesOptionToSearchTitleOnly({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesTitleOnlySearch({ actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" selects mediaType "Document" from the search result filter chip
-    await ui.userSelectsMediaTypeFromSearchResultFilterChip({
+    await ui.userFiltersSearchByMediaType({
       actorsEnvironment,
       stepUser: 'Alice',
       mediaType: 'Document'
@@ -532,7 +531,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // And "Alice" clears mediaType filter
     await ui.userClearsFilter({ actorsEnvironment, stepUser: 'Alice', filter: 'mediaType' })
     // When "Alice" selects mediaType "PDF" from the search result filter chip
-    await ui.userSelectsMediaTypeFromSearchResultFilterChip({
+    await ui.userFiltersSearchByMediaType({
       actorsEnvironment,
       stepUser: 'Alice',
       mediaType: 'PDF'
@@ -549,7 +548,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // And "Alice" clears mediaType filter
     await ui.userClearsFilter({ actorsEnvironment, stepUser: 'Alice', filter: 'mediaType' })
     // When "Alice" selects mediaType "Audio" from the search result filter chip
-    await ui.userSelectsMediaTypeFromSearchResultFilterChip({
+    await ui.userFiltersSearchByMediaType({
       actorsEnvironment,
       stepUser: 'Alice',
       mediaType: 'Audio'
@@ -566,7 +565,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // And "Alice" clears mediaType filter
     await ui.userClearsFilter({ actorsEnvironment, stepUser: 'Alice', filter: 'mediaType' })
     // When "Alice" selects mediaType "Archive" from the search result filter chip
-    await ui.userSelectsMediaTypeFromSearchResultFilterChip({
+    await ui.userFiltersSearchByMediaType({
       actorsEnvironment,
       stepUser: 'Alice',
       mediaType: 'Archive'
@@ -585,13 +584,13 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
 
     // # multiple choose
     // When "Alice" selects mediaType "Folder" from the search result filter chip
-    await ui.userSelectsMediaTypeFromSearchResultFilterChip({
+    await ui.userFiltersSearchByMediaType({
       actorsEnvironment,
       stepUser: 'Alice',
       mediaType: 'Folder'
     })
     // And "Alice" selects mediaType "Image" from the search result filter chip
-    await ui.userSelectsMediaTypeFromSearchResultFilterChip({
+    await ui.userFiltersSearchByMediaType({
       actorsEnvironment,
       stepUser: 'Alice',
       mediaType: 'Image'
@@ -620,6 +619,8 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     })
     // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
   })
 
   test('Search using lastModified filter', async () => {
@@ -673,9 +674,9 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       command: 'presses enter'
     })
     // And "Alice" enables the option to search title only
-    await ui.userEnablesOptionToSearchTitleOnly({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesTitleOnlySearch({ actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" selects lastModified "last 30 days" from the search result filter chip
-    await ui.userSelectsLastModifiedFromSearchResultFilterChip({
+    await ui.userFiltersSearchByLastModifiedDate({
       actorsEnvironment,
       stepUser: 'Alice',
       lastModified: 'last 30 days'
@@ -692,7 +693,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       resources: ['mainFolder/mediaTest.pdf', 'mainFolder/mediaTest.txt', 'mainFolder/mediaTest.md']
     })
     // When "Alice" selects lastModified "last 7 days" from the search result filter chip
-    await ui.userSelectsLastModifiedFromSearchResultFilterChip({
+    await ui.userFiltersSearchByLastModifiedDate({
       actorsEnvironment,
       stepUser: 'Alice',
       lastModified: 'last 7 days'
@@ -717,7 +718,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       resources: ['mainFolder/mediaTest.pdf']
     })
     // When "Alice" selects lastModified "today" from the search result filter chip
-    await ui.userSelectsLastModifiedFromSearchResultFilterChip({
+    await ui.userFiltersSearchByLastModifiedDate({
       actorsEnvironment,
       stepUser: 'Alice',
       lastModified: 'today'
