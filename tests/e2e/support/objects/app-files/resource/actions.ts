@@ -606,14 +606,12 @@ export const editTextDocument = async ({
   const inputLocator =
     isMarkdownMode === 'true' ? textEditorMarkdownInput : textEditorPlainTextInput
 
-  const a11yObject = new objects.a11y.Accessibility({ page })
+  await page.locator(inputLocator).fill(content)
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['textEditor', 'topBar'],
     'text editor'
   )
-
-  await page.locator(inputLocator).fill(content)
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'PUT'),
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
