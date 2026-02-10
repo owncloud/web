@@ -153,11 +153,11 @@ test.describe(
       // And "Alice" downloads the following resources using the sidebar panel
       // | resource           | type |
       // | important file.url | file |
+      const resourceToDownload = [{ resource: 'important file.url', type: 'file' }]
       await ui.userDownloadsResource({
         actorsEnvironment,
         stepUser: 'Alice',
-        resource: 'important file.url',
-        type: 'file',
+        resourceToDownload: resourceToDownload,
         actionType: 'SIDEBAR_PANEL'
       })
 
