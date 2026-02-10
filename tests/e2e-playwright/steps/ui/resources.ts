@@ -22,27 +22,23 @@ export async function uploadResource({
   actorsEnvironment,
   filesEnvironment,
   stepUser,
-  resource,
-  to,
-  type,
-  option
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   filesEnvironment: FilesEnvironment
   stepUser: string
-  resource: string
-  to: string
-  type?: string
-  option?: string
+  resources: { name: string; to?: string; type?: string; option?: string }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.upload({
-    to: to,
-    resources: [filesEnvironment.getFile({ name: resource })],
-    option: option,
-    type: type
-  })
+  for (const resource of resources) {
+    await resourceObject.upload({
+      to: resource.to,
+      resources: [filesEnvironment.getFile({ name: resource.name })],
+      option: resource.option,
+      type: resource.type
+    })
+  }
 }
 
 export async function isAbleToEditFileOrFolder({
@@ -408,7 +404,7 @@ export async function userSavesTextEditor({
   await editor.save(page)
 }
 
-export async function userClosesTextEditor({
+export async function userClosesFileViewer({
   actorsEnvironment,
   stepUser
 }: {
@@ -687,4 +683,67 @@ export async function userNavigatesToFolderViaBreadcrumb({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFolderViaBreadcrumb(resource)
+}
+
+export async function userEditsFile({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: { name: string; content: string; type?: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    await resourceObject.editResource({
+      name: resource.name,
+      type: resource.type,
+      content: resource.content
+    })
+  }
+}
+
+export async function userShouldSeeThumbnailAndPreview({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await expect(resourceObject.getFileThumbnailLocator(resource)).toBeVisible()
+  await resourceObject.shouldSeeFilePreview({ resource })
+}
+
+export async function userOpensMediaUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.previewMediaFromSidebarPanel(resource)
+}
+
+export async function userNavigatesMediaResource({
+  actorsEnvironment,
+  stepUser,
+  navigationType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  navigationType: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.navigateMediaFile(navigationType)
 }

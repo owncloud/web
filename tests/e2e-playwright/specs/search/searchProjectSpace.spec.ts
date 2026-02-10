@@ -64,8 +64,7 @@ test.describe('Search in the project space', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: "new-'single'quotes.txt",
-      to: 'folder(WithSymbols:!;_+-&)'
+      resources: [{ name: "new-'single'quotes.txt", to: 'folder(WithSymbols:!;_+-&)' }]
     })
 
     await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })

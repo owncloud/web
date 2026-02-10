@@ -774,6 +774,11 @@ export const navigateMediaFile = async ({
     .locator(topbarFilenameSelector)
     .getAttribute('data-test-resource-name')
 
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['previewControlBar'],
+    'preview controls action bar'
+  )
   await page.locator(util.format(mediaNavigationButton, navigationType)).click()
   const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType: 'media-viewer' })
   await expect(fileViewerLocator).toBeVisible()

@@ -42,7 +42,7 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
       editor: 'TextEditor'
     })
     await ui.userSavesTextEditor({ actorsEnvironment, stepUser: 'Alice' })
-    await ui.userClosesTextEditor({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
     await ui.userShouldSeeTheResources({
       actorsEnvironment,
       listType: 'files list',
