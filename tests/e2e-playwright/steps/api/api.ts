@@ -407,3 +407,14 @@ export async function userShouldGetSSEEvent({
   const user = usersEnvironment.getCreatedUser({ key: stepUser })
   await waitForSSEEvent(user, event)
 }
+
+export async function userDisablesAutoAccepting({
+  usersEnvironment,
+  stepUser
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+}): Promise<void> {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.settings.configureAutoAcceptShare({ user, state: false })
+}
