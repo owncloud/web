@@ -124,8 +124,8 @@ export const deleteGroup = async ({
   group: Group
   admin: User
 }): Promise<Group> => {
-  const usersEnvironment = new UsersEnvironment()
-  const groupId = usersEnvironment.getCreatedGroup({ key: group.id }).uuid
+  // Use the UUID directly from the group parameter (which stays the same even when renamed)
+  const groupId = group.uuid || group.id
 
   const response = await request({
     method: 'DELETE',

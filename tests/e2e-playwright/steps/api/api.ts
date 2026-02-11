@@ -437,14 +437,39 @@ export const groupsHaveBeenCreated = async ({
   const usersEnvironment = new UsersEnvironment()
   const createdGroups: Group[] = []
 
-  // Clear the store first to prevent conflicts between tests in the same file
-  store.createdGroupStore.clear()
-
   // First, fetch all existing groups to check for orphans
   const existingGroups = await api.graph.getGroups(admin)
+  console.log(
+    '[GROUPS-CREATED] Existing groups on server:',
+    existingGroups.map((g) => g.displayName)
+  )
 
   for (const id of groupIds) {
     const group = usersEnvironment.getGroup({ key: id })
+
+    // Check if group already exists in the store (from a previous test in the same file)
+    if (store.createdGroupStore.has(id.toLowerCase())) {
+      const existingInStore = store.createdGroupStore.get(id.toLowerCase())
+
+      // Check if the group still exists on the server
+      const stillOnServer = existingGroups.some((g) => g.id === existingInStore.uuid)
+
+      if (stillOnServer) {
+        console.log(
+          '[GROUPS-CREATED] Group already in store and on server, skipping creation:',
+          group.displayName
+        )
+        createdGroups.push(existingInStore)
+        continue
+      } else {
+        // Group was deleted from server (e.g., by a previous test), remove from store and re-create
+        console.log(
+          '[GROUPS-CREATED] Group in store but not on server, re-creating:',
+          group.displayName
+        )
+        store.createdGroupStore.delete(id.toLowerCase())
+      }
+    }
 
     // Check if group already exists on server (orphaned from previous run)
     // Look for the group by its original display name
@@ -459,10 +484,6 @@ export const groupsHaveBeenCreated = async ({
       // Don't throw error if group doesn't exist (it might have been cleaned up already)
       if (response.status !== 204 && response.status !== 404) {
         throw Error(`Failed to delete group: ${group.displayName}, Status: ${response.status}`)
-      }
-      // Remove from store if present
-      if (store.createdGroupStore.has(id.toLowerCase())) {
-        store.createdGroupStore.delete(id.toLowerCase())
       }
     }
 
@@ -481,7 +502,12 @@ export const groupsHaveBeenCreated = async ({
     checkResponseStatus(response, 'Failed while creating group')
 
     const resBody = (await response.json()) as Group
+    console.log('[GROUPS-CREATED] Created group:', group.displayName, 'with UUID:', resBody.id)
     usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: resBody.id } })
+    console.log(
+      '[GROUPS-CREATED] Store entries AFTER adding group:',
+      Array.from(store.createdGroupStore.entries())
+    )
     createdGroups.push({ ...group, uuid: resBody.id })
   }
   return createdGroups
