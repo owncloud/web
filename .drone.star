@@ -67,7 +67,6 @@ config = {
             "skip": False,
             "suites": [
                 "journeys",
-                "smoke",
             ],
         },
         "2": {

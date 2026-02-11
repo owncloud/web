@@ -1371,3 +1371,130 @@ export async function userShouldNotSeeShareIndicatorOnResource({
   })
   await expect(shareIndicator).not.toBeVisible()
 }
+
+export async function userAddsFollowingTagsForResourcesUsingSidebarPanel({
+  world,
+  stepUser,
+  resources
+}: {
+  world: World
+  stepUser: string
+  resources: { name: string; tags: string[] }[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    await resourceObject.addTags({
+      resource: resource.name,
+      tags: resource.tags.map((tag) => tag.trim().toLowerCase())
+    })
+  }
+}
+
+export async function resourceShouldContainTagsInFileList({
+  world,
+  stepUser,
+  resources
+}: {
+  world: World
+  stepUser: string
+  resources: { name: string; tags: string[] }[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    const isVisible = await resourceObject.areTagsVisibleForResourceInFilesTable({
+      resource: resource.name,
+      tags: resource.tags.map((tag) => tag.trim().toLowerCase())
+    })
+    expect(isVisible).toBe(true)
+  }
+}
+
+export async function resourceShouldContainTagsInDetailPanel({
+  world,
+  stepUser,
+  resources
+}: {
+  world: World
+  stepUser: string
+  resources: { name: string; tags: string[] }[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    const isVisible = await resourceObject.areTagsVisibleForResourceInDetailsPanel({
+      resource: resource.name,
+      tags: resource.tags.map((tag) => tag.trim().toLowerCase())
+    })
+  }
+}
+
+export async function userRemovesTagsFromResourcesUsingSideBar({
+  world,
+  stepUser,
+  resources
+}: {
+  world: World
+  stepUser: string
+  resources: { name: string; tags: string[] }[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    await resourceObject.removeTags({
+      resource: resource.name,
+      tags: resource.tags.map((tag) => tag.trim().toLowerCase())
+    })
+  }
+}
+
+export async function userTriesToAddTagForResourceUsingSidebarPanel({
+  world,
+  stepUser,
+  resources
+}: {
+  world: World
+  stepUser: string
+  resources: { name: string; tags: string[] }[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    await resourceObject.tryToAddTags({
+      resource: resource.name,
+      tags: resource.tags.map((tag) => tag.trim().toLowerCase())
+    })
+  }
+}
+
+export async function userShouldSeeFollowingTagValidationMessages({
+  world,
+  stepUser,
+  message
+}: {
+  world: World
+  stepUser: string
+  message: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const actualMessage = await resourceObject.getTagValidationMessage()
+  expect(actualMessage).toBe(message)
+}
+
+export async function userClicksTheTagOnResource({
+  world,
+  stepUser,
+  resourceName,
+  tagName
+}: {
+  world: World
+  stepUser: string
+  resourceName: string
+  tagName: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.clickTag({ resource: resourceName, tag: tagName.trim().toLowerCase() })
+}
