@@ -978,3 +978,129 @@ export async function userResumesUpload({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.resumeUpload()
 }
+
+export async function userAddsFollowingTags({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  tags
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  tags: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.addTags({
+    resource,
+    tags
+  })
+}
+
+export async function resourceShouldContainTagsInFileList({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  tags
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  tags: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const isVisible = await resourceObject.areTagsVisibleForResourceInFilesTable({
+    resource,
+    tags
+  })
+  expect(isVisible).toBe(true)
+}
+export async function resourceShouldContainTagsInDetailList({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  tags
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  tags: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const isVisible = await resourceObject.areTagsVisibleForResourceInDetailsPanel({
+    resource,
+    tags
+  })
+  expect(isVisible).toBe(true)
+}
+export async function userRemovesTagsFromResourcesUsingSideBar({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  tags
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  tags: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  await resourceObject.removeTags({
+    resource,
+    tags
+  })
+}
+export async function userTriesToAddTagUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  tags
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  tags: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  await resourceObject.tryToAddTags({
+    resource,
+    tags
+  })
+}
+
+export async function userShouldSeeFollowingTagValidationMessages({
+  actorsEnvironment,
+  stepUser,
+  message
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  message: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const actualMessage = await resourceObject.getTagValidationMessage()
+  expect(actualMessage).toBe(message)
+}
+export async function userClicksTag({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  tag
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  tag: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.clickTag({ resource, tag })
+}
