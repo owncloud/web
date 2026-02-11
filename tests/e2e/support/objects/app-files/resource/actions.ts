@@ -1786,7 +1786,8 @@ export const clickResourceTag = async (args: clickTagArgs): Promise<void> => {
   await page.locator(tagCellSelector).waitFor()
   const resourceTagCell = page.locator(tagCellSelector)
   const tagSpan = resourceTagCell.locator(util.format(tagInFilesTable, tag))
-  return tagSpan.click()
+  tagSpan.click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'files view')
 }
 
 export const getTagsForResourceVisibilityInDetailsPanel = async (
@@ -2058,6 +2059,11 @@ export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> =
 
       page.locator('.vs__dropdown-option').first().press('Enter')
     ])
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'side bar after adding tag'
+    )
   }
 
   await sidebar.close({ page })
@@ -2070,6 +2076,11 @@ export const tryToAddTagsToResource = async (args: resourceTagsArgs): Promise<vo
 
   for (const tag of tags) {
     await inputForm.pressSequentially(tag)
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'side bar after trying to add too long tag name'
+    )
   }
 }
 
@@ -2089,6 +2100,11 @@ export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<vo
   for (const tag of tags) {
     await page.locator(util.format(tagInInputForm, tag)).click()
   }
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['appSidebar'],
+    'sidebar after removing tag'
+  )
   await sidebar.close({ page })
 }
 
