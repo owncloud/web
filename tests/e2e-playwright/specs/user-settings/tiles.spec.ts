@@ -53,13 +53,13 @@ test.describe('tiles view', { tag: '@predefined-users' }, () => {
       stepUser: 'Alice'
     })
     // And "Alice" opens folder "tile_folder"
-    await ui.openResource({
+    await ui.userOpensResources({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'tile_folder'
     })
     // And "Alice" creates the following resources
-    await ui.createResource({
+    await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
       type: 'folder',
