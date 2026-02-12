@@ -167,6 +167,13 @@ config = {
     # NOTE: make the pipelines similar to the above e2e
     # along with the addition of new test suites
     "e2e-playwright": {
+        "1": {
+            "earlyFail": True,
+            "skip": False,
+            "suites": [
+                "smoke",
+            ],
+        },
         "2": {
             "earlyFail": True,
             "skip": False,
