@@ -708,6 +708,12 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
     ),
     uploadAction
   ])
+
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['uploadInfoSnackBar'],
+    'Upload information modal while uploading'
+  )
 }
 
 export const uploadLargeNumberOfResources = async (args: uploadResourceArgs): Promise<void> => {
@@ -774,8 +780,13 @@ export const startResourceUpload = (args: uploadResourceArgs): Promise<void> => 
   return performUpload(args)
 }
 
-const pauseResumeUpload = (page: Page): Promise<void> => {
-  return page.locator(pauseResumeUploadButton).click()
+const pauseResumeUpload = async (page: Page): Promise<void> => {
+  await page.locator(pauseResumeUploadButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['uploadInfoSnackBar'],
+    'Upload information modal while upload is paused'
+  )
 }
 
 export const navigateMediaFile = async ({
@@ -812,7 +823,11 @@ export const pauseResourceUpload = async (page: Page): Promise<void> => {
 export const resumeResourceUpload = async (page: Page): Promise<void> => {
   await pauseResumeUpload(page)
   await page.locator(pauseUploadButton).waitFor()
-
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['uploadInfoSnackBar'],
+    'Upload information modal while upload is resumed'
+  )
   await page.locator(util.format(uploadInfoLabel, 'Upload complete')).waitFor()
   await page.locator(uploadInfoCloseButton).click()
 }
@@ -821,6 +836,11 @@ export const cancelResourceUpload = async (page: Page): Promise<void> => {
   await page.locator(cancelUploadButton).click()
   await page.locator(util.format(uploadInfoLabel, 'Upload cancelled')).waitFor()
   await page.locator(util.format(uploadInfoLabel, '0 items uploaded')).waitFor()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['uploadInfoSnackBar'],
+    'Upload information modal while upload is canceled'
+  )
 }
 
 /**/
