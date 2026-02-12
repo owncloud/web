@@ -51,7 +51,7 @@
     "@vavt/cm-extension": "^1.11.2",
     "@vue/shared": "^3.5.26",
     "@vueuse/core": "^14.1.0",
-    "axios": "^1.13.2",
+    "axios": "^1.13.5",
     "deepmerge": "^4.3.1",
     "dompurify": "^3.3.1",
     "emoji-regex": "^10.6.0",
