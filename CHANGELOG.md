@@ -1,3 +1,28 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v12.3.0...master
+
+Summary
+-------
+
+* Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
+
+Details
+-------
+
+* Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
+
+   Added a new logic to the WebDAV client to strip the prefix from the path if it
+   is present. Previously, only `/dav/` prefix would be stripped when parsing the
+   response. Now, it will strip all the parts of the base remote URL. For example,
+   if the base remote URL is `https://example.com/my/nested/path/`, it will strip
+   the `/my/nested/path/dav/` prefix.
+
+   https://github.com/owncloud/web/pull/13545
+
 Changelog for ownCloud Web [12.3.0] (2026-01-23)
 =======================================
 The following sections list the changes in ownCloud web 12.3.0 relevant to
