@@ -45,7 +45,7 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
     // And "Alice" creates the following resources
     //   | resource           | type           | content                |
     //   | MicrosoftWord.docx | Microsoft Word | Microsoft Word Content |
-    await ui.createResource({
+    await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'MicrosoftWord.docx',
