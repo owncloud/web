@@ -38,7 +38,11 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
 
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
@@ -50,16 +54,10 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      resource: 'lorem.txt',
-      type: 'txtFile',
-      content: 'some text'
-    })
-    await ui.userCreatesResources({
-      actorsEnvironment,
-      stepUser: 'Alice',
-      resource: 'lorem.md',
-      type: 'mdFile',
-      content: 'readme'
+      resources: [
+        { name: 'lorem.txt', type: 'txtFile', content: 'some text' },
+        { name: 'lorem.md', type: 'mdFile', content: 'readme' }
+      ]
     })
 
     // And "Alice" edits the following resources

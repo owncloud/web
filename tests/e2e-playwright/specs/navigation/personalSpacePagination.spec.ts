@@ -34,36 +34,37 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
 
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" creates 15 folders in personal space using API
-    for (let i = 1; i <= 15; i++) {
-      await api.userHasCreatedFolder({
-        usersEnvironment,
-        stepUser: 'Alice',
-        folderName: `folder${i}`
-      })
-    }
+    await api.userHasCreatedFolders({
+      usersEnvironment,
+      stepUser: 'Alice',
+      folderNames: Array.from({ length: 15 }, (_, i) => `folder${i + 1}`)
+    })
     // And "Alice" creates 10 files in personal space using API
-    for (let i = 1; i <= 10; i++) {
-      await api.userHasCreatedFile({
-        usersEnvironment,
-        stepUser: 'Alice',
-        filename: `file${i}`,
-        content: `This is a test file${i}`
-      })
-    }
+    await api.userHasCreatedFiles({
+      usersEnvironment,
+      stepUser: 'Alice',
+      files: Array.from({ length: 10 }, (_, i) => ({
+        pathToFile: `file${i + 1}`,
+        content: `This is a test file${i + 1}`
+      }))
+    })
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile           | content                |
     //   | .hidden-testFile.txt | This is a hidden file. |
-    await api.userHasCreatedFile({
+    await api.userHasCreatedFiles({
       usersEnvironment,
       stepUser: 'Alice',
-      filename: '.hidden-testFile.txt',
-      content: 'This is a hidden file.'
+      files: [{ pathToFile: '.hidden-testFile.txt', content: 'This is a hidden file.' }]
     })
     // When "Alice" opens the "files" app
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })

@@ -41,7 +41,11 @@ test.describe('check files pagination in project space', () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
@@ -71,27 +75,30 @@ test.describe('check files pagination in project space', () => {
     await api.userHasCreatedFoldersInSpace({
       usersEnvironment,
       stepUser: 'Alice',
-      numberOfFolders: 55,
-      space: 'Developers'
+      spaceName: 'Developers',
+      folders: Array.from({ length: 55 }, (_, i) => `testFolder${i + 1}`)
     })
 
     // And "Alice" creates 55 files in space "Developers" using API
     await api.createFilesInsideSpaceBySpaceName({
       usersEnvironment,
       stepUser: 'Alice',
-      numberOfFiles: 55,
-      space: 'Developers'
+      files: Array.from({ length: 55 }, (_, i) => ({
+        name: `testfile${i + 1}.txt`,
+        space: 'Developers',
+        content: `This is a test file${i + 1}`
+      }))
     })
 
     // And "Alice" creates the following file in space "Developers" using API
     //   | name                 | content                |
     //   | .hidden-testFile.txt | This is a hidden file. |
-    await api.createFileInsideSpaceBySpaceName({
+    await api.createFilesInsideSpaceBySpaceName({
       usersEnvironment,
       stepUser: 'Alice',
-      fileName: '.hidden-testFile.txt',
-      space: 'Developers',
-      content: 'This is a hidden file.'
+      files: [
+        { name: '.hidden-testFile.txt', space: 'Developers', content: 'This is a hidden file.' }
+      ]
     })
 
     // And "Alice" navigates to the project space "dev.1"

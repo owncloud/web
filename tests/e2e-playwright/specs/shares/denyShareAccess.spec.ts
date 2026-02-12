@@ -25,8 +25,11 @@ test.describe('deny share access', () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
 
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
 
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
@@ -43,16 +46,20 @@ test.describe('deny share access', () => {
 
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
 
-    await ui.shareResource({
-      role: 'Can view',
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
-      resource: 'folder_to_shared',
-      recipient: 'Brian',
-      type: 'user',
-      resourceType: 'folder'
+      shares: [
+        {
+          resource: 'folder_to_shared',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can view',
+          resourceType: 'folder'
+        }
+      ]
     })
 
     await ui.userOpensResources({
@@ -61,16 +68,20 @@ test.describe('deny share access', () => {
       resource: 'folder_to_shared'
     })
 
-    await ui.shareResource({
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'folder_to_deny',
-      resourceType: 'folder',
-      recipient: 'Brian',
-      role: 'Cannot access',
       actionType: 'SIDEBAR_PANEL',
-      type: 'user'
+      shares: [
+        {
+          resource: 'folder_to_deny',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Cannot access',
+          resourceType: 'folder'
+        }
+      ]
     })
   })
 

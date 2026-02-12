@@ -28,8 +28,11 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       browser: browser
     })
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
   })
 
   test.afterEach(async () => {
@@ -56,11 +59,10 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile                | content     |
     //   | folderPublic/new file.txt | lorem ipsum |
-    await api.userHasCreatedFile({
+    await api.userHasCreatedFiles({
       usersEnvironment,
       stepUser: 'Alice',
-      filename: 'folderPublic/new file.txt',
-      content: 'lorem ipsum'
+      files: [{ pathToFile: 'folderPublic/new file.txt', content: 'lorem ipsum' }]
     })
 
     // And "Alice" uploads the following local file into personal space using API
@@ -78,32 +80,32 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | folderPublic   | Brian     | user | Can edit with versions and trashbin | folder       |
     //   | emptyFolder    | Brian     | user | Can edit with versions and trashbin | folder       |
     //   | testavatar.jpg | Brian     | user | Can edit with versions and trashbin | file         |
-    await api.userHasSharedResource({
+    await api.userHasSharedResources({
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'folderPublic',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with versions and trashbin',
-      resourceType: 'folder'
-    })
-    await api.userHasSharedResource({
-      usersEnvironment,
-      stepUser: 'Alice',
-      resource: 'emptyFolder',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with versions and trashbin',
-      resourceType: 'folder'
-    })
-    await api.userHasSharedResource({
-      usersEnvironment,
-      stepUser: 'Alice',
-      resource: 'testavatar.jpg',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with versions and trashbin',
-      resourceType: 'file'
+      shares: [
+        {
+          resource: 'folderPublic',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with versions and trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'emptyFolder',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with versions and trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'testavatar.jpg',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with versions and trashbin',
+          resourceType: 'file'
+        }
+      ]
     })
 
     // When "Alice" downloads the following resources using the batch action

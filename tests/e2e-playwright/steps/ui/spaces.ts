@@ -59,35 +59,33 @@ export async function createProjectSpace({
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   await spacesObject.create({ key: id || name, space: { name: name, id: id } as unknown as Space })
 }
-export async function addMembersToSpace({
+export async function userAddsMembersToSpace({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
-  sharee,
-  role,
-  kind
+  members
 }: {
   actorsEnvironment: ActorsEnvironment
   usersEnvironment: UsersEnvironment
   stepUser: string
-  sharee: string
-  role: string
-  kind: string
+  members: { user: string; role: string; kind: string }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const sharer = usersEnvironment.getUser({ key: stepUser })
 
-  const collaborator =
-    kind === 'user'
-      ? usersEnvironment.getUser({ key: sharee })
-      : usersEnvironment.getGroup({ key: sharee })
-  const roleId = await getDynamicRoleIdByName(sharer, role, 'space' as ResourceType)
-  const collaboratorWithRole = {
-    collaborator,
-    role: roleId
+  for (const sharee of members) {
+    const collaborator =
+      sharee.kind === 'user'
+        ? usersEnvironment.getUser({ key: sharee.user })
+        : usersEnvironment.getGroup({ key: sharee.user })
+    const roleId = await getDynamicRoleIdByName(sharer, sharee.role, 'space' as ResourceType)
+    const collaboratorWithRole = {
+      collaborator,
+      role: roleId
+    }
+    await spacesObject.addMembers({ users: [collaboratorWithRole] })
   }
-  await spacesObject.addMembers({ users: [collaboratorWithRole] })
 }
 
 export async function addExpirationDate({

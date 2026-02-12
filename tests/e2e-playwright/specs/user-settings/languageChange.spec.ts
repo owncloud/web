@@ -32,8 +32,11 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
     // Given "Admin" creates following users using API
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
 
     // Given "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
@@ -57,14 +60,18 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
     // And "Alice" shares the following resource using API
     //   | resource      | recipient | type | role     | resourceType |
     //   | check_message | Brian     | user | Can edit | folder       |
-    await api.userHasSharedResource({
+    await api.userHasSharedResources({
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'check_message',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit',
-      resourceType: 'folder'
+      shares: [
+        {
+          resource: 'check_message',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit',
+          resourceType: 'folder'
+        }
+      ]
     })
     // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
