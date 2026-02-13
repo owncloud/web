@@ -95,6 +95,25 @@ export async function userHasCreatedFile({
   })
 }
 
+export async function userHasCreatedFiles({
+  usersEnvironment,
+  stepUser,
+  files
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  files: { pathToFile: string; content: string }[]
+}): Promise<void> {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  for (const file of files) {
+    await api.dav.uploadFileInPersonalSpace({
+      user,
+      pathToFile: file.pathToFile,
+      content: file.content
+    })
+  }
+}
+
 export async function userHasSharedResource({
   usersEnvironment,
   stepUser,
