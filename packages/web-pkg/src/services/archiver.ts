@@ -1,6 +1,6 @@
 import { RuntimeError } from '../errors'
 import { ClientService } from '../services'
-import { urlJoin } from '@ownclouders/web-client'
+import { SignatureAuth, urlJoin } from '@ownclouders/web-client'
 
 import { Ref, ref, computed, unref } from 'vue'
 import { ArchiverCapability } from '@ownclouders/web-client/ocs'
@@ -14,6 +14,7 @@ interface TriggerDownloadOptions {
   publicToken?: string
   publicLinkPassword?: string
   publicLinkShareOwner?: string
+  signatureAuth?: SignatureAuth
 }
 
 function sortArchivers(a: ArchiverCapability, b: ArchiverCapability): number {
@@ -83,28 +84,39 @@ export class ArchiverService {
       throw new RuntimeError('download url could not be built')
     }
 
-    const url =
-      options.publicToken && !options.publicLinkPassword
-        ? downloadUrl
-        : await this.clientService.ocs.signUrl({
-            url: downloadUrl,
-            username: options.publicLinkShareOwner || this.userStore.user?.onPremisesSamAccountName,
-            publicToken: options.publicToken,
-            publicLinkPassword: options.publicLinkPassword
-          })
+    if (options.publicToken && (!options.publicLinkPassword || options.signatureAuth)) {
+      window.open(downloadUrl, '_blank')
+      return downloadUrl
+    }
+
+    const url = await this.clientService.ocs.signUrl({
+      url: downloadUrl,
+      username: options.publicLinkShareOwner || this.userStore.user?.onPremisesSamAccountName,
+      publicToken: options.publicToken,
+      publicLinkPassword: options.publicLinkPassword
+    })
 
     window.open(url, '_blank')
     return downloadUrl
   }
 
   private buildDownloadUrl(options: TriggerDownloadOptions): string {
-    const queryParams = []
-    if (options.publicToken && !options.publicLinkPassword) {
-      queryParams.push(`public-token=${options.publicToken}`)
+    const url = new URL(this.url)
+
+    if (options.publicToken && (options.signatureAuth || !options.publicLinkPassword)) {
+      url.searchParams.set('public-token', options.publicToken)
     }
 
-    queryParams.push(...options.fileIds.map((id) => `id=${id}`))
-    return this.url + '?' + queryParams.join('&')
+    if (options.publicLinkPassword && options.signatureAuth) {
+      url.searchParams.set('signature', options.signatureAuth.signature)
+      url.searchParams.set('expiration', options.signatureAuth.expiration.toISOString())
+    }
+
+    for (const fileId of options.fileIds) {
+      url.searchParams.append('id', fileId)
+    }
+
+    return url.toString()
   }
 
   private get url(): string {
