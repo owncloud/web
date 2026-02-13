@@ -145,7 +145,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     })
 
     // And "Alice" closes the file viewer
-    await ui.userClosesTextEditor({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })

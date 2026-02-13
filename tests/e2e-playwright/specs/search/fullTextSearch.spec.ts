@@ -303,7 +303,7 @@ test.describe('Search', () => {
       application: 'texteditor'
     })
     // And "Brian" closes the file viewer
-    await ui.userClosesTextEditor({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Brian' })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource                      |
     //   | textfile.txt                  |

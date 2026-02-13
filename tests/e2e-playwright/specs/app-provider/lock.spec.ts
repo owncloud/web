@@ -147,7 +147,7 @@ test.describe('lock', { tag: '@sse' }, () => {
 
     // file-unlocked
     // When "Brian" closes the file viewer
-    await ui.userClosesTextEditor({
+    await ui.userClosesFileViewer({
       actorsEnvironment,
       stepUser: 'Brian'
     })

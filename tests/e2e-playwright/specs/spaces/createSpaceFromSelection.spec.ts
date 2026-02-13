@@ -77,15 +77,10 @@ test.describe('create Space shortcut', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: 'data.zip',
-      to: 'spaceFolder'
-    })
-    await ui.uploadResource({
-      actorsEnvironment,
-      filesEnvironment,
-      stepUser: 'Alice',
-      resource: 'lorem.txt',
-      to: 'spaceFolder'
+      resources: [
+        { name: 'data.zip', to: 'spaceFolder' },
+        { name: 'lorem.txt', to: 'spaceFolder' }
+      ]
     })
 
     // And "Alice" navigates to the personal space page
@@ -136,15 +131,7 @@ test.describe('create Space shortcut', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: 'data.zip',
-      to: 'resourceFolder'
-    })
-    await ui.uploadResource({
-      actorsEnvironment,
-      filesEnvironment,
-      stepUser: 'Alice',
-      resource: 'lorem.txt',
-      to: ''
+      resources: [{ name: 'data.zip', to: 'resourceFolder' }, { name: 'lorem.txt' }]
     })
 
     // And "Alice" navigates to the personal space page

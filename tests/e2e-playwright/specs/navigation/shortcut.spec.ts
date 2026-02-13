@@ -174,7 +174,7 @@ test.describe(
         fileViewerType: 'text-editor'
       })
       // And "Alice" closes the file viewer
-      await ui.userClosesTextEditor({ actorsEnvironment, stepUser: 'Alice' })
+      await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
       // And "Alice" opens the "files" app
       await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
       // Then "Alice" can open a shortcut "companyNews.url" with external url "https://owncloud.com/news/"
@@ -211,7 +211,7 @@ test.describe(
         fileViewerType: 'media-viewer'
       })
       // And "Brian" closes the file viewer
-      await ui.userClosesTextEditor({ actorsEnvironment, stepUser: 'Brian' })
+      await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Brian' })
 
       // # create a shortcut to the public link
       // When "Brian" opens the "files" app

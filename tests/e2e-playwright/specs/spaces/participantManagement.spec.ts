@@ -171,8 +171,7 @@ test.describe('check files pagination in project space', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
-      resource: 'lorem.txt',
-      to: 'parent'
+      resources: [{ name: 'lorem.txt', to: 'parent' }]
     })
 
     // When "David" logs in
@@ -216,8 +215,7 @@ test.describe('check files pagination in project space', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Edith',
-      resource: 'lorem.txt',
-      to: 'edith'
+      resources: [{ name: 'lorem.txt', to: 'edith' }]
     })
 
     // And "Edith" logs out
