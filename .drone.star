@@ -314,6 +314,7 @@ def beforePipelines(ctx):
            pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
+    return e2eTestsOnPlaywright(ctx)
     unit_test_pipelines = unitTests(ctx)
 
     # run only unit tests when publishing a standalone package

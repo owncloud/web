@@ -105,6 +105,15 @@ export class UsersEnvironment {
     return group
   }
 
+  removeCreatedGroup({ key }: { key: string }): boolean {
+    const lowerKey = key.toLowerCase()
+    if (createdGroupStore.has(lowerKey)) {
+      createdGroupStore.delete(lowerKey)
+      return true
+    }
+    return false
+  }
+
   storeCreatedKeycloakUser({ user }: { user: User }): User {
     if (keycloakCreatedUser.has(user.id)) {
       throw new Error(`Keycloak user '${user.id}' already exists`)

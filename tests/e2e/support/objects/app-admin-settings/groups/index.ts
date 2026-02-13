@@ -60,5 +60,20 @@ export class Groups {
     const uuid = this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeGroup({ uuid, attribute: attribute, value: value, page: this.#page })
+
+    // Update the store if the displayName attribute was changed
+    // We use UUID to identify the group since that doesn't change when renamed
+    if (attribute === 'displayName') {
+      const group = this.#usersEnvironment.getCreatedGroup({ key })
+      // Remove the old entry first
+      this.#usersEnvironment.removeCreatedGroup({ key })
+      // Add the updated entry with new displayName, keeping the same UUID
+      this.#usersEnvironment.storeCreatedGroup({
+        group: {
+          ...group,
+          displayName: value
+        }
+      })
+    }
   }
 }
