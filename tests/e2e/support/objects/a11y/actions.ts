@@ -29,6 +29,7 @@ export const selectors = {
   filesSpaceTableCheckbox: '#files-space-table .oc-checkbox',
   uploadMenuDropdown: '#upload-menu-drop',
   appSidebar: '#app-sidebar',
+  sidebarPanelActions: '#sidebar-panel-actions',
   accountInfoContainer: '#account-info-container',
   account: '#account',
   removeUserModal: '.oc-modal.oc-modal-danger',

@@ -18,12 +18,17 @@ import { Public } from '../../../e2e/support/objects/app-files/page'
 import { Resource } from '../../../e2e/support/objects/app-files/resource'
 import { config } from '../../../e2e/config'
 
+const FileActionType = {
+  batchAction: 'BATCH_ACTION',
+  sidebarPanel: 'SIDEBAR_PANEL'
+} as const
+
 export async function uploadResource({
   actorsEnvironment,
   filesEnvironment,
   stepUser,
   resource,
-  to,
+  to = '',
   type,
   option
 }: {
@@ -31,7 +36,7 @@ export async function uploadResource({
   filesEnvironment: FilesEnvironment
   stepUser: string
   resource: string
-  to: string
+  to?: string
   type?: string
   option?: string
 }): Promise<void> {
@@ -95,7 +100,7 @@ export async function searchGloballyWithFilter({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   keyword: string
-  filter: string
+  filter: searchFilter
   command?: string
 }): Promise<void> {
   keyword = keyword ?? ''
@@ -106,7 +111,7 @@ export async function searchGloballyWithFilter({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.searchResource({
     keyword,
-    filter: filter as searchFilter,
+    filter: filter,
     pressEnter
   })
 }
@@ -422,22 +427,22 @@ export async function userClosesTextEditor({
 export async function deleteResource({
   actorsEnvironment,
   stepUser,
-  file,
-  actionType,
+  resource,
+  actionType = FileActionType.sidebarPanel,
   parentFolder = ''
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  file: string
-  actionType: string
+  resource: string
+  actionType: 'BATCH_ACTION' | 'SIDEBAR_PANEL'
   parentFolder?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.Resource({ page })
   await pageObject.delete({
     folder: parentFolder === '' ? null : parentFolder,
-    resourcesWithInfo: [{ name: file }],
-    via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+    resourcesWithInfo: [{ name: resource }],
+    via: actionType
   })
 }
 
@@ -687,4 +692,20 @@ export async function userNavigatesToFolderViaBreadcrumb({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFolderViaBreadcrumb(resource)
+}
+
+export async function userRenamesResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  as
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  as: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.rename({ resource, newName: as })
 }
