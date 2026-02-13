@@ -127,7 +127,35 @@ describe('archiver', () => {
     })
   })
 
-  it('should sign the download url if a public token is provided with a password', async () => {
+  it('should use signature auth if a public token is provided with a password', async () => {
+    const archiverService = getArchiverServiceInstance(capabilities)
+    const fileId = 'asdf'
+    const signatureExpiration = new Date(Date.now() + 1000 * 60 * 60)
+
+    await archiverService.triggerDownload({
+      fileIds: [fileId],
+      publicToken: 'token',
+      publicLinkPassword: 'password',
+      publicLinkShareOwner: 'owner',
+      signatureAuth: {
+        signature: 'resource-signature-string',
+        expiration: signatureExpiration
+      }
+    })
+    expect(archiverService.clientService.ocs.signUrl).not.toHaveBeenCalled()
+    expect(window.open).toHaveBeenCalledWith(
+      archiverUrl +
+        '?public-token=token' +
+        '&signature=resource-signature-string' +
+        '&expiration=' +
+        encodeURIComponent(signatureExpiration.toISOString()) +
+        '&id=' +
+        fileId,
+      '_blank'
+    )
+  })
+
+  it('should fallback to signing the download url if a public token is provided with a password but signature auth is not provided', async () => {
     const archiverService = getArchiverServiceInstance(capabilities)
     const fileId = 'asdf'
     await archiverService.triggerDownload({

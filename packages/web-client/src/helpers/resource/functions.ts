@@ -136,7 +136,7 @@ export function buildResource(
     }
   }
 
-  const r = {
+  const r: Resource = {
     id,
     fileId: id,
     storageId: extractStorageId(id),
@@ -225,12 +225,20 @@ export function buildResource(
       return this.permissions.indexOf(DavPermission.Deny) >= 0
     },
     getDomSelector: () => extractDomSelector(id)
-  } satisfies Resource
+  }
   Object.defineProperty(r, 'nodeId', {
     get() {
       return extractNodeId(this.id)
     }
   })
+
+  if (resource.props[DavProperty.SignatureAuth]) {
+    r.signatureAuth = {
+      signature: resource.props[DavProperty.SignatureAuth].signature,
+      expiration: new Date(resource.props[DavProperty.SignatureAuth].expiration)
+    }
+  }
+
   return r
 }
 
