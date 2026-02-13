@@ -16,6 +16,7 @@ import { editor } from '../../../e2e/support/objects/app-files/utils'
 import path from 'path'
 import { Public } from '../../../e2e/support/objects/app-files/page'
 import { Resource } from '../../../e2e/support/objects/app-files/resource'
+import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
 import { config } from '../../../e2e/config'
 
 export async function uploadResource({
@@ -687,4 +688,87 @@ export async function userNavigatesToFolderViaBreadcrumb({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFolderViaBreadcrumb(resource)
+}
+
+export async function uploadLargeResourceFromTheTempUploadDir({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource,
+  to,
+  option
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+  to?: string
+  option?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.startUpload({
+    to: to,
+    resources: [
+      filesEnvironment.getFile({
+        name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), resource)
+      })
+    ],
+    option: option
+  })
+}
+
+export async function pauseUpload({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.pauseUpload()
+}
+
+export async function cancelUpload({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.cancelUpload()
+}
+
+export async function resumeUpload({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.resumeUpload()
+}
+
+export async function isResourceVisibleInTheListType({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  listType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  listType: 'search list' | 'files list' | 'Shares' | 'trashbin'
+}): Promise<boolean> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const actualList = await resourceObject.getDisplayedResources({
+    keyword: listType as displayedResourceType
+  })
+  return actualList.includes(resource)
 }
