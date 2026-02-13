@@ -31,6 +31,14 @@ export type AbilitySubjects =
 export type Ability = MongoAbility<[AbilityActions, AbilitySubjects]>
 export type AbilityRule = SubjectRawRule<AbilityActions, AbilitySubjects, any>
 
+/**
+ * Signature authentication for public links
+ */
+export interface SignatureAuth {
+  signature: string
+  expiration: Date
+}
+
 // FIXME: almost all of the properties are non-optional, the interface should reflect that
 export interface Resource {
   id: string
@@ -69,6 +77,11 @@ export interface Resource {
   // necessary for incoming share resources and resources inside shares
   remoteItemId?: string
   remoteItemPath?: string
+
+  /**
+   * Signature authentication for public links
+   */
+  signatureAuth?: SignatureAuth
 
   canCreate?(): boolean
   canUpload?({ user }: { user?: User }): boolean
