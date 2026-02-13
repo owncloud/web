@@ -267,6 +267,25 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       const publicLinkPassword = authStore.publicLinkPassword
       const publicLinkType = authStore.publicLinkType
 
+      const previewService = app.config.globalProperties.$previewService
+
+      if (capabilityStore.supportSSE) {
+        registerSSEEventListeners({
+          language: gettext,
+          resourcesStore,
+          spacesStore,
+          messageStore: messagesStore,
+          sharesStore,
+          clientService,
+          userStore,
+          previewService,
+          configStore,
+          router,
+          publicLinkToken,
+          publicLinkPassword
+        })
+      }
+
       const space = buildPublicSpaceResource({
         id: publicLinkToken,
         name: app.config.globalProperties.$gettext('Public files'),

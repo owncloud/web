@@ -99,6 +99,7 @@ export interface PublicSpaceResource extends SpaceResource {
   publicLinkShareDate?: string
   publicLinkShareOwner?: string
   publicLinkShareOwnerDisplayName?: string
+  spaceId?: string
 }
 export const isPublicSpaceResource = (resource: Resource): resource is PublicSpaceResource => {
   return (resource as SpaceResource)?.driveType === 'public'
