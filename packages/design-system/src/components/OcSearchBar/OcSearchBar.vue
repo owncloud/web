@@ -246,6 +246,10 @@ const inputClass = computed(() => {
 
   !buttonHidden && classes.push('oc-search-input-button')
 
+  if (icon || slots.locationFilter) {
+    classes.push('oc-search-input-icon')
+  }
+
   return classes
 })
 const loadingAccessibleLabelValue = computed(() => {
