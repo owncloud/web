@@ -34,7 +34,11 @@ test.describe('Page not found', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
 
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })

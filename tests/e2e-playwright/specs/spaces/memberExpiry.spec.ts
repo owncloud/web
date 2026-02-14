@@ -47,8 +47,11 @@ test.describe('spaces member expiry', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
 
     // And "Admin" assigns following roles to the users using API
     //  | id    | role        |
@@ -80,13 +83,11 @@ test.describe('spaces member expiry', () => {
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
     //   | Brian | Can edit | user |
-    await ui.addMembersToSpace({
+    await ui.userAddsMembersToSpace({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
-      sharee: 'Brian',
-      role: 'Can edit with versions and trashbin',
-      kind: 'user'
+      members: [{ user: 'Brian', role: 'Can edit with versions and trashbin', kind: 'user' }]
     })
 
     // And "Alice" sets the expiration date of the member "Brian" of the project space to "+5 days"

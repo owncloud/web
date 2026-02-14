@@ -36,15 +36,10 @@ test.describe(
       //    | id    |
       //    | Alice |
       //    | Brian |
-      await api.userHasBeenCreated({
+      await api.usersHasBeenCreated({
         usersEnvironment,
         stepUser: 'Admin',
-        userToBeCreated: 'Alice'
-      })
-      await api.userHasBeenCreated({
-        usersEnvironment,
-        stepUser: 'Admin',
-        userToBeCreated: 'Brian'
+        users: ['Alice', 'Brian']
       })
     })
 
@@ -75,11 +70,10 @@ test.describe(
       // And "Alice" creates the following files into personal space using API
       // | pathToFile      | content           |
       // | docs/notice.txt | important content |
-      await api.userHasCreatedFile({
+      await api.userHasCreatedFiles({
         usersEnvironment,
         stepUser: 'Alice',
-        filename: 'docs/notice.txt',
-        content: 'important content'
+        files: [{ pathToFile: 'docs/notice.txt', content: 'important content' }]
       })
 
       // And "Alice" uploads the following local file into personal space using API
@@ -94,14 +88,18 @@ test.describe(
       // And "Alice" shares the following resource using API
       // | resource       | recipient | type | role     | resourceType |
       // | testavatar.jpg | Brian     | user | Can view | file         |
-      await api.userHasSharedResource({
+      await api.userHasSharedResources({
         usersEnvironment,
         stepUser: 'Alice',
-        resource: 'testavatar.jpg',
-        recipient: 'Brian',
-        type: 'user',
-        role: 'Can view',
-        resourceType: 'file'
+        shares: [
+          {
+            resource: 'testavatar.jpg',
+            recipient: 'Brian',
+            type: 'user',
+            role: 'Can view',
+            resourceType: 'file'
+          }
+        ]
       })
       // And "Alice" creates a public link of following resource using API
       // | resource        | password |
@@ -128,26 +126,14 @@ test.describe(
       // | notice.txt                 | important file | file    |
       // | docs                       |                | folder  |
       // | https://owncloud.com/news/ | companyNews    | website |
-      await ui.userCreatesShortcutForResource({
+      await ui.userCreatesShortcutForResources({
         actorsEnvironment,
         stepUser: 'Alice',
-        resource: 'notice.txt',
-        name: 'important file',
-        type: 'file'
-      })
-      await ui.userCreatesShortcutForResource({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        resource: 'docs',
-        name: '',
-        type: 'folder'
-      })
-      await ui.userCreatesShortcutForResource({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        resource: 'https://owncloud.com/news/',
-        name: 'companyNews',
-        type: 'website'
+        resources: [
+          { resource: 'notice.txt', name: 'important file', type: 'file' },
+          { resource: 'docs', name: '', type: 'folder' },
+          { resource: 'https://owncloud.com/news/', name: 'companyNews', type: 'website' }
+        ]
       })
 
       // And "Alice" downloads the following resources using the sidebar panel
@@ -191,12 +177,10 @@ test.describe(
       // When "Brian" creates a shortcut for the following resources
       // | resource       | name | type |
       // | testavatar.jpg | logo | file |
-      await ui.userCreatesShortcutForResource({
+      await ui.userCreatesShortcutForResources({
         actorsEnvironment,
         stepUser: 'Brian',
-        resource: 'testavatar.jpg',
-        name: 'logo',
-        type: 'file'
+        resources: [{ resource: 'testavatar.jpg', name: 'logo', type: 'file' }]
       })
       // And "Brian" opens a shortcut "logo.url"
       await ui.userOpensShortcut({
@@ -219,12 +203,10 @@ test.describe(
       // And "Brian" creates a shortcut for the following resources
       // | resource     | name             | type        |
       // | myPublicLink | linkToNoticeFile | public link |
-      await ui.userCreatesShortcutForResource({
+      await ui.userCreatesShortcutForResources({
         actorsEnvironment,
         stepUser: 'Brian',
-        resource: 'myPublicLink',
-        name: 'linkToNoticeFile',
-        type: 'public link'
+        resources: [{ resource: 'myPublicLink', name: 'linkToNoticeFile', type: 'public link' }]
       })
       // And "Brian" opens a shortcut "linkToNoticeFile.url"
       await ui.userOpensShortcut({

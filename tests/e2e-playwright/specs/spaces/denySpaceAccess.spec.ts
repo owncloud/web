@@ -41,8 +41,11 @@ test.describe('deny space access', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
@@ -72,17 +75,11 @@ test.describe('deny space access', () => {
     //   | name |
     //   | f1   |
     //   | f2   |
-    await api.userHasCreatedFolderInSpace({
+    await api.userHasCreatedFoldersInSpace({
       usersEnvironment,
       stepUser: 'Alice',
       spaceName: 'sales',
-      folder: 'f1'
-    })
-    await api.userHasCreatedFolderInSpace({
-      usersEnvironment,
-      stepUser: 'Alice',
-      spaceName: 'sales',
-      folder: 'f2'
+      folders: ['f1', 'f2']
     })
 
     // And "Alice" adds the following members to the space "sales" using API
@@ -103,16 +100,20 @@ test.describe('deny space access', () => {
     // When "Alice" shares the following resource using the sidebar panel
     //   | resource | recipient | type | role          | resourceType |
     //   | f1       | Brian     | user | Cannot access | folder       |
-    await ui.shareResource({
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
-      resource: 'f1',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Cannot access',
-      resourceType: 'folder'
+      shares: [
+        {
+          resource: 'f1',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Cannot access',
+          resourceType: 'folder'
+        }
+      ]
     })
 
     // And "Brian" logs in

@@ -28,9 +28,11 @@ test.describe('lock', { tag: '@sse' }, () => {
     //   | Alice |
     //   | Brian |
     //   | Carol |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Carol' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian', 'Carol']
+    })
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
@@ -46,23 +48,26 @@ test.describe('lock', { tag: '@sse' }, () => {
     // When "Alice" creates the following resources
     //   | resource | type         | content      |
     //   | test.odt | OpenDocument | some content |
-    await api.userHasCreatedFile({
+    await api.userHasCreatedFiles({
       usersEnvironment,
       stepUser: 'Alice',
-      filename: 'test.odt',
-      content: 'some content'
+      files: [{ pathToFile: 'test.odt', content: 'some content' }]
     })
     // And "Alice" shares the following resource using API
     // | resource | recipient | type | role                                | resourceType |
     // | test.odt | Brian     | user | Can edit with versions and trashbin | file         |
-    await api.userHasSharedResource({
+    await api.userHasSharedResources({
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'test.odt',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with versions and trashbin',
-      resourceType: 'file'
+      shares: [
+        {
+          resource: 'test.odt',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with versions and trashbin',
+          resourceType: 'file'
+        }
+      ]
     })
     // And "Brian" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
@@ -133,16 +138,20 @@ test.describe('lock', { tag: '@sse' }, () => {
     // And "Alice" shares the following resource using the sidebar panel
     //   | resource | recipient | type | role     | resourceType |
     //   | test.odt | Carol     | user | Can view | file         |
-    await ui.shareResource({
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'test.odt',
-      recipient: 'Carol',
-      type: 'user',
-      role: 'Can view',
       actionType: 'SIDEBAR_PANEL',
-      resourceType: 'file'
+      shares: [
+        {
+          resource: 'test.odt',
+          recipient: 'Carol',
+          type: 'user',
+          role: 'Can view',
+          resourceType: 'file'
+        }
+      ]
     })
 
     // file-unlocked

@@ -59,26 +59,22 @@ export async function isAbleToEditFileOrFolder({
 export async function userCreatesResources({
   actorsEnvironment,
   stepUser,
-  resource,
-  type,
-  content,
-  password
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resource: string
-  type: createResourceTypes
-  content?: string
-  password?: string
+  resources: { name: string; type: createResourceTypes; content?: string; password?: string }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.create({
-    name: resource,
-    type: type,
-    content: content,
-    password: password
-  })
+  for (const resource of resources) {
+    await resourceObject.create({
+      name: resource.name,
+      type: resource.type,
+      content: resource.content,
+      password: resource.password
+    })
+  }
 }
 
 export async function searchGloballyWithFilter({
@@ -484,27 +480,25 @@ export async function restoreDeletedResourceFromTrashbin({
     })
   }
 }
-export async function userCreatesShortcutForResource({
+export async function userCreatesShortcutForResources({
   actorsEnvironment,
   stepUser,
-  resource,
-  name,
-  type
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resource: string
-  name: string
-  type: string
+  resources: { resource: string; name: string; type: string }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
-  await resourceObject.createShotcut({
-    resource: resource,
-    name: name,
-    type: type as shortcutType
-  })
+  for (const resource of resources) {
+    await resourceObject.createShotcut({
+      resource: resource.resource,
+      name: resource.name,
+      type: resource.type as shortcutType
+    })
+  }
 }
 
 type resourceToDownload = {

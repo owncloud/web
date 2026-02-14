@@ -32,22 +32,29 @@ test.describe('internal link share', () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
 
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
 
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     await api.userHasCreatedFolder({ usersEnvironment, stepUser: 'Alice', folderName: 'myfolder' })
 
-    await api.userHasSharedResource({
+    await api.userHasSharedResources({
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'myfolder',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit',
-      resourceType: 'folder'
+      shares: [
+        {
+          resource: 'myfolder',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit',
+          resourceType: 'folder'
+        }
+      ]
     })
 
     await api.userHasCreatedPublicLinkOfResource({

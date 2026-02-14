@@ -36,9 +36,11 @@ test.describe('Notifications', () => {
     //   | Alice |
     //   | Brian |
     //   | Carol |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Carol' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian', 'Carol']
+    })
 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
@@ -70,7 +72,10 @@ test.describe('Notifications', () => {
     // Given "Admin" creates following groups using API
     //   | id    |
     //   | sales |
-    await api.userHasCreatedGroup({ usersEnvironment, stepUser: 'Admin', groupId: 'sales' })
+    await api.groupsHaveBeenCreated({
+      groupIds: ['sales'],
+      admin: usersEnvironment.getUser({ key: 'Admin' })
+    })
 
     // And "Admin" adds user to the group using API
     //   | user  | group |
@@ -79,14 +84,10 @@ test.describe('Notifications', () => {
     await api.addUserToGroup({
       usersEnvironment,
       stepUser: 'Admin',
-      groupName: 'sales',
-      userToAdd: 'Alice'
-    })
-    await api.addUserToGroup({
-      usersEnvironment,
-      stepUser: 'Admin',
-      groupName: 'sales',
-      userToAdd: 'Brian'
+      userToAdd: [
+        { user: 'Alice', group: 'sales' },
+        { user: 'Brian', group: 'sales' }
+      ]
     })
 
     // And "Alice" creates the following folder in personal space using API
@@ -117,27 +118,27 @@ test.describe('Notifications', () => {
     //   | resource         | recipient | type  | role                      | resourceType |
     //   | folder_to_shared | Brian     | user  | Can edit without versions | folder       |
     //   | share_to_group   | sales     | group | Can edit without versions | folder       |
-    await ui.shareResource({
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
-      resource: 'folder_to_shared',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await ui.shareResource({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
-      resource: 'share_to_group',
-      recipient: 'sales',
-      type: 'group',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
+      shares: [
+        {
+          resource: 'folder_to_shared',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'share_to_group',
+          recipient: 'sales',
+          type: 'group',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        }
+      ]
     })
 
     // And "Brian" logs in
@@ -179,22 +180,14 @@ test.describe('Notifications', () => {
     //   | user  | role     | kind |
     //   | Brian | Can edit | user |
     //   | Carol | Can edit | user |
-    await ui.addMembersToSpace({
+    await ui.userAddsMembersToSpace({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
-      sharee: 'Brian',
-      role: 'Can edit with versions and trashbin',
-      kind: 'user'
-    })
-
-    await ui.addMembersToSpace({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      sharee: 'Carol',
-      role: 'Can edit with versions and trashbin',
-      kind: 'user'
+      members: [
+        { user: 'Brian', role: 'Can edit with versions and trashbin', kind: 'user' },
+        { user: 'Carol', role: 'Can edit with versions and trashbin', kind: 'user' }
+      ]
     })
 
     // Then "Alice" should see no notifications
@@ -357,16 +350,20 @@ test.describe('Notifications', () => {
     // And "Alice" shares the following resource using the sidebar panel
     //   | resource         | recipient | type  | role                      | resourceType |
     //   | folder_to_shared | Brian     | user  | Can edit without versions | folder       |
-    await ui.shareResource({
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
-      resource: 'folder_to_shared',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
+      shares: [
+        {
+          resource: 'folder_to_shared',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        }
+      ]
     })
 
     // When "Alice" removes following sharee

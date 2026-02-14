@@ -115,53 +115,55 @@ export async function updateShareeRole({
   }
 }
 
-export async function shareResource({
+export async function userSharesResources({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
-  resource,
-  recipient,
-  type,
-  role,
-  resourceType,
   actionType,
-  expirationDate,
-  shareType
+  shares
 }: {
   actorsEnvironment: ActorsEnvironment
   usersEnvironment: UsersEnvironment
   stepUser: string
   actionType: ActionViaType
-  resource: string
-  recipient: string
-  type: string
-  role: string
-  resourceType: string
-  expirationDate?: string
-  shareType?: string
+  shares: {
+    resource: string
+    recipient: string
+    type: string
+    role: string
+    resourceType: string
+    expirationDate?: string
+    shareType?: string
+  }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   const sharer = usersEnvironment.getUser({ key: stepUser })
 
-  const shareRecipient = {
-    collaborator:
-      type === 'group'
-        ? usersEnvironment.getGroup({ key: recipient })
-        : usersEnvironment.getUser({ key: recipient }),
-    role,
-    type: type as CollaboratorType,
-    resourceType,
-    expirationDate,
-    shareType
-  }
+  for (const resource of shares) {
+    const shareRecipient = {
+      collaborator:
+        resource.type === 'group'
+          ? usersEnvironment.getGroup({ key: resource.recipient })
+          : usersEnvironment.getUser({ key: resource.recipient }),
+      role: resource.role,
+      type: resource.type as CollaboratorType,
+      resourceType: resource.resourceType,
+      expirationDate: resource.expirationDate,
+      shareType: resource.shareType
+    }
 
-  shareRecipient.role = await getDynamicRoleIdByName(sharer, role, resourceType as ResourceType)
-  await shareObject.create({
-    resource,
-    recipients: [shareRecipient],
-    via: actionType
-  })
+    shareRecipient.role = await getDynamicRoleIdByName(
+      sharer,
+      resource.role,
+      resource.resourceType as ResourceType
+    )
+    await shareObject.create({
+      resource: resource.resource,
+      recipients: [shareRecipient],
+      via: actionType
+    })
+  }
 }
 
 export async function removeSharee({

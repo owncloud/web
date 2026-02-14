@@ -32,7 +32,11 @@ test.describe('Search in the project space', () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
 
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
 
     await api.userHasAssignRolesToUsers({
       usersEnvironment,
@@ -56,8 +60,7 @@ test.describe('Search in the project space', () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      resource: 'folder(WithSymbols:!;_+-&)',
-      type: 'folder'
+      resources: [{ name: 'folder(WithSymbols:!;_+-&)', type: 'folder' }]
     })
 
     await ui.uploadResource({

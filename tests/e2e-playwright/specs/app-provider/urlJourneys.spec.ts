@@ -30,17 +30,20 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile          | content                 |
     //   | OpenDocument.odt    | OpenDocument Content    |
-    await api.userHasCreatedFile({
+    await api.userHasCreatedFiles({
       usersEnvironment,
       stepUser: 'Alice',
-      filename: 'OpenDocument.odt',
-      content: 'OpenDocument Content'
+      files: [{ pathToFile: 'OpenDocument.odt', content: 'OpenDocument Content' }]
     })
     // And "Alice" creates the following resources
     //   | resource           | type           | content                |
@@ -48,9 +51,9 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      resource: 'MicrosoftWord.docx',
-      type: 'Microsoft Word',
-      content: 'Microsoft Word Content'
+      resources: [
+        { name: 'MicrosoftWord.docx', type: 'Microsoft Word', content: 'Microsoft Word Content' }
+      ]
     })
     // And for "Alice" file "MicrosoftWord.docx" should not be locked
     await ui.resourceShouldNotBeLocked({
