@@ -1302,6 +1302,11 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
       for (const resource of resourcesWithInfo) {
         await sidebar.open({ page, resource: resource.name })
         await sidebar.openPanel({ page, name: 'actions' })
+        await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+          page,
+          ['#app-sidebar'],
+          'sidebar panel'
+        )
         await Promise.all([
           page.waitForResponse(
             (resp) =>
