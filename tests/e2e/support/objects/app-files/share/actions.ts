@@ -6,6 +6,7 @@ import { clickResource } from '../resource/actions'
 import { User } from '../../../types'
 import { locatorUtils } from '../../../utils'
 import { objects } from '../../..'
+import { a11y } from '../..'
 
 const invitePanel = '//*[@id="oc-files-sharing-sidebar"]'
 const quickShareButton =
@@ -138,6 +139,11 @@ export const syncAllShares = async ({ page }: { page: Page }): Promise<void> => 
     )
   }
   await Promise.all([...checkResponses, page.locator(acceptButton).click()])
+  await a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['files'],
+    'Files view after sync is enabled for all shared resources'
+  )
 }
 
 export const disableSync = async (args: ShareStatusArgs): Promise<void> => {
