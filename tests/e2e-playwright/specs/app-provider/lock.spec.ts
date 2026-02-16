@@ -92,7 +92,7 @@ test.describe('lock', { tag: '@sse' }, () => {
 
     // file-locked
     // And "Alice" should get "file-locked" SSE event
-    await api.userShouldGetSSEEvent({
+    await ui.userShouldGetSSEEvent({
       usersEnvironment,
       stepUser: 'Alice',
       event: 'file-locked'
@@ -161,7 +161,7 @@ test.describe('lock', { tag: '@sse' }, () => {
       stepUser: 'Brian'
     })
     // Then "Alice" should get "file-unlocked" SSE event
-    await api.userShouldGetSSEEvent({
+    await ui.userShouldGetSSEEvent({
       usersEnvironment,
       stepUser: 'Alice',
       event: 'file-unlocked'

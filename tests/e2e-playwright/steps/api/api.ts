@@ -11,7 +11,6 @@ import fs from 'fs'
 
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 import { join } from 'path'
-import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
 
 export async function usersHasBeenCreated({
   usersEnvironment,
@@ -395,20 +394,7 @@ export async function userHasAddedTagsToResources({
   }
 }
 
-export async function userShouldGetSSEEvent({
-  usersEnvironment,
-  stepUser,
-  event
-}: {
-  usersEnvironment: UsersEnvironment
-  stepUser: string
-  event: string
-}): Promise<void> {
-  const user = usersEnvironment.getCreatedUser({ key: stepUser })
-  await waitForSSEEvent(user, event)
-}
-
-export async function userDisablesAutoAccepting({
+export async function userHasDisabledAutoAcceptingShare({
   usersEnvironment,
   stepUser
 }: {

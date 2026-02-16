@@ -32,21 +32,20 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | Carol |
     //   | David |
     //   | Edith |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Carol' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'David' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Edith' })
-
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian', 'Carol', 'David', 'Edith']
+    })
     // And "Admin" creates following group using API
     //   | id       |
     //   | sales    |
     //   | finance  |
     //   | security |
-    await api.userHasCreatedGroup({ usersEnvironment, stepUser: 'Admin', groupId: 'sales' })
-    await api.userHasCreatedGroup({ usersEnvironment, stepUser: 'Admin', groupId: 'finance' })
-    await api.userHasCreatedGroup({ usersEnvironment, stepUser: 'Admin', groupId: 'security' })
-
+    await api.groupsHaveBeenCreated({
+      groupIds: ['sales', 'finance', 'security'],
+      admin: usersEnvironment.getUser({ key: 'Admin' })
+    })
     // And "Admin" adds user to the group using API
     //   | user  | group    |
     //   | Brian | sales    |
@@ -55,22 +54,12 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     await api.addUserToGroup({
       usersEnvironment,
       stepUser: 'Admin',
-      groupName: 'sales',
-      userToAdd: 'Brian'
+      userToAdd: [
+        { user: 'Brian', group: 'sales' },
+        { user: 'Brian', group: 'finance' },
+        { user: 'Brian', group: 'security' }
+      ]
     })
-    await api.addUserToGroup({
-      usersEnvironment,
-      stepUser: 'Admin',
-      groupName: 'finance',
-      userToAdd: 'Brian'
-    })
-    await api.addUserToGroup({
-      usersEnvironment,
-      stepUser: 'Admin',
-      groupName: 'security',
-      userToAdd: 'Brian'
-    })
-
     // And "Brian" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
   })
@@ -87,7 +76,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
   test('batch share a resource to multiple users and groups', async () => {
     // disabling auto accepting to check accepting share
     // And "Brian" disables auto-accepting using API
-    await api.userDisablesAutoAccepting({ usersEnvironment, stepUser: 'Brian' })
+    await api.userHasDisabledAutoAcceptingShare({ usersEnvironment, stepUser: 'Brian' })
 
     // And "Alice" creates the following folders in personal space using API
     //   | name                   |
@@ -119,59 +108,53 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     // | folder4      | Brian     | user | Can edit with trashbin | folder       |
     // | folder5      | Brian     | user | Can edit with trashbin | folder       |
     // | parentFolder | Brian     | user | Can edit with trashbin | folder       |
-    await api.userHasSharedResource({
+    await api.userHasSharedResources({
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'folder1',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await api.userHasSharedResource({
-      usersEnvironment,
-      stepUser: 'Alice',
-      resource: 'folder2',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await api.userHasSharedResource({
-      usersEnvironment,
-      stepUser: 'Alice',
-      resource: 'folder3',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await api.userHasSharedResource({
-      usersEnvironment,
-      stepUser: 'Alice',
-      resource: 'folder4',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await api.userHasSharedResource({
-      usersEnvironment,
-      stepUser: 'Alice',
-      resource: 'folder5',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await api.userHasSharedResource({
-      usersEnvironment,
-      stepUser: 'Alice',
-      resource: 'parentFolder',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
+      shares: [
+        {
+          resource: 'folder1',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'folder2',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'folder3',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'folder4',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'folder5',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'parentFolder',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        }
+      ]
     })
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
@@ -186,82 +169,62 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     // | sharedFolder | sales     | group | Can edit with trashbin | folder       |
     // | sharedFolder | finance   | group | Can edit with trashbin | folder       |
     // | sharedFolder | security  | group | Can edit with trashbin | folder       |
-    await ui.shareResource({
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
-      stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
-      resource: 'sharedFolder',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await ui.shareResource({
-      actorsEnvironment,
-      usersEnvironment,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
-      resource: 'sharedFolder',
-      recipient: 'Carol',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await ui.shareResource({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
-      resource: 'sharedFolder',
-      recipient: 'David',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await ui.shareResource({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
-      resource: 'sharedFolder',
-      recipient: 'Edith',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await ui.shareResource({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
-      resource: 'sharedFolder',
-      recipient: 'sales',
-      type: 'group',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await ui.shareResource({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
-      resource: 'sharedFolder',
-      recipient: 'finance',
-      type: 'group',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await ui.shareResource({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
-      resource: 'sharedFolder',
-      recipient: 'security',
-      type: 'group',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
+      shares: [
+        {
+          resource: 'sharedFolder',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'sharedFolder',
+          recipient: 'Carol',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'sharedFolder',
+          recipient: 'David',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'sharedFolder',
+          recipient: 'Edith',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'sharedFolder',
+          recipient: 'sales',
+          type: 'group',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'sharedFolder',
+          recipient: 'finance',
+          type: 'group',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'sharedFolder',
+          recipient: 'security',
+          type: 'group',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        }
+      ]
     })
 
     // And "Brian" navigates to the shared with me page

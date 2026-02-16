@@ -4,6 +4,7 @@ import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/enviro
 import { User } from '../../../e2e/support/types'
 import { listenSSE } from '../../../e2e/support/environment/sse.js'
 import { test } from '@playwright/test'
+import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
 
 async function createNewSession(actorsEnvironment: ActorsEnvironment, stepUser: string) {
   const { page } = await actorsEnvironment.createActor({
@@ -79,4 +80,17 @@ export async function logOutUser({
   const sessionObject = new objects.runtime.Session({ page: actor.page })
   canLogout && (await sessionObject.logout())
   await actor.close()
+}
+
+export async function userShouldGetSSEEvent({
+  usersEnvironment,
+  stepUser,
+  event
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  event: string
+}): Promise<void> {
+  const user = usersEnvironment.getCreatedUser({ key: stepUser })
+  await waitForSSEEvent(user, event)
 }
