@@ -115,6 +115,12 @@ test.describe('Navigate web directly through urls', () => {
   test.afterEach(async () => {
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
+    await api.userHasDeletedProjectSpace({
+      usersEnvironment,
+      stepUser: 'Admin',
+      name: 'Development',
+      id: 'team.1'
+    })
   })
 
   test('pagination', async () => {
