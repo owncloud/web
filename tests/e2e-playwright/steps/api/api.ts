@@ -8,26 +8,27 @@ import { api, store } from '../../../e2e/support'
 import { ResourceType } from '../../../e2e/support/api/share/share'
 import { Group, Space, User } from '../../../e2e/support/types'
 import fs from 'fs'
-import { integer } from 'vscode-languageserver-types'
 
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 import { join } from 'path'
 import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
 
-export async function userHasBeenCreated({
+export async function usersHasBeenCreated({
   usersEnvironment,
   stepUser,
-  userToBeCreated
+  users
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  userToBeCreated: string
+  users: Array<string>
 }): Promise<void> {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: userToBeCreated })
-  // do not try to create users when using predefined users
-  if (!config.predefinedUsers) {
-    await api.provision.createUser({ user, admin })
+  for (const userToBeCreated of users) {
+    const user = usersEnvironment.getUser({ key: userToBeCreated })
+    // do not try to create users when using predefined users
+    if (!config.predefinedUsers) {
+      await api.provision.createUser({ user, admin })
+    }
   }
 }
 
@@ -76,51 +77,51 @@ export async function userHasCreatedFolders({
   }
 }
 
-export async function userHasCreatedFile({
+export async function userHasCreatedFiles({
   usersEnvironment,
   stepUser,
-  filename,
-  content = 'This is a test file'
+  files
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  filename: string
-  content?: string
+  files: { pathToFile: string; content: string }[]
 }): Promise<void> {
   const user = usersEnvironment.getUser({ key: stepUser })
-  await api.dav.uploadFileInPersonalSpace({
-    user,
-    pathToFile: filename,
-    content
-  })
+  for (const file of files) {
+    await api.dav.uploadFileInPersonalSpace({
+      user,
+      pathToFile: file.pathToFile,
+      content: file.content
+    })
+  }
 }
 
-export async function userHasSharedResource({
+export async function userHasSharedResources({
   usersEnvironment,
   stepUser,
-  resource,
-  recipient,
-  type,
-  role,
-  resourceType
+  shares
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  resource: string
-  recipient: string
-  type: string
-  role: string
-  resourceType: ResourceType
+  shares: {
+    resource: string
+    recipient: string
+    type: string
+    role: string
+    resourceType: string
+  }[]
 }): Promise<void> {
   const user = usersEnvironment.getUser({ key: stepUser })
-  await api.share.createShare({
-    user,
-    path: resource,
-    shareType: type,
-    shareWith: recipient,
-    role: role,
-    resourceType: resourceType as ResourceType
-  })
+  for (const resource of shares) {
+    await api.share.createShare({
+      user,
+      path: resource.resource,
+      shareType: resource.type,
+      shareWith: resource.recipient,
+      role: resource.role,
+      resourceType: resource.resourceType as ResourceType
+    })
+  }
 }
 
 export async function userHasCreatedPublicLinkOfResource({
@@ -224,116 +225,59 @@ export async function userHasUploadedFilesInPersonalSpace({
 export async function userHasCreatedFoldersInSpace({
   usersEnvironment,
   stepUser,
-  numberOfFolders,
-  space
-}: {
-  usersEnvironment: UsersEnvironment
-  stepUser: string
-  numberOfFolders: integer
-  space: string
-}) {
-  const user = usersEnvironment.getUser({ key: stepUser })
-  for (let i = 1; i <= numberOfFolders; i++) {
-    await api.dav.createFolderInsideSpaceBySpaceName({
-      user,
-      folder: `testFolder${i}`,
-      spaceName: space
-    })
-  }
-}
-
-export async function userHasCreatedFolderInSpace({
-  usersEnvironment,
-  stepUser,
   spaceName,
-  folder
+  folders
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
   spaceName: string
-  folder: string
+  folders: Array<string>
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
-  await api.dav.createFolderInsideSpaceBySpaceName({
-    user,
-    folder,
-    spaceName
-  })
+  for (const folder of folders) {
+    await api.dav.createFolderInsideSpaceBySpaceName({
+      user,
+      folder,
+      spaceName
+    })
+  }
 }
 
 export async function createFilesInsideSpaceBySpaceName({
   usersEnvironment,
   stepUser,
-  numberOfFiles,
-  space
+  files
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  numberOfFiles: integer
-  space: string
+  files: { name: string; space: string; content?: string }[]
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
-  for (let i = 1; i <= numberOfFiles; i++) {
+  for (const file of files) {
     await api.dav.uploadFileInsideSpaceBySpaceName({
       user,
-      pathToFile: `testfile${i}.txt`,
-      spaceName: space,
-      content: `This is a test file${i}`
+      pathToFile: file.name,
+      spaceName: file.space,
+      content: file.content
     })
   }
-}
-
-export async function createFileInsideSpaceBySpaceName({
-  usersEnvironment,
-  stepUser,
-  fileName,
-  space,
-  content = 'This is a test file'
-}: {
-  usersEnvironment: UsersEnvironment
-  stepUser: string
-  fileName: string
-  space: string
-  content?: string
-}) {
-  const user = usersEnvironment.getUser({ key: stepUser })
-  await api.dav.uploadFileInsideSpaceBySpaceName({
-    user,
-    pathToFile: fileName,
-    spaceName: space,
-    content: content
-  })
-}
-
-export async function userHasCreatedGroup({
-  usersEnvironment,
-  stepUser,
-  groupId
-}: {
-  usersEnvironment: UsersEnvironment
-  stepUser: string
-  groupId: string
-}) {
-  const admin = usersEnvironment.getUser({ key: stepUser })
-  const group = usersEnvironment.getGroup({ key: groupId })
-  await api.graph.createGroup({ group, admin })
 }
 
 export async function addUserToGroup({
   usersEnvironment,
   stepUser,
-  groupName,
   userToAdd
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  groupName: string
-  userToAdd: string
+  userToAdd: { user: string; group: string }[]
 }) {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  const group = usersEnvironment.getGroup({ key: groupName })
-  const user = usersEnvironment.getUser({ key: userToAdd })
-  await api.graph.addUserToGroup({ user, group, admin })
+  for (const info of userToAdd) {
+    const group = usersEnvironment.getGroup({ key: info.group })
+    const user = usersEnvironment.getUser({ key: info.user })
+    await api.graph.addUserToGroup({ user, group, admin })
+  }
 }
 
 export async function userHasDeletedGroup({
@@ -436,19 +380,19 @@ export const cleanUpGroup = async (adminUser: User) => {
   store.createdGroupStore.clear()
 }
 
-export async function userHasAddedTagsToResource({
+export async function userHasAddedTagsToResources({
   usersEnvironment,
   stepUser,
-  resource,
   tags
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  resource: string
-  tags: string
+  tags: { resource: string; tags: string }[]
 }): Promise<void> {
   const user = usersEnvironment.getUser({ key: stepUser })
-  await api.dav.addTagToResource({ user, resource, tags })
+  for (const resource of tags) {
+    await api.dav.addTagToResource({ user, resource: resource.resource, tags: resource.tags })
+  }
 }
 
 export async function userShouldGetSSEEvent({

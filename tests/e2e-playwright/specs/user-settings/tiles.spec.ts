@@ -26,7 +26,11 @@ test.describe('tiles view', { tag: '@predefined-users' }, () => {
     await setAccessAndRefreshToken(usersEnvironment)
 
     // Given "Admin" creates following user using API
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" creates the following resources
@@ -62,8 +66,7 @@ test.describe('tiles view', { tag: '@predefined-users' }, () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      type: 'folder',
-      resource: 'tile_folder/tile_folder2'
+      resources: [{ name: 'tile_folder/tile_folder2', type: 'folder' }]
     })
     // And "Alice" sees the resources displayed as tiles
     await ui.shouldSeeResourcesAsTiles({

@@ -24,7 +24,11 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
 
@@ -37,8 +41,7 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      type: 'folder',
-      resource: 'parent/folder%2Fwith%2FSlashes'
+      resources: [{ name: 'parent/folder%2Fwith%2FSlashes', type: 'folder' }]
     })
     await ui.userOpensResources({
       actorsEnvironment,
@@ -48,8 +51,7 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      type: 'folder',
-      resource: `'single-double quotes"`
+      resources: [{ name: `'single-double quotes"`, type: 'folder' }]
     })
     await ui.userOpensResources({
       actorsEnvironment,
@@ -59,8 +61,7 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      type: 'folder',
-      resource: `"inner" double quote`
+      resources: [{ name: `"inner" double quote`, type: 'folder' }]
     })
     await ui.userOpensResources({
       actorsEnvironment,
@@ -70,8 +71,7 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      type: 'folder',
-      resource: 'sub-folder'
+      resources: [{ name: 'sub-folder', type: 'folder' }]
     })
     await ui.userOpensResources({
       actorsEnvironment,

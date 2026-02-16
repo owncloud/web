@@ -51,18 +51,20 @@ test.describe('check files pagination in project space', () => {
     //   | Carol |
     //   | David |
     //   | Edith |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Carol' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'David' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Edith' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian', 'Carol', 'David', 'Edith']
+    })
 
     // And "Admin" creates following group using API
     //   | id       |
     //   | sales    |
     //   | security |
-    await api.userHasCreatedGroup({ usersEnvironment, stepUser: 'Admin', groupId: 'sales' })
-    await api.userHasCreatedGroup({ usersEnvironment, stepUser: 'Admin', groupId: 'security' })
+    await api.groupsHaveBeenCreated({
+      groupIds: ['sales', 'security'],
+      admin: usersEnvironment.getUser({ key: 'Admin' })
+    })
 
     // And "Admin" adds user to the group using API
     //   | user  | group    |
@@ -71,15 +73,10 @@ test.describe('check files pagination in project space', () => {
     await api.addUserToGroup({
       usersEnvironment,
       stepUser: 'Admin',
-      groupName: 'sales',
-      userToAdd: 'David'
-    })
-
-    await api.addUserToGroup({
-      usersEnvironment,
-      stepUser: 'Admin',
-      groupName: 'security',
-      userToAdd: 'Edith'
+      userToAdd: [
+        { user: 'David', group: 'sales' },
+        { user: 'Edith', group: 'security' }
+      ]
     })
 
     // And "Admin" assigns following roles to the users using API
@@ -115,37 +112,16 @@ test.describe('check files pagination in project space', () => {
     //   | Carol    | Can view | user  |
     //   | sales    | Can view | group |
     //   | security | Can edit | group |
-    await ui.addMembersToSpace({
+    await ui.userAddsMembersToSpace({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
-      sharee: 'Brian',
-      role: 'Can edit with versions and trashbin',
-      kind: 'user'
-    })
-    await ui.addMembersToSpace({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      sharee: 'Carol',
-      role: 'Can view',
-      kind: 'user'
-    })
-    await ui.addMembersToSpace({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      sharee: 'sales',
-      role: 'Can view',
-      kind: 'group'
-    })
-    await ui.addMembersToSpace({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      sharee: 'security',
-      role: 'Can edit with versions and trashbin',
-      kind: 'group'
+      members: [
+        { user: 'Brian', role: 'Can edit', kind: 'user' },
+        { user: 'Carol', role: 'Can view', kind: 'user' },
+        { user: 'sales', role: 'Can view', kind: 'group' },
+        { user: 'security', role: 'Can edit', kind: 'group' }
+      ]
     })
 
     // When "Brian" logs in
@@ -160,8 +136,7 @@ test.describe('check files pagination in project space', () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Brian',
-      resource: 'parent',
-      type: 'folder'
+      resources: [{ name: 'parent', type: 'folder' }]
     })
 
     // And "Brian" uploads the following resources
@@ -204,8 +179,7 @@ test.describe('check files pagination in project space', () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Edith',
-      resource: 'edith',
-      type: 'folder'
+      resources: [{ name: 'edith', type: 'folder' }]
     })
 
     // And "Edith" uploads the following resources

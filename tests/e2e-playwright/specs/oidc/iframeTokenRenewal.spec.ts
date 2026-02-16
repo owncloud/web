@@ -34,7 +34,11 @@ test.describe('details', () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
@@ -81,8 +85,7 @@ test.describe('details', () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      resource: 'space-folder',
-      type: 'folder'
+      resources: [{ name: 'space-folder', type: 'folder' }]
     })
 
     // Then following resources should be displayed in the files list for user "Alice"

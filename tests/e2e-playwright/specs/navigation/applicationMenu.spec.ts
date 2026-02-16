@@ -24,7 +24,11 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice']
+    })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
 

@@ -36,8 +36,11 @@ test.describe('Search', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
@@ -62,24 +65,27 @@ test.describe('Search', () => {
     // And "Alice" adds the following tags for the following resources using API
     //   | resource        | tags      |
     //   | fileToShare.txt | alice tag |
-    await api.userHasAddedTagsToResource({
+    await api.userHasAddedTagsToResources({
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'fileToShare.txt',
-      tags: 'alice tag'
+      tags: [{ resource: 'fileToShare.txt', tags: 'alice tag' }]
     })
 
     // And "Alice" shares the following resource using API
     //   | resource        | recipient | type | role     | resourceType |
     //   | fileToShare.txt | Brian     | user | Can edit | file         |
-    await api.userHasSharedResource({
+    await api.userHasSharedResources({
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'fileToShare.txt',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit',
-      resourceType: 'file'
+      shares: [
+        {
+          resource: 'fileToShare.txt',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit',
+          resourceType: 'file'
+        }
+      ]
     })
 
     // And "Brian" creates the following folder in personal space using API
@@ -123,39 +129,39 @@ test.describe('Search', () => {
     // And "Brian" creates the following folder in space "FullTextSearch" using API
     //   | name        |
     //   | spaceFolder |
-    await api.userHasCreatedFolderInSpace({
+    await api.userHasCreatedFoldersInSpace({
       usersEnvironment,
       stepUser: 'Brian',
       spaceName: 'FullTextSearch',
-      folder: 'spaceFolder'
+      folders: ['spaceFolder']
     })
 
     // And "Brian" creates the following file in space "FullTextSearch" using API
     //   | name                          | content                   |
     //   | spaceFolder/spaceTextfile.txt | This is test file. Cheers |
-    await api.createFileInsideSpaceBySpaceName({
+    await api.createFilesInsideSpaceBySpaceName({
       usersEnvironment,
       stepUser: 'Brian',
-      fileName: 'spaceFolder/spaceTextfile.txt',
-      space: 'FullTextSearch',
-      content: 'This is test file. Cheers'
+      files: [
+        {
+          name: 'spaceFolder/spaceTextfile.txt',
+          space: 'FullTextSearch',
+          content: 'This is test file. Cheers'
+        }
+      ]
     })
 
     // And "Brian" adds the following tags for the following resources using API
     //   | resource        | tags  |
     //   | fileWithTag.txt | tag 1 |
     //   | withTag.txt     | tag 1 |
-    await api.userHasAddedTagsToResource({
+    await api.userHasAddedTagsToResources({
       usersEnvironment,
       stepUser: 'Brian',
-      resource: 'fileWithTag.txt',
-      tags: 'tag 1'
-    })
-    await api.userHasAddedTagsToResource({
-      usersEnvironment,
-      stepUser: 'Brian',
-      resource: 'withTag.txt',
-      tags: 'tag 1'
+      tags: [
+        { resource: 'fileWithTag.txt', tags: 'tag 1' },
+        { resource: 'withTag.txt', tags: 'tag 1' }
+      ]
     })
 
     // And "Brian" logs in

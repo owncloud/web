@@ -42,8 +42,11 @@ test.describe('download space', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
@@ -72,21 +75,20 @@ test.describe('download space', () => {
     // And "Alice" creates the following folder in space "team" using API
     //   | name        |
     //   | spaceFolder |
-    await api.userHasCreatedFolderInSpace({
+    await api.userHasCreatedFoldersInSpace({
       usersEnvironment,
       stepUser: 'Alice',
       spaceName: 'team',
-      folder: 'spaceFolder'
+      folders: ['spaceFolder']
     })
 
     // And "Alice" creates the following file in space "team" using API
     //   | name                  | content    |
     //   | spaceFolder/lorem.txt | space team |
-    await api.createFileInsideSpaceBySpaceName({
+    await api.createFilesInsideSpaceBySpaceName({
       usersEnvironment,
       stepUser: 'Alice',
-      fileName: 'spaceFolder/lorem.txt',
-      space: 'team'
+      files: [{ name: 'spaceFolder/lorem.txt', space: 'team', content: 'space team' }]
     })
 
     // And "Alice" navigates to the project space "team.1"
@@ -98,13 +100,11 @@ test.describe('download space', () => {
     // And "Alice" adds following users to the project space
     //   | user     | role     | kind  |
     //   | Brian    | Can edit | user  |
-    await ui.addMembersToSpace({
+    await ui.userAddsMembersToSpace({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
-      sharee: 'Brian',
-      role: 'Can edit with versions and trashbin',
-      kind: 'user'
+      members: [{ user: 'Brian', role: 'Can edit with versions and trashbin', kind: 'user' }]
     })
 
     // And "Alice" logs out
