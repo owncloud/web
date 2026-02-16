@@ -263,7 +263,7 @@ test.describe('check files pagination in project space', () => {
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'textfile.txt',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: ui.FileAction.sidebarPanel,
       parentFolder: 'parent'
     })
 

@@ -33,7 +33,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
   })
 
   test.afterEach(async () => {
@@ -45,7 +45,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Brian |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
     // And "Brian" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
@@ -74,27 +74,27 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource             | recipient | type | role     | resourceType |
     //   | new_share_from_brian | Alice     | user | Can view | folder       |
     //   | new-lorem-big.txt    | Alice     | user | Can view | file         |
-    await ui.shareResource({
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Brian',
-      resource: 'new_share_from_brian',
-      recipient: 'Alice',
-      type: 'user',
-      role: 'Can view',
-      resourceType: 'folder',
-      actionType: 'SIDEBAR_PANEL'
-    })
-    await ui.shareResource({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Brian',
-      resource: 'new-lorem-big.txt',
-      recipient: 'Alice',
-      type: 'user',
-      role: 'Can view',
-      resourceType: 'file',
-      actionType: 'SIDEBAR_PANEL'
+      actionType: ui.FileAction.sidebarPanel,
+      shares: [
+        {
+          resource: 'new_share_from_brian',
+          recipient: 'Alice',
+          type: 'user',
+          role: 'Can view',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'new-lorem-big.txt',
+          recipient: 'Alice',
+          type: 'user',
+          role: 'Can view',
+          resourceType: 'file'
+        }
+      ]
     })
     // And "Brian" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
@@ -107,20 +107,11 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     await ui.userCreatesResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      resource: 'folder',
-      type: 'folder'
-    })
-    await ui.userCreatesResources({
-      actorsEnvironment,
-      stepUser: 'Alice',
-      resource: 'FolDer/child-one/child-two',
-      type: 'folder'
-    })
-    await ui.userCreatesResources({
-      actorsEnvironment,
-      stepUser: 'Alice',
-      resource: 'strängéनेपालीName',
-      type: 'folder'
+      resources: [
+        { name: 'folder', type: 'folder' },
+        { name: 'FolDer/child-one/child-two', type: 'folder' },
+        { name: 'strängéनेपालीName', type: 'folder' }
+      ]
     })
 
     // And "Alice" enables the option to display the hidden file
@@ -334,7 +325,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'strängéनेपालीName',
-      actionType: 'SIDEBAR_PANEL'
+      actionType: ui.FileAction.sidebarPanel
     })
 
     // And "Alice" searches "forDeleting" using the global search and the "all files" filter
@@ -375,23 +366,20 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | exampleInsideThePersonalSpace.txt                  | I'm in the personal Space |
     //   | mainFolder/exampleInsideTheMainFolder.txt          | I'm in the main folder    |
     //   | mainFolder/subFolder/exampleInsideTheSubFolder.txt | I'm in the sub folder     |
-    await api.userHasCreatedFile({
+    await api.userHasCreatedFiles({
       usersEnvironment,
       stepUser: 'Alice',
-      filename: 'exampleInsideThePersonalSpace.txt',
-      content: "I'm in the personal Space"
-    })
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'mainFolder/exampleInsideTheMainFolder.txt',
-      content: "I'm in the main folder"
-    })
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'mainFolder/subFolder/exampleInsideTheSubFolder.txt',
-      content: "I'm in the sub folder"
+      files: [
+        { pathToFile: 'exampleInsideThePersonalSpace.txt', content: "I'm in the personal Space" },
+        {
+          pathToFile: 'mainFolder/exampleInsideTheMainFolder.txt',
+          content: "I'm in the main folder"
+        },
+        {
+          pathToFile: 'mainFolder/subFolder/exampleInsideTheSubFolder.txt',
+          content: "I'm in the sub folder"
+        }
+      ]
     })
     // When "Alice" opens folder "mainFolder"
     await ui.userOpensResources({
@@ -478,29 +466,15 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mediaTest.pdf | I'm a PDF      |
     //   | mediaTest.mp3 | I'm a Audio    |
     //   | mediaTest.zip | I'm a Archive  |
-    await api.userHasCreatedFile({
+    await api.userHasCreatedFiles({
       usersEnvironment,
       stepUser: 'Alice',
-      filename: 'mediaTest.txt',
-      content: "I'm a Document"
-    })
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'mediaTest.pdf',
-      content: "I'm a PDF"
-    })
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'mediaTest.mp3',
-      content: "I'm a Audio"
-    })
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'mediaTest.zip',
-      content: "I'm a Archive"
+      files: [
+        { pathToFile: 'mediaTest.txt', content: "I'm a Document" },
+        { pathToFile: 'mediaTest.pdf', content: "I'm a PDF" },
+        { pathToFile: 'mediaTest.mp3', content: "I'm a Audio" },
+        { pathToFile: 'mediaTest.zip', content: "I'm a Archive" }
+      ]
     })
     // And "Alice" searches "mediaTest" using the global search and the "all files" filter and presses enter
     await ui.searchGloballyWithFilter({
@@ -636,25 +610,22 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mainFolder/mediaTest.pdf | created 29 days ago | -29 days       |
     //   | mainFolder/mediaTest.txt | created 5 days ago  | -5 days        |
     //   | mainFolder/mediaTest.md  | created today       |                |
-    await api.userHasCreatedFile({
+    await api.userHasCreatedFiles({
       usersEnvironment,
       stepUser: 'Alice',
-      filename: 'mainFolder/mediaTest.pdf',
-      content: 'created 29 days ago',
-      mtimeDeltaDays: '-29 days'
-    })
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'mainFolder/mediaTest.txt',
-      content: 'created 5 days ago',
-      mtimeDeltaDays: '-5 days'
-    })
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'mainFolder/mediaTest.md',
-      content: 'created today'
+      files: [
+        {
+          pathToFile: 'mainFolder/mediaTest.pdf',
+          content: 'created 29 days ago',
+          mtimeDeltaDays: '-29 days'
+        },
+        {
+          pathToFile: 'mainFolder/mediaTest.txt',
+          content: 'created 5 days ago',
+          mtimeDeltaDays: '-5 days'
+        },
+        { pathToFile: 'mainFolder/mediaTest.md', content: 'created today' }
+      ]
     })
     // When "Alice" opens folder "mainFolder"
     await ui.userOpensResources({

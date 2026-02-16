@@ -18,10 +18,12 @@ import { Public } from '../../../e2e/support/objects/app-files/page'
 import { Resource } from '../../../e2e/support/objects/app-files/resource'
 import { config } from '../../../e2e/config'
 
-const FileActionType = {
+export const FileAction = {
   batchAction: 'BATCH_ACTION',
   sidebarPanel: 'SIDEBAR_PANEL'
 } as const
+
+export type FileActionViaType = (typeof FileAction)[keyof typeof FileAction]
 
 export async function uploadResource({
   actorsEnvironment,
@@ -420,13 +422,13 @@ export async function deleteResource({
   actorsEnvironment,
   stepUser,
   resource,
-  actionType = FileActionType.sidebarPanel,
+  actionType = FileAction.sidebarPanel,
   parentFolder = ''
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
-  actionType: 'BATCH_ACTION' | 'SIDEBAR_PANEL'
+  actionType: FileActionViaType
   parentFolder?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })

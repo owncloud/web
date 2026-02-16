@@ -84,14 +84,15 @@ export async function userHasCreatedFiles({
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  files: { pathToFile: string; content: string }[]
+  files: { pathToFile: string; content: string; mtimeDeltaDays?: string }[]
 }): Promise<void> {
   const user = usersEnvironment.getUser({ key: stepUser })
   for (const file of files) {
     await api.dav.uploadFileInPersonalSpace({
       user,
       pathToFile: file.pathToFile,
-      content: file.content
+      content: file.content,
+      mtimeDeltaDays: file.mtimeDeltaDays
     })
   }
 }
