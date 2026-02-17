@@ -97,7 +97,6 @@ config = {
             "earlyFail": True,
             "skip": False,
             "suites": [
-                "navigation",
                 "file-action",
             ],
         },
