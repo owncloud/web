@@ -98,8 +98,7 @@ test.describe('Notifications', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      names: ['team'],
-      ids: ['team.1']
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Alice" logs in
@@ -227,7 +226,7 @@ test.describe('Notifications', () => {
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
 
     // And "Alice" navigates to the project spaces management page
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" disables the space "team.1" using the context-menu
     await ui.manageSpaceUsingContexMenu({
@@ -277,8 +276,7 @@ test.describe('Notifications', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      names: ['team'],
-      ids: ['team.1']
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Brian" logs in
@@ -413,7 +411,7 @@ test.describe('Notifications', () => {
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
 
     // And "Alice" navigates to the project spaces management page
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" disables the space "team.1" using the context-menu
     await ui.manageSpaceUsingContexMenu({
