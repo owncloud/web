@@ -38,6 +38,7 @@ test.describe('spaces member expiry', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Admin',
+      name: 'team',
       id: 'team.1'
     })
   })
@@ -72,8 +73,7 @@ test.describe('spaces member expiry', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      names: ['team'],
-      ids: ['team.1']
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Alice" navigates to the project space "team.1"

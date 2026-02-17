@@ -66,8 +66,7 @@ test.describe('check files pagination in project space', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      names: ['Developers'],
-      ids: ['dev.1']
+      spaces: [{ name: 'Developers', id: 'dev.1' }]
     })
 
     // And "Alice" creates 55 folders in space "Developers" using API

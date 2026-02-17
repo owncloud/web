@@ -32,7 +32,7 @@ test.describe('spaces management', () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
   })
 
   test.afterEach(async () => {
@@ -42,7 +42,8 @@ test.describe('spaces management', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Admin',
-      id: 'team.a'
+      id: 'team.a',
+      name: 'team A'
     })
   })
 
@@ -56,20 +57,18 @@ test.describe('spaces management', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      names: ['team A'],
-      ids: ['team.a']
+      spaces: [{ name: 'team A', id: 'team.a' }]
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
-    await ui.createProjectSpaces({
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userCreatesProjectSpaces({
       actorsEnvironment,
       stepUser: 'Alice',
-      names: ['team B'],
-      ids: ['team.b']
+      spaces: [{ name: 'team B', id: 'team.b' }]
     })
     expect(
-      await ui.shouldSeeSpaces({
+      await ui.userShouldSeeSpaces({
         actorsEnvironment,
         stepUser: 'Alice',
         expectedSpaceIds: ['team.a', 'team.b']
@@ -79,12 +78,13 @@ test.describe('spaces management', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Admin',
+      name: 'team B',
       id: 'team.b'
     })
   })
 
   test('spaces can be managed in the admin settings via the context menu', async () => {
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
     await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
@@ -99,65 +99,67 @@ test.describe('spaces management', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      names: ['team A', 'team B'],
-      ids: ['team.a', 'team.b']
+      spaces: [
+        { name: 'team A', id: 'team.a' },
+        { name: 'team B', id: 'team.b' }
+      ]
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
-    await ui.updateSpaceUsingContextMenu({
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userUpdatesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       key: 'team.a',
       attribute: 'name',
       value: 'team A updated'
     })
-    await ui.updateSpaceUsingContextMenu({
+    await ui.userUpdatesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       key: 'team.b',
       attribute: 'subtitle',
       value: 'Developer team-subtitle'
     })
-    await ui.updateSpaceUsingContextMenu({
+    await ui.userUpdatesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       key: 'team.b',
       attribute: 'quota',
       value: '50'
     })
-    await ui.disableSpaceUsingContextMenu({
+    await ui.userDisablesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceId: 'team.a'
     })
-    await ui.enableSpaceUsingContextMenu({
+    await ui.userEnablesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceId: 'team.a'
     })
     expect(
-      await ui.shouldSeeSpaces({
+      await ui.userShouldSeeSpaces({
         actorsEnvironment,
         stepUser: 'Alice',
         expectedSpaceIds: ['team.a', 'team.b']
       })
     ).toBeTruthy()
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Brian', name: 'admin-settings' })
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.disableSpaceUsingContextMenu({
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Brian', name: 'admin-settings' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userDisablesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Brian',
       spaceId: 'team.b'
     })
-    await ui.deleteSpaceUsingContextMenu({
+    await ui.userDeletesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Brian',
       spaceId: 'team.b'
     })
     expect(
-      await ui.shouldSeeSpaces({
+      await ui.userShouldSeeSpaces({
         actorsEnvironment,
         stepUser: 'Brian',
         expectedSpaceIds: ['team.b']
@@ -168,7 +170,8 @@ test.describe('spaces management', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Admin',
-      id: 'team.b'
+      id: 'team.b',
+      name: 'team B'
     })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
   })
@@ -183,40 +186,44 @@ test.describe('spaces management', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      names: ['team A', 'team B', 'team C', 'team D'],
-      ids: ['team.a', 'team.b', 'team.c', 'team.d']
+      spaces: [
+        { name: 'team A', id: 'team.a' },
+        { name: 'team B', id: 'team.b' },
+        { name: 'team C', id: 'team.c' },
+        { name: 'team D', id: 'team.d' }
+      ]
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
-    await ui.disableSpacesUsingBatchActions({
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userDisablesSpacesUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
     })
-    await ui.enableSpacesUsingBatchActions({
+    await ui.userEnablesSpacesUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
     })
-    await ui.changeSpaceQuotaUsingBatchActions({
+    await ui.userChangesSpaceQuotaUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b', 'team.c', 'team.d'],
       value: '50'
     })
-    await ui.disableSpacesUsingBatchActions({
+    await ui.userDisablesSpacesUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
     })
-    await ui.deleteSpacesUsingBatchActions({
+    await ui.userDeletesSpacesUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
     })
     expect(
-      await ui.shouldSeeSpaces({
+      await ui.userShouldSeeSpaces({
         actorsEnvironment,
         stepUser: 'Alice',
         expectedSpaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
@@ -225,10 +232,10 @@ test.describe('spaces management', () => {
   })
 
   test('list members via sidebar', async () => {
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'carol' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'David' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Edith' })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Carol'] })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['David'] })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Edith'] })
     await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
@@ -238,23 +245,22 @@ test.describe('spaces management', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Admin',
-      names: ['team A'],
-      ids: ['team.a']
+      spaces: [{ name: 'team A', id: 'team.a' }]
     })
-    await api.addMembersToProjectSpace({
+    await api.userHasAddedMembersToSpace({
       usersEnvironment,
       stepUser: 'Admin',
-      spaceName: 'team A',
-      members: [
-        { user: 'Brian', shareType: 'user', role: 'Can edit' },
+      space: 'team A',
+      sharee: [
+        { user: 'Brian', shareType: 'user', role: 'Can edit with versions and trashbin' },
         { user: 'Carol', shareType: 'user', role: 'Can view' },
         { user: 'David', shareType: 'user', role: 'Can view' },
         { user: 'Edith', shareType: 'user', role: 'Can view' }
       ]
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
     await ui.listMembersOfProjectSpaceUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Alice',
@@ -265,7 +271,7 @@ test.describe('spaces management', () => {
       stepUser: 'Alice',
       expectedMembers: [
         { user: 'Admin', role: 'Can manage' },
-        { user: 'Brian', role: 'Can edit' },
+        { user: 'Brian', role: 'Can edit with versions and trashbin' },
         { user: 'Carol', role: 'Can view' },
         { user: 'David', role: 'Can view' },
         { user: 'Edith', role: 'Can view' }
@@ -278,8 +284,8 @@ test.describe('spaces management', () => {
   })
 
   test('admin user can manage the spaces created by other space admin user', async () => {
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Carol' })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
+    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Carol'] })
     await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
@@ -293,47 +299,45 @@ test.describe('spaces management', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Brian',
-      names: ['team A'],
-      ids: ['team.a']
+      spaces: [{ name: 'team A', id: 'team.a' }]
     })
     await api.userHasCreatedProjectSpaces({
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Carol',
-      names: ['team B'],
-      ids: ['team.b']
+      spaces: [{ name: 'team B', id: 'team.b' }]
     })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
-    await ui.changeSpaceQuotaUsingBatchActions({
+    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userChangesSpaceQuotaUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b'],
       value: '50'
     })
-    await ui.disableSpacesUsingBatchActions({
+    await ui.userDisablesSpacesUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b']
     })
-    await ui.enableSpacesUsingBatchActions({
+    await ui.userEnablesSpacesUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b']
     })
-    await ui.disableSpacesUsingBatchActions({
+    await ui.userDisablesSpacesUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b']
     })
-    await ui.deleteSpacesUsingBatchActions({
+    await ui.userDeletesSpacesUsingBatchActions({
       actorsEnvironment,
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b']
     })
     expect(
-      await ui.shouldSeeSpaces({
+      await ui.userShouldSeeSpaces({
         actorsEnvironment,
         stepUser: 'Alice',
         expectedSpaceIds: ['team.a', 'team.b']
@@ -343,7 +347,8 @@ test.describe('spaces management', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Admin',
-      id: 'team.b'
+      id: 'team.b',
+      name: 'team B'
     })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
