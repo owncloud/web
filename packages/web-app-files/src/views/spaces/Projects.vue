@@ -477,7 +477,7 @@ function openSidebarSharePanel(space: SpaceResource) {
 
 <style lang="scss">
 #files-spaces-empty {
-  height: 75svh;
+  height: 75dvh;
 }
 
 .table-preview {
