@@ -52,7 +52,6 @@ Summary
 * Enhancement - Drop custom share filters: [#13485](https://github.com/owncloud/web/pull/13485)
 * Enhancement - Add cross-instance reference: [#13499](https://github.com/owncloud/web/pull/13499)
 * Enhancement - Add instance switcher: [#13500](https://github.com/owncloud/web/pull/13500)
-* Enhancement - Use dynamic viewport units (dvh/dvw) instead of small viewport units (svh/svw)
 
 Details
 -------
@@ -132,12 +131,6 @@ Details
    the instance or a "Switch" button.
 
    https://github.com/owncloud/web/pull/13500
-
-* Enhancement - Use dynamic viewport units (dvh/dvw) instead of small viewport units (svh/svw)
-
-   We have updated the CSS to use dynamic viewport units (dvh/dvw) instead of small
-   viewport units (svh/svw) for better responsiveness on mobile devices, especially
-   when the virtual keyboard appears.
 
 Changelog for ownCloud Web [12.2.0] (2025-11-21)
 =======================================
