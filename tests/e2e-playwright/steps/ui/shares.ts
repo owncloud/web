@@ -309,29 +309,33 @@ export async function userEnablesSyncForShares({
 export async function shareShouldHaveSyncStatus({
   actorsEnvironment,
   stepUser,
-  resource
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resource: string
+  resources: string[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
-  expect(await shareObject.resourceIsSynced(resource)).toBe(true)
+  for (const resource of resources) {
+    expect(await shareObject.resourceIsSynced(resource)).toBe(true)
+  }
 }
 
 export async function shareShouldNotHaveSyncStatus({
   actorsEnvironment,
   stepUser,
-  resource
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resource: string
+  resources: string[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
-  expect(await shareObject.resourceIsSynced(resource)).toBe(false)
+  for (const resource of resources) {
+    expect(await shareObject.resourceIsSynced(resource)).toBe(false)
+  }
 }
 
 export async function userShouldNotSeeShare({

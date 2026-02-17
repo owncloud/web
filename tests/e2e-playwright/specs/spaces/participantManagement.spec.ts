@@ -259,12 +259,11 @@ test.describe('check files pagination in project space', () => {
     // When "Brian" deletes the following resources using the sidebar panel
     //   | resource     | from   |
     //   | textfile.txt | parent |
-    await ui.deleteResource({
+    await ui.deleteResources({
       actorsEnvironment,
       stepUser: 'Brian',
-      file: 'textfile.txt',
-      actionType: 'sidebar panel',
-      parentFolder: 'parent'
+      actionType: 'SIDEBAR_PANEL',
+      resources: [{ name: 'textfile.txt', from: 'parent' }]
     })
 
     // When "Carol" navigates to the trashbin of the project space "team.1"

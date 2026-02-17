@@ -34,8 +34,11 @@ test.describe('share', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
   })
 
   test.afterEach(async () => {
@@ -64,42 +67,35 @@ test.describe('share', () => {
     //   | folder_to_shared   | Brian     | user | Can edit with trashbin | folder       |
     //   | shared_folder      | Brian     | user | Can edit with trashbin | folder       |
     //   | folder_to_shared_2 | Brian     | user | Can edit with trashbin | folder       |
-    await ui.userSharesResource({
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
+      actionType: 'SIDEBAR_PANEL',
       stepUser: 'Alice',
-      resource: 'folder_to_shared',
-      recipient: 'Brian',
-      type: 'user',
-      resourceType: 'folder',
-      role: 'Can edit with trashbin',
-      actionType: 'SIDEBAR_PANEL'
+      shares: [
+        {
+          resource: 'folder_to_shared',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'shared_folder',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'folder_to_shared_2',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        }
+      ]
     })
-
-    await ui.userSharesResource({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      resource: 'shared_folder',
-      recipient: 'Brian',
-      type: 'user',
-      resourceType: 'folder',
-      role: 'Can edit with trashbin',
-      actionType: 'SIDEBAR_PANEL'
-    })
-
-    await ui.userSharesResource({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      resource: 'folder_to_shared_2',
-      recipient: 'Brian',
-      type: 'user',
-      resourceType: 'folder',
-      role: 'Can edit with trashbin',
-      actionType: 'SIDEBAR_PANEL'
-    })
-
     // And "Alice" uploads the following resource
     // | resource      | to                 |
     // | lorem.txt     | folder_to_shared   |
@@ -143,19 +139,12 @@ test.describe('share', () => {
       resources: ['folder_to_shared', 'folder_to_shared_2']
     })
     // Then "Brian" should not see a sync status for the folder "folder_to_shared"
-    await ui.shareShouldNotHaveSyncStatus({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      resource: 'folder_to_shared'
-    })
-
     // And "Brian" should not see a sync status for the folder "folder_to_shared_2"
     await ui.shareShouldNotHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
-      resource: 'folder_to_shared_2'
+      resources: ['folder_to_shared', 'folder_to_shared_2']
     })
-
     // When "Brian" enables the sync for the following share using the context menu
     //   | name               |
     //   | folder_to_shared   |
@@ -167,16 +156,12 @@ test.describe('share', () => {
     })
 
     // Then "Brian" should see a sync status for the folder "folder_to_shared"
-    await ui.shareShouldHaveSyncStatus({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      resource: 'folder_to_shared'
-    })
     // And "Brian" should see a sync status for the folder "folder_to_shared_2"
+
     await ui.shareShouldHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
-      resource: 'folder_to_shared_2'
+      resources: ['folder_to_shared', 'folder_to_shared_2']
     })
 
     // When "Brian" renames the following resource
@@ -205,12 +190,11 @@ test.describe('share', () => {
     // When "Brian" deletes the following resources using the sidebar panel
     //   | resource      | from               |
     //   | lorem-big.txt | folder_to_shared_2 |
-    await ui.deleteResource({
+    await ui.deleteResources({
       actorsEnvironment,
       stepUser: 'Brian',
-      file: 'lorem-big.txt',
       actionType: 'SIDEBAR_PANEL',
-      parentFolder: 'folder_to_shared_2'
+      resources: [{ name: 'lorem-big.txt', from: 'folder_to_shared_2' }]
     })
 
     // And "Alice" opens the "files" app
@@ -249,19 +233,11 @@ test.describe('share', () => {
     //   | resource         | from             |
     //   | lorem_new.txt    | folder_to_shared |
     //   | folder_to_shared |                  |
-    await ui.deleteResource({
+    await ui.deleteResources({
       actorsEnvironment,
       stepUser: 'Alice',
-      file: 'lorem_new.txt',
       actionType: 'SIDEBAR_PANEL',
-      parentFolder: 'folder_to_shared'
-    })
-
-    await ui.deleteResource({
-      actorsEnvironment,
-      stepUser: 'Alice',
-      file: 'folder_to_shared',
-      actionType: 'SIDEBAR_PANEL'
+      resources: [{ name: 'lorem_new.txt', from: 'folder_to_shared' }, { name: 'folder_to_shared' }]
     })
 
     // And "Alice" logs out

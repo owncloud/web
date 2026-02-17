@@ -411,26 +411,29 @@ export async function userClosesFileViewer({
   await editor.close(page)
 }
 
-export async function deleteResource({
+// When "Brian" deletes the following resources using the sidebar panel
+//   | resource      | from               |
+//   | lorem-big.txt | folder_to_shared_2 |
+export async function deleteResources({
   actorsEnvironment,
   stepUser,
-  file,
-  actionType,
-  parentFolder = ''
+  actionType = 'SIDEBAR_PANEL',
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  file: string
-  actionType: string
-  parentFolder?: string
+  actionType: 'BATCH_ACTION' | 'SIDEBAR_PANEL'
+  resources: { name: string; from?: string }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.Resource({ page })
-  await pageObject.delete({
-    folder: parentFolder === '' ? null : parentFolder,
-    resourcesWithInfo: [{ name: file }],
-    via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
-  })
+  for (const resource of resources) {
+    await pageObject.delete({
+      folder: resource.from === '' ? null : resource.from,
+      resourcesWithInfo: [{ name: resource.name }],
+      via: actionType
+    })
+  }
 }
 
 export async function deleteResourceFromTrashbin({
