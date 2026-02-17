@@ -49,23 +49,21 @@ export async function navigateToSpace({
   await spacesObject.open({ key: space })
 }
 
-export async function createProjectSpaces({
+export async function userCreatesProjectSpaces({
   actorsEnvironment,
   stepUser,
-  names,
-  ids
+  spaces
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  names: string[]
-  ids: string[]
+  spaces: Array<{ name: string; id: string }>
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
-  for (let i = 0; i < names.length; i++) {
+  for (const space of spaces) {
     await spacesObject.create({
-      key: ids[i] || names[i],
-      space: { name: names[i], id: ids[i] } as unknown as Space
+      key: space.id || space.name,
+      space: { name: space.name, id: space.id } as unknown as Space
     })
   }
 }
@@ -156,7 +154,7 @@ export async function removeAccessToMember({
   await spacesObject.removeAccessToMember({ users: [member] })
 }
 
-export async function navigateToProjectSpaceManagementPage({
+export async function userNavigatesToProjectSpaceManagementPage({
   actorsEnvironment,
   stepUser
 }: {
@@ -228,21 +226,6 @@ export async function navigateToTrashbin({
   }
 }
 
-export async function userShouldSeeSpace({
-  actorsEnvironment,
-  stepUser,
-  space
-}: {
-  actorsEnvironment: ActorsEnvironment
-  stepUser: string
-  space?: string
-}): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const spacesObject = new objects.applicationFiles.Spaces({ page })
-  const spaceLocator = await spacesObject.getSpaceLocator(space)
-  await expect(spaceLocator).toBeVisible()
-}
-
 export async function userShouldNotSeeSpace({
   actorsEnvironment,
   stepUser,
@@ -300,7 +283,7 @@ export async function userShouldSeeActivitiesOfSpace({
   }
 }
 
-export async function shouldSeeSpaces({
+export async function userShouldSeeSpaces({
   actorsEnvironment,
   stepUser,
   expectedSpaceIds
@@ -321,7 +304,7 @@ export async function shouldSeeSpaces({
   return true
 }
 
-export async function disableSpaceUsingContextMenu({
+export async function userDisablesSpaceUsingContextMenu({
   actorsEnvironment,
   stepUser,
   spaceId
@@ -336,7 +319,7 @@ export async function disableSpaceUsingContextMenu({
   await spacesObject.disable({ spaceIds: [spaceUUID], context: 'context-menu' })
 }
 
-export async function enableSpaceUsingContextMenu({
+export async function userEnablesSpaceUsingContextMenu({
   actorsEnvironment,
   stepUser,
   spaceId
@@ -351,7 +334,7 @@ export async function enableSpaceUsingContextMenu({
   await spacesObject.enable({ spaceIds: [spaceUUID], context: 'context-menu' })
 }
 
-export async function deleteSpaceUsingContextMenu({
+export async function userDeletesSpaceUsingContextMenu({
   actorsEnvironment,
   stepUser,
   spaceId
@@ -366,7 +349,7 @@ export async function deleteSpaceUsingContextMenu({
   await spacesObject.delete({ spaceIds: [spaceUUID], context: 'context-menu' })
 }
 
-export async function disableSpacesUsingBatchActions({
+export async function userDisablesSpacesUsingBatchActions({
   actorsEnvironment,
   stepUser,
   spaceIds
@@ -384,7 +367,7 @@ export async function disableSpacesUsingBatchActions({
   await spacesObject.disable({ spaceIds: uuids, context: 'batch-actions' })
 }
 
-export async function enableSpacesUsingBatchActions({
+export async function userEnablesSpacesUsingBatchActions({
   actorsEnvironment,
   stepUser,
   spaceIds
@@ -402,7 +385,7 @@ export async function enableSpacesUsingBatchActions({
   await spacesObject.enable({ spaceIds: uuids, context: 'batch-actions' })
 }
 
-export async function deleteSpacesUsingBatchActions({
+export async function userDeletesSpacesUsingBatchActions({
   actorsEnvironment,
   stepUser,
   spaceIds
@@ -420,7 +403,7 @@ export async function deleteSpacesUsingBatchActions({
   await spacesObject.delete({ spaceIds: uuids, context: 'batch-actions' })
 }
 
-export async function updateSpaceUsingContextMenu({
+export async function userUpdatesSpaceUsingContextMenu({
   actorsEnvironment,
   stepUser,
   key,
@@ -451,7 +434,7 @@ export async function updateSpaceUsingContextMenu({
   }
 }
 
-export async function changeSpaceQuotaUsingBatchActions({
+export async function userChangesSpaceQuotaUsingBatchActions({
   actorsEnvironment,
   stepUser,
   spaceIds,
@@ -504,7 +487,7 @@ export async function shouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
   const actualMemberList = {
     manager: await spacesObject.listMembers({ filter: 'Can manage' }),
     viewer: await spacesObject.listMembers({ filter: 'Can view' }),
-    editor: await spacesObject.listMembers({ filter: 'Can edit' })
+    editor: await spacesObject.listMembers({ filter: 'Can edit with versions and trashbin' })
   }
   for (const member of expectedMembers) {
     const shareRole = shareRoles[member.role as keyof typeof shareRoles]
