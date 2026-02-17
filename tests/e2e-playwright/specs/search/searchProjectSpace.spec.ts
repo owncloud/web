@@ -50,8 +50,7 @@ test.describe('Search in the project space', () => {
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      names: ['team'],
-      ids: ['team.1']
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })

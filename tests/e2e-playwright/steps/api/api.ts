@@ -181,24 +181,22 @@ export async function userHasCreatedProjectSpaces({
   usersEnvironment,
   spacesEnvironment,
   stepUser,
-  names,
-  ids
+  spaces
 }: {
   usersEnvironment: UsersEnvironment
   spacesEnvironment: SpacesEnvironment
   stepUser: string
-  names: string[]
-  ids: string[]
+  spaces: Array<{ name: string; id: string }>
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
-  for (let i = 0; i < names.length; i++) {
+  for (const space of spaces) {
     const spaceId = await api.graph.createSpace({
       user,
-      space: { id: ids[i], name: names[i] } as unknown as Space
+      space: { id: space.id, name: space.name } as unknown as Space
     })
     spacesEnvironment.createSpace({
-      key: ids[i] || names[i],
-      space: { name: names[i], id: spaceId } as unknown as Space
+      key: space.id || space.name,
+      space: { name: space.name, id: spaceId } as unknown as Space
     })
   }
 }
@@ -301,11 +299,13 @@ export async function userHasDeletedProjectSpace({
   usersEnvironment,
   spacesEnvironment,
   stepUser,
+  name,
   id
 }: {
   usersEnvironment: UsersEnvironment
   spacesEnvironment: SpacesEnvironment
   stepUser: string
+  name: string
   id: string
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
@@ -317,25 +317,23 @@ export async function userHasAddedMembersToSpace({
   usersEnvironment,
   stepUser,
   space,
-  shareType,
-  role,
   sharee
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
   space: string
-  shareType: string
-  role: string
-  sharee: string
+  sharee: Array<{ user: string; shareType: string; role: string }>
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
-  await api.share.addMembersToTheProjectSpace({
-    user,
-    spaceName: space,
-    shareType: shareType,
-    shareWith: sharee,
-    role: role
-  })
+  for (const share of sharee) {
+    await api.share.addMembersToTheProjectSpace({
+      user,
+      spaceName: space,
+      shareType: share.shareType,
+      shareWith: share.user,
+      role: share.role
+    })
+  }
 }
 
 export const groupsHaveBeenCreated = async ({

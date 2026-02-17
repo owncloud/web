@@ -62,11 +62,10 @@ test.describe('details', () => {
     // And "Alice" creates the following project spaces
     //   | name | id     |
     //   | team | team.1 |
-    await ui.createProjectSpaces({
+    await ui.userCreatesProjectSpaces({
       actorsEnvironment,
       stepUser: 'Alice',
-      names: ['team'],
-      ids: ['team.1']
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // When "Alice" waits for token renewal via refresh token
