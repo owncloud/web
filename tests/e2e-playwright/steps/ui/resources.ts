@@ -857,7 +857,7 @@ export async function userRestoresResourceVersion({
   actorsEnvironment,
   filesEnvironment,
   stepUser,
-  resource,
+  file,
   to,
   version,
   openDetailsPanel
@@ -865,7 +865,7 @@ export async function userRestoresResourceVersion({
   actorsEnvironment: ActorsEnvironment
   filesEnvironment: FilesEnvironment
   stepUser: string
-  resource: string
+  file: string
   to: string
   version: number
   openDetailsPanel: boolean
@@ -878,7 +878,7 @@ export async function userRestoresResourceVersion({
     fileInfo[to] = []
   }
 
-  fileInfo[to].push(filesEnvironment.getFile({ name: resource }))
+  fileInfo[to].push(filesEnvironment.getFile({ name: file }))
 
   if (version !== 1) {
     throw new Error('restoring is only supported for the most recent version')

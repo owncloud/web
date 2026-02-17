@@ -48,7 +48,7 @@ export async function userOpensResourceViaUrl({
   await urlNavObject.openResourceViaUrl({ resource, user, space, editorName, client })
 }
 
-export async function userOpensResourceOfSpaceViaUrl({
+export async function userOpensSpaceResourceViaUrl({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
@@ -67,7 +67,7 @@ export async function userOpensResourceOfSpaceViaUrl({
   await urlNavObject.openResourceViaUrl({ resource, user, space })
 }
 
-export async function userNavigatesToDetailsPanelOfResourceViaUrl({
+export async function userOpensResourceDetailsPanelViaUrl({
   actorsEnvironment,
   usersEnvironment,
   stepUser,

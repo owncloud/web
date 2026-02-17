@@ -31,12 +31,29 @@ test.describe('Navigate web directly through urls', () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
+  })
+
+  test.afterEach(async () => {
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
+    await api.userHasDeletedProjectSpace({
+      usersEnvironment,
+      stepUser: 'Admin',
+      name: 'Development',
+      id: 'team.1'
+    })
+  })
+
+  test('pagination', async () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Alice' })
-    await api.userHasBeenCreated({ usersEnvironment, stepUser: 'Admin', userToBeCreated: 'Brian' })
+    await api.usersHasBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Alice', 'Brian']
+    })
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
@@ -57,36 +74,30 @@ test.describe('Navigate web directly through urls', () => {
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile                    | content      |
     //   | FOLDER/file_inside_folder.txt | example text |
-    await api.userHasCreatedFile({
+    //   | lorem.txt                     | some content |
+    //   | test.odt                      | some content |
+    //   | lorem.txt                     | new content |
+    await api.userHasCreatedFiles({
       usersEnvironment,
       stepUser: 'Alice',
-      filename: 'FOLDER/file_inside_folder.txt',
-      content: 'example text'
-    })
-    // And "Alice" creates the following files into personal space using API
-    //   | pathToFile | content      |
-    //   | lorem.txt  | some content |
-    //   | test.odt   | some content |
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'lorem.txt',
-      content: 'some content'
-    })
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'test.odt',
-      content: 'some content'
-    })
-    // And "Alice" creates the following files into personal space using API
-    //   | pathToFile | content     |
-    //   | lorem.txt  | new content |
-    await api.userHasCreatedFile({
-      usersEnvironment,
-      stepUser: 'Alice',
-      filename: 'lorem.txt',
-      content: 'new content'
+      files: [
+        {
+          pathToFile: 'FOLDER/file_inside_folder.txt',
+          content: 'example text'
+        },
+        {
+          pathToFile: 'lorem.txt',
+          content: 'some content'
+        },
+        {
+          pathToFile: 'test.odt',
+          content: 'some content'
+        },
+        {
+          pathToFile: 'lorem.txt',
+          content: 'new content'
+        }
+      ]
     })
     // And "Alice" creates the following project space using API
     //   | name        | id     |
@@ -101,31 +112,21 @@ test.describe('Navigate web directly through urls', () => {
     // And "Alice" creates the following file in space "Development" using API
     //   | name              | content                   |
     //   | spaceTextfile.txt | This is test file. Cheers |
-    await api.createFileInsideSpaceBySpaceName({
+    await api.createFilesInsideSpaceBySpaceName({
       usersEnvironment,
       stepUser: 'Alice',
-      fileName: 'spaceTextfile.txt',
-      space: 'Development',
-      content: 'This is test file. Cheers'
+      files: [
+        {
+          name: 'spaceTextfile.txt',
+          space: 'Development',
+          content: 'This is test file. Cheers'
+        }
+      ]
     })
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-  })
-
-  test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-    await api.userHasDeletedProjectSpace({
-      usersEnvironment,
-      stepUser: 'Admin',
-      name: 'Development',
-      id: 'team.1'
-    })
-  })
-
-  test('pagination', async () => {
     // When "Alice" navigates to "versions" details panel of file "lorem.txt" of space "personal" through the URL
-    await ui.userNavigatesToDetailsPanelOfResourceViaUrl({
+    await ui.userOpensResourceDetailsPanelViaUrl({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -140,14 +141,14 @@ test.describe('Navigate web directly through urls', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
-      resource: 'lorem.txt',
+      file: 'lorem.txt',
       to: '/',
       version: 1,
       openDetailsPanel: false
     })
 
     // When "Alice" navigates to "sharing" details panel of file "lorem.txt" of space "personal" through the URL
-    await ui.userNavigatesToDetailsPanelOfResourceViaUrl({
+    await ui.userOpensResourceDetailsPanelViaUrl({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -158,21 +159,25 @@ test.describe('Navigate web directly through urls', () => {
     // Then "Alice" shares the following resource using the direct url navigation
     //   | resource  | recipient | type | role     | resourceType |
     //   | lorem.txt | Brian     | user | Can view | file         |
-    await ui.shareResource({
+    await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
       actionType: 'URL_NAVIGATION',
-      resource: 'lorem.txt',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can view',
-      resourceType: 'file'
+      shares: [
+        {
+          resource: 'lorem.txt',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can view',
+          resourceType: 'file'
+        }
+      ]
     })
 
     // file that has respective editor will open in the respective editor
     // When "Alice" opens the file "lorem.txt" of space "personal" through the URL
-    await ui.userOpensResourceOfSpaceViaUrl({
+    await ui.userOpensSpaceResourceViaUrl({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -192,7 +197,7 @@ test.describe('Navigate web directly through urls', () => {
 
     // file without the respective editor will show the file in the file list
     // When "Alice" opens the file "test.odt" of space "personal" through the URL
-    await ui.userOpensResourceOfSpaceViaUrl({
+    await ui.userOpensSpaceResourceViaUrl({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -211,7 +216,7 @@ test.describe('Navigate web directly through urls', () => {
       resources: ['FOLDER', 'lorem.txt', 'test.odt']
     })
     // When "Alice" opens the folder "FOLDER" of space "personal" through the URL
-    await ui.userOpensResourceOfSpaceViaUrl({
+    await ui.userOpensSpaceResourceViaUrl({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
