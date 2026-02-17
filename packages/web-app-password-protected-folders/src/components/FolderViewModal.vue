@@ -47,7 +47,7 @@ const onLoad = () => {
 
 <style lang="scss">
 .oc-modal.folder-view-modal {
-  max-width: 80svw;
+  max-width: 80dvw;
   border: none;
   overflow: hidden;
 
@@ -59,7 +59,7 @@ const onLoad = () => {
     padding: 0;
 
     &-message {
-      height: 60svh;
+      height: 60dvh;
       margin: 0;
     }
   }

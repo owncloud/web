@@ -297,7 +297,7 @@ export default defineComponent({
   display: flex;
   flex-flow: column;
   flex-wrap: nowrap;
-  height: calc(100svh - var(--web-runtime-maintenance-banner-height));
+  height: calc(100dvh - var(--web-runtime-maintenance-banner-height));
 
   #global-progress-bar {
     z-index: 10;

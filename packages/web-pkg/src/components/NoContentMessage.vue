@@ -29,10 +29,10 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 <style>
 .no-content-message {
-  height: 75svh;
+  height: 75dvh;
 }
 
 .space-frontpage .no-content-message {
-  height: 55svh;
+  height: 55dvh;
 }
 </style>

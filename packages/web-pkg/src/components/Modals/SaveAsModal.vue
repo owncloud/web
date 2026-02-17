@@ -174,7 +174,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss">
 .oc-modal.save-as-modal {
-  max-width: 80svw;
+  max-width: 80dvw;
   border: none;
   overflow: hidden;
 
@@ -186,7 +186,7 @@ onBeforeUnmount(() => {
     padding: 0;
 
     &-message {
-      height: 60svh;
+      height: 60dvh;
       margin: 0;
     }
   }

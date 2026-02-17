@@ -75,6 +75,6 @@ const spacesRoute = createLocationSpaces('files-spaces-projects')
 </script>
 <style>
 #files-list-not-found-message {
-  height: 75svh;
+  height: 75dvh;
 }
 </style>

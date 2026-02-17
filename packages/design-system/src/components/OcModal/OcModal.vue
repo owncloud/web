@@ -326,7 +326,7 @@ const iconName = computed(() => {
   border: 1px solid var(--oc-color-input-border);
   border-radius: 15px;
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
-  max-height: 90svh;
+  max-height: 90dvh;
   max-width: 500px;
   overflow: auto;
   width: 100%;
