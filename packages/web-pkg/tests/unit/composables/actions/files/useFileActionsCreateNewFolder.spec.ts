@@ -134,7 +134,8 @@ function getWrapper({
         id: '1',
         type: 'folder',
         isReceivedShare: vi.fn(),
-        path: '/'
+        path: '/',
+        spaceId: '1'
       } as FolderResource)
     }
     return Promise.reject('error')

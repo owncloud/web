@@ -203,6 +203,7 @@ export function buildSpace(
     members: members || {},
     spaceImageData,
     spaceReadmeData,
+    spaceId: data.id,
     canUpload: function ({ user }: { user?: User } = {}): boolean {
       if (isPersonalSpaceResource(this) && this.isOwner(user)) {
         return true

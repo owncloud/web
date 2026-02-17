@@ -11,7 +11,8 @@ import { unref } from 'vue'
 
 const currentFolder = {
   id: '1',
-  path: '/folder'
+  path: '/folder',
+  spaceId: '1'
 }
 
 describe('rename', () => {
@@ -124,7 +125,12 @@ describe('rename', () => {
     it('should call the rename action on a resource in the file list', () => {
       getWrapper({
         setup: async ({ renameResource }, { space }) => {
-          const resource = { id: '2', path: '/folder', webDavPath: '/files/admin/folder' }
+          const resource = {
+            id: '2',
+            path: '/folder',
+            webDavPath: '/files/admin/folder',
+            spaceId: '1'
+          }
           await renameResource(space, resource, 'new name')
 
           const { upsertResource } = useResourcesStore()

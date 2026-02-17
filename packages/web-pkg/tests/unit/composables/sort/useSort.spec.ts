@@ -33,15 +33,23 @@ describe('useSort', () => {
 
   describe('sorting resources', () => {
     const resources: Resource[] = [
-      { id: '1', name: 'c.png', path: '', webDavPath: '', mdate: '2' },
-      { id: '2', name: 'Dir4', path: '', webDavPath: '', mdate: '4', type: 'folder' },
-      { id: '3', name: 'a.png', path: '', webDavPath: '', mdate: '3' },
-      { id: '4', name: 'A.png', path: '', webDavPath: '', mdate: '6' },
-      { id: '5', name: 'dir2', path: '', webDavPath: '', mdate: '7', type: 'folder' },
-      { id: '6', name: 'b.png', path: '', webDavPath: '', mdate: '1' },
-      { id: '7', name: 'Dir1', path: '', webDavPath: '', mdate: '5', type: 'folder' },
-      { id: '8', name: 'dir11', path: '', webDavPath: '', mdate: '8', type: 'folder' },
-      { id: '9', name: 'dir3', path: '', webDavPath: '', mdate: '9', type: 'folder' }
+      { id: '1', name: 'c.png', path: '', webDavPath: '', mdate: '2', spaceId: '1' },
+      { id: '2', name: 'Dir4', path: '', webDavPath: '', mdate: '4', type: 'folder', spaceId: '1' },
+      { id: '3', name: 'a.png', path: '', webDavPath: '', mdate: '3', spaceId: '1' },
+      { id: '4', name: 'A.png', path: '', webDavPath: '', mdate: '6', spaceId: '1' },
+      { id: '5', name: 'dir2', path: '', webDavPath: '', mdate: '7', type: 'folder', spaceId: '1' },
+      { id: '6', name: 'b.png', path: '', webDavPath: '', mdate: '1', spaceId: '1' },
+      { id: '7', name: 'Dir1', path: '', webDavPath: '', mdate: '5', type: 'folder', spaceId: '1' },
+      {
+        id: '8',
+        name: 'dir11',
+        path: '',
+        webDavPath: '',
+        mdate: '8',
+        type: 'folder',
+        spaceId: '1'
+      },
+      { id: '9', name: 'dir3', path: '', webDavPath: '', mdate: '9', type: 'folder', spaceId: '1' }
     ]
 
     it('sorts resources by name', () => {

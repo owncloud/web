@@ -83,6 +83,12 @@ export interface Resource {
    */
   signatureAuth?: SignatureAuth
 
+  /**
+   * The UUID of the space this resource belongs to.
+   * Within trashbin, the value is an empty string.
+   */
+  spaceId: string
+
   canCreate?(): boolean
   canUpload?({ user }: { user?: User }): boolean
   canDownload?(): boolean

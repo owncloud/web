@@ -35,7 +35,8 @@ const testItem = {
   icon: 'file',
   name: 'lorem.txt',
   path: '/lorem.txt',
-  size: '12220'
+  size: '12220',
+  spaceId: '1'
 } as Resource
 
 describe('QuickActions', () => {

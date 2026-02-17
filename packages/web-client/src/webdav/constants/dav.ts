@@ -109,7 +109,8 @@ const DavPropertyMapping = {
   SignatureAuth: {
     value: 'signature-auth',
     type: null as Record<'signature' | 'expiration', string>
-  }
+  },
+  SpaceId: defString('spaceid' as const)
 } as const satisfies Record<string, M<unknown, unknown>>
 
 type DavPropertyMappingType = typeof DavPropertyMapping
@@ -152,7 +153,8 @@ export abstract class DavProperties {
     DavProperty.Audio,
     DavProperty.Location,
     DavProperty.Image,
-    DavProperty.Photo
+    DavProperty.Photo,
+    DavProperty.SpaceId
   ]
 
   static readonly PublicLink: DavPropertyValue[] = DavProperties.Default.concat([

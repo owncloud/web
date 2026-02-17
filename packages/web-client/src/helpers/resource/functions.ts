@@ -107,7 +107,13 @@ export function buildResource(
     resourcePath = `/${resourcePath}`
   }
 
-  const extension = extractExtensionFromFile({ ...resource, id, name, path: resourcePath })
+  const extension = extractExtensionFromFile({
+    ...resource,
+    id,
+    name,
+    path: resourcePath,
+    spaceId: resource.props[DavProperty.SpaceId]
+  })
 
   const lock = resource.props[DavProperty.LockDiscovery]
   let activeLock: { [DavProperty.LockOwner]?: string; [DavProperty.LockTime]?: string }
@@ -174,6 +180,7 @@ export function buildResource(
     image: convertObjectToCamelCaseKeys(resource.props[DavProperty.Image]),
     photo: convertObjectToCamelCaseKeys(resource.props[DavProperty.Photo]),
     extraProps,
+    spaceId: resource.props[DavProperty.SpaceId],
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
@@ -257,6 +264,7 @@ export function buildDeletedResource(resource: WebDavResponseResource): TrashRes
     id,
     parentFolderId: resource.props[DavProperty.FileParent],
     webDavPath: '',
+    spaceId: '',
     canUpload: () => false,
     canDownload: () => false,
     canBeDeleted: () => {

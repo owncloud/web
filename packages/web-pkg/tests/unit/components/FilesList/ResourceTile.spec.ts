@@ -21,6 +21,7 @@ const getSpaceMock = (props = {}) => ({
   type: 'space',
   isFolder: true,
   disabled: false,
+  spaceId: '1',
   getDriveAliasAndItem: () => '1',
   ...props
 })

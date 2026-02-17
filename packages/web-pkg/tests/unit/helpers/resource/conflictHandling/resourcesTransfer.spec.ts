@@ -27,12 +27,14 @@ describe('resourcesTransfer', () => {
         id: 'a',
         name: 'a',
         path: '/a',
-        type: 'folder'
+        type: 'folder',
+        spaceId: '1'
       },
       {
         id: 'b',
         name: 'b',
-        path: '/b'
+        path: '/b',
+        spaceId: '1'
       }
     ]
     const spaceOptions = {
@@ -43,7 +45,8 @@ describe('resourcesTransfer', () => {
     targetFolder = {
       id: 'target',
       path: 'target',
-      webDavPath: '/target'
+      webDavPath: '/target',
+      spaceId: '1'
     }
   })
   it.each([
@@ -112,7 +115,8 @@ describe('resourcesTransfer', () => {
         id: 'a',
         path: 'target/a',
         webDavPath: '/target/a',
-        name: '/target/a'
+        name: '/target/a',
+        spaceId: '1'
       }
     ]
     const resourcesTransfer = new ResourceTransfer(
@@ -138,7 +142,8 @@ describe('resourcesTransfer', () => {
         id: 'a',
         path: 'target/a',
         webDavPath: '/target/a',
-        name: '/target/a'
+        name: '/target/a',
+        spaceId: '1'
       }
     ]
     const resourcesTransfer = new ResourceTransfer(

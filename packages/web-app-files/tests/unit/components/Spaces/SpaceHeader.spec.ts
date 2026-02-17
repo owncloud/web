@@ -86,7 +86,11 @@ function getWrapper({ space = {} as SpaceResource, isSideBarOpen = false, isMobi
   const mocks = defaultComponentMocks()
   mocks.$previewService.loadPreview.mockResolvedValue('blob:image')
   mocks.$clientService.webdav.getFileContents.mockResolvedValue({ body: 'lorem body' })
-  mocks.$clientService.webdav.getFileInfo.mockResolvedValue({ id: '1', path: 'lorem/path' })
+  mocks.$clientService.webdav.getFileInfo.mockResolvedValue({
+    id: '1',
+    path: 'lorem/path',
+    spaceId: '1'
+  })
   vi.mocked(buildSpaceImageResource).mockReturnValue(mock<Resource>())
 
   return mount(SpaceHeader, {

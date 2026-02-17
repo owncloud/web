@@ -72,7 +72,7 @@ export type OcUppyMeta = {
   isFolder: boolean
 }
 export type OcUppyBody = Body
-export type OcUppyFile = UppyFile<OcUppyMeta, OcUppyBody> & { isFolder?: boolean }
+export type OcUppyFile = UppyFile<OcUppyMeta, OcUppyBody> & { isFolder?: boolean; spaceId: string }
 type OcUppyPlugin = typeof BasePlugin<any, OcUppyMeta, OcUppyBody>
 export type OcMinimalUppyFile = MinimalRequiredUppyFile<OcUppyMeta, OcUppyBody>
 
@@ -94,7 +94,7 @@ export class UppyService {
         if (file.id in files) {
           file.meta.retry = true
         }
-        file.meta.relativePath = this.getRelativeFilePath(file)
+        file.meta.relativePath = this.getRelativeFilePath({ ...file, spaceId: file.meta.spaceId })
         // id needs to be generated after the relative path has been set.
         file.id = generateFileID(file, this.uppy.getID())
         return file
