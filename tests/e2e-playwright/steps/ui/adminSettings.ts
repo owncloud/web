@@ -161,3 +161,31 @@ export async function userChangesGroup({
     action
   })
 }
+
+export async function userNavigatesToUserManagementPage({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationAdminSettings.page.Users({ page })
+  await pageObject.navigate()
+}
+
+export async function userChangesUserQuota({
+  actorsEnvironment,
+  stepUser,
+  key,
+  value
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.changeQuota({ key, value, action: 'context-menu' })
+}
