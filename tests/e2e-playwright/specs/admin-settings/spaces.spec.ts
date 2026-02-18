@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -67,13 +67,11 @@ test.describe('spaces management', () => {
       stepUser: 'Alice',
       spaces: [{ name: 'team B', id: 'team.b' }]
     })
-    expect(
-      await ui.userShouldSeeSpaces({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        expectedSpaceIds: ['team.a', 'team.b']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeSpaces({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      expectedSpaceIds: ['team.a', 'team.b']
+    })
     await api.userHasDeletedProjectSpace({
       usersEnvironment,
       spacesEnvironment,
@@ -112,19 +110,19 @@ test.describe('spaces management', () => {
       stepUser: 'Alice',
       key: 'team.a',
       attribute: 'name',
-      value: 'team A updated'
+      value: 'developer team'
     })
     await ui.userUpdatesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
-      key: 'team.b',
+      key: 'team.a',
       attribute: 'subtitle',
-      value: 'Developer team-subtitle'
+      value: 'developer team-subtitle'
     })
     await ui.userUpdatesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
-      key: 'team.b',
+      key: 'team.a',
       attribute: 'quota',
       value: '50'
     })
@@ -138,13 +136,11 @@ test.describe('spaces management', () => {
       stepUser: 'Alice',
       spaceId: 'team.a'
     })
-    expect(
-      await ui.userShouldSeeSpaces({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        expectedSpaceIds: ['team.a', 'team.b']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeSpaces({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      expectedSpaceIds: ['team.a']
+    })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Brian', name: 'admin-settings' })
     await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Brian' })
@@ -158,13 +154,11 @@ test.describe('spaces management', () => {
       stepUser: 'Brian',
       spaceId: 'team.b'
     })
-    expect(
-      await ui.userShouldSeeSpaces({
-        actorsEnvironment,
-        stepUser: 'Brian',
-        expectedSpaceIds: ['team.b']
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotSeeSpaces({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      expectedSpaceIds: ['team.b']
+    })
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
     await api.userHasDeletedProjectSpace({
       usersEnvironment,
@@ -222,13 +216,11 @@ test.describe('spaces management', () => {
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
     })
-    expect(
-      await ui.userShouldSeeSpaces({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        expectedSpaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotSeeSpaces({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      expectedSpaceIds: ['team.a', 'team.b', 'team.c', 'team.d']
+    })
   })
 
   test('list members via sidebar', async () => {
@@ -336,13 +328,11 @@ test.describe('spaces management', () => {
       stepUser: 'Alice',
       spaceIds: ['team.a', 'team.b']
     })
-    expect(
-      await ui.userShouldSeeSpaces({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        expectedSpaceIds: ['team.a', 'team.b']
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotSeeSpaces({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      expectedSpaceIds: ['team.a', 'team.b']
+    })
     await api.userHasDeletedProjectSpace({
       usersEnvironment,
       spacesEnvironment,
