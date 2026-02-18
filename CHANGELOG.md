@@ -8,11 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Prevent duplicate call for password protected public links: [#13363](https://github.com/owncloud/web/issues/13363)
 * Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
 * Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
 
 Details
 -------
+
+* Bugfix - Prevent duplicate call for password protected public links: [#13363](https://github.com/owncloud/web/issues/13363)
+
+   We've fixed an issue where the password protected public link was being called
+   twice.
+
+   https://github.com/owncloud/web/issues/13363
+   https://github.com/owncloud/web/pull/13409
 
 * Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
 
