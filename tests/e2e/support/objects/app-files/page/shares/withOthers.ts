@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test'
+import { a11y } from '../../..'
 
 const sharesNavSelector = '//a[@data-nav-name="files-shares"]'
 
@@ -11,6 +12,16 @@ export class WithOthers {
 
   async navigate(): Promise<void> {
     await this.#page.locator(sharesNavSelector).click()
+    await a11y.Accessibility.assertNoSevereA11yViolations(
+      this.#page,
+      ['files', 'sidebarNavigationMenu'],
+      'files view and sidebar after navigating to shares section'
+    )
     await this.#page.getByText('Shared with others').click()
+    await a11y.Accessibility.assertNoSevereA11yViolations(
+      this.#page,
+      ['files'],
+      'files view after navigating to shared with others'
+    )
   }
 }

@@ -65,6 +65,18 @@ export async function navigateToSharedWithMePage({
   await pageObject.navigate()
 }
 
+export async function userNavigatesToSharedWithOthersPage({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.shares.WithOthers({ page })
+  await pageObject.navigate()
+}
+
 export async function updateShareeRole({
   usersEnvironment,
   actorsEnvironment,
