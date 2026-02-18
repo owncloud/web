@@ -136,14 +136,14 @@ test.describe('share', () => {
     await ui.userDisablesSyncForShares({
       actorsEnvironment,
       stepUser: 'Brian',
-      resources: ['folder_to_shared', 'folder_to_shared_2']
+      shares: ['folder_to_shared', 'folder_to_shared_2']
     })
     // Then "Brian" should not see a sync status for the folder "folder_to_shared"
     // And "Brian" should not see a sync status for the folder "folder_to_shared_2"
-    await ui.shareShouldNotHaveSyncStatus({
+    await ui.sharesShouldNotHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
-      resources: ['folder_to_shared', 'folder_to_shared_2']
+      shares: ['folder_to_shared', 'folder_to_shared_2']
     })
     // When "Brian" enables the sync for the following share using the context menu
     //   | name               |
@@ -152,16 +152,15 @@ test.describe('share', () => {
     await ui.userEnablesSyncForShares({
       actorsEnvironment,
       stepUser: 'Brian',
-      resources: ['folder_to_shared', 'folder_to_shared_2']
+      shares: ['folder_to_shared', 'folder_to_shared_2']
     })
 
     // Then "Brian" should see a sync status for the folder "folder_to_shared"
     // And "Brian" should see a sync status for the folder "folder_to_shared_2"
-
-    await ui.shareShouldHaveSyncStatus({
+    await ui.sharesShouldHaveSyncStatus({
       actorsEnvironment,
       stepUser: 'Brian',
-      resources: ['folder_to_shared', 'folder_to_shared_2']
+      shares: ['folder_to_shared', 'folder_to_shared_2']
     })
 
     // When "Brian" renames the following resource
@@ -190,7 +189,7 @@ test.describe('share', () => {
     // When "Brian" deletes the following resources using the sidebar panel
     //   | resource      | from               |
     //   | lorem-big.txt | folder_to_shared_2 |
-    await ui.deleteResources({
+    await ui.userDeletesResources({
       actorsEnvironment,
       stepUser: 'Brian',
       actionType: 'SIDEBAR_PANEL',
@@ -215,7 +214,7 @@ test.describe('share', () => {
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
-      resources: ['simple.pdf'],
+      file: 'simple.pdf',
       to: 'folder_to_shared'
     })
     // And "Alice" removes following sharee
@@ -233,7 +232,7 @@ test.describe('share', () => {
     //   | resource         | from             |
     //   | lorem_new.txt    | folder_to_shared |
     //   | folder_to_shared |                  |
-    await ui.deleteResources({
+    await ui.userDeletesResources({
       actorsEnvironment,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',

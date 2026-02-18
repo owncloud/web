@@ -277,64 +277,64 @@ export async function userShouldNotBeAbleToManageShareOfFile({
 export async function userDisablesSyncForShares({
   actorsEnvironment,
   stepUser,
-  resources
+  shares
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resources: string[]
+  shares: string[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
-  for (const resource of resources) {
-    await shareObject.disableSync({ resource })
+  for (const share of shares) {
+    await shareObject.disableSync({ resource: share })
   }
 }
 
 export async function userEnablesSyncForShares({
   actorsEnvironment,
   stepUser,
-  resources
+  shares
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resources: string[]
+  shares: string[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
-  for (const resource of resources) {
-    await shareObject.enableSync({ resource, via: 'CONTEXT_MENU' })
+  for (const share of shares) {
+    await shareObject.enableSync({ resource: share, via: 'CONTEXT_MENU' })
   }
 }
 
-export async function shareShouldHaveSyncStatus({
+export async function sharesShouldHaveSyncStatus({
   actorsEnvironment,
   stepUser,
-  resources
+  shares
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resources: string[]
+  shares: string[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
-  for (const resource of resources) {
-    expect(await shareObject.resourceIsSynced(resource)).toBe(true)
+  for (const share of shares) {
+    expect(await shareObject.resourceIsSynced(share)).toBe(true)
   }
 }
 
-export async function shareShouldNotHaveSyncStatus({
+export async function sharesShouldNotHaveSyncStatus({
   actorsEnvironment,
   stepUser,
-  resources
+  shares
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resources: string[]
+  shares: string[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
-  for (const resource of resources) {
-    expect(await shareObject.resourceIsSynced(resource)).toBe(false)
+  for (const share of shares) {
+    expect(await shareObject.resourceIsSynced(share)).toBe(false)
   }
 }
 

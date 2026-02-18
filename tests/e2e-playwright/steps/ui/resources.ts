@@ -414,7 +414,7 @@ export async function userClosesFileViewer({
 // When "Brian" deletes the following resources using the sidebar panel
 //   | resource      | from               |
 //   | lorem-big.txt | folder_to_shared_2 |
-export async function deleteResources({
+export async function userDeletesResources({
   actorsEnvironment,
   stepUser,
   actionType = 'SIDEBAR_PANEL',
@@ -761,48 +761,24 @@ export async function userRenamesResource({
   await resourceObject.rename({ resource, newName: newResourceName })
 }
 
-export async function userDeletesResource({
-  actorsEnvironment,
-  stepUser,
-  resource,
-  from,
-  actionType
-}: {
-  actorsEnvironment: ActorsEnvironment
-  stepUser: string
-  resource: string
-  from: string
-  actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
-}): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.delete({
-    folder: from,
-    resourcesWithInfo: [{ name: resource }],
-    via: actionType
-  })
-}
-
 export async function shouldNotSeeVersionPanelForFiles({
   actorsEnvironment,
   filesEnvironment,
   stepUser,
-  resources,
+  file,
   to
 }: {
   actorsEnvironment: ActorsEnvironment
   filesEnvironment: FilesEnvironment
   stepUser: string
-  resources: string[]
+  file: string
   to: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  for (const resource of resources) {
-    const fileInfo = filesEnvironment.getFile({ name: resource })
-    await resourceObject.checkThatFileVersionPanelIsNotAvailable({
-      folder: to,
-      files: [fileInfo]
-    })
-  }
+  const fileInfo = filesEnvironment.getFile({ name: file })
+  await resourceObject.checkThatFileVersionPanelIsNotAvailable({
+    folder: to,
+    files: [fileInfo]
+  })
 }
