@@ -172,8 +172,8 @@ body {
 
 #web {
   background-color: var(--oc-color-swatch-brand-default);
-  height: calc(100vh - var(--web-runtime-maintenance-banner-height));
-  max-height: 100vh;
+  height: calc(100dvh - var(--web-runtime-maintenance-banner-height));
+  max-height: 100dvh;
   overflow-y: hidden;
 
   .mark-highlight {

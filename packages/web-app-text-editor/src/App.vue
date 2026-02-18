@@ -37,7 +37,7 @@ defineEmits<Emits>()
   padding: 18px 25px;
 
   //Fixes in readonly mode vertical scrolling is not available
-  height: calc(100vh - 52px);
+  height: calc(100dvh - 52px);
   overflow: auto;
 }
 

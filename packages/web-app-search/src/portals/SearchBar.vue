@@ -737,7 +737,7 @@ onBeforeUnmount(() => {
       right: 0;
       margin: 0 auto;
       top: 0;
-      max-width: 95vw !important;
+      max-width: 95dvw !important;
       z-index: 9;
 
       .oc-search-input-icon {
@@ -759,7 +759,7 @@ onBeforeUnmount(() => {
     width: 100%;
     max-width: 450px;
     overflow-y: auto;
-    max-height: calc(100vh - 60px);
+    max-height: calc(100dvh - 60px);
     text-decoration: none;
 
     // Prevent all elements inside dropdown from being focusable via tab
@@ -790,7 +790,7 @@ onBeforeUnmount(() => {
     }
 
     @media (max-width: 639px) {
-      max-width: 93vw !important;
+      max-width: 93dvw !important;
     }
 
     ul {
