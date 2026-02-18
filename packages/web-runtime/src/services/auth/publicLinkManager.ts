@@ -106,7 +106,8 @@ export class PublicLinkManager {
       publicLinkToken: token,
       publicLinkPassword: password,
       publicLinkContextReady: true,
-      publicLinkType: this.getType(token)
+      publicLinkType: this.getType(token),
+      publicLinkPasswordRequired: this.isPasswordRequired(token)
     })
   }
 
