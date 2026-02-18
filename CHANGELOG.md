@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Prevent duplicate call for password protected public links: [#13363](https://github.com/owncloud/web/issues/13363)
+* Bugfix - Use dynamic viewport units (dvh/dvw) instead of viewport units (vh/vw): [#13578](https://github.com/owncloud/web/pull/13578)
 * Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
 * Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
 
@@ -22,6 +23,14 @@ Details
 
    https://github.com/owncloud/web/issues/13363
    https://github.com/owncloud/web/pull/13409
+
+* Bugfix - Use dynamic viewport units (dvh/dvw) instead of viewport units (vh/vw): [#13578](https://github.com/owncloud/web/pull/13578)
+
+   We have updated the CSS to use dynamic viewport units (dvh/dvw) instead of
+   viewport units (vh/vw) for better responsiveness on mobile devices, especially
+   when the virtual keyboard appears.
+
+   https://github.com/owncloud/web/pull/13578
 
 * Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
 
