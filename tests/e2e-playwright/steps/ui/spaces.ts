@@ -3,6 +3,7 @@ import { objects } from '../../../e2e/support'
 import { Space } from '../../../e2e/support/types'
 import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
 import { expect } from '@playwright/test'
+import { substitute } from '../../../e2e/support/utils'
 
 export async function navigateToPersonalSpacePage({
   actorsEnvironment,
@@ -271,4 +272,21 @@ export async function userChangesMemberRole({
     role: roleId
   }
   await spacesObject.changeRoles({ users: [member] })
+}
+
+export async function userShouldSeeActivitiesOfSpace({
+  actorsEnvironment,
+  stepUser,
+  activities
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  activities: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+
+  for (const activity of activities) {
+    await spacesObject.checkSpaceActivity({ activity: substitute(activity) })
+  }
 }

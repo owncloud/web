@@ -18,6 +18,7 @@ import { Public } from '../../../e2e/support/objects/app-files/page'
 import { Resource } from '../../../e2e/support/objects/app-files/resource'
 import { config } from '../../../e2e/config'
 import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
+import { substitute } from '../../../e2e/support/utils'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -890,6 +891,43 @@ export async function userRestoresResourceVersion({
       folder,
       files: fileInfo[folder],
       openDetailsPanel: fileInfo[folder]['openDetailsPanel']
+    })
+  }
+}
+
+export async function userShouldNotSeeAnyActivityOfResources({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  for (const resource of resources) {
+    await resourceObject.checkEmptyActivity({ resource })
+  }
+}
+
+export async function userShouldSeeActivityOfResources({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: { resource: string; activity: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  for (const info of resources) {
+    await resourceObject.checkActivity({
+      resource: info.resource,
+      activity: substitute(info.activity)
     })
   }
 }
