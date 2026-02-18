@@ -215,7 +215,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // And "Anonymous" opens the public link "Unnamed link"
-    await ui.openPublicLink({
+    await ui.userOpensPublicLink({
       actorsEnvironment,
       linksEnvironment,
       stepUser: 'Anonymous',

@@ -8,7 +8,7 @@ import { editor } from '../../../e2e/support/objects/app-files/utils'
 import { substitute } from '../../../e2e/support/utils'
 import { expect } from '@playwright/test'
 
-export async function openPublicLink({
+export async function userOpensPublicLink({
   actorsEnvironment,
   linksEnvironment,
   stepUser,

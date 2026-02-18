@@ -67,7 +67,7 @@ test.describe('internal link share', () => {
   })
 
   test('opening a link with internal role', async () => {
-    await ui.openPublicLink({
+    await ui.userOpensPublicLink({
       actorsEnvironment,
       linksEnvironment,
       stepUser: 'Brian',
