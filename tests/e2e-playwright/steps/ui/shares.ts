@@ -357,3 +357,15 @@ export async function userShouldNotSeeShare({
   )
   expect(isAcceptedSharePresent).toBe(false)
 }
+
+export async function userEnablesSyncForAllShares({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  await shareObject.syncAll()
+}
