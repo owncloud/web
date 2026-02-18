@@ -44,3 +44,43 @@ export async function userClearsFilter({
   const searchObject = new objects.applicationFiles.Search({ page })
   await searchObject.clearFilter({ filter })
 }
+
+export async function userEnablesTitleOnlySearch({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const searchObject = new objects.applicationFiles.Search({ page })
+  await searchObject.toggleSearchTitleOnly({ enableOrDisable: 'enable' })
+}
+
+export async function userFiltersSearchByMediaType({
+  actorsEnvironment,
+  stepUser,
+  mediaType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  mediaType: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const searchObject = new objects.applicationFiles.Search({ page })
+  await searchObject.selectMediaTypeFilter({ mediaType })
+}
+
+export async function userFiltersSearchByLastModifiedDate({
+  actorsEnvironment,
+  stepUser,
+  lastModified
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  lastModified: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const searchObject = new objects.applicationFiles.Search({ page })
+  await searchObject.selectlastModifiedFilter({ lastModified })
+}
