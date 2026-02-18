@@ -273,17 +273,32 @@ export async function userShouldSeeSpaces({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   expectedSpaceIds: string[]
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const actualList = await spacesObject.getDisplayedSpaces()
   for (const expectedSpaceId of expectedSpaceIds) {
     const space = spacesObject.getSpace({ key: expectedSpaceId })
-    if (!actualList.includes(space.id)) {
-      return false
-    }
+    expect(actualList).toContain(space.id)
   }
-  return true
+}
+
+export async function userShouldNotSeeSpaces({
+  actorsEnvironment,
+  stepUser,
+  expectedSpaceIds
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedSpaceIds: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const actualList = await spacesObject.getDisplayedSpaces()
+  for (const expectedSpaceId of expectedSpaceIds) {
+    const space = spacesObject.getSpace({ key: expectedSpaceId })
+    expect(actualList).not.toContain(space.id)
+  }
 }
 
 export async function userDisablesSpaceUsingContextMenu({
@@ -395,7 +410,7 @@ export async function userUpdatesSpaceUsingContextMenu({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   key: string
-  attribute: string
+  attribute: 'name' | 'subtitle' | 'quota'
   value: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
