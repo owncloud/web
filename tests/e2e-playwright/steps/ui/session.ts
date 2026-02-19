@@ -94,3 +94,14 @@ export async function userShouldGetSSEEvent({
   const user = usersEnvironment.getCreatedUser({ key: stepUser })
   await waitForSSEEvent(user, event)
 }
+
+export async function userClosesTheCurrentTab({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const actor = actorsEnvironment.getActor({ key: stepUser })
+  await actor.closeCurrentTab()
+}
