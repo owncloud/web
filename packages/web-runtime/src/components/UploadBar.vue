@@ -29,7 +29,7 @@
     >
       <div v-if="runningUploads" class="oc-flex oc-flex-middle">
         <oc-icon v-if="uploadsPaused" name="pause" size="small" class="oc-mr-s" />
-        <oc-spinner v-else size="small" class="oc-mr-s" />
+        <oc-spinner v-else size="small" class="oc-mr-s" :aria-label="$gettext('Uploading')" />
         <span class="oc-text-small oc-text-muted" v-text="remainingTime" />
       </div>
       <div
@@ -97,6 +97,7 @@
         :max="100"
         size="small"
         :indeterminate="!filesInProgressCount"
+        :aria-label="$gettext('Upload progress')"
       />
     </div>
     <div
