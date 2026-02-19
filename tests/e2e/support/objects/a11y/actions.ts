@@ -55,7 +55,8 @@ export const selectors = {
   editPanel: '.sidebar-panel__body-EditPanel:visible',
   breadcrumb: '#files-breadcrumb',
   previewControlBar: '.preview-controls-action-bar',
-  uploadInfoSnackBar: '#upload-info-snackbar'
+  uploadInfoSnackBar: '#upload-info-snackbar',
+  folderViewModal: '.folder-view-modal'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
