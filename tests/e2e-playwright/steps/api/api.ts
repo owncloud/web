@@ -12,7 +12,7 @@ import fs from 'fs'
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 import { join } from 'path'
 
-export async function usersHasBeenCreated({
+export async function usersHaveBeenCreated({
   usersEnvironment,
   stepUser,
   users
@@ -41,14 +41,15 @@ export async function deleteUser({
   targetUser: string
 }): Promise<void> {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  // Try to get the target user from createdUserStore first (for dynamically created users),
-  // fall back to userStore if not found (for predefined users)
+
   let user
   try {
-    user = usersEnvironment.getCreatedUser({ key: targetUser })
-  } catch {
     user = usersEnvironment.getUser({ key: targetUser })
+  } catch {
+    // If not found in userStore, try createdUserStore
+    user = usersEnvironment.getCreatedUser({ key: targetUser })
   }
+
   await api.provision.deleteUser({ user, admin })
 }
 
@@ -269,17 +270,17 @@ export async function createFilesInsideSpaceBySpaceName({
   }
 }
 
-export async function addUserToGroup({
+export async function usersHaveBeenAddedToGroup({
   usersEnvironment,
   stepUser,
-  userToAdd
+  usersToAdd
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  userToAdd: { user: string; group: string }[]
+  usersToAdd: { user: string; group: string }[]
 }) {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  for (const info of userToAdd) {
+  for (const info of usersToAdd) {
     const group = usersEnvironment.getGroup({ key: info.group })
     const user = usersEnvironment.getUser({ key: info.user })
     await api.graph.addUserToGroup({ user, group, admin })
@@ -410,18 +411,4 @@ export async function userHasDisabledAutoAcceptingShare({
 }): Promise<void> {
   const user = usersEnvironment.getUser({ key: stepUser })
   await api.settings.configureAutoAcceptShare({ user, state: false })
-}
-
-export const cleanUpUser = async (adminUser: User) => {
-  if (config.predefinedUsers) {
-    return
-  }
-  const usersEnvironment = new UsersEnvironment()
-  const requests: Promise<void>[] = []
-  store.createdUserStore.forEach((user) => {
-    requests.push(deleteUser({ usersEnvironment, stepUser: 'admin', targetUser: user.id }))
-  })
-
-  await Promise.all(requests)
-  store.createdUserStore.clear()
 }

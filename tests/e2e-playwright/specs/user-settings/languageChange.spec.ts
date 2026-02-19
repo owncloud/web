@@ -32,7 +32,7 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
     // Given "Admin" creates following users using API
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']

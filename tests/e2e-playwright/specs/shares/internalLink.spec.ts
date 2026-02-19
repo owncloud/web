@@ -32,7 +32,7 @@ test.describe('internal link share', () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
 
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']

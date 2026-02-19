@@ -23,7 +23,7 @@ test.describe('GDPR export', { tag: '@predefined-users' }, () => {
       browser: browser
     })
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']

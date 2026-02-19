@@ -32,7 +32,7 @@ test.describe('Search in the project space', () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
 
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']

@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
 
@@ -84,7 +85,7 @@ export async function userForbidsLoginForUserUsingSidebarPanel({
   await usersObject.forbidLogin({ key, action: 'context-menu' })
 }
 
-export async function userChangesQuotaForUser({
+export async function userChangesQuotaForUserUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   key,
@@ -172,17 +173,34 @@ export async function usersShouldBeVisible({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   expectedUsers: string[]
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
   const displayedUsers = await usersObject.getDisplayedUsers()
 
   for (const user of expectedUsers) {
     const userId = usersObject.getUUID({ key: user })
-    if (!displayedUsers.includes(userId)) return false
+    expect(displayedUsers).toContain(userId)
   }
+}
 
-  return true
+export async function usersShouldNotBeVisible({
+  actorsEnvironment,
+  stepUser,
+  expectedUsers
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedUsers: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const displayedUsers = await usersObject.getDisplayedUsers()
+
+  for (const user of expectedUsers) {
+    const userId = usersObject.getUUID({ key: user })
+    expect(displayedUsers).not.toContain(userId)
+  }
 }
 
 export async function userChangesUserNameUsingSidebarPanel({
@@ -303,7 +321,7 @@ export async function userDeletesUsersUsingContextMenu({
   }
 }
 
-export async function userShouldHaveInfo({
+export async function userShouldHaveSelfInfo({
   actorsEnvironment,
   stepUser,
   info
@@ -311,16 +329,14 @@ export async function userShouldHaveInfo({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   info: { key: string; value: string }[]
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
 
   for (const { key, value } of info) {
     const actual = await accountObject.getUserInfo(key)
-    if (actual !== value) return false
+    expect(actual).toBe(value)
   }
-
-  return true
 }
 
 export async function userCreatesUser({
@@ -378,15 +394,10 @@ export async function userShouldSeeEditPanel({
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
-  try {
-    await usersObject.waitForEditPanelToBeVisible()
-    return true
-  } catch {
-    return false
-  }
+  await usersObject.waitForEditPanelToBeVisible()
 }
 
 export async function userAddsUserToGroupsUsingSidebarPanel({

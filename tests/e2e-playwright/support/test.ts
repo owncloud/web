@@ -1,5 +1,5 @@
 import { test as base } from '@playwright/test'
-import { cleanUpGroup, cleanUpUser } from '../steps/api/api'
+import { cleanUpGroup } from '../steps/api/api'
 import { UsersEnvironment } from '../../e2e/support/environment'
 
 const usersEnvironment = new UsersEnvironment()
@@ -13,5 +13,4 @@ export const test = base.extend<{ usersEnvironment: UsersEnvironment }>({
 test.afterEach(async ({ usersEnvironment }) => {
   const admin = usersEnvironment.getUser({ key: 'Admin' })
   await cleanUpGroup(admin)
-  await cleanUpUser(admin)
 })

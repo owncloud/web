@@ -26,7 +26,7 @@ test.describe('tiles view', { tag: '@predefined-users' }, () => {
     await setAccessAndRefreshToken(usersEnvironment)
 
     // Given "Admin" creates following user using API
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
