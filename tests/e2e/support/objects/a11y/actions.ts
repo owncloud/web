@@ -45,6 +45,7 @@ export const selectors = {
   // visible tippy/popover (active)
   tippyBoxVisible: '.tippy-box[data-state="visible"]',
   logoWrapper: '.logo-wrapper',
+  appSidebarDiv: '#app-sidebar',
   fileAppBar: '#files-app-bar',
   pageNotFound: '.page-not-found',
   createGroupInput: '#create-group-input-display-name',
