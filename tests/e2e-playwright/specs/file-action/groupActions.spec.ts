@@ -32,7 +32,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | Carol |
     //   | David |
     //   | Edith |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol', 'David', 'Edith']
@@ -51,7 +51,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | Brian | sales    |
     //   | Brian | finance  |
     //   | Brian | security |
-    await api.addUserToGroup({
+    await api.usersHaveBeenAddedToGroup({
       usersEnvironment,
       stepUser: 'Admin',
       userToAdd: [

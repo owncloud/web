@@ -37,7 +37,7 @@ test.describe('Notifications', () => {
     //   | Alice |
     //   | Brian |
     //   | Carol |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol']
@@ -82,7 +82,7 @@ test.describe('Notifications', () => {
     //   | user  | group |
     //   | Alice | sales |
     //   | Brian | sales |
-    await api.addUserToGroup({
+    await api.usersHaveBeenAddedToGroup({
       usersEnvironment,
       stepUser: 'Admin',
       userToAdd: [

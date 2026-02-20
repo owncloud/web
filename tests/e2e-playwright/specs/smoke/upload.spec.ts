@@ -33,7 +33,7 @@ test.describe('internal link share', () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
+    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
 
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })

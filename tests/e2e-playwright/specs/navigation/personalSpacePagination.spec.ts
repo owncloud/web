@@ -34,7 +34,7 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
