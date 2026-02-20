@@ -1101,7 +1101,7 @@ function getSharedWithAvatarItems(resource: Resource) {
   &-edit-name,
   &-activity-indicator {
     display: inline-flex;
-    margin-left: var(--oc-space-xsmall);
+    margin-left: var(--oc-space-small);
 
     svg {
       fill: var(--oc-color-text-muted);
