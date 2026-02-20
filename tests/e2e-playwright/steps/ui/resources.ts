@@ -852,3 +852,67 @@ export async function userUploadsResourceViaDragNDrop({
   const resources = [filesEnvironment.getFile({ name: resource })]
   await resourceObject.dropUpload({ resources })
 }
+
+export async function userStartsUploadingLargeResourceFromTheTempUploadDir({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource,
+  to,
+  option
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resource: string
+  to?: string
+  option?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.startUpload({
+    to: to,
+    resources: [
+      filesEnvironment.getFile({
+        name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), resource)
+      })
+    ],
+    option: option
+  })
+}
+
+export async function userPausesUpload({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.pauseUpload()
+}
+
+export async function userCancelsUpload({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.cancelUpload()
+}
+
+export async function userResumesUpload({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.resumeUpload()
+}
