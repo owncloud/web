@@ -1053,6 +1053,10 @@ export interface RemoteItem {
      * URL that displays the resource in the browser. Read-only.
      */
     'webUrl'?: string;
+    /**
+     * The UUID of the space that contains the item.
+     */
+    'spaceId'?: string;
 }
 /**
  * This resource is used to represent a set of identities associated with various events for an item, such as created by or last modified by.

@@ -8,7 +8,8 @@ describe('useFolderLink', () => {
       path: '/my-folder',
       id: '2',
       fileId: '2',
-      storageId: '1'
+      storageId: '1',
+      spaceId: '1'
     }
     const wrapper = createWrapper()
 
@@ -26,7 +27,8 @@ describe('useFolderLink', () => {
       id: '2',
       fileId: '2',
       storageId: '1',
-      parentFolderId: '1'
+      parentFolderId: '1',
+      spaceId: '1'
     }
 
     const wrapper = createWrapper()
@@ -42,7 +44,8 @@ describe('useFolderLink', () => {
     it('should equal "Personal" if share jail is enabled', () => {
       const resource = {
         path: '/my-folder',
-        storageId: '1'
+        storageId: '1',
+        spaceId: '1'
       } as Resource
 
       const wrapper = createWrapper()
@@ -52,7 +55,8 @@ describe('useFolderLink', () => {
     it('should equal the space name if resource storage is representing a project space', () => {
       const resource = {
         path: '/my-folder',
-        storageId: '2'
+        storageId: '2',
+        spaceId: '2'
       } as Resource
 
       const wrapper = createWrapper()
@@ -64,6 +68,7 @@ describe('useFolderLink', () => {
         path: '/My share',
         remoteItemPath: '/My share',
         remoteItemId: '1',
+        spaceId: '1',
         isShareRoot: () => true
       } as Resource
 
@@ -76,7 +81,8 @@ describe('useFolderLink', () => {
         path: '/My share/test.txt',
         remoteItemPath: '/My share',
         remoteItemId: '1',
-        storageId: '1'
+        storageId: '1',
+        spaceId: '1'
       } as Resource
 
       const wrapper = createWrapper()

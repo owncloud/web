@@ -16,7 +16,8 @@ vi.mock('../../../../../src/composables/spaces/useGetMatchingSpace')
 
 const currentFolder = {
   id: '1',
-  path: '/folder'
+  path: '/folder',
+  spaceId: '1'
 }
 
 const passwordProtectedFolder = mock<Resource>({
@@ -28,7 +29,7 @@ const passwordProtectedFolder = mock<Resource>({
 describe('deleteResources', () => {
   describe('method "filesList_delete"', () => {
     it('should call the delete action on a resource in the file list', () => {
-      const filesToDelete = [{ id: '2', path: '/folder/fileToDelete.txt' }]
+      const filesToDelete = [{ id: '2', path: '/folder/fileToDelete.txt', spaceId: '1' }]
 
       getWrapper({
         currentFolder,
@@ -54,7 +55,7 @@ describe('deleteResources', () => {
     })
 
     it('should push resources into delete queue', () => {
-      const filesToDelete = [{ id: '2', path: '/folder/fileToDelete.txt' }]
+      const filesToDelete = [{ id: '2', path: '/folder/fileToDelete.txt', spaceId: '1' }]
       getWrapper({
         currentFolder,
         result: filesToDelete,
@@ -74,7 +75,8 @@ describe('deleteResources', () => {
           path: '/folder/psecFolder.psec',
           storageId: 'personal',
           extension: 'psec',
-          name: 'psecFolder.psec'
+          name: 'psecFolder.psec',
+          spaceId: '1'
         })
       ]
       getWrapper({
@@ -100,6 +102,7 @@ describe('deleteResources', () => {
       const psecFile = mock<Resource>({
         id: '2',
         path: '/folder/psecFolder.psec',
+        spaceId: '1',
         storageId: 'personal',
         extension: 'psec',
         name: 'psecFolder.psec',

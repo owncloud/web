@@ -16,7 +16,7 @@ describe('useSpaceHelpers', () => {
     it('should return the matching project space', () => {
       getWrapper({
         setup: ({ getMatchingSpace }) => {
-          const resource = mock<Resource>({ storageId: '1' })
+          const resource = mock<Resource>({ spaceId: '1' })
           expect(getMatchingSpace(resource).id).toEqual('1')
         }
       })

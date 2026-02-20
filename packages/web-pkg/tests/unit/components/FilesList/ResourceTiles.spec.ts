@@ -59,6 +59,7 @@ const spacesResources = [
 const resources = [
   {
     id: 'forest',
+    spaceId: '1',
     driveId: 'forest',
     name: 'forest.jpg',
     path: 'images/nature/forest.jpg',

@@ -45,7 +45,7 @@ describe('openWithApp', () => {
           setup: async ({ actions }) => {
             const { dispatchModal } = useModals()
             await unref(actions)[0].handler({
-              resources: [mock<Resource>({ storageId: spaceMock.id, path: '/' })],
+              resources: [mock<Resource>({ spaceId: spaceMock.id, path: '/' })],
               space: mock<SpaceResource>()
             })
             expect(dispatchModal).toHaveBeenCalled()

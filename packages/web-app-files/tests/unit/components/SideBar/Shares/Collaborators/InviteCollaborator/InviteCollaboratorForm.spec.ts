@@ -28,7 +28,8 @@ const folderMock = {
   privateLink: 'some-link',
   canShare: vi.fn(() => true),
   path: '/documents',
-  canDeny: () => false
+  canDeny: () => false,
+  spaceId: '1'
 } as Resource
 
 const spaceMock = {

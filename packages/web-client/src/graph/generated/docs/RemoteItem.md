@@ -27,6 +27,7 @@ Name | Type | Description | Notes
 **specialFolder** | [**SpecialFolder**](SpecialFolder.md) |  | [optional] [default to undefined]
 **webDavUrl** | **string** | DAV compatible URL for the item. | [optional] [default to undefined]
 **webUrl** | **string** | URL that displays the resource in the browser. Read-only. | [optional] [default to undefined]
+**spaceId** | **string** | The UUID of the space that contains the item. | [optional] [default to undefined]
 
 ## Example
 
@@ -55,6 +56,7 @@ const instance: RemoteItem = {
     specialFolder,
     webDavUrl,
     webUrl,
+    spaceId,
 };
 ```
 

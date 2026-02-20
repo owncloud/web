@@ -14,6 +14,7 @@ const activeFiles = [
   {
     id: '1',
     fileId: '1',
+    spaceId: '1',
     name: 'bear.png',
     mimeType: 'image/png',
     path: 'personal/admin/bear.png',
@@ -23,6 +24,7 @@ const activeFiles = [
   {
     id: '2',
     fileId: '2',
+    spaceId: '1',
     name: 'elephant.png',
     mimeType: 'image/png',
     path: 'personal/admin/elephant.png',
@@ -32,6 +34,7 @@ const activeFiles = [
   {
     id: '3',
     fileId: '3',
+    spaceId: '1',
     name: 'wale_sounds.flac',
     mimeType: 'audio/flac',
     path: 'personal/admin/wale_sounds.flac',
@@ -41,6 +44,7 @@ const activeFiles = [
   {
     id: '4',
     fileId: '4',
+    spaceId: '1',
     name: 'lonely_sloth_very_sad.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/lonely_sloth_very_sad.gif',
@@ -50,6 +54,7 @@ const activeFiles = [
   {
     id: '5',
     fileId: '5',
+    spaceId: '1',
     name: 'tiger_eats_plants.mp4',
     mimeType: 'video/mp4',
     path: 'personal/admin/tiger_eats_plants.mp4',
@@ -59,6 +64,7 @@ const activeFiles = [
   {
     id: '6',
     fileId: '6',
+    spaceId: '1',
     name: 'happy_hippo.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/happy_hippo.gif',
@@ -68,6 +74,7 @@ const activeFiles = [
   {
     id: '7',
     fileId: '7',
+    spaceId: '1',
     name: 'sleeping_dog.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/sleeping_dog.gif',
@@ -77,6 +84,7 @@ const activeFiles = [
   {
     id: '8',
     fileId: '8',
+    spaceId: '1',
     name: 'cat_murr_murr.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/cat_murr_murr.gif',
@@ -86,6 +94,7 @@ const activeFiles = [
   {
     id: '9',
     fileId: '9',
+    spaceId: '1',
     name: 'labrador.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/labrador.gif',

@@ -45,7 +45,7 @@ describe('SaveAsModal', () => {
           data: {
             name: 'owncloud-embed:select',
             data: {
-              resources: [mock<Resource>({ storageId: '1' })],
+              resources: [mock<Resource>({ storageId: '1', spaceId: '1' })],
               fileName: 'test with new name.txt'
             }
           }
@@ -69,7 +69,7 @@ describe('SaveAsModal', () => {
           data: {
             name: 'owncloud-embed:select',
             data: {
-              resources: [mock<Resource>({ storageId: '1' })],
+              resources: [mock<Resource>({ storageId: '1', spaceId: '1' })],
               fileName: 'test with new name.txt'
             }
           }
@@ -95,7 +95,13 @@ function getWrapper() {
       props: {
         modal: mock<Modal>(),
         content: 'some text',
-        originalResource: { id: '1', path: '/test.txt', name: 'test.txt', extension: 'txt' },
+        originalResource: {
+          id: '1',
+          path: '/test.txt',
+          name: 'test.txt',
+          extension: 'txt',
+          spaceId: '1'
+        },
         parentFolderLink: {
           name: 'files-spaces-generic',
           params: {

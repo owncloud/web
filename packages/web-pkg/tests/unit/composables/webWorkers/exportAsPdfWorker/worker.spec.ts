@@ -8,12 +8,14 @@ const destinationFolderMock = {
   id: 'destinationFolderId',
   name: 'Documents',
   path: '/Documents',
-  fileId: 'destinationFolderId'
+  fileId: 'destinationFolderId',
+  spaceId: '1'
 }
 
 const spaceMock = {
   id: 'spaceId',
-  name: 'Personal'
+  name: 'Personal',
+  spaceId: '1'
 }
 
 const dataMock = {
@@ -28,7 +30,8 @@ const createdResourceMock = {
   id: 'created-resource-id',
   name: 'test-document.pdf',
   path: '/Documents/test-document.pdf',
-  fileId: 'created-resource-id'
+  fileId: 'created-resource-id',
+  spaceId: '1'
 }
 
 vi.mock('../../../../../src/composables/webWorkers/exportAsPdfWorker/renderer', () => ({
@@ -98,8 +101,18 @@ describe('export as PDF worker', () => {
 
   it('handles file name conflicts by resolving duplicates', async () => {
     const existingResources = [
-      { name: 'test-document.pdf', id: 'existing-1', path: '/Documents/test-document.pdf' },
-      { name: 'test-document (1).pdf', id: 'existing-2', path: '/Documents/test-document (1).pdf' }
+      {
+        name: 'test-document.pdf',
+        id: 'existing-1',
+        path: '/Documents/test-document.pdf',
+        spaceId: '1'
+      },
+      {
+        name: 'test-document (1).pdf',
+        id: 'existing-2',
+        path: '/Documents/test-document (1).pdf',
+        spaceId: '1'
+      }
     ]
 
     webDavMock.listFiles.mockResolvedValue({

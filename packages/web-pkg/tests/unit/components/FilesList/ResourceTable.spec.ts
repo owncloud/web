@@ -120,6 +120,7 @@ const indicators = [
 const resourcesWithAllFields = [
   {
     id: 'forest',
+    spaceId: '1',
     driveId: 'forest',
     name: 'forest.jpg',
     path: 'images/nature/forest.jpg',
@@ -148,6 +149,7 @@ const resourcesWithAllFields = [
   },
   {
     id: 'notes',
+    spaceId: '1',
     driveId: 'notes',
     name: 'notes.txt',
     path: '/Documents/notes.txt',
@@ -174,6 +176,7 @@ const resourcesWithAllFields = [
   },
   {
     id: 'documents',
+    spaceId: '1',
     driveId: 'documents',
     name: 'Documents',
     path: '/Documents',
@@ -278,7 +281,8 @@ const processingResourcesWithAllFields = [
     getDomSelector: () => extractDomSelector('forest'),
     canDownload: () => true,
     canListVersions: () => true,
-    processing: true
+    processing: true,
+    spaceId: '1'
   },
   {
     id: 'personalnotes',
@@ -305,7 +309,8 @@ const processingResourcesWithAllFields = [
     getDomSelector: () => extractDomSelector('notes'),
     canDownload: () => true,
     canListVersions: () => true,
-    processing: true
+    processing: true,
+    spaceId: '1'
   }
 ] as IncomingShareResource[]
 

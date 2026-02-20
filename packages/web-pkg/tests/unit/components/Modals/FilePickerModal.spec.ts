@@ -34,7 +34,7 @@ describe('FilePickerModal', () => {
           data: {
             name: 'owncloud-embed:file-pick',
             data: {
-              resource: mock<Resource>({ storageId: '1' }),
+              resource: mock<Resource>({ spaceId: '1' }),
               originRoute: mock<RouteLocation>()
             }
           }
