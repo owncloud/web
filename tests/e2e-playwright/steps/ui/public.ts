@@ -146,3 +146,43 @@ export async function userIsInFileViewer({
   const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType })
   await expect(fileViewerLocator).toBeVisible()
 }
+
+export async function userTriesToUnlockPasswordProtectedFolderWithPassword({
+  actorsEnvironment,
+  stepUser,
+  password
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  password: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  password = substitute(password)
+  await pageObject.authenticate({
+    password,
+    passwordProtectedFolder: true,
+    expectToSucceed: false
+  })
+  const actualErrorMessage = await linkObject.checkErrorMessage({ passwordProtectedFolder: true })
+  expect(actualErrorMessage).toBe('Incorrect password')
+}
+
+export async function userUnlocksPasswordProtectedFolderWithPassword({
+  actorsEnvironment,
+  stepUser,
+  password
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  password: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  password = substitute(password)
+  await pageObject.authenticate({
+    password,
+    passwordProtectedFolder: true
+  })
+}

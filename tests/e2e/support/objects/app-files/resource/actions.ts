@@ -381,12 +381,12 @@ export const createPasswordProtectedFolder = async ({
   password: string
 }): Promise<void> => {
   password = substitute(password)
+  await page.locator(passwordProtectedFolderButton).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
     'create new folder modal'
   )
-  await page.locator(passwordProtectedFolderButton).click()
   await page.locator(passwordProtectedFolderNameInput).fill(resource)
   await page.locator(passwordProtectedFolderPasswordInput).fill(password)
   await Promise.all([
