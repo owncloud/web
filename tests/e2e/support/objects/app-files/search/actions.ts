@@ -29,7 +29,15 @@ export const selectTagFilter = async ({
   page: Page
 }): Promise<void> => {
   await page.locator(selectTagDropdownSelector).click()
-  await page.locator(util.format(tagFilterChipSelector, tag)).click()
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes('/dav/spaces') &&
+        resp.status() === 207 &&
+        resp.request().method() === 'REPORT'
+    ),
+    page.locator(util.format(tagFilterChipSelector, tag)).click()
+  ])
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tippyBox'],
