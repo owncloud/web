@@ -58,8 +58,8 @@
           <div class="oc-modal-body-actions-grid">
             <oc-button
               class="oc-modal-body-actions-cancel"
-              variation="passive"
-              appearance="outline"
+              variation="primary"
+              appearance="filled"
               :disabled="isLoading"
               @click="cancelModalAction"
               >{{ $gettext(buttonCancelText) }}
