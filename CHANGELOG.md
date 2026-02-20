@@ -12,6 +12,7 @@ Summary
 * Bugfix - Use dynamic viewport units (dvh/dvw) instead of viewport units (vh/vw): [#13578](https://github.com/owncloud/web/pull/13578)
 * Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
 * Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
+* Enhancement - Use spaceId: [#13577](https://github.com/owncloud/web/pull/13577)
 
 Details
 -------
@@ -50,6 +51,13 @@ Details
    the `/my/nested/path/dav/` prefix.
 
    https://github.com/owncloud/web/pull/13545
+
+* Enhancement - Use spaceId: [#13577](https://github.com/owncloud/web/pull/13577)
+
+   We now use the `spaceId` when matching the space for a resource instead of
+   manually constructed `storageId` from the resource ID.
+
+   https://github.com/owncloud/web/pull/13577
 
 Changelog for ownCloud Web [12.3.0] (2026-01-23)
 =======================================
