@@ -12,7 +12,7 @@ import fs from 'fs'
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 import { join } from 'path'
 
-export async function usersHasBeenCreated({
+export async function usersHaveBeenCreated({
   usersEnvironment,
   stepUser,
   users
@@ -136,6 +136,32 @@ export async function userHasCreatedPublicLinkOfResource({
     name: name ? name : 'Unnamed link',
     role: role,
     spaceName: space
+  })
+}
+
+export async function userHasCreatedPublicLinkOfSpace({
+  usersEnvironment,
+  stepUser,
+  space,
+  password,
+  role,
+  name
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  space: string
+  password: string
+  role?: string
+  name?: string
+}) {
+  const user = usersEnvironment.getUser({ key: stepUser })
+
+  await api.share.createSpaceLinkShare({
+    user,
+    spaceName: space,
+    password: password,
+    name: name ? name : 'Unnamed link',
+    role: role
   })
 }
 

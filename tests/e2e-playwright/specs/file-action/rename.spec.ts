@@ -36,7 +36,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     // | id    |
     // | Alice |
     // | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']

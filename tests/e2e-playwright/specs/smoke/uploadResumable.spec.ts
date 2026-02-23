@@ -33,7 +33,7 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following user using API
     // | id    |
     // | Alice |
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
+    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
   })
 
   test('Upload large resources in personal space', async () => {

@@ -40,7 +40,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -48,21 +48,19 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
     // Given "Alice" creates the following project space using API
     //   | name | id     |
     //   | team | team.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
     // And "Alice" adds the following members to the space "team" using API
     //   | user  | role     | shareType |
@@ -71,9 +69,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
       usersEnvironment,
       stepUser: 'Alice',
       space: 'team',
-      sharee: 'Brian',
-      role: 'Can view',
-      shareType: 'user'
+      sharee: [{ user: 'Brian', role: 'Can view', shareType: 'user' }]
     })
 
     // And "Alice" creates a public link of the space using API

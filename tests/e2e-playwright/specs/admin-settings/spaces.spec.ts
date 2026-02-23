@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -32,12 +32,11 @@ test.describe('spaces management', () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
+    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
   })
 
   test.afterEach(async () => {
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
     await api.userHasDeletedProjectSpace({
       usersEnvironment,
       spacesEnvironment,
@@ -82,16 +81,14 @@ test.describe('spaces management', () => {
   })
 
   test('spaces can be managed in the admin settings via the context menu', async () => {
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
+    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
     await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
-      users: [{ id: 'Alice', role: 'Space Admin' }]
-    })
-    await api.userHasAssignedRolesToUsers({
-      usersEnvironment,
-      stepUser: 'Admin',
-      users: [{ id: 'Brian', role: 'Space Admin' }]
+      users: [
+        { id: 'Alice', role: 'Space Admin' },
+        { id: 'Brian', role: 'Space Admin' }
+      ]
     })
     await api.userHasCreatedProjectSpaces({
       usersEnvironment,
@@ -108,23 +105,12 @@ test.describe('spaces management', () => {
     await ui.userUpdatesSpaceUsingContextMenu({
       actorsEnvironment,
       stepUser: 'Alice',
-      key: 'team.a',
-      attribute: 'name',
-      value: 'developer team'
-    })
-    await ui.userUpdatesSpaceUsingContextMenu({
-      actorsEnvironment,
-      stepUser: 'Alice',
-      key: 'team.a',
-      attribute: 'subtitle',
-      value: 'developer team-subtitle'
-    })
-    await ui.userUpdatesSpaceUsingContextMenu({
-      actorsEnvironment,
-      stepUser: 'Alice',
-      key: 'team.a',
-      attribute: 'quota',
-      value: '50'
+      spaceId: 'team.a',
+      updates: [
+        { attribute: 'name', value: 'developer team' },
+        { attribute: 'subtitle', value: 'developer team-subtitle' },
+        { attribute: 'quota', value: '50' }
+      ]
     })
     await ui.userDisablesSpaceUsingContextMenu({
       actorsEnvironment,
@@ -167,7 +153,6 @@ test.describe('spaces management', () => {
       id: 'team.b',
       name: 'team B'
     })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
   })
 
   test('multiple spaces can be managed at once in the admin settings via the batch actions', async () => {
@@ -224,10 +209,11 @@ test.describe('spaces management', () => {
   })
 
   test('list members via sidebar', async () => {
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Carol'] })
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['David'] })
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Edith'] })
+    await api.usersHaveBeenCreated({
+      usersEnvironment,
+      stepUser: 'Admin',
+      users: ['Brian', 'Carol', 'David', 'Edith']
+    })
     await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
@@ -269,15 +255,10 @@ test.describe('spaces management', () => {
         { user: 'Edith', role: 'Can view' }
       ]
     })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'David' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Edith' })
   })
 
   test('admin user can manage the spaces created by other space admin user', async () => {
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Carol'] })
+    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian', 'Carol'] })
     await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
@@ -340,7 +321,5 @@ test.describe('spaces management', () => {
       id: 'team.b',
       name: 'team B'
     })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
   })
 })

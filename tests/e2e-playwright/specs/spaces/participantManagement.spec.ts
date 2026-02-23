@@ -44,7 +44,7 @@ test.describe('check files pagination in project space', () => {
     //   | Carol |
     //   | David |
     //   | Edith |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol', 'David', 'Edith']
