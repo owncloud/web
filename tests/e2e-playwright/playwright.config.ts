@@ -29,8 +29,7 @@ export default defineConfig({
 
   // Reporter to use
   reporter: [
-    (process.env.CI && ['dot']) as ReporterDescription,
-    (!process.env.CI && ['list']) as ReporterDescription,
+    ['list'] as ReporterDescription,
     ['./reporters/a11y.ts', { outputFile: path.join(reportsDir, 'a11y-report.json') }]
   ].filter(Boolean) as ReporterDescription[],
   outputDir: reportsDir,

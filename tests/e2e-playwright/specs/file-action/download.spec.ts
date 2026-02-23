@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config'
 import {
   ActorsEnvironment,
@@ -33,11 +33,6 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
-  })
-
-  test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
   })
 
   test('download resources', async () => {

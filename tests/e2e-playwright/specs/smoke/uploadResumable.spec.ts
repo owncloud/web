@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from './../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -34,10 +34,6 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     // | id    |
     // | Alice |
     await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
-  })
-
-  test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('Upload large resources in personal space', async () => {

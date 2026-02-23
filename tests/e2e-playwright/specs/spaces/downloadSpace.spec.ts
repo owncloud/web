@@ -1,20 +1,14 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  SpacesEnvironment
-} from '../../../e2e/support/environment/index.js'
+import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 
 test.describe('download space', () => {
   let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const spacesEnvironment = new SpacesEnvironment()
 
-  test.beforeEach(async ({ browser }) => {
+  test.beforeEach(async ({ browser, usersEnvironment }) => {
     actorsEnvironment = new ActorsEnvironment({
       context: {
         acceptDownloads: config.acceptDownloads,
@@ -31,13 +25,7 @@ test.describe('download space', () => {
     await setAccessAndRefreshToken(usersEnvironment)
   })
 
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-  })
-
-  test('download space', async () => {
+  test('download space', async ({ usersEnvironment, spacesEnvironment }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |

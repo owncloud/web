@@ -1,20 +1,14 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from './../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  SpacesEnvironment,
-  UsersEnvironment
-} from '../../../e2e/support/environment'
+import { ActorsEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('deny space access', () => {
   let actorsEnvironment: ActorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const spacesEnvironment = new SpacesEnvironment()
 
-  test.beforeEach(async ({ browser }) => {
+  test.beforeEach(async ({ browser, usersEnvironment }) => {
     actorsEnvironment = new ActorsEnvironment({
       context: {
         acceptDownloads: config.acceptDownloads,
@@ -31,12 +25,7 @@ test.describe('deny space access', () => {
     await setAccessAndRefreshToken(usersEnvironment)
   })
 
-  test.afterEach(async () => {
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-  })
-
-  test('deny and grant access', async () => {
+  test('deny and grant access', async ({ usersEnvironment, spacesEnvironment }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |

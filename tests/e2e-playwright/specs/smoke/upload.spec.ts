@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -40,11 +40,6 @@ test.describe('internal link share', () => {
 
     // And "Alice" opens the "files" app
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
-  })
-
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('Upload files in personal space', { tag: '@predefined-users' }, async () => {

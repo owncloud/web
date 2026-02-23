@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
@@ -35,13 +36,6 @@ test.describe('lock', { tag: '@sse' }, () => {
     })
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-  })
-
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
   })
 
   test('file lock indication', async () => {
