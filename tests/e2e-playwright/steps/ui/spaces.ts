@@ -403,31 +403,36 @@ export async function userDeletesSpacesUsingBatchActions({
 export async function userUpdatesSpaceUsingContextMenu({
   actorsEnvironment,
   stepUser,
-  key,
-  attribute,
-  value
+  spaceId,
+  updates
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  key: string
-  attribute: 'name' | 'subtitle' | 'quota'
-  value: string
+  spaceId: string
+  updates: Array<{ attribute: 'name' | 'subtitle' | 'quota'; value: string }>
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
-  const spaceId = spacesObject.getUUID({ key })
-  switch (attribute) {
-    case 'name':
-      await spacesObject.renameSpaceUsingContextMenu({ key, value })
-      break
-    case 'subtitle':
-      await spacesObject.changeSubtitleUsingContextMenu({ key, value })
-      break
-    case 'quota':
-      await spacesObject.changeQuota({ spaceIds: [spaceId], value, context: 'context-menu' })
-      break
-    default:
-      throw new Error(`'${attribute}' not implemented`)
+  const spaceUUID = spacesObject.getUUID({ key: spaceId })
+
+  for (const update of updates) {
+    switch (update.attribute) {
+      case 'name':
+        await spacesObject.renameSpaceUsingContextMenu({ key: spaceId, value: update.value })
+        break
+      case 'subtitle':
+        await spacesObject.changeSubtitleUsingContextMenu({ key: spaceId, value: update.value })
+        break
+      case 'quota':
+        await spacesObject.changeQuota({
+          spaceIds: [spaceUUID],
+          value: update.value,
+          context: 'context-menu'
+        })
+        break
+      default:
+        throw new Error(`'${update.attribute}' not implemented`)
+    }
   }
 }
 

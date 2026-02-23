@@ -12,7 +12,7 @@ import fs from 'fs'
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 import { join } from 'path'
 
-export async function usersHasBeenCreated({
+export async function usersHaveBeenCreated({
   usersEnvironment,
   stepUser,
   users
