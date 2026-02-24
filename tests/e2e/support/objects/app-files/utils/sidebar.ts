@@ -179,6 +179,11 @@ export const openPanel = async ({
       'sidebar panel'
     )
     await Promise.all([nextPanel.waitFor(), panelSelector.click()])
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'activity sidebar panel with no activities'
+    )
   }
 }
 
