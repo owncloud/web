@@ -451,53 +451,78 @@ export async function userDeletesResources({
   }
 }
 
-export async function userDeletesResourceFromTrashbin({
+export async function userShouldBeAbleToDeleteResourceFromTrashbin({
   world,
   stepUser,
-  resource,
-  actionType
+  resources
 }: {
   world: World
   stepUser: string
-  resource: string
-  actionType: string
+  resources: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  if (actionType === 'should') {
+  for (const resource of resources) {
     const message = await resourceObject.deleteTrashBin({ resource: resource })
     const paths = resource.split('/')
     expect(message).toBe(`"${paths[paths.length - 1]}" was deleted successfully`)
-  } else {
+  }
+}
+
+export async function userShouldNotBeAbleToDeleteResourceFromTrashbin({
+  world,
+  stepUser,
+  resources
+}: {
+  world: World
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
     await resourceObject.expectThatDeleteTrashBinButtonIsNotVisible({ resource: resource })
   }
 }
 
-export async function userRestoresDeletedResourceFromTrashbin({
+export async function userShouldBeAbleToRestoreResourceFromTrashbin({
   world,
   stepUser,
-  resource,
-  actionType
+  resources
 }: {
   world: World
   stepUser: string
-  resource: string
-  actionType: string
+  resources: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  if (actionType === 'should') {
+  for (const resource of resources) {
     const message = await resourceObject.restoreTrashBin({
       resource: resource
     })
     const paths = resource.split('/')
     expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
-  } else {
+  }
+}
+
+export async function userShouldNotBeAbleToRestoreResourceFromTrashbin({
+  world,
+  stepUser,
+  resources
+}: {
+  world: World
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
     await resourceObject.expectThatRestoreTrashBinButtonIsNotVisible({
       resource: resource
     })
   }
 }
+
 export async function userCreatesShortcutForResources({
   world,
   stepUser,
@@ -1131,5 +1156,56 @@ export async function userShouldNotSeeActionsForResource({
   for (const action of actions) {
     const actions = await resourceObject.getAllAvailableActions({ resource })
     expect(actions.some((act) => act.startsWith(action))).toBe(false)
+  }
+}
+
+export async function userDeletesResourcesFromTrashbinUsingBatchAction({
+  world,
+  stepUser,
+  resources
+}: {
+  world: World
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.deleteTrashbinMultipleResources({ resources })
+}
+
+export async function userEmptiesTrashbin({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.emptyTrashbin({ page })
+}
+
+export async function userRestoresResourcesFromTrashbin({
+  world,
+  stepUser,
+  resources,
+  actionType
+}: {
+  world: World
+  stepUser: string
+  resources: string[]
+  actionType?: 'BATCH_ACTION'
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  if (actionType === 'BATCH_ACTION') {
+    const message = await resourceObject.batchRestoreTrashBin({ resources })
+    expect(message).toBe(`${resources.length} files restored successfully`)
+  } else {
+    for (const resource of resources) {
+      const message = await resourceObject.restoreTrashBin({ resource: resource })
+      const paths = resource.split('/')
+      expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
+    }
   }
 }
