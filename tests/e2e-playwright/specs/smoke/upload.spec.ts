@@ -8,6 +8,7 @@ import {
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { applications } from '../../support/constants.js'
 
 test.describe('internal link share', () => {
   let actorsEnvironment
@@ -204,7 +205,7 @@ test.describe('internal link share', () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'simple.pdf',
-      application: 'pdfviewer'
+      application: application.pdfViewer
     })
     // Then "Alice" closes the file viewer
     await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })

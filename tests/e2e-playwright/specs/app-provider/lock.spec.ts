@@ -4,6 +4,7 @@ import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/enviro
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { applications } from '../../support/constants.js'
 
 test.describe('lock', { tag: '@sse' }, () => {
   let actorsEnvironment
@@ -80,7 +81,7 @@ test.describe('lock', { tag: '@sse' }, () => {
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'test.odt',
-      application: 'Collabora'
+      application: applications.collabora
     })
     // Then "Brian" should see the content "some content" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({

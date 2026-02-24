@@ -9,7 +9,6 @@ import {
   ActionViaType,
   createResourceTypes,
   displayedResourceType,
-  searchFilter,
   shortcutType
 } from '../../../e2e/support/objects/app-files/resource/actions'
 import { editor } from '../../../e2e/support/objects/app-files/utils'
@@ -18,6 +17,13 @@ import { Public } from '../../../e2e/support/objects/app-files/page'
 import { Resource } from '../../../e2e/support/objects/app-files/resource'
 import { config } from '../../../e2e/config'
 import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
+import {
+  SearchFilters,
+  applications,
+  Applications,
+  DisplayedResourceTypes,
+  displayedResourceTypes
+} from '../../support/constants'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -88,7 +94,7 @@ export async function searchGloballyWithFilter({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   keyword: string
-  filter: string
+  filter: SearchFilters
   command?: string
 }): Promise<void> {
   keyword = keyword ?? ''
@@ -99,7 +105,7 @@ export async function searchGloballyWithFilter({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.searchResource({
     keyword,
-    filter: filter as searchFilter,
+    filter: filter,
     pressEnter
   })
 }
@@ -151,7 +157,7 @@ export async function openResourceInViewer({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
-  application: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
+  application: Applications
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -168,7 +174,7 @@ export async function userShouldSeeTheResources({
   resources
 }: {
   actorsEnvironment: ActorsEnvironment
-  listType: displayedResourceType
+  listType: DisplayedResourceTypes
   stepUser: string
   resources: string[]
 }): Promise<void> {

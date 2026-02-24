@@ -9,6 +9,7 @@ import {
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { searchFilters } from '../../support/constants.js'
 
 test.describe('Search in the project space', () => {
   let actorsEnvironment
@@ -84,7 +85,7 @@ test.describe('Search in the project space', () => {
       actorsEnvironment,
       stepUser: 'Alice',
       keyword: "-'s",
-      filter: 'all files'
+      filter: searchFilters.allFiles
     })
 
     await ui.userShouldSeeTheResources({
@@ -105,7 +106,7 @@ test.describe('Search in the project space', () => {
       actorsEnvironment,
       stepUser: 'Alice',
       keyword: '!;_+-&)',
-      filter: 'all files'
+      filter: searchFilters.allFiles
     })
 
     await ui.userShouldSeeTheResources({

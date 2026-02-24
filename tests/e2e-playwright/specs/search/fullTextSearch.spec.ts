@@ -9,6 +9,7 @@ import {
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { searchFilters, applications } from '../../support/constants.js'
 
 test.describe('Search', () => {
   let actorsEnvironment
@@ -180,7 +181,7 @@ test.describe('Search', () => {
       actorsEnvironment,
       stepUser: 'Brian',
       keyword: 'Cheers',
-      filter: 'all files',
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
 
@@ -234,7 +235,7 @@ test.describe('Search', () => {
       actorsEnvironment,
       stepUser: 'Brian',
       keyword: 'file',
-      filter: 'all files',
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
 
@@ -275,7 +276,7 @@ test.describe('Search', () => {
       actorsEnvironment,
       stepUser: 'Brian',
       keyword: 'Cheers',
-      filter: 'all files',
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
     // Then following resources should be displayed in the files list for user "Brian"
@@ -306,7 +307,7 @@ test.describe('Search', () => {
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'textfile.txt',
-      application: 'texteditor'
+      application: applications.textEditor
     })
     // And "Brian" closes the file viewer
     await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Brian' })

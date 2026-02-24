@@ -8,6 +8,7 @@ import {
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { applications } from '../../support/constants.js'
 
 test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
   let actorsEnvironment: ActorsEnvironment
@@ -144,7 +145,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testavatar.jpeg',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -178,7 +179,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleGif.gif',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -198,7 +199,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testimage.mp3',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -218,7 +219,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleOgg.ogg',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -238,7 +239,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleWebm.webm',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -258,7 +259,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'test_video.mp4',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer

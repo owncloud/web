@@ -8,6 +8,7 @@ import {
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { applications } from '../../support/constants.js'
 
 test.describe('Download', { tag: '@predefined-users' }, () => {
   let actorsEnvironment: ActorsEnvironment
@@ -132,7 +133,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testavatar.jpg',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // And "Alice" downloads the following resources using the preview topbar
@@ -192,7 +193,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // And "Brian" downloads the following resources using the preview topbar
