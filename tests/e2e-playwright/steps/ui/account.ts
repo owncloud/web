@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment } from '../../../e2e/support/environment'
 
@@ -100,4 +101,38 @@ export async function disableNotificationEvent({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   await accountObject.disableNotificationEvent(event)
+}
+
+export async function userShouldHaveQuota({
+  actorsEnvironment,
+  stepUser,
+  quota
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  quota: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const accountObject = new objects.account.Account({ page })
+  const actualQuota = await accountObject.getQuotaValue()
+  expect(actualQuota).toBe(quota)
+}
+
+export async function userChangesQuotaForUsersUsingBatchAction({
+  actorsEnvironment,
+  stepUser,
+  value,
+  users
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  value: string
+  users: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  for (const user of users) {
+    await usersObject.selectUser({ key: user })
+  }
+  await usersObject.changeQuotaUsingBatchAction({ value, users })
 }

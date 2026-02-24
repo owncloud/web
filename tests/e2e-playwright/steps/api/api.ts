@@ -41,7 +41,15 @@ export async function deleteUser({
   targetUser: string
 }): Promise<void> {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: targetUser })
+
+  let user
+  try {
+    user = usersEnvironment.getUser({ key: targetUser })
+  } catch {
+    // If not found in userStore, try createdUserStore
+    user = usersEnvironment.getCreatedUser({ key: targetUser })
+  }
+
   await api.provision.deleteUser({ user, admin })
 }
 
@@ -262,17 +270,17 @@ export async function createFilesInsideSpaceBySpaceName({
   }
 }
 
-export async function addUserToGroup({
+export async function usersHaveBeenAddedToGroup({
   usersEnvironment,
   stepUser,
-  userToAdd
+  usersToAdd
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  userToAdd: { user: string; group: string }[]
+  usersToAdd: { user: string; group: string }[]
 }) {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  for (const info of userToAdd) {
+  for (const info of usersToAdd) {
     const group = usersEnvironment.getGroup({ key: info.group })
     const user = usersEnvironment.getUser({ key: info.user })
     await api.graph.addUserToGroup({ user, group, admin })

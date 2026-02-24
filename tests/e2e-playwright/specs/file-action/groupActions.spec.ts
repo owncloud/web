@@ -51,10 +51,10 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | Brian | sales    |
     //   | Brian | finance  |
     //   | Brian | security |
-    await api.addUserToGroup({
+    await api.usersHaveBeenAddedToGroup({
       usersEnvironment,
       stepUser: 'Admin',
-      userToAdd: [
+      usersToAdd: [
         { user: 'Brian', group: 'sales' },
         { user: 'Brian', group: 'finance' },
         { user: 'Brian', group: 'security' }

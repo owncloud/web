@@ -54,7 +54,18 @@ export const selectors = {
   groupList: '.group-list',
   editPanel: '.sidebar-panel__body-EditPanel:visible',
   breadcrumb: '#files-breadcrumb',
-  previewControlBar: '.preview-controls-action-bar'
+  previewControlBar: '.preview-controls-action-bar',
+  loginInputDropdownToggle: '.vs__dropdown-toggle:has(input[id="login-input"])',
+  compareSaveDialog: '.compare-save-dialog',
+  batchQuotaInputDropdownToggle: '.quota-select-batch-action-form .vs__dropdown-toggle', //dropdown with icon
+  quotaValueDropDown: 'ul.vs__dropdown-menu',
+  roleDropdownMenu: 'ul.vs__dropdown-menu',
+  groupsDropdownMenu: 'ul.vs__dropdown-menu',
+  notificationContainer: '.oc-notification',
+  usersTable: '.users-table',
+  usersList: '#user-list', //users list with filter options included
+  addUserToGroupForm: '#user-group-select-form',
+  loginErrorMessageLocator: '#oc-login-error-message'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']

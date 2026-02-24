@@ -82,10 +82,10 @@ test.describe('Notifications', () => {
     //   | user  | group |
     //   | Alice | sales |
     //   | Brian | sales |
-    await api.addUserToGroup({
+    await api.usersHaveBeenAddedToGroup({
       usersEnvironment,
       stepUser: 'Admin',
-      userToAdd: [
+      usersToAdd: [
         { user: 'Alice', group: 'sales' },
         { user: 'Brian', group: 'sales' }
       ]

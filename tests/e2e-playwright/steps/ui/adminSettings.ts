@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
 
@@ -40,6 +41,403 @@ export async function resetLogo({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const generalObject = new objects.applicationAdminSettings.General({ page })
   await generalObject.resetLogo()
+}
+
+export async function userNavigatesToUsersManagementPage({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationAdminSettings.page.Users({ page })
+  await pageObject.navigate()
+}
+
+export async function userAllowsLoginForUserUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  key
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  key: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  await usersObject.allowLogin({ key, action: 'context-menu' })
+}
+
+export async function userForbidsLoginForUserUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  key
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  key: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  await usersObject.forbidLogin({ key, action: 'context-menu' })
+}
+
+export async function userChangesQuotaForUserUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  key,
+  value
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  await usersObject.changeQuota({ key, value, action: 'context-menu' })
+}
+
+export async function userAddsUsersToGroupsUsingBatchActions({
+  actorsEnvironment,
+  stepUser,
+  groups,
+  users
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  groups: string[]
+  users: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const userIds = []
+
+  for (const user of users) {
+    userIds.push(usersObject.getUUID({ key: user }))
+    await usersObject.select({ key: user })
+  }
+
+  await usersObject.addToGroupsBatchAtion({ userIds, groups })
+}
+
+export async function userRemovesUsersFromGroupsUsingBatchActions({
+  actorsEnvironment,
+  stepUser,
+  groups,
+  users
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  groups: string[]
+  users: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const userIds = []
+
+  for (const user of users) {
+    userIds.push(usersObject.getUUID({ key: user }))
+    await usersObject.select({ key: user })
+  }
+
+  await usersObject.removeFromGroupsBatchAtion({ userIds, groups })
+}
+
+export async function userSetsFilters({
+  actorsEnvironment,
+  stepUser,
+  filters
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  filters: { filter: string; values: string[] }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  for (const { filter, values } of filters) {
+    await usersObject.filter({ filter, values })
+  }
+}
+
+export async function usersShouldBeVisible({
+  actorsEnvironment,
+  stepUser,
+  expectedUsers
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedUsers: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const displayedUsers = await usersObject.getDisplayedUsers()
+
+  for (const user of expectedUsers) {
+    const userId = usersObject.getUUID({ key: user })
+    expect(displayedUsers).toContain(userId)
+  }
+}
+
+export async function usersShouldNotBeVisible({
+  actorsEnvironment,
+  stepUser,
+  expectedUsers
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedUsers: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const displayedUsers = await usersObject.getDisplayedUsers()
+
+  for (const user of expectedUsers) {
+    const userId = usersObject.getUUID({ key: user })
+    expect(displayedUsers).not.toContain(userId)
+  }
+}
+
+export async function userChangesUserNameUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  key,
+  value
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.changeUser({ key, attribute: 'userName', value, action: 'context-menu' })
+}
+
+export async function userChangesUserDisplayNameUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  key,
+  value
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.changeUser({ key, attribute: 'displayName', value, action: 'context-menu' })
+}
+
+export async function userChangesUserEmailUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  key,
+  value
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.changeUser({ key, attribute: 'email', value, action: 'context-menu' })
+}
+
+export async function userChangesUserPasswordUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  key,
+  value
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.changeUser({ key, attribute: 'password', value, action: 'context-menu' })
+}
+
+export async function userChangesUserRoleUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  key,
+  value
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.changeUser({ key, attribute: 'role', value, action: 'context-menu' })
+}
+
+export async function userDeletesUsersUsingBatchActions({
+  actorsEnvironment,
+  stepUser,
+  users
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  users: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const userIds = []
+
+  for (const user of users) {
+    userIds.push(usersObject.getUUID({ key: user }))
+    await usersObject.select({ key: user })
+  }
+
+  await usersObject.deleteUserUsingBatchAction({ userIds })
+}
+
+export async function userDeletesUsersUsingContextMenu({
+  actorsEnvironment,
+  stepUser,
+  users
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  users: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  for (const user of users) {
+    await usersObject.deleteUserUsingContextMenu({ key: user })
+  }
+}
+
+export async function userShouldHaveSelfInfo({
+  actorsEnvironment,
+  stepUser,
+  info
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  info: { key: string; value: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const accountObject = new objects.account.Account({ page })
+
+  for (const { key, value } of info) {
+    const actual = await accountObject.getUserInfo(key)
+    expect(actual).toBe(value)
+  }
+}
+
+export async function userCreatesUser({
+  actorsEnvironment,
+  stepUser,
+  userData
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  userData: { name: string; displayname: string; email: string; password: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  for (const info of userData) {
+    await usersObject.createUser({
+      name: info.name,
+      displayname: info.displayname,
+      email: info.email,
+      password: info.password
+    })
+  }
+}
+
+export async function userOpensEditPanelOfUserUsingQuickAction({
+  actorsEnvironment,
+  stepUser,
+  actionUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.openEditPanel({ key: actionUser, action: 'quick-action' })
+}
+
+export async function userOpensEditPanelOfUserUsingContextMenu({
+  actorsEnvironment,
+  stepUser,
+  actionUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.openEditPanel({ key: actionUser, action: 'context-menu' })
+}
+
+export async function userShouldSeeEditPanel({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.waitForEditPanelToBeVisible()
+}
+
+export async function userAddsUserToGroupsUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  user,
+  groups
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  user: string
+  groups: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.addToGroups({
+    key: user,
+    groups,
+    action: 'context-menu'
+  })
+}
+
+export async function userRemovesUserFromGroupsUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  user,
+  groups
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  user: string
+  groups: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.removeFromGroups({
+    key: user,
+    groups,
+    action: 'context-menu'
+  })
 }
 
 export async function userNavigatesToGroupsManagementPage({
