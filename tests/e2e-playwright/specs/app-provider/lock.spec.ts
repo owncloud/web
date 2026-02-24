@@ -106,13 +106,11 @@ test.describe('lock', { tag: '@sse' }, () => {
 
     // checking that user cannot 'move', 'rename', 'delete' locked file
     // And "Alice" should not be able to edit file "test.odt"
-    expect(
-      await ui.isAbleToEditFileOrFolder({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        resource: 'test.odt'
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotBeAbleToEditFileOrFolder({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'test.odt'
+    })
 
     // checking that user cannot delete or change share of the locked file
     // https://github.com/owncloud/web/issues/10507

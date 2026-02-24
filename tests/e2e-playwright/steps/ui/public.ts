@@ -7,6 +7,8 @@ import {
 import { editor } from '../../../e2e/support/objects/app-files/utils'
 import { substitute } from '../../../e2e/support/utils'
 import { expect } from '@playwright/test'
+import { processDownload, ResourceToDownload } from './resources'
+import { ActionViaType } from '../../../e2e/support/objects/app-files/resource/actions'
 
 export async function openPublicLink({
   actorsEnvironment,
@@ -34,8 +36,8 @@ export async function createPublicLink({
   stepUser,
   resource,
   password,
-  role,
-  name = 'Unnamed link'
+  name = 'Unnamed link',
+  role
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
@@ -47,6 +49,21 @@ export async function createPublicLink({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const publicObject = new objects.applicationFiles.Link({ page })
   await publicObject.create({ resource, password: substitute(password), role, name })
+}
+
+export async function createPublicLinkOfSpace({
+  actorsEnvironment,
+  stepUser,
+  password
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  password: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spaceObject = new objects.applicationFiles.Spaces({ page })
+  password = substitute(password)
+  await spaceObject.createPublicLink({ password })
 }
 
 export async function anonymousUserOpensPublicLink({
@@ -145,4 +162,63 @@ export async function userIsInFileViewer({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType })
   await expect(fileViewerLocator).toBeVisible()
+}
+
+export async function userDownloadsPublicLinkResource({
+  actorsEnvironment,
+  stepUser,
+  resourceToDownload,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resourceToDownload: ResourceToDownload[]
+  actionType: ActionViaType
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await processDownload(pageObject, actionType, resourceToDownload)
+}
+
+export async function userUploadsResourceInPublicLink({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resource,
+  to,
+  option,
+  type
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  to: string
+  resource: string
+  option: string
+  type: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.upload({
+    to: to,
+    resources: [filesEnvironment.getFile({ name: resource })],
+    option: option,
+    type: type
+  })
+}
+
+export async function userRenamesResourceOfPublicLink({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  newName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  newName: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.rename({ resource, newName })
 }
