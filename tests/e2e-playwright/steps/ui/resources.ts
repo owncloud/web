@@ -412,9 +412,6 @@ export async function userClosesFileViewer({
   await editor.close(page)
 }
 
-// When "Brian" deletes the following resources using the sidebar panel
-//   | resource      | from               |
-//   | lorem-big.txt | folder_to_shared_2 |
 export async function userDeletesResources({
   actorsEnvironment,
   stepUser,
@@ -437,53 +434,78 @@ export async function userDeletesResources({
   }
 }
 
-export async function deleteResourceFromTrashbin({
+export async function userShouldAbleToDeleteResourcesFromTrashbin({
   actorsEnvironment,
   stepUser,
-  resource,
-  actionType
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resource: string
-  actionType: string
+  resources: string[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  if (actionType === 'should') {
+  for (const resource of resources) {
     const message = await resourceObject.deleteTrashBin({ resource: resource })
     const paths = resource.split('/')
     expect(message).toBe(`"${paths[paths.length - 1]}" was deleted successfully`)
-  } else {
+  }
+}
+
+export async function userShouldNotAbleToDeleteResourceFromTrashbin({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
     await resourceObject.expectThatDeleteTrashBinButtonIsNotVisible({ resource: resource })
   }
 }
 
-export async function restoreDeletedResourceFromTrashbin({
+export async function userShouldAbleToRestoreResourcesFromTrashbin({
   actorsEnvironment,
   stepUser,
-  resource,
-  actionType
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  resource: string
-  actionType: string
+  resources: string[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  if (actionType === 'should') {
+  for (const resource of resources) {
     const message = await resourceObject.restoreTrashBin({
       resource: resource
     })
     const paths = resource.split('/')
     expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
-  } else {
+  }
+}
+
+export async function userShouldNotAbleToRestoreResourceFromTrashbin({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
     await resourceObject.expectThatRestoreTrashBinButtonIsNotVisible({
       resource: resource
     })
   }
 }
+
 export async function userCreatesShortcutForResources({
   actorsEnvironment,
   stepUser,
@@ -956,4 +978,56 @@ export async function userResumesUpload({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.resumeUpload()
+}
+
+export async function userDeletesResourcesFromTrashbinUsingBatchAction({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.deleteTrashbinMultipleResources({ resources })
+}
+
+export async function userEmptiesTrashbin({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.emptyTrashbin({ page })
+}
+
+export async function userRestoresResourcesFromTrashbin({
+  actorsEnvironment,
+  stepUser,
+  resources,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: string[]
+  actionType?: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    if (actionType === 'BATCH_ACTION') {
+      const message = await resourceObject.batchRestoreTrashBin({ resources })
+      expect(message).toBe(`${resources.length} files restored successfully`)
+      break
+    } else {
+      const message = await resourceObject.restoreTrashBin({ resource: resource })
+      const paths = resource.split('/')
+      expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
+    }
+  }
 }
