@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -42,12 +42,6 @@ test.describe('Trashbin delete', () => {
 
     // And "Alice" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-  })
-
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
   })
 
   test('delete files and folders from trashbin', async () => {
@@ -128,6 +122,8 @@ test.describe('Trashbin delete', () => {
   })
 
   test('delete and restore a file inside a received shared folder', async () => {
+    // Given "Brian" logs in
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // Given "Alice" creates the following folders in personal space using API
     //   | name          |
     //   | folderToShare |
@@ -149,14 +145,12 @@ test.describe('Trashbin delete', () => {
         { pathToFile: 'sample.txt', content: 'sample' }
       ]
     })
-    // And "Alice" shares the following resource using the sidebar panel
-    //   | resource      | recipient | type | role                      | resourceType |
-    //   | folderToShare | Brian     | user | Can edit without versions | folder       |
-    await ui.userSharesResources({
-      actorsEnvironment,
+    // And "Alice" shares the following resource using API
+    //   | resource      | recipient | type | role                   | resourceType |
+    //   | folderToShare | Brian     | user | Can edit with trashbin | folder       |
+    await api.userHasSharedResources({
       usersEnvironment,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
       shares: [
         {
           resource: 'folderToShare',
@@ -167,8 +161,6 @@ test.describe('Trashbin delete', () => {
         }
       ]
     })
-    // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" navigates to the shared with me page
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" opens folder "folderToShare"
