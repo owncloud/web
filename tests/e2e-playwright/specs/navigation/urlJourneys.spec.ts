@@ -49,7 +49,7 @@ test.describe('Navigate web directly through urls', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']

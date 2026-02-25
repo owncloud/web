@@ -12,7 +12,7 @@ import fs from 'fs'
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 import { join } from 'path'
 
-export async function usersHasBeenCreated({
+export async function usersHaveBeenCreated({
   usersEnvironment,
   stepUser,
   users
@@ -152,50 +152,53 @@ export async function userHasCreatedPublicLinkOfResource({
   })
 }
 
-export async function userHasAssignRolesToUsers({
+export async function userHasAssignedRolesToUsers({
   usersEnvironment,
   stepUser,
-  targetUserId,
-  role
+  users
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  targetUserId: string
-  role: string
-}) {
+  users: Array<{ id: string; role: string }>
+}): Promise<void> {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: targetUserId })
-  /**
-   The oCIS API request for assigning roles allows only one role per user,
-    whereas the Keycloak API request can assign multiple roles to a user.
-    If multiple roles are assigned to a user in Keycloak,
-    oCIS map the highest priority role among Keycloak assigned roles.
-    Therefore, we need to unassign the previous role before
-    assigning a new one when using the Keycloak API.
-  */
-  await api.provision.unAssignRole({ admin, user })
-  await api.provision.assignRole({ admin, user, role })
+  for (const userInfo of users) {
+    const user = usersEnvironment.getUser({ key: userInfo.id })
+    /**
+     The oCIS API request for assigning roles allows only one role per user,
+      whereas the Keycloak API request can assign multiple roles to a user.
+      If multiple roles are assigned to a user in Keycloak,
+      oCIS map the highest priority role among Keycloak assigned roles.
+      Therefore, we need to unassign the previous role before
+      assigning a new one when using the Keycloak API.
+    */
+    await api.provision.unAssignRole({ admin, user })
+    await api.provision.assignRole({ admin, user, role: userInfo.role })
+  }
 }
 
-export async function userHasCreatedProjectSpace({
+export async function userHasCreatedProjectSpaces({
   usersEnvironment,
   spacesEnvironment,
   stepUser,
-  name,
-  id
+  spaces
 }: {
   usersEnvironment: UsersEnvironment
   spacesEnvironment: SpacesEnvironment
   stepUser: string
-  name: string
-  id: string
+  spaces: Array<{ name: string; id: string }>
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
-  const spaceId = await api.graph.createSpace({ user, space: { id, name } as unknown as Space })
-  spacesEnvironment.createSpace({
-    key: id || name,
-    space: { name: name, id: spaceId }
-  })
+  for (const space of spaces) {
+    const spaceId = await api.graph.createSpace({
+      user,
+      space: { id: space.id, name: space.name } as unknown as Space
+    })
+    spacesEnvironment.createSpace({
+      key: space.id || space.name,
+      space: { name: space.name, id: spaceId } as unknown as Space
+    })
+  }
 }
 
 export async function userHasUploadedFilesInPersonalSpace({
@@ -294,11 +297,13 @@ export async function userHasDeletedGroup({
 }
 export async function userHasDeletedProjectSpace({
   usersEnvironment,
+  spacesEnvironment,
   stepUser,
   name,
   id
 }: {
   usersEnvironment: UsersEnvironment
+  spacesEnvironment: SpacesEnvironment
   stepUser: string
   name: string
   id: string
@@ -312,25 +317,23 @@ export async function userHasAddedMembersToSpace({
   usersEnvironment,
   stepUser,
   space,
-  shareType,
-  role,
   sharee
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
   space: string
-  shareType: string
-  role: string
-  sharee: string
+  sharee: Array<{ user: string; shareType: string; role: string }>
 }) {
   const user = usersEnvironment.getUser({ key: stepUser })
-  await api.share.addMembersToTheProjectSpace({
-    user,
-    spaceName: space,
-    shareType: shareType,
-    shareWith: sharee,
-    role: role
-  })
+  for (const share of sharee) {
+    await api.share.addMembersToTheProjectSpace({
+      user,
+      spaceName: space,
+      shareType: share.shareType,
+      shareWith: share.user,
+      role: share.role
+    })
+  }
 }
 
 export const groupsHaveBeenCreated = async ({

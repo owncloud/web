@@ -52,12 +52,22 @@ export class Spaces {
     await po.selectSpace({ page: this.#page, id: this.getUUID({ key }) })
   }
 
-  async rename({ key, value }: { key: string; value: string }): Promise<void> {
-    await po.renameSpace({ page: this.#page, id: this.getUUID({ key }), value })
+  async renameSpaceUsingContextMenu({ key, value }: { key: string; value: string }): Promise<void> {
+    await po.renameSpaceUsingContextMenu({ page: this.#page, id: this.getUUID({ key }), value })
   }
 
-  async changeSubtitle({ key, value }: { key: string; value: string }): Promise<void> {
-    await po.changeSpaceSubtitle({ page: this.#page, id: this.getUUID({ key }), value })
+  async changeSubtitleUsingContextMenu({
+    key,
+    value
+  }: {
+    key: string
+    value: string
+  }): Promise<void> {
+    await po.changeSpaceSubtitleUsingContextMenu({
+      page: this.#page,
+      id: this.getUUID({ key }),
+      value
+    })
   }
 
   async openPanel({ key }: { key: string }): Promise<void> {

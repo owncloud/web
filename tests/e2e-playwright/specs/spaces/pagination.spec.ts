@@ -41,7 +41,7 @@ test.describe('check files pagination in project space', () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
@@ -50,11 +50,10 @@ test.describe('check files pagination in project space', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" logs in
@@ -63,12 +62,11 @@ test.describe('check files pagination in project space', () => {
     // And "Alice" creates the following project space using API
     //   | name       | id    |
     //   | Developers | dev.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      name: 'Developers',
-      id: 'dev.1'
+      spaces: [{ name: 'Developers', id: 'dev.1' }]
     })
 
     // And "Alice" creates 55 folders in space "Developers" using API

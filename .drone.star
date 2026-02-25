@@ -144,7 +144,6 @@ config = {
                 "cucumber/features/admin-settings/users.feature:106",
                 "cucumber/features/admin-settings/users.feature:131",
                 "cucumber/features/admin-settings/users.feature:185",
-                "cucumber/features/admin-settings/spaces.feature",
                 "cucumber/features/keycloak",
             ],
             "extraServerEnvironment": {

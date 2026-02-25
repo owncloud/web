@@ -42,7 +42,7 @@ test.describe('download space', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -51,11 +51,10 @@ test.describe('download space', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // Given "Alice" logs in
@@ -64,12 +63,11 @@ test.describe('download space', () => {
     // And "Alice" creates the following project spaces using API
     //   | name | id     |
     //   | team | team.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Alice" creates the following folder in space "team" using API
