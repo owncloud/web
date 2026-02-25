@@ -40,7 +40,7 @@ export const extensions = (appInfo: ApplicationInformation) => {
         })
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       showErrorMessage({
         title: $gettext('An error occurred'),
         desc: $gettext("Couldn't open remotely"),

@@ -62,26 +62,47 @@
           :highlighted="inviteTokensListStore.getLastCreatedToken()"
         >
           <template #token="rowData">
-            <div class="invite-code-wrapper oc-flex">
-              <div class="oc-text-truncate">
-                <span class="oc-text-truncate">{{ encodeInviteToken(rowData.item.token) }}</span>
+            <div class="invite-code-wrapper oc-flex oc-flex-middle">
+              <div class="oc-text-truncate oc-mr-s">
+                <span class="oc-text-truncate">{{ rowData.item.token }}</span>
               </div>
-              <oc-button
-                id="oc-sciencemesh-copy-token"
-                v-oc-tooltip="$gettext('Copy invite token')"
-                :aria-label="$gettext('Copy invite token')"
-                appearance="raw"
-                class="oc-ml-s"
-                @click="copyToken(rowData)"
-              >
-                <oc-icon name="file-copy" />
-              </oc-button>
+              <div class="copy-buttons oc-flex oc-flex-middle">
+                <oc-button
+                  id="oc-sciencemesh-copy-plain"
+                  v-oc-tooltip="$gettext('Copy plain token')"
+                  :aria-label="$gettext('Copy plain token')"
+                  appearance="raw"
+                  class="oc-mr-xs"
+                  @click="copyPlainToken(rowData)"
+                >
+                  <oc-icon name="file-copy" />
+                </oc-button>
+                <oc-button
+                  id="oc-sciencemesh-copy-base64"
+                  v-oc-tooltip="$gettext('Copy base64 token')"
+                  :aria-label="$gettext('Copy base64 token')"
+                  appearance="raw"
+                  class="oc-mr-xs"
+                  @click="copyToken(rowData)"
+                >
+                  <oc-icon name="code" />
+                </oc-button>
+                <oc-button
+                  id="oc-sciencemesh-copy-wayf"
+                  v-oc-tooltip="$gettext('Copy Invite link')"
+                  :aria-label="$gettext('Copy Invite link')"
+                  appearance="raw"
+                  @click="copyWayfLink(rowData)"
+                >
+                  <oc-icon name="link" />
+                </oc-button>
+              </div>
             </div>
           </template>
           <template #link="rowData">
             <a :href="rowData.item.link" v-text="$gettext('Link')" />
             <oc-button
-              id="oc-sciencemesh-copy-token"
+              id="oc-sciencemesh-copy-link"
               v-oc-tooltip="$gettext('Copy invitation link')"
               :aria-label="$gettext('Copy invitation link')"
               appearance="raw"
@@ -171,9 +192,18 @@ const helperContent = computed(() => {
   }
 })
 
-const encodeInviteToken = (token: string) => {
+const getTokenAtProvider = (token: string) => {
   const url = new URL(configStore.serverUrl)
-  return btoa(`${token}@${url.host}`)
+  return `${token}@${url.host}`
+}
+
+const encodeInviteToken = (token: string) => {
+  return btoa(getTokenAtProvider(token))
+}
+
+const generateWayfLink = (token: string) => {
+  const url = new URL(configStore.serverUrl)
+  return `${url.origin}/open-cloud-mesh/wayf?token=${token}`
 }
 
 const generateToken = async () => {
@@ -194,10 +224,15 @@ const generateToken = async () => {
     )
 
     if (tokenInfo.token) {
+      const tokenAtProvider = getTokenAtProvider(tokenInfo.token)
+      const wayfLink = generateWayfLink(tokenInfo.token)
+
       inviteTokensListStore.addToken({
         id: tokenInfo.token,
         link: tokenInfo.invite_link,
         token: tokenInfo.token,
+        tokenAtProvider: tokenAtProvider,
+        wayfLink: wayfLink,
         ...(tokenInfo.expiration && {
           expiration: toDateTime(tokenInfo.expiration)
         }),
@@ -216,7 +251,7 @@ const generateToken = async () => {
 
       const quickToken = encodeInviteToken(tokenInfo.token)
       inviteTokensListStore.setLastCreatedToken(quickToken)
-      navigator.clipboard.writeText(quickToken)
+      await navigator.clipboard.writeText(quickToken)
     }
   } catch (error) {
     inviteTokensListStore.setLastCreatedToken('')
@@ -235,6 +270,8 @@ const listTokens = async () => {
     const tokenList = data.map((t) => ({
       id: t.token,
       token: t.token,
+      tokenAtProvider: getTokenAtProvider(t.token),
+      wayfLink: generateWayfLink(t.token),
       ...(t.expiration && {
         expiration: toDateTime(t.expiration)
       }),
@@ -245,7 +282,7 @@ const listTokens = async () => {
     }))
     inviteTokensListStore.setTokensList(tokenList)
   } catch (error) {
-    console.log(error)
+    console.error('Failed to list invite tokens:', error)
   } finally {
     loading.value = false
   }
@@ -254,15 +291,32 @@ const listTokens = async () => {
 const copyLink = (rowData: { item: { link: string; token: string } }) => {
   navigator.clipboard.writeText(rowData.item.link)
   showMessage({
-    title: $gettext('Invition link copied'),
+    title: $gettext('Invitation link copied'),
     desc: $gettext('Invitation link has been copied to your clipboard.')
   })
 }
+const copyPlainToken = (rowData: { item: { token: string } }) => {
+  const tokenAtProvider = getTokenAtProvider(rowData.item.token)
+  navigator.clipboard.writeText(tokenAtProvider)
+  showMessage({
+    title: $gettext('Plain token copied'),
+    desc: $gettext('Plain token has been copied to your clipboard.')
+  })
+}
+
 const copyToken = (rowData: { item: { link: string; token: string } }) => {
   navigator.clipboard.writeText(encodeInviteToken(rowData.item.token))
   showMessage({
-    title: $gettext('Invite token copied'),
-    desc: $gettext('Invite token has been copied to your clipboard.')
+    title: $gettext('Base64 token copied'),
+    desc: $gettext('Base64 token has been copied to your clipboard.')
+  })
+}
+
+const copyWayfLink = (rowData: { item: { wayfLink: string } }) => {
+  navigator.clipboard.writeText(rowData.item.wayfLink)
+  showMessage({
+    title: $gettext('Invite link copied'),
+    desc: $gettext('Invite link has been copied to your clipboard.')
   })
 }
 const errorPopup = (error: Error) => {
@@ -307,6 +361,16 @@ const formatDateRelative = (date: Date) => {
 .sciencemesh-app {
   .invite-code-wrapper {
     width: 200px;
+
+    .copy-buttons {
+      gap: 4px;
+
+      .oc-button {
+        padding: 4px;
+        min-width: 32px;
+        height: 32px;
+      }
+    }
   }
   #invite-tokens-empty {
     height: 100%;

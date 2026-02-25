@@ -5,6 +5,8 @@ type Token = {
   id: string
   token: string
   link?: string
+  tokenAtProvider?: string
+  wayfLink?: string
   expiration?: Date
   expirationSeconds?: number
   description?: string
