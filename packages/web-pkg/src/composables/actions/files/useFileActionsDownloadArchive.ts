@@ -50,7 +50,8 @@ export const useFileActionsDownloadArchive = () => {
           isPublicSpaceResource(space) && {
             publicToken: space.id as string,
             publicLinkPassword: authStore.publicLinkPassword,
-            publicLinkShareOwner: space.publicLinkShareOwner
+            publicLinkShareOwner: space.publicLinkShareOwner,
+            signatureAuth: resources[0].signatureAuth
           })
       })
       .catch((e) => {
