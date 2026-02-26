@@ -1,10 +1,7 @@
-import { expect, test } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  SpacesEnvironment
-} from '../../../e2e/support/environment'
+import { ActorsEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
@@ -12,10 +9,8 @@ import { editor } from '../../../e2e/support/objects/app-files/utils/index.js'
 
 test.describe('check files pagination in project space', () => {
   let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const spacesEnvironment = new SpacesEnvironment()
 
-  test.beforeEach(async ({ browser }) => {
+  test.beforeEach(async ({ browser, usersEnvironment }) => {
     actorsEnvironment = new ActorsEnvironment({
       context: {
         acceptDownloads: config.acceptDownloads,
@@ -32,12 +27,7 @@ test.describe('check files pagination in project space', () => {
     await setAccessAndRefreshToken(usersEnvironment)
   })
 
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-  })
-
-  test('pagination', async () => {
+  test('pagination', async ({ usersEnvironment, spacesEnvironment }) => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |

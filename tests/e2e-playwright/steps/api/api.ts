@@ -31,20 +31,6 @@ export async function usersHasBeenCreated({
   }
 }
 
-export async function deleteUser({
-  usersEnvironment,
-  stepUser,
-  targetUser
-}: {
-  usersEnvironment: UsersEnvironment
-  stepUser: string
-  targetUser: string
-}): Promise<void> {
-  const admin = usersEnvironment.getUser({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: targetUser })
-  await api.provision.deleteUser({ user, admin })
-}
-
 export async function userHasCreatedFolder({
   usersEnvironment,
   stepUser,
@@ -362,21 +348,6 @@ export const groupsHaveBeenCreated = async ({
     createdGroups.push({ ...group, uuid: resBody.id })
   }
   return createdGroups
-}
-
-export const cleanUpGroup = async (adminUser: User) => {
-  if (config.predefinedUsers) {
-    return
-  }
-  const requests: Promise<Group>[] = []
-  store.createdGroupStore.forEach((group) => {
-    if (!group.id.startsWith('keycloak')) {
-      requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
-    }
-  })
-
-  await Promise.all(requests)
-  store.createdGroupStore.clear()
 }
 
 export async function userHasAddedTagsToResources({

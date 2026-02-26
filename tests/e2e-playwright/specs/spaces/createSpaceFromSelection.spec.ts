@@ -1,22 +1,15 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from './../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  FilesEnvironment,
-  SpacesEnvironment
-} from '../../../e2e/support/environment'
+import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('create Space shortcut', () => {
   let actorsEnvironment: ActorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
   const filesEnvironment = new FilesEnvironment()
-  const spacesEnvironment = new SpacesEnvironment()
 
-  test.beforeEach(async ({ browser }) => {
+  test.beforeEach(async ({ browser, usersEnvironment }) => {
     actorsEnvironment = new ActorsEnvironment({
       context: {
         acceptDownloads: config.acceptDownloads,
@@ -56,10 +49,9 @@ test.describe('create Space shortcut', () => {
   test.afterEach(async () => {
     // And "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
-  test('create Space from folder', async () => {
+  test('create Space from folder', async ({ usersEnvironment, spacesEnvironment }) => {
     // And "Alice" creates the following folder in personal space using API
     //   | name             |
     //   | spaceFolder      |
@@ -114,7 +106,7 @@ test.describe('create Space shortcut', () => {
     })
   })
 
-  test('create space from resources', async () => {
+  test('create space from resources', async ({ usersEnvironment, spacesEnvironment }) => {
     // And "Alice" creates the following folder in personal space using API
     //   | name             |
     //   | resourceFolder   |

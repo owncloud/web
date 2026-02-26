@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -71,11 +71,6 @@ test.describe('Search in the project space', () => {
     })
 
     await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
-  })
-
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('Search in the project spaces', async () => {

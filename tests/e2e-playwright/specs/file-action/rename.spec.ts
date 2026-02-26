@@ -31,12 +31,6 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     await setAccessAndRefreshToken(usersEnvironment)
   })
 
-  test.afterEach(async () => {
-    // clean up users
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
-    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
-  })
-
   test('rename resources', async () => {
     // Given "Admin" creates following user using API
     // | id    |
