@@ -59,7 +59,7 @@
     "fuse.js": "^7.1.0",
     "highlight.js": "^11.11.1",
     "html2canvas": "^1.4.1",
-    "katex": "^0.16.28",
+    "katex": "^0.16.33",
     "lodash-es": "^4.17.23",
     "luxon": "^3.7.2",
     "mark.js": "^8.11.1",
