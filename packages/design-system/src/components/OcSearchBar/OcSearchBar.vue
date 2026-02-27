@@ -26,7 +26,7 @@
         v-if="icon"
         v-oc-tooltip="$gettext('Search')"
         :aria-label="$gettext('Search')"
-        class="oc-position-small oc-position-center-right oc-mt-rm"
+        class="btn-search-icon oc-position-small oc-position-center-right oc-mt-rm"
         appearance="raw"
         @click.prevent.stop="$emit('advancedSearch', $event)"
       >
@@ -330,5 +330,10 @@ const loadingAccessibleLabelValue = computed(() => {
       }
     }
   }
+}
+
+.btn-search-icon {
+  height: 1.9591836735rem;
+  width: 1.9591836735rem;
 }
 </style>

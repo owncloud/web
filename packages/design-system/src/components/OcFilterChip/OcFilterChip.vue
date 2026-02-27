@@ -176,6 +176,7 @@ defineExpose({ hideDrop })
     max-width: 180px;
     padding: var(--oc-space-xsmall) var(--oc-space-small) !important;
     height: 100%;
+    min-height: 1.9591836735rem;
   }
   &-button-selected.oc-pill,
   &-button-selected.oc-pill:hover {
