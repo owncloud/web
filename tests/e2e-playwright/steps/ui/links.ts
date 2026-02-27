@@ -18,3 +18,32 @@ export async function userRenamesMostRecentlyCreatedPublicLinkOfResource({
   const linkName = await linkObject.changeName({ resource, newName })
   expect(linkName).toBe(newName)
 }
+
+export async function userCopiesTheLinkOfPasswordProtectedFolder({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.copyLinkToClipboard({
+    resource: resource,
+    resourceType: 'passwordProtectedFolder'
+  })
+}
+
+export async function userClosesThePasswordProtectedFolderModal({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.closeFolderModal()
+}

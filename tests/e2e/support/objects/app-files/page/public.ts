@@ -58,12 +58,18 @@ export class Public {
     let page: Page | FrameLocator = this.#page
     if (passwordProtectedFolder) {
       page = this.#page.frameLocator(folderModalIframe)
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        this.#page,
+        ['folderViewModal'],
+        'password protected folder modal'
+      )
+    } else {
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        this.#page,
+        ['body'],
+        'public link authenticate page'
+      )
     }
-    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
-      this.#page,
-      ['body'],
-      'public link authenticate page'
-    )
     await page.locator(passwordInput).fill(password)
     await page.locator(publicLinkAuthorizeButton).click()
     if (expectToSucceed) {

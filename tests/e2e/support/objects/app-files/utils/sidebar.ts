@@ -39,7 +39,7 @@ const openForResource = async ({
       .click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
-      ['appSidebar'],
+      [folderModalIframe],
       'account page'
     )
   } else {
@@ -166,7 +166,7 @@ export const openPanel = async ({
     const nextPanel = page.frameLocator(folderModalIframe).locator(`#sidebar-panel-${name}`)
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
-      ['sidebarPanel'],
+      [folderModalIframe],
       'sidebar panel'
     )
     await Promise.all([nextPanel.waitFor(), panelSelector.click()])
@@ -175,7 +175,7 @@ export const openPanel = async ({
     const nextPanel = page.locator(`#sidebar-panel-${name}`)
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
-      ['sidebarPanel'],
+      [sidebarPanel],
       'sidebar panel'
     )
     await Promise.all([nextPanel.waitFor(), panelSelector.click()])

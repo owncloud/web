@@ -102,7 +102,10 @@ test.describe('details', () => {
     await actor.page.waitForTimeout(config.tokenTimeout * 1000)
 
     // And "Alice" closes the current tab
-    await actor.closeCurrentTab()
+    await ui.userClosesTheCurrentTab({
+      actorsEnvironment,
+      stepUser: 'Alice'
+    })
 
     // And "Alice" opens the "files" app
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
