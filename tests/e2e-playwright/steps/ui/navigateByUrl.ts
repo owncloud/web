@@ -1,5 +1,6 @@
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
+import { Editor, Client } from '../../support/constants'
 
 export async function userNavigatesToNonExistingPage({
   actorsEnvironment,
@@ -39,8 +40,8 @@ export async function userOpensResourceViaUrl({
   stepUser: string
   resource: string
   space: string
-  editorName: 'Collabora' | 'OnlyOffice'
-  client: 'mobile' | 'desktop'
+  editorName?: Editor
+  client?: Client
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const user = usersEnvironment.getUser({ key: stepUser })

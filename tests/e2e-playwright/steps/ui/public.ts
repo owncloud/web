@@ -7,6 +7,7 @@ import {
 import { editor } from '../../../e2e/support/objects/app-files/utils'
 import { substitute } from '../../../e2e/support/utils'
 import { expect } from '@playwright/test'
+import { actionTypes, fileViewerTypes } from '../../support/constants'
 
 export async function openPublicLink({
   actorsEnvironment,
@@ -115,13 +116,13 @@ export async function deleteResourceFromPublicLink({
   actorsEnvironment,
   stepUser,
   file,
-  actionType,
+  actionType = actionTypes.sideBarPanel,
   parentFolder = ''
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   file: string
-  actionType: string
+  actionType: typeof actionTypes.batchActions | typeof actionTypes.sideBarPanel
   parentFolder?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
@@ -129,7 +130,7 @@ export async function deleteResourceFromPublicLink({
   await pageObject.delete({
     folder: parentFolder === '' ? null : parentFolder,
     resourcesWithInfo: [{ name: file }],
-    via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+    via: actionType
   })
 }
 
@@ -140,7 +141,10 @@ export async function userIsInFileViewer({
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  fileViewerType: 'text-editor' | 'pdf-viewer' | 'media-viewer'
+  fileViewerType:
+    | typeof fileViewerTypes.textEditor
+    | typeof fileViewerTypes.pdfViewer
+    | typeof fileViewerTypes.mediaViewer
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType })
