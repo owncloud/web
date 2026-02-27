@@ -1,7 +1,7 @@
 <template>
   <li v-oc-tooltip="componentProps.disabled ? action.disabledTooltip?.(actionOptions) : ''">
     <oc-button
-      v-oc-tooltip="showTooltip || action.hideLabel ? action.label(actionOptions) : ''"
+      v-oc-tooltip="showTooltip || action.hideLabel ? tooltipText : ''"
       :type="componentType"
       v-bind="componentProps"
       :class="[action.class, 'action-menu-item', 'oc-py-s', 'oc-px-m', 'oc-width-1-1']"
@@ -9,7 +9,8 @@
       data-testid="action-handler"
       :size="size"
       justify-content="left"
-      :title="action.label(actionOptions)"
+      :title="tooltipText"
+      :aria-describedby="uniqueId"
       v-on="componentListeners"
     >
       <oc-img
@@ -51,11 +52,14 @@
         v-text="action.shortcut"
       />
     </oc-button>
+    <span :id="uniqueId" class="oc-invisible-sr">
+      {{ tooltipText }}
+    </span>
   </li>
 </template>
 
 <script lang="ts" setup>
-import { computed, unref } from 'vue'
+import { computed, unref, useId } from 'vue'
 import { Action, ActionOptions, useConfigStore } from '../../composables'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
@@ -96,6 +100,16 @@ const componentType = computed<string>(() => {
   }
   console.warn('ActionMenuItem: No handler, route or href callback found in action', action)
   return 'button'
+})
+
+const uniqueId = useId()
+
+const tooltipText = computed<string>(() => {
+  if (action?.tooltip) {
+    return `${action.label(actionOptions)} - ${action.tooltip(actionOptions)}`
+  }
+
+  return action.label(actionOptions)
 })
 
 const ariaLabel = computed<string | null>(() => {

@@ -12,7 +12,7 @@ import { useMessages, useConfigStore, useResourcesStore } from '../../piniaStore
 export const useFileActionsEnableSync = () => {
   const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
-  const { $gettext, $ngettext } = useGettext()
+  const { $gettext, $ngettext, $pgettext } = useGettext()
 
   const clientService = useClientService()
   const loadingService = useLoadingService()
@@ -82,6 +82,11 @@ export const useFileActionsEnableSync = () => {
       name: 'enable-sync',
       icon: 'check',
       handler: (args) => loadingService.addTask(() => handler(args)),
+      tooltip: () =>
+        $pgettext(
+          'Explanation tooltip for the enable sync action in files shared with me and spaces',
+          'Only affects desktop and mobile clients. You can toggle this setting here, but it will only take effect on those platforms.'
+        ),
       label: () => $gettext('Enable sync'),
       isVisible: ({ space, resources }) => {
         if (

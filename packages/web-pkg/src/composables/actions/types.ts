@@ -24,6 +24,8 @@ export interface Action<T = ActionOptions> {
   isExternal?: boolean
   ext?: string
 
+  tooltip?(options?: T): string
+
   label(options?: T): string
 
   isVisible(options?: T): boolean
