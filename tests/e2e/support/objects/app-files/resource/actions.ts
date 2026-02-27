@@ -18,6 +18,7 @@ import { environment, objects, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
+import { a11y } from '../..'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -1469,13 +1470,29 @@ export const deleteTrashbinMultipleResources = async (
   const { page, resources } = args
   for (const resource of resources) {
     await page.locator(util.format(checkBox, resource)).click()
+    await a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['filesView'],
+      'files view when selecting multiple resources in trashbin for deletion'
+    )
   }
 
   await page.locator(permanentDeleteButton).first().click()
+  await a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'confirmation modal when deleting multiple resources in trashbin'
+  )
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'DELETE'),
     page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
+
+  await a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesView'],
+    'files view after deleting multiple resources in trashbin'
+  )
 
   for (const resource of resources) {
     await expect(page.locator(util.format(filesSelector, resource))).not.toBeVisible()
@@ -1484,10 +1501,20 @@ export const deleteTrashbinMultipleResources = async (
 
 export const emptyTrashbin = async ({ page }: { page: Page }): Promise<void> => {
   await page.locator(emptyTrashbinButtonSelector).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'confirmation modal when emptying the trashbin'
+  )
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'DELETE'),
     page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesView'],
+    'files view after emptying the trashbin'
+  )
   const message = await page.locator(notificationMessageDialog).textContent()
   expect(message).toBe('All deleted files were removed')
 }
@@ -1541,6 +1568,11 @@ export const selectTrashbinResource = async (page: Page, resource: string): Prom
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesView'],
+    'trashbin page'
+  )
 }
 
 export const restoreTrashBinResource = async (
@@ -1592,6 +1624,11 @@ export const batchRestoreTrashBinResources = async (
   }
 
   await Promise.all([...waitResponses, page.locator(restoreResourceButton).click()])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesView'],
+    'files view after restoring multiple resources from trashbin'
+  )
 
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
