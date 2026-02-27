@@ -143,7 +143,7 @@ export async function userOpensResources({
   await resourceObject.openFolder(resource)
 }
 
-export async function openResourceInViewer({
+export async function userOpensResourceInViewer({
   actorsEnvironment,
   stepUser,
   resource,
@@ -1012,4 +1012,55 @@ export async function userShouldSeeActivityOfResources({
       activity: substitute(info.activity)
     })
   }
+}
+
+export async function userShouldNotBeAbleToEditContentOfResource({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: { name: string; type: string; content: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    const canEdit = await resourceObject.canEditDocumentContent({ type: resource.type })
+    expect(canEdit).toBe(false)
+  }
+}
+
+export async function userCreatesFileFromTemplateFile({
+  actorsEnvironment,
+  stepUser,
+  file,
+  webOffice,
+  actionType
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  file: string
+  webOffice: string
+  actionType: 'sidebar panel' | 'context menu'
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.createFileFromTemplate(file, webOffice, actionType)
+}
+
+export async function userOpensTemplateFileUsingContextMenu({
+  actorsEnvironment,
+  stepUser,
+  file,
+  webOffice
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  file: string
+  webOffice: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openTemplateFile(file, webOffice)
 }

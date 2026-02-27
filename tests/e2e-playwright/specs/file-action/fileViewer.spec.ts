@@ -136,7 +136,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource        |
     //   | testavatar.jpeg |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testavatar.jpeg',
@@ -170,7 +170,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource      |
     //   | sampleGif.gif |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleGif.gif',
@@ -190,7 +190,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource      |
     //   | testimage.mp3 |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testimage.mp3',
@@ -210,7 +210,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource      |
     //   | sampleOgg.ogg |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleOgg.ogg',
@@ -230,7 +230,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource        |
     //   | sampleWebm.webm |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleWebm.webm',
@@ -250,7 +250,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource       |
     //   | test_video.mp4 |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'test_video.mp4',

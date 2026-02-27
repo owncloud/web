@@ -206,7 +206,7 @@ test.describe('check files pagination in project space', () => {
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource | role     | password |
     //   | parent   | Can edit | %public% |
-    await ui.createPublicLink({
+    await ui.userCreatesPublicLinkUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'parent',
