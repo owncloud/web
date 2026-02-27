@@ -62,7 +62,7 @@ test.describe('link', () => {
       newName: 'myPublicLink'
     })
     // And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Secret File Drop"
-    await ui.userChangesRoleOfThePublicLinkOfResource({
+    await ui.userChangesRoleOfPublicLinkOfResource({
       world,
       stepUser: 'Alice',
       resource: 'folderPublic',
@@ -145,7 +145,7 @@ test.describe('link', () => {
       name: 'files'
     })
     // And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Can edit"
-    await ui.userChangesRoleOfThePublicLinkOfResource({
+    await ui.userChangesRoleOfPublicLinkOfResource({
       world,
       stepUser: 'Alice',
       resource: 'folderPublic',

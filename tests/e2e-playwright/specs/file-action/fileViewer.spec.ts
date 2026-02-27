@@ -33,7 +33,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     //   | resource  | content                   |
     //   | lorem.txt | new content edited        |
     //   | lorem.md  | new readme content edited |
-    await ui.userEditsFile({
+    await ui.userEditsResources({
       world,
       stepUser: 'Alice',
       resources: [

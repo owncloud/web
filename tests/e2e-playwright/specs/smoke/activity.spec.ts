@@ -112,7 +112,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     // And "Anonymous" edits the following resources
     //   | resource     | content     |
     //   | textfile.txt | new content |
-    await ui.userEditsFile({
+    await ui.userEditsResources({
       world,
       stepUser: 'Anonymous',
       resources: [{ name: 'textfile.txt', content: 'new content' }]
