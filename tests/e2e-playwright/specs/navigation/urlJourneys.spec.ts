@@ -215,7 +215,7 @@ test.describe('Navigate web directly through urls', () => {
     // And "Alice" opens the following file in texteditor
     //   | resource               |
     //   | file_inside_folder.txt |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'file_inside_folder.txt',
@@ -239,7 +239,7 @@ test.describe('Navigate web directly through urls', () => {
     // And "Alice" opens the following file in texteditor
     //   | resource          |
     //   | spaceTextfile.txt |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'spaceTextfile.txt',

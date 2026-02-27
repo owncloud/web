@@ -77,7 +77,7 @@ export async function userNavigatesToSharedWithOthersPage({
   await pageObject.navigate()
 }
 
-export async function updateShareeRole({
+export async function userUpdateShareeRole({
   usersEnvironment,
   actorsEnvironment,
   stepUser,

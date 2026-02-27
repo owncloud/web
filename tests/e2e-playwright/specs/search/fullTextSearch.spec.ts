@@ -296,7 +296,7 @@ test.describe('Search', () => {
     // When "Brian" opens the following file in texteditor
     //   | resource     |
     //   | textfile.txt |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'textfile.txt',
