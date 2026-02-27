@@ -978,3 +978,95 @@ export async function userResumesUpload({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.resumeUpload()
 }
+
+export async function userDuplicatesResources({
+  actorsEnvironment,
+  stepUser,
+  method,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  method: 'sidebar-panel' | 'dropdown-menu' | 'batch-action'
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    await resourceObject.duplicate(resource, method)
+  }
+}
+
+async function performResourceAction({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  method,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: 'copy' | 'move'
+  method:
+    | 'keyboard'
+    | 'drag-drop'
+    | 'drag-drop-breadcrumb'
+    | 'sidebar-panel'
+    | 'dropdown-menu'
+    | 'batch-action'
+  resources: { resource: string; to: string; option?: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  // drag-n-drop always does MOVE
+  if (method.includes('drag-drop')) {
+    expect(actionType).toBe('move')
+  }
+
+  for (const { resource, to, option } of resources) {
+    await resourceObject[actionType]({
+      resource,
+      newLocation: to,
+      method,
+      option: option ?? undefined
+    })
+  }
+}
+
+export const userCopiesResources = (args) => performResourceAction({ ...args, actionType: 'copy' })
+
+export const userMovesResources = (args) => performResourceAction({ ...args, actionType: 'move' })
+
+export async function userCopiesOrMovesMultipleResources({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  newLocation,
+  method,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: string
+  newLocation: string
+  method: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  // drag-n-drop always does MOVE
+  if (method.includes('drag-drop')) {
+    expect(actionType).toBe('moves')
+  }
+
+  const normalizedResources = [].concat(...resources)
+  await resourceObject[actionType === 'copies' ? 'copyMultipleResources' : 'moveMultipleResources'](
+    {
+      newLocation,
+      method,
+      resources: normalizedResources
+    }
+  )
+}
