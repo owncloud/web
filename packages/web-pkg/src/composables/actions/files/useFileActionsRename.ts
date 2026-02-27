@@ -1,5 +1,9 @@
 import { isSameResource } from '../../../helpers/resource'
-import { isLocationTrashActive, isLocationSharesActive } from '../../../router'
+import {
+  isLocationTrashActive,
+  isLocationSharesActive,
+  isLocationPublicActive
+} from '../../../router'
 import { Resource } from '@ownclouders/web-client'
 import { dirname, join } from 'path'
 import { WebDAV } from '@ownclouders/web-client/webdav'
@@ -216,6 +220,10 @@ export const useFileActionsRename = () => {
       handler,
       isVisible: ({ resources }) => {
         if (isLocationTrashActive(router, 'files-trash-generic')) {
+          return false
+        }
+
+        if (isLocationPublicActive(router, 'files-public-link')) {
           return false
         }
         if (

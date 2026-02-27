@@ -1,0 +1,8 @@
+Bugfix: Disable rename action in password-protected folder view
+
+We've fixed a bug where renaming a folder from inside a password-protected
+folder view would create a duplicate folder instead of renaming the original.
+The rename action is now hidden in public link contexts, which aligns with
+the documented behavior that link files should not be manipulated from this view.
+
+https://github.com/owncloud/web/issues/12365
