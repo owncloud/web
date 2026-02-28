@@ -14,7 +14,7 @@
     "directory": "packages/extension-sdk"
   },
   "dependencies": {
-    "@vitejs/plugin-vue": "^6.0.3",
+    "@vitejs/plugin-vue": "^6.0.4",
     "rollup-plugin-serve": "^3.0.0"
   },
   "peerDependencies": {
