@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Prevent duplicate call for password protected public links: [#13363](https://github.com/owncloud/web/issues/13363)
 * Bugfix - Use dynamic viewport units (dvh/dvw) instead of viewport units (vh/vw): [#13578](https://github.com/owncloud/web/pull/13578)
+* Bugfix - Cannot-edit-public-link-when-name-is-too-long: [#13610](https://github.com/owncloud/web/pull/13610)
 * Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
 * Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
 * Enhancement - Use spaceId: [#13577](https://github.com/owncloud/web/pull/13577)
@@ -32,6 +33,14 @@ Details
    when the virtual keyboard appears.
 
    https://github.com/owncloud/web/pull/13578
+
+* Bugfix - Cannot-edit-public-link-when-name-is-too-long: [#13610](https://github.com/owncloud/web/pull/13610)
+
+   We've fixed an issue where users were unable to edit a public link if the name
+   of the link was too long.
+
+   https://github.com/owncloud/web/pull/13610
+   https://kiteworks.atlassian.net/browse/OCISDEV-701
 
 * Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
 
