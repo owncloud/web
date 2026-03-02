@@ -7,6 +7,7 @@ import {
 import { editor } from '../../../e2e/support/objects/app-files/utils'
 import { substitute } from '../../../e2e/support/utils'
 import { expect } from '@playwright/test'
+import { processDownload, resourceToDownload } from './resources'
 
 export async function userOpensPublicLink({
   actorsEnvironment,
@@ -185,4 +186,79 @@ export async function userUnlocksPasswordProtectedFolderWithPassword({
     password,
     passwordProtectedFolder: true
   })
+}
+
+export async function userUploadsResourceViaDrop({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  for (const resource of resources) {
+    await pageObject.dropUpload({
+      resources: [filesEnvironment.getFile({ name: resource })]
+    })
+  }
+}
+
+export async function userRefreshesTheOldLink({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.reload()
+}
+
+export async function userDownloadsThePublicLinkResources({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  resources: resourceToDownload[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await processDownload(pageObject, actionType, resources)
+}
+
+// Then(
+//   '{string} should not be able to open the old link {string}',
+//   async function (this: World, stepUser: string, name: string): Promise<void> {
+//     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+//     const pageObject = new objects.applicationFiles.page.Public({ page })
+//     const { url } = this.linksEnvironment.getLink({ name })
+//     await pageObject.expectThatLinkIsDeleted({ url })
+//   }
+// )
+
+export async function userShouldNotBeAbleToOpenTheOldLink({
+  actorsEnvironment,
+  linksEnvironment,
+  stepUser,
+  linkName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  linksEnvironment: LinksEnvironment
+  stepUser: string
+  linkName: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  const { url } = linksEnvironment.getLink({ name: linkName })
+  await pageObject.expectThatLinkIsDeleted({ url })
 }

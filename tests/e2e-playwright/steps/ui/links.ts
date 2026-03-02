@@ -47,3 +47,56 @@ export async function userClosesThePasswordProtectedFolderModal({
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.closeFolderModal()
 }
+
+export async function userChangesRoleOfThePublicLinkOfResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  linkName,
+  newRole
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  linkName: string
+  newRole: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  const roleText = await linkObject.changeRole({ linkName, resource, role: newRole })
+  expect(roleText.toLowerCase()).toBe(newRole.toLowerCase())
+}
+
+export async function userSetsExpirationDateOfThePublicLinkOfResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  linkName,
+  expireDate
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  linkName: string
+  expireDate: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.addExpiration({ resource, linkName, expireDate })
+}
+
+export async function userRemovesThePublicLinkOfResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  linkName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  linkName: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.delete({ resourceName: resource, name: linkName })
+}

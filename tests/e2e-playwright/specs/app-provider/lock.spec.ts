@@ -42,10 +42,10 @@ test.describe('lock', { tag: '@sse' }, () => {
     // When "Alice" creates the following resources
     //   | resource | type         | content      |
     //   | test.odt | OpenDocument | some content |
-    await api.userHasCreatedFiles({
-      usersEnvironment,
+    await ui.userCreatesResources({
+      actorsEnvironment,
       stepUser: 'Alice',
-      files: [{ pathToFile: 'test.odt', content: 'some content' }]
+      resources: [{ name: 'test.odt', type: 'OpenDocument', content: 'some content' }]
     })
     // And "Alice" shares the following resource using API
     // | resource | recipient | type | role                                | resourceType |
