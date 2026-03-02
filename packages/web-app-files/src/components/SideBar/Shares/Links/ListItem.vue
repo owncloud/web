@@ -1,6 +1,6 @@
 <template>
   <div class="oc-width-1-1 oc-flex oc-flex-middle oc-flex-between files-links-details">
-    <div class="oc-flex oc-flex-middle">
+    <div class="oc-flex oc-flex-middle files-links-content">
       <oc-avatar-item :width="36" icon-size="medium" icon="link" name="df" />
       <div class="files-links-name-wrapper oc-pl-s">
         <div class="oc-flex oc-flex-middle">
@@ -145,3 +145,12 @@ const currentLinkRoleLabel = computed(() => {
   return getLinkRoleByType(unref(currentLinkType))?.displayName || ''
 })
 </script>
+<style lang="scss" scoped>
+.files-links-content {
+  min-width: 0;
+}
+
+.files-links-name-wrapper {
+  min-width: 0;
+}
+</style>
