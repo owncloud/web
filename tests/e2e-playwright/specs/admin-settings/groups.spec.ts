@@ -5,6 +5,7 @@ import { ActorsEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import { actionTypes } from '../../support/constants'
 
 test.describe('groups management', () => {
   let actorsEnvironment
@@ -58,7 +59,7 @@ test.describe('groups management', () => {
     await ui.userDeletesGroups({
       actorsEnvironment,
       stepUser: 'Admin',
-      actionType: 'context menu',
+      actionType: actionTypes.contextMenu,
       groupsToBeDeleted: ['sales']
     })
 
@@ -73,7 +74,7 @@ test.describe('groups management', () => {
     await ui.userDeletesGroups({
       actorsEnvironment,
       stepUser: 'Admin',
-      actionType: 'batch actions',
+      actionType: actionTypes.batchActions,
       groupsToBeDeleted: ['security', 'finance']
     })
 

@@ -9,6 +9,7 @@ import {
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
+import { applications } from '../../support/constants.js'
 
 test.describe('Navigate web directly through urls', () => {
   let actorsEnvironment: ActorsEnvironment
@@ -219,7 +220,7 @@ test.describe('Navigate web directly through urls', () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'file_inside_folder.txt',
-      application: 'texteditor'
+      application: applications.textEditor
     })
     // Then "Alice" is in a text-editor
     await ui.userIsInFileViewer({
@@ -243,7 +244,7 @@ test.describe('Navigate web directly through urls', () => {
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'spaceTextfile.txt',
-      application: 'texteditor'
+      application: applications.textEditor
     })
     // Then "Alice" is in a text-editor
     await ui.userIsInFileViewer({
