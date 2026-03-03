@@ -1,12 +1,38 @@
 import { defineStore } from 'pinia'
 import { ref, Ref, unref } from 'vue'
 import { useConfigStore } from '../config'
-import { Extension, ExtensionPoint, ExtensionType } from './types'
+import path from 'path'
+import { Extension, ExtensionPoint, ExtensionType, SidebarNavExtension } from './types'
 
 export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const configStore = useConfigStore()
 
   const extensions = ref<Ref<Extension[]>[]>([])
+  const rebuild = ({ route }) => {
+    extensions.value = unref(extensions).map((extension) =>
+      unref(extension).map((ext) => {
+        if (ext.type === 'sidebarNav') {
+          const e = ext as SidebarNavExtension
+          const routeType =
+            typeof e.navItem.route === 'string' ? e.navItem.route : e.navItem.route.path
+          console.log('params: ', unref(route).params)
+
+          return {
+            ...e,
+            navItem: {
+              ...e.navItem,
+              route:
+                unref(route).params?.scope === 'vault'
+                  ? path.join('/vault', routeType)
+                  : e.navItem.route
+            }
+          }
+        }
+
+        return ext
+      })
+    )
+  }
 
   const registerExtensions = (e: Ref<Extension[]>) => {
     extensions.value.push(e)
@@ -67,7 +93,8 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
     extensionPoints,
     registerExtensionPoints,
     unregisterExtensionPoints,
-    getExtensionPoints
+    getExtensionPoints,
+    rebuild
   }
 })
 
