@@ -230,7 +230,8 @@ const loadResourcesTask = useTask(function* (signal) {
   setAncestorMetaData({})
   yield spacesStore.reloadProjectSpaces({
     graphClient: clientService.graphAuthenticated,
-    signal
+    signal,
+    isInVault: unref(route).params.scope === 'vault'
   })
   initResourceList({ currentFolder: null, resources: unref(spaces) })
 })

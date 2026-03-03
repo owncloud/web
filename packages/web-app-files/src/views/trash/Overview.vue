@@ -97,6 +97,7 @@ import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { FieldType } from '@ownclouders/design-system/helpers'
 import { useFileListHeaderPosition } from '@ownclouders/web-pkg'
+import { useRoute } from 'vue-router'
 
 const userStore = useUserStore()
 const spacesStore = useSpacesStore()
@@ -107,6 +108,7 @@ const { y: fileListHeaderY } = useFileListHeaderPosition()
 const resourcesStore = useResourcesStore()
 const { isSideBarOpen, sideBarActivePanel } = useSideBar()
 const { isSticky } = useIsTopBarSticky()
+const route = useRoute()
 
 const sortBy = ref<keyof SpaceResource>('name')
 const sortDir = ref<SortDir>(SortDir.Asc)
@@ -125,7 +127,8 @@ const loadResourcesTask = useTask(function* (signal) {
   resourcesStore.clearResourceList()
   yield spacesStore.reloadProjectSpaces({
     graphClient: clientService.graphAuthenticated,
-    signal
+    signal,
+    isInVault: unref(route).params.scope === 'vault'
   })
   resourcesStore.initResourceList({ currentFolder: null, resources: unref(spaces) })
 })
