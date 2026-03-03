@@ -194,7 +194,13 @@ export const useSpacesStore = defineStore('spaces', () => {
     }
   }
 
-  const loadSpaces = async ({ graphClient }: { graphClient: Graph }) => {
+  const loadSpaces = async ({
+    graphClient,
+    isInVault
+  }: {
+    graphClient: Graph
+    isInVault: boolean
+  }) => {
     spacesLoading.value = true
     try {
       /**
@@ -208,13 +214,13 @@ export const useSpacesStore = defineStore('spaces', () => {
       const [personalSpaces, projectSpaces] = await Promise.all([
         getSpacesByType({
           graphClient,
-          driveType: 'personal',
+          driveType: isInVault ? "'protected-personal'" : 'personal',
           configStore,
           graphRoles: sharesStore.graphRoles
         }),
         getSpacesByType({
           graphClient,
-          driveType: 'project',
+          driveType: isInVault ? "'protected-project'" : 'project',
           configStore,
           graphRoles: sharesStore.graphRoles
         })
@@ -254,14 +260,16 @@ export const useSpacesStore = defineStore('spaces', () => {
 
   const reloadProjectSpaces = async ({
     graphClient,
+    isInVault,
     signal
   }: {
     graphClient: Graph
+    isInVault: boolean
     signal?: AbortSignal
   }) => {
     const projectSpaces = await getSpacesByType({
       graphClient,
-      driveType: 'project',
+      driveType: isInVault ? "'protected-project'" : 'project',
       configStore,
       graphRoles: sharesStore.graphRoles,
       signal
