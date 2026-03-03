@@ -112,26 +112,26 @@ export async function uploadResourceInPublicLink({
   })
 }
 
-export async function deleteResourceFromPublicLink({
+export async function userDeletesResourcesFromPublicLink({
   actorsEnvironment,
   stepUser,
-  file,
-  actionType,
-  parentFolder = ''
+  actionType = 'SIDEBAR_PANEL',
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  file: string
-  actionType: string
-  parentFolder?: string
+  actionType: 'BATCH_ACTION' | 'SIDEBAR_PANEL'
+  resources: { resource: string; parentFolder?: string }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
-  await pageObject.delete({
-    folder: parentFolder === '' ? null : parentFolder,
-    resourcesWithInfo: [{ name: file }],
-    via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
-  })
+  for (const resource of resources) {
+    await pageObject.delete({
+      folder: resource.parentFolder ? resource.parentFolder : null,
+      resourcesWithInfo: [{ name: resource.resource }],
+      via: actionType
+    })
+  }
 }
 
 export async function userIsInFileViewer({
@@ -236,16 +236,6 @@ export async function userDownloadsThePublicLinkResources({
   await processDownload(pageObject, actionType, resources)
 }
 
-// Then(
-//   '{string} should not be able to open the old link {string}',
-//   async function (this: World, stepUser: string, name: string): Promise<void> {
-//     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-//     const pageObject = new objects.applicationFiles.page.Public({ page })
-//     const { url } = this.linksEnvironment.getLink({ name })
-//     await pageObject.expectThatLinkIsDeleted({ url })
-//   }
-// )
-
 export async function userShouldNotBeAbleToOpenTheOldLink({
   actorsEnvironment,
   linksEnvironment,
@@ -261,4 +251,20 @@ export async function userShouldNotBeAbleToOpenTheOldLink({
   const pageObject = new objects.applicationFiles.page.Public({ page })
   const { url } = linksEnvironment.getLink({ name: linkName })
   await pageObject.expectThatLinkIsDeleted({ url })
+}
+
+export async function userRenamesPublicLinkResources({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: { resource: string; newName: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  for (const resource of resources) {
+    await pageObject.rename({ resource: resource.resource, newName: resource.newName })
+  }
 }

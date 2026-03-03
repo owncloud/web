@@ -30,7 +30,7 @@ const downloadFolderButtonSideBar =
 const downloadButtonBatchAction = '.oc-files-actions-download-archive-trigger'
 const appBarContextMenu = '#oc-openfile-contextmenu-trigger'
 const appBarDownloadFileButton = '#oc-openfile-contextmenu .oc-files-actions-download-file-trigger'
-const deleteButtonBatchAction = '.oc-files-actions-delete-trigger'
+const deleteButtonBatchAction = '.batch-actions .oc-files-actions-delete-trigger'
 const createSpaceFromResourceAction = '.oc-files-actions-create-space-from-resource-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
 const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//input`

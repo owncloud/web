@@ -202,13 +202,12 @@ test.describe('link', () => {
     // And "Brian" deletes the following resources from public link using sidebar panel
     //   | resource   |
     //   | simple.pdf |
-    await ui.deleteResourceFromPublicLink({
+    await ui.userDeletesResourcesFromPublicLink({
       actorsEnvironment,
       stepUser: 'Brian',
-      file: 'simple.pdf',
-      actionType: 'sidebar panel'
+      actionType: 'SIDEBAR_PANEL',
+      resources: [{ resource: 'simple.pdf' }]
     })
-
     // And "Brian" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
 
@@ -292,35 +291,26 @@ test.describe('link', () => {
     //   | resource     | as               |
     //   | lorem.txt    | lorem_new.txt    |
     //   | textfile.txt | textfile_new.txt |
-    await ui.userRenamesResource({
+    await ui.userRenamesPublicLinkResources({
       actorsEnvironment,
       stepUser: 'Anonymous',
-      resource: 'lorem.txt',
-      newResourceName: 'lorem_new.txt'
-    })
-    await ui.userRenamesResource({
-      actorsEnvironment,
-      stepUser: 'Anonymous',
-      resource: 'textfile.txt',
-      newResourceName: 'textfile_new.txt'
+      resources: [
+        { resource: 'lorem.txt', newName: 'lorem_new.txt' },
+        { resource: 'textfile.txt', newName: 'textfile_new.txt' }
+      ]
     })
     // And "Anonymous" deletes the following resources from public link using batch action
     //   | resource  | from     |
     //   | lorem.txt | myfolder |
     //   | child     | myfolder |
-    await ui.deleteResourceFromPublicLink({
+    await ui.userDeletesResourcesFromPublicLink({
       actorsEnvironment,
       stepUser: 'Anonymous',
-      file: 'lorem.txt',
-      actionType: 'batch action',
-      parentFolder: 'myfolder'
-    })
-    await ui.deleteResourceFromPublicLink({
-      actorsEnvironment,
-      stepUser: 'Anonymous',
-      file: 'child',
-      actionType: 'batch action',
-      parentFolder: 'myfolder'
+      actionType: 'BATCH_ACTION',
+      resources: [
+        { resource: 'lorem.txt', parentFolder: 'myfolder' },
+        { resource: 'child', parentFolder: 'myfolder' }
+      ]
     })
     // And "Alice" removes the public link named "myPublicLink" of resource "folderPublic"
     await ui.userRemovesThePublicLinkOfResource({
