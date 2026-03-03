@@ -737,6 +737,35 @@ export async function userShouldSeeThumbnailAndPreview({
   await resourceObject.shouldSeeFilePreview({ resource })
 }
 
+export async function userShouldNotSeePreview({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.shouldNotSeeFilePreview({ resource })
+}
+
+export async function userShouldNotSeeThumbnailAndPreview({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await expect(resourceObject.getFileThumbnailLocator(resource)).not.toBeVisible()
+  await resourceObject.shouldNotSeeFilePreview({ resource })
+}
+
 export async function userOpensMediaUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
@@ -1011,5 +1040,43 @@ export async function userShouldSeeActivityOfResources({
       resource: info.resource,
       activity: substitute(info.activity)
     })
+  }
+}
+
+export async function userShouldSeeActionsForResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  actions
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  actions: string[]
+}) {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const action of actions) {
+    const actions = await resourceObject.getAllAvailableActions({ resource })
+    expect(actions.some((act) => act.startsWith(action))).toBe(true)
+  }
+}
+
+export async function userShouldNotSeeActionsForResource({
+  actorsEnvironment,
+  stepUser,
+  resource,
+  actions
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+  actions: string[]
+}) {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const action of actions) {
+    const actions = await resourceObject.getAllAvailableActions({ resource })
+    expect(actions.some((act) => act.startsWith(action))).toBe(false)
   }
 }
