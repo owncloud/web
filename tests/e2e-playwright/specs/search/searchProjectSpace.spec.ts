@@ -52,7 +52,7 @@ test.describe('Search in the project space', () => {
       filter: 'all files'
     })
 
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'search list',
       stepUser: 'Alice',
@@ -73,7 +73,7 @@ test.describe('Search in the project space', () => {
       filter: 'all files'
     })
 
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'search list',
       stepUser: 'Alice',

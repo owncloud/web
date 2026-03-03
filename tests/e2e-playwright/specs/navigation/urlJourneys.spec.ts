@@ -161,7 +161,7 @@ test.describe('Navigate web directly through urls', () => {
     //   | FOLDER    |
     //   | lorem.txt |
     //   | test.odt  |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',

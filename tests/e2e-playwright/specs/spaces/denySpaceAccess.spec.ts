@@ -100,7 +100,7 @@ test.describe('deny space access', () => {
     // But following resources should be displayed in the files list for user "Brian"
     //   | resource |
     //   | f2       |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',
@@ -124,7 +124,7 @@ test.describe('deny space access', () => {
     //   | resource |
     //   | f1       |
     //   | f2       |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',

@@ -164,7 +164,7 @@ test.describe('Search', () => {
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource        |
     //   | fileToShare.txt |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',
@@ -185,7 +185,7 @@ test.describe('Search', () => {
     //   | resource        |
     //   | fileWithTag.txt |
     //   | withTag.txt     |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',
@@ -204,7 +204,7 @@ test.describe('Search', () => {
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource        |
     //   | fileWithTag.txt |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',
@@ -220,7 +220,7 @@ test.describe('Search', () => {
     //   | testFolder/innerTextfile.txt  |
     //   | fileToShare.txt               |
     //   | spaceFolder/spaceTextfile.txt |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',
@@ -249,7 +249,7 @@ test.describe('Search', () => {
     //   | fileWithTag.txt               |
     //   | withTag.txt                   |
     //   | spaceFolder/spaceTextfile.txt |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',
@@ -281,7 +281,7 @@ test.describe('Search', () => {
     //   | fileWithTag.txt               |
     //   | withTag.txt                   |
     //   | spaceFolder/spaceTextfile.txt |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',

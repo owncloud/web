@@ -123,7 +123,7 @@ test.describe('link', () => {
     })
 
     //   When "Alice" opens folder "folderPublic"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'folderPublic'
@@ -132,7 +132,7 @@ test.describe('link', () => {
     //   | resource     |
     //   | textfile.txt |
     //   | simple.pdf   |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -161,7 +161,7 @@ test.describe('link', () => {
     //   | simple.pdf   |
     //   | SubFolder    |
     //   | lorem.txt    |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',
@@ -221,7 +221,7 @@ test.describe('link', () => {
       resources: [{ name: 'PARENT', type: 'folder' }]
     })
     // And "Anonymous" should see the resource "PARENT" in the files list
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Anonymous',

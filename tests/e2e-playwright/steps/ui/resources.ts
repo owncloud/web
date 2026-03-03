@@ -123,7 +123,7 @@ export async function userShouldSeeResourcesAsTiles({
   await resourceObject.expectThatResourcesAreTiles()
 }
 
-export async function userOpensResources({
+export async function userOpensResource({
   world,
   stepUser,
   resource
@@ -156,7 +156,7 @@ export async function userOpensResourceInViewer({
   })
 }
 
-export async function userShouldSeeTheResources({
+export async function userShouldSeeResources({
   world,
   listType,
   stepUser,
@@ -717,7 +717,7 @@ export async function userEditsFile({
   }
 }
 
-export async function userShouldSeeThumbnailAndPreview({
+export async function userShouldSeeThumbnailAndPreviewForFile({
   world,
   stepUser,
   resource
@@ -730,6 +730,35 @@ export async function userShouldSeeThumbnailAndPreview({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await expect(resourceObject.getFileThumbnailLocator(resource)).toBeVisible()
   await resourceObject.shouldSeeFilePreview({ resource })
+}
+
+export async function userShouldNotSeePreviewForFile({
+  world,
+  stepUser,
+  resource
+}: {
+  world: World
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.shouldNotSeeFilePreview({ resource })
+}
+
+export async function userShouldNotSeeThumbnailAndPreviewForFile({
+  world,
+  stepUser,
+  resource
+}: {
+  world: World
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await expect(resourceObject.getFileThumbnailLocator(resource)).not.toBeVisible()
+  await resourceObject.shouldNotSeeFilePreview({ resource })
 }
 
 export async function userOpensMediaUsingSidebarPanel({
@@ -1065,4 +1094,42 @@ export async function userDownloadsThePublicLinkResources({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await processDownload(pageObject, actionType, resources)
+}
+
+export async function userShouldSeeActionsForResource({
+  world,
+  stepUser,
+  resource,
+  actions
+}: {
+  world: World
+  stepUser: string
+  resource: string
+  actions: string[]
+}) {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const action of actions) {
+    const actions = await resourceObject.getAllAvailableActions({ resource })
+    expect(actions.some((act) => act.startsWith(action))).toBe(true)
+  }
+}
+
+export async function userShouldNotSeeActionsForResource({
+  world,
+  stepUser,
+  resource,
+  actions
+}: {
+  world: World
+  stepUser: string
+  resource: string
+  actions: string[]
+}) {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const action of actions) {
+    const actions = await resourceObject.getAllAvailableActions({ resource })
+    expect(actions.some((act) => act.startsWith(action))).toBe(false)
+  }
 }

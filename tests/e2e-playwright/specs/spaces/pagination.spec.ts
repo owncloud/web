@@ -98,7 +98,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // When "Alice" opens file "testfile45.txt"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'testfile45.txt'

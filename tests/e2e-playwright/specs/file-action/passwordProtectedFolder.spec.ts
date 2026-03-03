@@ -39,7 +39,7 @@ test.describe('password-protected folder operation', () => {
       //   | .PasswordProtectedFolders |
       //   | folder1.psec              |
       //   | folder2.psec              |
-      await ui.userShouldSeeTheResources({
+      await ui.userShouldSeeResources({
         world,
         listType: 'files list',
         stepUser: 'Alice',
@@ -47,7 +47,7 @@ test.describe('password-protected folder operation', () => {
       })
 
       // When "Alice" opens folder ".PasswordProtectedFolders/projects/Personal"
-      await ui.userOpensResources({
+      await ui.userOpensResource({
         world,
         stepUser: 'Alice',
         resource: '.PasswordProtectedFolders/projects/Personal'
@@ -57,7 +57,7 @@ test.describe('password-protected folder operation', () => {
       //   | resource |
       //   | folder1  |
       //   | folder2  |
-      await ui.userShouldSeeTheResources({
+      await ui.userShouldSeeResources({
         world,
         listType: 'files list',
         stepUser: 'Alice',
@@ -69,7 +69,7 @@ test.describe('password-protected folder operation', () => {
       await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
 
       // And "Alice" opens folder "folder1.psec"
-      await ui.userOpensResources({
+      await ui.userOpensResource({
         world,
         stepUser: 'Alice',
         resource: 'folder1.psec'
@@ -135,7 +135,7 @@ test.describe('password-protected folder operation', () => {
       })
 
       // And "Alice" opens folder ".PasswordProtectedFolders/projects/Personal"
-      await ui.userOpensResources({
+      await ui.userOpensResource({
         world,
         stepUser: 'Alice',
         resource: '.PasswordProtectedFolders/projects/Personal'
@@ -191,7 +191,7 @@ test.describe('password-protected folder operation', () => {
       //   | resource     |
       //   | folder1.psec |
       //   | folder2.psec |
-      await ui.userShouldSeeTheResources({
+      await ui.userShouldSeeResources({
         world,
         listType: 'files list',
         stepUser: 'Alice',
@@ -274,7 +274,7 @@ test.describe('password-protected folder operation', () => {
     //   | space-folder1.psec |
     //   | space-folder2.psec |
     //   | space-folder3.psec |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -285,7 +285,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userNavigatesToPersonalSpacePage({ world, stepUser: 'Alice' })
 
     // When "Alice" opens folder ".PasswordProtectedFolders/projects/team"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: '.PasswordProtectedFolders/projects/team'
@@ -296,7 +296,7 @@ test.describe('password-protected folder operation', () => {
     //   | space-folder1 |
     //   | space-folder2 |
     //   | space-folder3 |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -311,7 +311,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" opens folder "space-folder1.psec"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'space-folder1.psec'
@@ -344,7 +344,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userNavigatesToSpace({ world, stepUser: 'Brian', space: 'team.1' })
 
     // And "Brian" opens folder "space-folder1.psec"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Brian',
       resource: 'space-folder1.psec'
@@ -368,7 +368,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userNavigatesToPersonalSpacePage({ world, stepUser: 'Alice' })
 
     // And "Alice" opens folder ".PasswordProtectedFolders/projects/team"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: '.PasswordProtectedFolders/projects/team'
@@ -440,7 +440,7 @@ test.describe('password-protected folder operation', () => {
     //   | space-folder1.psec |
     //   | space-folder2.psec |
     //   | space-folder3.psec |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',
@@ -459,7 +459,7 @@ test.describe('password-protected folder operation', () => {
     //   | space-folder1.psec |
     //   | space-folder2.psec |
     //   | space-folder3.psec |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -470,7 +470,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userNavigatesToPersonalSpacePage({ world, stepUser: 'Alice' })
 
     // And "Alice" opens folder ".PasswordProtectedFolders/projects/team"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: '.PasswordProtectedFolders/projects/team'
@@ -479,7 +479,7 @@ test.describe('password-protected folder operation', () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | space-folder2 |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',

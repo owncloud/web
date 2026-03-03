@@ -18,7 +18,7 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
       stepUser: 'Alice',
       resources: [{ name: 'parent/folder%2Fwith%2FSlashes', type: 'folder' }]
     })
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'parent/folder%2Fwith%2FSlashes'
@@ -28,7 +28,7 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
       stepUser: 'Alice',
       resources: [{ name: `'single-double quotes"`, type: 'folder' }]
     })
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: `'single-double quotes"`
@@ -38,7 +38,7 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
       stepUser: 'Alice',
       resources: [{ name: `"inner" double quote`, type: 'folder' }]
     })
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: `"inner" double quote`
@@ -48,7 +48,7 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
       stepUser: 'Alice',
       resources: [{ name: 'sub-folder', type: 'folder' }]
     })
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'sub-folder'

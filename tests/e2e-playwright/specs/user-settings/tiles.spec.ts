@@ -32,7 +32,7 @@ test.describe('tiles view', { tag: '@predefined-users' }, () => {
       stepUser: 'Alice'
     })
     // And "Alice" opens folder "tile_folder"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'tile_folder'
