@@ -24,6 +24,16 @@
       <custom-component-target :extension-point="topBarCenterExtensionPoint" />
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle">
+      <oc-select
+        v-if="!isEmbedModeEnabled"
+        v-model="selectedMode"
+        class="oc-topbar-mode-switch"
+        :label="$gettext('Mode')"
+        :label-hidden="true"
+        :clearable="false"
+        :options="modeOptions"
+        option-label="label"
+      />
       <portal-target name="app.runtime.header.right" multiple />
     </div>
     <template v-if="!isEmbedModeEnabled">
@@ -65,6 +75,7 @@ import {
   useRouter,
   useThemeStore
 } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
 import { isRuntimeRoute } from '../../router'
 import { appMenuExtensionPoint, topBarCenterExtensionPoint } from '../../extensionPoints'
 
@@ -86,6 +97,7 @@ export default {
     }
   },
   setup() {
+    const { $gettext } = useGettext()
     const capabilityStore = useCapabilityStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
@@ -146,6 +158,33 @@ export default {
       )
     })
 
+    const modeOptions = computed(() => {
+      return [
+        {
+          id: 'default-mode',
+          label: $gettext('Default mode'),
+          route: '/'
+        },
+        {
+          id: 'account-mode',
+          label: $gettext('Vault'),
+          route: '/vault/files'
+        }
+      ]
+    })
+
+    const selectedMode = computed({
+      get() {
+        const currentPath = unref(router.currentRoute).path
+        return currentPath.startsWith('/vault') ? unref(modeOptions)[1] : unref(modeOptions)[0]
+      },
+      set(mode) {
+        if (mode?.route && mode.route !== unref(router.currentRoute).path) {
+          router.push(mode.route)
+        }
+      }
+    })
+
     return {
       configOptions,
       contentOnLeftPortal,
@@ -161,7 +200,9 @@ export default {
       appMenuExtensions,
       hideAppSwitcher,
       hideAccountMenu,
-      isUniversalAccessEnabled
+      isUniversalAccessEnabled,
+      modeOptions,
+      selectedMode
     }
   },
   computed: {
@@ -257,6 +298,10 @@ export default {
     @media (min-width: $oc-breakpoint-small-default) {
       gap: 20px;
       justify-content: flex-end;
+    }
+
+    .oc-topbar-mode-switch {
+      min-width: 12rem;
     }
   }
 }
