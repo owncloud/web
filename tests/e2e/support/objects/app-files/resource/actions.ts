@@ -1006,6 +1006,11 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
   const { page, resource, newLocation, action, method, option } = args
 
   await page.locator(breadcrumbRoot).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['breadcrumb', 'filesSpaceTable'],
+    'Personal Page and breadcrumb before pasting resource'
+  )
   const newLocationPath = newLocation.split('/')
 
   for (const path of newLocationPath) {
@@ -1038,6 +1043,11 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
       names: [resource]
     })
   }
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesSpaceTable', 'breadcrumb', 'fileAppBarActions'],
+    `Personal Page and breadcrumb after pasting resource with ${action} action`
+  )
 }
 
 const selectBatchAction = async (page: Page, action: string): Promise<void> => {
@@ -1168,6 +1178,11 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
 
       const actionButtonType = action === 'copy' ? 'Copy' : 'Cut'
       await page.locator(util.format(sideBarActionButton, actionButtonType)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['ocNotificationSuccessMessage'],
+        `Success notification after clicking ${actionButtonType} in sidebar`
+      )
       await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
     }
@@ -1212,6 +1227,12 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
         page.locator(util.format(resourceNameSelector, resourceBase)),
         page.locator(util.format(resourceNameSelector, newLocation)).click()
       ])
+
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['breadcrumb', 'filesSpaceTable'],
+        'Personal Page and breadcrumb after dragging and dropping resource'
+      )
 
       break
     }
@@ -1300,6 +1321,11 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
     ),
     page.locator(util.format(actionConfirmationButton, 'Rename')).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesView'],
+    'files view after renaming a resource'
+  )
 }
 
 /**/
