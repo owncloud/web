@@ -44,6 +44,7 @@ export const selectors = {
   appDetails: '.app-details',
   filesView: '#files-view',
   sidebarNavigationMenu: '.oc-sidebar-nav',
+  sidebarPaneSharing: '#sidebar-panel-sharing',
   // visible tippy/popover (active)
   tippyBoxVisible: '.tippy-box[data-state="visible"]',
   logoWrapper: '.logo-wrapper',
