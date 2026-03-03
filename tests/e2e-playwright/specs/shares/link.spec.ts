@@ -42,7 +42,7 @@ test.describe('link', () => {
     })
   })
 
-  test('public link', async () => {
+  test('public link', { tag: '@predefined-users' }, async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Brian |
@@ -106,7 +106,7 @@ test.describe('link', () => {
       expireDate: '+5 days'
     })
     // When "Anonymous" opens the public link "myPublicLink"
-    await ui.openPublicLink({
+    await ui.userOpensPublicLink({
       actorsEnvironment,
       linksEnvironment,
       stepUser: 'Anonymous',
@@ -132,7 +132,7 @@ test.describe('link', () => {
     // When "Brian" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" opens the public link "myPublicLink"
-    await ui.openPublicLink({
+    await ui.userOpensPublicLink({
       actorsEnvironment,
       linksEnvironment,
       stepUser: 'Brian',

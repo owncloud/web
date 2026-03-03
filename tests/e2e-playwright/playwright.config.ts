@@ -10,7 +10,7 @@ const reportsDir = path.resolve(__dirname, '../../', config.reportDir)
  */
 export default defineConfig({
   // Set default test timeout to 60 seconds
-  timeout: config.timeout * 100000,
+  timeout: config.timeout * 1000,
 
   // Look for test files in the following directory, relative to this configuration file.
   testDir: 'specs',
