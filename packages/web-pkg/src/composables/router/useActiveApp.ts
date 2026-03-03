@@ -3,7 +3,8 @@ import { useRoute } from './useRoute'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 
 export const activeApp = (route: RouteLocationNormalizedLoaded): string => {
-  return route.path.split('/')[1]
+  const removeVaultPrefix = route.path.replace(/^\/vault/, '')
+  return removeVaultPrefix.split('/')[1]
 }
 
 export const useActiveApp = (): ComputedRef<string> => {

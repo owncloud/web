@@ -114,6 +114,16 @@ export default defineComponent({
     const allMessages = ref<{ id: string; title: string; desc?: string }[]>([])
 
     watch(
+      () => route.value.params?.scope,
+      () => {
+        extensionRegistry.rebuild({ route })
+      },
+      {
+        immediate: true
+      }
+    )
+
+    watch(
       () => messageStore.messages,
       (messages) => {
         if (messages && messages.length > 0) {
@@ -183,17 +193,21 @@ export default defineComponent({
       }
 
       const { href: currentHref } = router.resolve(unref(route))
+      const newRef = currentHref.replace(/^\/vault/, '')
+
       return orderBy(
         unref(extensionNavItems).map((item) => {
           let active = typeof item.isActive !== 'function' || item.isActive()
+          console.log('active item: ', active)
 
           if (active) {
             active = [item.route, ...(item.activeFor || [])].filter(Boolean).some((currentItem) => {
               try {
-                const comparativeHref = router.resolve(
-                  currentItem as RouteLocationAsRelativeTyped
-                ).href
-                return currentHref.startsWith(comparativeHref)
+                const comparativeHref = router
+                  .resolve(currentItem as RouteLocationAsRelativeTyped)
+                  .href.replace(/^\/vault/, '')
+
+                return newRef.startsWith(comparativeHref)
               } catch (e) {
                 console.error(e)
                 return false
