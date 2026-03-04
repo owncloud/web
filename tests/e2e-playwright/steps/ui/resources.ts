@@ -37,6 +37,21 @@ export async function userUploadsResources({
   }
 }
 
+export async function userShouldBeAbleToEditResource({
+  world,
+  stepUser,
+  resource
+}: {
+  world: World
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const userCanEdit = await resourceObject.canManageResource({ resource })
+  expect(userCanEdit).toBe(true)
+}
+
 export async function userShouldNotBeAbleToEditResource({
   world,
   stepUser,
@@ -49,7 +64,7 @@ export async function userShouldNotBeAbleToEditResource({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const userCanEdit = await resourceObject.canManageResource({ resource })
-  expect(userCanEdit).toBeFalsy()
+  expect(userCanEdit).toBe(false)
 }
 
 export async function userCreatesResources({
@@ -1335,4 +1350,24 @@ export async function userShouldSeeShareIndicatorOnResource({
   })
 
   await expect(showShareIndicator).toBeVisible()
+}
+
+export async function userShouldNotSeeShareIndicatorOnResource({
+  world,
+  stepUser,
+  buttonLabel,
+  resource
+}: {
+  world: World
+  stepUser: string
+  buttonLabel: 'link-direct' | 'link-indirect' | 'user-direct' | 'user-indirect'
+  resource: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const shareIndicator = resourceObject.showShareIndicatorSelector({
+    buttonLabel,
+    resource
+  })
+  await expect(shareIndicator).not.toBeVisible()
 }
