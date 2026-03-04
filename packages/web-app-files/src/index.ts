@@ -22,7 +22,11 @@ import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
-import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
+import {
+  isPersonalSpaceResource,
+  isProtectedPersonalSpaceResource,
+  isShareSpaceResource
+} from '@ownclouders/web-client'
 import { ComponentCustomProperties, unref } from 'vue'
 import { extensionPoints } from './extensionPoints'
 
@@ -63,7 +67,9 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
         }
 
         return !!spacesStores.spaces.find(
-          (drive) => isPersonalSpaceResource(drive) && drive.isOwner(userStore.user)
+          (drive) =>
+            (isPersonalSpaceResource(drive) || isProtectedPersonalSpaceResource(drive)) &&
+            drive.isOwner(userStore.user)
         )
       },
       priority: 10
