@@ -149,13 +149,11 @@ test.describe('check files pagination in project space', () => {
     await ui.navigateToSpace({ actorsEnvironment, stepUser: 'David', space: 'team.1' })
 
     // Then "David" should not be able to edit folder "parent"
-    expect(
-      await ui.isAbleToEditFileOrFolder({
-        actorsEnvironment,
-        stepUser: 'David',
-        resource: 'parent'
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotAbleToEditResource({
+      actorsEnvironment,
+      stepUser: 'David',
+      resource: 'parent'
+    })
 
     // And "David" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'David' })
@@ -195,18 +193,16 @@ test.describe('check files pagination in project space', () => {
     await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Carol', space: 'team.1' })
 
     // Then "Carol" should not be able to edit folder "parent"
-    expect(
-      await ui.isAbleToEditFileOrFolder({
-        actorsEnvironment,
-        stepUser: 'Carol',
-        resource: 'parent'
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotAbleToEditResource({
+      actorsEnvironment,
+      stepUser: 'Carol',
+      resource: 'parent'
+    })
 
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource | role     | password |
     //   | parent   | Can edit | %public% |
-    await ui.createPublicLink({
+    await ui.userCreatePublicLink({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'parent',

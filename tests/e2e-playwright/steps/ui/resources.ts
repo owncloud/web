@@ -43,7 +43,7 @@ export async function uploadResource({
   }
 }
 
-export async function isAbleToEditFileOrFolder({
+export async function userShouldAbleToEditResource({
   actorsEnvironment,
   stepUser,
   resource
@@ -51,11 +51,26 @@ export async function isAbleToEditFileOrFolder({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const userCanEdit = await resourceObject.canManageResource({ resource })
-  return userCanEdit
+  expect(userCanEdit).toBe(true)
+}
+
+export async function userShouldNotAbleToEditResource({
+  actorsEnvironment,
+  stepUser,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const userCanEdit = await resourceObject.canManageResource({ resource })
+  expect(userCanEdit).toBe(false)
 }
 
 export async function userCreatesResources({
@@ -1012,4 +1027,44 @@ export async function userShouldSeeActivityOfResources({
       activity: substitute(info.activity)
     })
   }
+}
+
+export async function userShouldSeeShareIndicatorOnResource({
+  actorsEnvironment,
+  stepUser,
+  buttonLabel,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  buttonLabel: 'link-direct' | 'link-indirect' | 'user-direct' | 'user-indirect'
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const shareIndicator = resourceObject.showShareIndicatorSelector({
+    buttonLabel,
+    resource
+  })
+  await expect(shareIndicator).toBeVisible()
+}
+
+export async function userShouldNotSeeShareIndicatorOnResource({
+  actorsEnvironment,
+  stepUser,
+  buttonLabel,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  buttonLabel: 'link-direct' | 'link-indirect' | 'user-direct' | 'user-indirect'
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const shareIndicator = resourceObject.showShareIndicatorSelector({
+    buttonLabel,
+    resource
+  })
+  await expect(shareIndicator).not.toBeVisible()
 }
