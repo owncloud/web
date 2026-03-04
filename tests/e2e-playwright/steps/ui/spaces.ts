@@ -1,7 +1,11 @@
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { objects } from '../../../e2e/support'
 import { Space } from '../../../e2e/support/types'
-import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
+import {
+  getDynamicRoleIdByName,
+  ResourceType,
+  shareRoles
+} from '../../../e2e/support/api/share/share'
 import { expect } from '@playwright/test'
 
 export async function navigateToPersonalSpacePage({
@@ -44,20 +48,23 @@ export async function navigateToSpace({
   await spacesObject.open({ key: space })
 }
 
-export async function createProjectSpace({
+export async function userCreatesProjectSpaces({
   actorsEnvironment,
   stepUser,
-  name,
-  id
+  spaces
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  name: string
-  id: string
+  spaces: Array<{ name: string; id: string }>
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
-  await spacesObject.create({ key: id || name, space: { name: name, id: id } as unknown as Space })
+  for (const space of spaces) {
+    await spacesObject.create({
+      key: space.id || space.name,
+      space: { name: space.name, id: space.id } as unknown as Space
+    })
+  }
 }
 export async function userAddsMembersToSpace({
   actorsEnvironment,
@@ -146,7 +153,7 @@ export async function removeAccessToMember({
   await spacesObject.removeAccessToMember({ users: [member] })
 }
 
-export async function navigateToProjectSpaceManagementPage({
+export async function userNavigatesToProjectSpaceManagementPage({
   actorsEnvironment,
   stepUser
 }: {
@@ -218,21 +225,6 @@ export async function navigateToTrashbin({
   }
 }
 
-export async function userShouldSeeSpace({
-  actorsEnvironment,
-  stepUser,
-  space
-}: {
-  actorsEnvironment: ActorsEnvironment
-  stepUser: string
-  space?: string
-}): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const spacesObject = new objects.applicationFiles.Spaces({ page })
-  const spaceLocator = await spacesObject.getSpaceLocator(space)
-  await expect(spaceLocator).toBeVisible()
-}
-
 export async function userShouldNotSeeSpace({
   actorsEnvironment,
   stepUser,
@@ -271,4 +263,236 @@ export async function userChangesMemberRole({
     role: roleId
   }
   await spacesObject.changeRoles({ users: [member] })
+}
+
+export async function userShouldSeeSpaces({
+  actorsEnvironment,
+  stepUser,
+  expectedSpaceIds
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedSpaceIds: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const actualList = await spacesObject.getDisplayedSpaces()
+  for (const expectedSpaceId of expectedSpaceIds) {
+    const space = spacesObject.getSpace({ key: expectedSpaceId })
+    expect(actualList).toContain(space.id)
+  }
+}
+
+export async function userShouldNotSeeSpaces({
+  actorsEnvironment,
+  stepUser,
+  expectedSpaceIds
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedSpaceIds: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const actualList = await spacesObject.getDisplayedSpaces()
+  for (const expectedSpaceId of expectedSpaceIds) {
+    const space = spacesObject.getSpace({ key: expectedSpaceId })
+    expect(actualList).not.toContain(space.id)
+  }
+}
+
+export async function userDisablesSpaceUsingContextMenu({
+  actorsEnvironment,
+  stepUser,
+  spaceId
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  spaceId: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const spaceUUID = spacesObject.getUUID({ key: spaceId })
+  await spacesObject.disable({ spaceIds: [spaceUUID], context: 'context-menu' })
+}
+
+export async function userEnablesSpaceUsingContextMenu({
+  actorsEnvironment,
+  stepUser,
+  spaceId
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  spaceId: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const spaceUUID = spacesObject.getUUID({ key: spaceId })
+  await spacesObject.enable({ spaceIds: [spaceUUID], context: 'context-menu' })
+}
+
+export async function userDeletesSpaceUsingContextMenu({
+  actorsEnvironment,
+  stepUser,
+  spaceId
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  spaceId: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const spaceUUID = spacesObject.getUUID({ key: spaceId })
+  await spacesObject.delete({ spaceIds: [spaceUUID], context: 'context-menu' })
+}
+
+export async function userDisablesSpacesUsingBatchActions({
+  actorsEnvironment,
+  stepUser,
+  spaceIds
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  spaceIds: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const uuids = spaceIds.map((id) => spacesObject.getUUID({ key: id }))
+  for (const id of spaceIds) {
+    await spacesObject.select({ key: id })
+  }
+  await spacesObject.disable({ spaceIds: uuids, context: 'batch-actions' })
+}
+
+export async function userEnablesSpacesUsingBatchActions({
+  actorsEnvironment,
+  stepUser,
+  spaceIds
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  spaceIds: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const uuids = spaceIds.map((id) => spacesObject.getUUID({ key: id }))
+  for (const id of spaceIds) {
+    await spacesObject.select({ key: id })
+  }
+  await spacesObject.enable({ spaceIds: uuids, context: 'batch-actions' })
+}
+
+export async function userDeletesSpacesUsingBatchActions({
+  actorsEnvironment,
+  stepUser,
+  spaceIds
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  spaceIds: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const uuids = spaceIds.map((id) => spacesObject.getUUID({ key: id }))
+  for (const id of spaceIds) {
+    await spacesObject.select({ key: id })
+  }
+  await spacesObject.delete({ spaceIds: uuids, context: 'batch-actions' })
+}
+
+export async function userUpdatesSpaceUsingContextMenu({
+  actorsEnvironment,
+  stepUser,
+  spaceId,
+  updates
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  spaceId: string
+  updates: Array<{ attribute: 'name' | 'subtitle' | 'quota'; value: string }>
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const spaceUUID = spacesObject.getUUID({ key: spaceId })
+
+  for (const update of updates) {
+    switch (update.attribute) {
+      case 'name':
+        await spacesObject.renameSpaceUsingContextMenu({ key: spaceId, value: update.value })
+        break
+      case 'subtitle':
+        await spacesObject.changeSubtitleUsingContextMenu({ key: spaceId, value: update.value })
+        break
+      case 'quota':
+        await spacesObject.changeQuota({
+          spaceIds: [spaceUUID],
+          value: update.value,
+          context: 'context-menu'
+        })
+        break
+      default:
+        throw new Error(`'${update.attribute}' not implemented`)
+    }
+  }
+}
+
+export async function userChangesSpaceQuotaUsingBatchActions({
+  actorsEnvironment,
+  stepUser,
+  spaceIds,
+  value
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  spaceIds: string[]
+  value: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const uuids = []
+  for (const spaceId of spaceIds) {
+    uuids.push(spacesObject.getUUID({ key: spaceId }))
+    await spacesObject.select({ key: spaceId })
+  }
+  await spacesObject.changeQuota({
+    spaceIds: uuids,
+    value,
+    context: 'batch-actions'
+  })
+}
+
+export async function listMembersOfProjectSpaceUsingSidebarPanel({
+  actorsEnvironment,
+  stepUser,
+  space
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  space: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  await spacesObject.openPanel({ key: space })
+  await spacesObject.openActionSideBarPanel({ action: 'SpaceMembers' })
+}
+export async function shouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
+  actorsEnvironment,
+  stepUser,
+  expectedMembers
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedMembers: Array<{ user: string; role: string }>
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
+  const actualMemberList = {
+    manager: await spacesObject.listMembers({ filter: 'Can manage' }),
+    viewer: await spacesObject.listMembers({ filter: 'Can view' }),
+    editor: await spacesObject.listMembers({ filter: 'Can edit with versions and trashbin' })
+  }
+  for (const member of expectedMembers) {
+    const shareRole = shareRoles[member.role as keyof typeof shareRoles]
+    expect(actualMemberList[shareRole as keyof typeof actualMemberList]).toContain(member.user)
+  }
 }
