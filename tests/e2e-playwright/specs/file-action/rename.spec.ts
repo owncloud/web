@@ -114,7 +114,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
 
     // rename in the public link
     // When "Anonymous" opens the public link "Unnamed link"
-    await ui.openPublicLink({
+    await ui.userOpensPublicLink({
       actorsEnvironment,
       linksEnvironment,
       stepUser: 'Anonymous',
