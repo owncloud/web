@@ -15,7 +15,6 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
           const e = ext as SidebarNavExtension
           const routeType =
             typeof e.navItem.route === 'string' ? e.navItem.route : e.navItem.route.path
-          console.log('params: ', unref(route).params)
 
           return {
             ...e,
