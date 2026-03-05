@@ -198,7 +198,6 @@ export default defineComponent({
       return orderBy(
         unref(extensionNavItems).map((item) => {
           let active = typeof item.isActive !== 'function' || item.isActive()
-          console.log('active item: ', active)
 
           if (active) {
             active = [item.route, ...(item.activeFor || [])].filter(Boolean).some((currentItem) => {

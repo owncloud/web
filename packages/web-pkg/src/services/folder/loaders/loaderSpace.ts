@@ -8,6 +8,7 @@ import {
   isPersonalSpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource,
+  isProtectedPersonalSpaceResource,
   SpaceMember,
   SpaceResource
 } from '@ownclouders/web-client'
@@ -84,7 +85,11 @@ export class FolderLoaderSpace implements FolderLoader {
                 serverUrl: configStore.serverUrl
               })
             }
-          } else if (!isPersonalSpaceResource(space) && !isPublicSpaceResource(space)) {
+          } else if (
+            !isPersonalSpaceResource(space) &&
+            !isPublicSpaceResource(space) &&
+            !isProtectedPersonalSpaceResource(space)
+          ) {
             // note: in the future we might want to show the space as root for personal spaces as well (to show quota and the like). Currently not needed.
             currentFolder = space
           }

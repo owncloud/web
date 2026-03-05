@@ -7,9 +7,9 @@ export const useCreateSpace = () => {
   const resourcesStore = useResourcesStore()
   const sharesStore = useSharesStore()
 
-  const createSpace = (name: string) => {
+  const createSpace = (name: string, driveType: string = 'project') => {
     const { graphAuthenticated } = clientService
-    return graphAuthenticated.drives.createDrive({ name }, sharesStore.graphRoles, {
+    return graphAuthenticated.drives.createDrive({ name, driveType }, sharesStore.graphRoles, {
       params: { template: 'default' }
     })
   }

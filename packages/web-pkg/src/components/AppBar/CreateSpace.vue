@@ -23,6 +23,7 @@ import {
   useSpacesStore,
   useResourcesStore
 } from '../../composables'
+import { useRoute } from 'vue-router'
 import { SpaceResource } from '@ownclouders/web-client'
 
 interface Props {
@@ -40,10 +41,16 @@ const { checkSpaceNameModalInput } = useSpaceHelpers()
 const { dispatchModal } = useModals()
 const spacesStore = useSpacesStore()
 const { upsertResource } = useResourcesStore()
+const route = useRoute()
 
 const addNewSpace = async (name: string) => {
+  let driveType = 'project'
   try {
-    const createdSpace = await createSpace(name)
+    if (route.params.scope === 'vault') {
+      driveType = 'protected-project'
+    }
+
+    const createdSpace = await createSpace(name, driveType)
     upsertResource(createdSpace)
     spacesStore.upsertSpace(createdSpace)
     emit('spaceCreated', createdSpace)

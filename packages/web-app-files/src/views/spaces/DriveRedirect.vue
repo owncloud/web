@@ -49,7 +49,9 @@ const route = useRoute()
 const spacesStore = useSpacesStore()
 
 const personalSpace = computed(() => {
-  return spacesStore.spaces.find((space) => space.driveType === 'personal')
+  return spacesStore.spaces.find(
+    (space) => space.driveType === 'personal' || space.driveType === 'protected-personal'
+  )
 })
 
 const spacesRoute = computed(() => createLocationSpaces('files-spaces-projects'))
