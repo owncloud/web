@@ -11,7 +11,8 @@ import {
   buildSpace,
   extractStorageId,
   isPersonalSpaceResource,
-  isProjectSpaceResource
+  isProjectSpaceResource,
+  isProtectedProjectSpaceResource
 } from '@ownclouders/web-client'
 import type { CollaboratorShare, MountPointSpaceResource, ShareRole } from '@ownclouders/web-client'
 import { useUserStore } from './user'
@@ -274,7 +275,9 @@ export const useSpacesStore = defineStore('spaces', () => {
       graphRoles: sharesStore.graphRoles,
       signal
     })
-    spaces.value = unref(spaces).filter((s) => !isProjectSpaceResource(s))
+    spaces.value = unref(spaces).filter(
+      (s) => !isProjectSpaceResource(s) && !isProtectedProjectSpaceResource(s)
+    )
     addSpaces(projectSpaces)
   }
 

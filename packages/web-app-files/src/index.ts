@@ -63,6 +63,7 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       isActive: () => {
         return !spacesStores.currentSpace || spacesStores.currentSpace?.isOwner(userStore.user)
       },
+      activeFor: [{ path: `/${appInfo.id}/spaces/protected-personal` }],
       isVisible() {
         if (!spacesStores.spacesInitialized) {
           return true
@@ -114,7 +115,10 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       route: {
         path: `/${appInfo.id}/spaces/projects`
       },
-      activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
+      activeFor: [
+        { path: `/${appInfo.id}/spaces/project` },
+        { path: `/${appInfo.id}/spaces/protected-project` }
+      ],
       isVisible() {
         return capabilityStore.spacesProjects
       },
