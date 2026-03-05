@@ -175,12 +175,12 @@ export default {
 
     const selectedMode = computed({
       get() {
-        const currentPath = unref(router.currentRoute).path
+        const currentPath = window.location.pathname
         return currentPath.startsWith('/vault') ? unref(modeOptions)[1] : unref(modeOptions)[0]
       },
       set(mode) {
-        if (mode?.route && mode.route !== unref(router.currentRoute).path) {
-          router.push(mode.route)
+        if (mode?.route && mode.route !== window.location.pathname) {
+          window.location.href = mode.route
         }
       }
     })
