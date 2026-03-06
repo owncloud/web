@@ -135,6 +135,11 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   if (role) {
     await page.locator(publicLinkRoleToggle).click()
     await page.locator(util.format(publicLinkSetRoleButton, role)).click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'link role dropdown tippy box'
+    )
   }
 
   role === 'Invited people'
@@ -152,6 +157,11 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     ),
     page.locator(editPublicLinkRenameConfirm).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['appSidebar'],
+    'sidebar panel'
+  )
   await clearCurrentPopup(page)
   return await getRecentLinkUrl(page, 'Unnamed link')
 }
@@ -175,6 +185,11 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
   await sidebar.open({ page: page, resource: resourceName })
   await sidebar.openPanel({ page: page, name: shareType })
   await page.locator(util.format(publicLinkEditRoleButton, linkName)).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'link role dropdown tippy box'
+  )
 
   await Promise.all([
     page.waitForResponse(
@@ -185,6 +200,12 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
     ),
     page.locator(util.format(publicLinkSetRoleButton, role)).click()
   ])
+
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['appSidebar'],
+    'sidebar panel'
+  )
 
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')

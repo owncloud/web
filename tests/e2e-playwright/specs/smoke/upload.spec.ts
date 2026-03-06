@@ -195,7 +195,7 @@ test.describe('internal link share', () => {
     // And "Alice" opens the following file in pdfviewer
     //   | resource   |
     //   | simple.pdf |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'simple.pdf',

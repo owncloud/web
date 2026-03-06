@@ -29,7 +29,7 @@ export async function userOpensPublicLink({
   await pageObject.open({ url })
 }
 
-export async function createPublicLink({
+export async function userCreatesPublicLinkUsingSidebarPanel({
   actorsEnvironment,
   stepUser,
   resource,
