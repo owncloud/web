@@ -11,6 +11,7 @@ export const test = base.extend<{
   usersEnvironment: UsersEnvironment
   spacesEnvironment: environment.SpacesEnvironment
   globalCleanup: void
+  setAdminTokenForFederatedServer: void
 }>({
   usersEnvironment: async ({}, use) => {
     await use(usersEnvironment)
@@ -19,7 +20,7 @@ export const test = base.extend<{
     await use(spacesEnvironment)
   },
   globalCleanup: [
-    async ({ usersEnvironment }, use) => {
+    async ({ usersEnvironment }, use, testInfo) => {
       await use()
 
       config.federatedServer = false
@@ -32,6 +33,17 @@ export const test = base.extend<{
           await api.keycloak.refreshAccessTokenForKeycloakOcisUser(keycloakAdminUser)
         } else {
           await api.token.refreshAccessToken(adminUser)
+        }
+
+        if (isOcm(testInfo)) {
+          // need to set federatedServer config to true to delete federated oCIS users
+          config.federatedServer = true
+          await api.token.refreshAccessToken(adminUser)
+          await cleanUpUser(
+            store.federatedUserStore,
+            usersEnvironment.getUser({ key: config.adminUsername })
+          )
+          config.federatedServer = false
         }
       }
 
@@ -46,6 +58,20 @@ export const test = base.extend<{
 
       utils.removeTempUploadDirectory()
       environment.closeSSEConnections()
+    },
+    { auto: true }
+  ],
+  setAdminTokenForFederatedServer: [
+    async ({ usersEnvironment }, use, testInfo) => {
+      const user = usersEnvironment.getUser({ key: config.adminUsername })
+
+      if (isOcm(testInfo)) {
+        config.federatedServer = true
+        // need to set tokens for federated oCIS admin
+        await api.token.setAccessAndRefreshToken(user)
+        config.federatedServer = false
+      }
+      await use()
     },
     { auto: true }
   ]
@@ -151,4 +177,8 @@ const cleanUpSpaces = async (adminUser: User) => {
     )
   }
   store.createdSpaceStore.clear()
+}
+
+const isOcm = (testInfo): boolean => {
+  return testInfo.tags.includes('@ocm')
 }
