@@ -22,6 +22,11 @@ export class Application {
 
   async reloadPage(): Promise<void> {
     await this.#page.reload()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      this.#page,
+      ['body'],
+      'body after page reload'
+    )
   }
 
   async open({ name }: { name: string }): Promise<void> {

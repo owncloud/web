@@ -96,21 +96,21 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     })
 
     // Then "Alice" should see thumbnail and preview for file "sampleGif.gif"
-    await ui.userShouldSeeThumbnailAndPreview({
+    await ui.userShouldSeeThumbnailAndPreviewForResource({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleGif.gif'
     })
 
     // And "Alice" should see thumbnail and preview for file "testavatar.jpeg"
-    await ui.userShouldSeeThumbnailAndPreview({
+    await ui.userShouldSeeThumbnailAndPreviewForResource({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testavatar.jpeg'
     })
 
     // And "Alice" should see thumbnail and preview for file "testavatar.png"
-    await ui.userShouldSeeThumbnailAndPreview({
+    await ui.userShouldSeeThumbnailAndPreviewForResource({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testavatar.png'

@@ -60,7 +60,9 @@ export const selectors = {
   previewControlBar: '.preview-controls-action-bar',
   uploadInfoSnackBar: '#upload-info-snackbar',
   folderViewModal: '.folder-view-modal',
-  ocNotificationSuccessMessage: '.oc-notification-message-success'
+  ocNotificationSuccessMessage: '.oc-notification-message-success',
+  ocModalGenerateNewToken: '.oc-modal.oc-modal-passive',
+  scienceMesh: '.sciencemesh'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
