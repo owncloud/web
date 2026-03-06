@@ -20,7 +20,7 @@ import { config } from '../../../e2e/config'
 import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
 import { substitute } from '../../../e2e/support/utils'
 
-export async function uploadResource({
+export async function userUploadsResource({
   actorsEnvironment,
   filesEnvironment,
   stepUser,

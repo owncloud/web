@@ -88,19 +88,19 @@ test.describe('internal link share', () => {
     //   | new-lorem-big.txt | replace   |
     //   | lorem.txt         | skip      |
     //   | textfile.txt      | keep both |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
       resources: [{ name: 'new-lorem-big.txt', option: 'replace' }]
     })
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', option: 'skip' }]
     })
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -179,7 +179,7 @@ test.describe('internal link share', () => {
     // When "Alice" uploads the following resources
     //   | resource | type   |
     //   | PARENT   | folder |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -234,7 +234,7 @@ test.describe('internal link share', () => {
     // When "Alice" uploads the following resources
     //   | resource | type   |
     //   | FOLDER   | folder |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -268,7 +268,7 @@ test.describe('internal link share', () => {
     // And "Alice" uploads the following resource
     //   | resource        |
     //   | simple.pdf      |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',

@@ -179,7 +179,7 @@ export async function userSharesResources({
   }
 }
 
-export async function removeSharee({
+export async function userRemovesSharee({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
@@ -380,4 +380,19 @@ export async function userEnablesSyncForAllShares({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   await shareObject.syncAll()
+}
+
+export async function userShouldSeeMessageOnWebUI({
+  actorsEnvironment,
+  stepUser,
+  message
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  message: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const actualMessage = await shareObject.getMessage()
+  expect(actualMessage).toBe(message)
 }

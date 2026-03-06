@@ -69,7 +69,7 @@ test.describe('create Space shortcut', () => {
     //   | resource          | to           |
     //   | data.zip          | spaceFolder  |
     //   | lorem.txt         | spaceFolder  |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -92,7 +92,7 @@ test.describe('create Space shortcut', () => {
     })
 
     // And "Alice" navigates to the project space "folderSpace"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'folderSpace' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'folderSpace' })
 
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource  |
@@ -123,7 +123,7 @@ test.describe('create Space shortcut', () => {
     //   | resource          | to             |
     //   | data.zip          | resourceFolder |
     //   | lorem.txt         |                |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -146,7 +146,7 @@ test.describe('create Space shortcut', () => {
     })
 
     // And "Alice" navigates to the project space "resourceSpace"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'resourceSpace' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'resourceSpace' })
 
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource        |

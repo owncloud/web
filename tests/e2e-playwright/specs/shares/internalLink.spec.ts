@@ -74,7 +74,7 @@ test.describe('internal link share', () => {
       name: 'Unnamed link'
     })
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',

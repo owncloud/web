@@ -115,7 +115,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // And "Alice" uploads the following resources
     //   | resource         |
     //   | .hidden-file.txt |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',

@@ -47,3 +47,19 @@ export async function userClosesThePasswordProtectedFolderModal({
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.closeFolderModal()
 }
+
+export async function userRemovesThePublicLinkOfResource({
+  actorsEnvironment,
+  stepUser,
+  publicLinkName,
+  resource
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  publicLinkName: string
+  resource: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.delete({ resourceName: resource, name: publicLinkName })
+}
