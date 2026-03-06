@@ -248,7 +248,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     // When "Brian" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" navigates to the project space "team.1"
-    await ui.navigateToSpace({
+    await ui.userNavigatesToSpace({
       actorsEnvironment,
       stepUser: 'Brian',
       space: 'team.1'

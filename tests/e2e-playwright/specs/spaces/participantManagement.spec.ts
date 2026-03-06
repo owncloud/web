@@ -97,7 +97,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user     | role     | kind  |
@@ -121,7 +121,7 @@ test.describe('check files pagination in project space', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
 
     // And "Brian" creates the following resources
     //   | resource | type   |
@@ -135,7 +135,7 @@ test.describe('check files pagination in project space', () => {
     // And "Brian" uploads the following resources
     //   | resource  | to     |
     //   | lorem.txt | parent |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
@@ -146,16 +146,14 @@ test.describe('check files pagination in project space', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'David' })
 
     // And "David" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'David', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'David', space: 'team.1' })
 
     // Then "David" should not be able to edit folder "parent"
-    expect(
-      await ui.isAbleToEditFileOrFolder({
-        actorsEnvironment,
-        stepUser: 'David',
-        resource: 'parent'
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotAbleToEditResource({
+      actorsEnvironment,
+      stepUser: 'David',
+      resource: 'parent'
+    })
 
     // And "David" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'David' })
@@ -164,7 +162,7 @@ test.describe('check files pagination in project space', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Edith' })
 
     // And "Edith" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Edith', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Edith', space: 'team.1' })
 
     // And "Edith" creates the following resources
     //   | resource | type   |
@@ -178,7 +176,7 @@ test.describe('check files pagination in project space', () => {
     // And "Edith" uploads the following resources
     //   | resource  | to    |
     //   | lorem.txt | edith |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Edith',
@@ -192,21 +190,19 @@ test.describe('check files pagination in project space', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Carol' })
 
     // And "Carol" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Carol', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Carol', space: 'team.1' })
 
     // Then "Carol" should not be able to edit folder "parent"
-    expect(
-      await ui.isAbleToEditFileOrFolder({
-        actorsEnvironment,
-        stepUser: 'Carol',
-        resource: 'parent'
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotAbleToEditResource({
+      actorsEnvironment,
+      stepUser: 'Carol',
+      resource: 'parent'
+    })
 
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource | role     | password |
     //   | parent   | Can edit | %public% |
-    await ui.createPublicLink({
+    await ui.userCreatePublicLink({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'parent',
@@ -320,7 +316,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" removes access to following users from the project space
     //   | user  |
@@ -371,12 +367,10 @@ test.describe('check files pagination in project space', () => {
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Carol' })
 
     // And "Alice" as project manager removes their own access to the project space
-    await ui.removeAccessToMember({
+    await ui.userAsProjectManagerRemovesOwnAccessToSpace({
       actorsEnvironment,
       usersEnvironment,
-      stepUser: 'Alice',
-      reciver: 'Alice',
-      role: 'Can manage'
+      stepUser: 'Alice'
     })
 
     // Then "Alice" should not see space "team.1"

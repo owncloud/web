@@ -55,7 +55,7 @@ test.describe('Search in the project space', () => {
       id: 'team.1'
     })
 
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     await ui.userCreatesResources({
       actorsEnvironment,
@@ -63,7 +63,7 @@ test.describe('Search in the project space', () => {
       resources: [{ name: 'folder(WithSymbols:!;_+-&)', type: 'folder' }]
     })
 
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',

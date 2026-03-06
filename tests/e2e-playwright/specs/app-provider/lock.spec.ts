@@ -42,10 +42,10 @@ test.describe('lock', { tag: '@sse' }, () => {
     // When "Alice" creates the following resources
     //   | resource | type         | content      |
     //   | test.odt | OpenDocument | some content |
-    await api.userHasCreatedFiles({
-      usersEnvironment,
+    await ui.userCreatesResources({
+      actorsEnvironment,
       stepUser: 'Alice',
-      files: [{ pathToFile: 'test.odt', content: 'some content' }]
+      resources: [{ name: 'test.odt', type: 'OpenDocument', content: 'some content' }]
     })
     // And "Alice" shares the following resource using API
     // | resource | recipient | type | role                                | resourceType |
@@ -100,13 +100,11 @@ test.describe('lock', { tag: '@sse' }, () => {
 
     // checking that user cannot 'move', 'rename', 'delete' locked file
     // And "Alice" should not be able to edit file "test.odt"
-    expect(
-      await ui.isAbleToEditFileOrFolder({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        resource: 'test.odt'
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotAbleToEditResource({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'test.odt'
+    })
 
     // checking that user cannot delete or change share of the locked file
     // https://github.com/owncloud/web/issues/10507
@@ -123,7 +121,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource | password |
     //   | test.odt | %public% |
-    await ui.createPublicLink({
+    await ui.userCreatePublicLink({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'test.odt',

@@ -29,7 +29,7 @@ export async function navigateToSpacesPage({
   await pageObject.navigate()
 }
 
-export async function navigateToSpace({
+export async function userNavigatesToSpace({
   actorsEnvironment,
   stepUser,
   space
@@ -136,7 +136,7 @@ export async function removeAccessToMember({
   usersEnvironment: UsersEnvironment
   stepUser: string
   reciver: string
-  role: string
+  role?: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
@@ -145,6 +145,23 @@ export async function removeAccessToMember({
     role
   }
   await spacesObject.removeAccessToMember({ users: [member] })
+}
+
+export async function userAsProjectManagerRemovesOwnAccessToSpace({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const member = {
+    collaborator: usersEnvironment.getUser({ key: stepUser })
+  }
+  await spacesObject.removeAccessToMember({ users: [member], removeOwnSpaceAccess: true })
 }
 
 export async function navigateToProjectSpaceManagementPage({

@@ -121,7 +121,7 @@ test.describe('deny share access', () => {
 
     // allow access - deleting "Cannot access" share
 
-    await ui.removeSharee({
+    await ui.userRemovesSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
