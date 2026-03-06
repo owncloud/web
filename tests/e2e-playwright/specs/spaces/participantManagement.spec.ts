@@ -242,11 +242,11 @@ test.describe('check files pagination in project space', () => {
     // And "Anonymous" deletes the following resources from public link using sidebar panel
     //   | resource  | from |
     //   | lorem.txt |      |
-    await ui.deleteResourceFromPublicLink({
+    await ui.userDeletesResourcesFromPublicLink({
       actorsEnvironment,
       stepUser: 'Anonymous',
-      file: 'lorem.txt',
-      actionType: 'sidebar panel'
+      actionType: 'SIDEBAR_PANEL',
+      resources: [{ resource: 'lorem.txt' }]
     })
 
     // When "Brian" deletes the following resources using the sidebar panel

@@ -524,7 +524,7 @@ export async function userCreatesShortcutForResources({
   }
 }
 
-type resourceToDownload = {
+export type resourceToDownload = {
   resource: string
   type: string
   from?: string
@@ -1010,6 +1010,60 @@ export async function userShouldSeeActivityOfResources({
     await resourceObject.checkActivity({
       resource: info.resource,
       activity: substitute(info.activity)
+    })
+  }
+}
+
+export async function userCopiesResource({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: 'keyboard' | 'sidebar-panel' | 'dropdown-menu' | 'batch-action'
+  resources: { resource: string; to: string; option?: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  for (const { resource, to, option } of resources) {
+    await resourceObject.copy({
+      resource,
+      newLocation: to,
+      method: actionType,
+      option: option
+    })
+  }
+}
+
+export async function userMovesResource({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType:
+    | 'keyboard'
+    | 'sidebar-panel'
+    | 'dropdown-menu'
+    | 'batch-action'
+    | 'drag-drop'
+    | 'drag-drop-breadcrumb'
+  resources: { resource: string; to: string; option?: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  for (const { resource, to, option } of resources) {
+    await resourceObject.move({
+      resource,
+      newLocation: to,
+      method: actionType,
+      option: option
     })
   }
 }
