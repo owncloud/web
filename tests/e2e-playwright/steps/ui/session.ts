@@ -126,3 +126,7 @@ export async function userWaitsForTokenToExpire({
   // wait for the token to expire
   await page.waitForTimeout(config.tokenTimeout * 1000)
 }
+
+export async function useServer({ server }: { server: 'LOCAL' | 'FEDERATED' }): Promise<void> {
+  config.federatedServer = server === 'FEDERATED'
+}

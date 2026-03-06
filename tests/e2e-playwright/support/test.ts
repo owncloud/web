@@ -18,7 +18,7 @@ export const test = base.extend<{
     await use(world)
   },
   globalCleanup: [
-    async ({ world }: { world: World }, use) => {
+    async ({ world }: { world: World }, use, testInfo) => {
       await use()
 
       config.federatedServer = false
@@ -34,6 +34,17 @@ export const test = base.extend<{
           await api.keycloak.refreshAccessTokenForKeycloakOcisUser(keycloakAdminUser)
         } else {
           await api.token.refreshAccessToken(adminUser)
+        }
+
+        if (isOcm(testInfo)) {
+          // need to set federatedServer config to true to delete federated oCIS users
+          config.federatedServer = true
+          await api.token.refreshAccessToken(adminUser)
+          await cleanUpUser(
+            store.federatedUserStore,
+            world.usersEnvironment.getUser({ key: config.adminUsername })
+          )
+          config.federatedServer = false
         }
       }
 
@@ -52,9 +63,16 @@ export const test = base.extend<{
     { auto: true }
   ],
   globalBeforeHook: [
-    async ({ world }: { world: World }, use) => {
+    async ({ world }: { world: World }, use, testInfo) => {
+      const user = world.usersEnvironment.getUser({ key: config.adminUsername })
       if (!config.basicAuth && !config.predefinedUsers) {
         await setAccessAndRefreshToken(world.usersEnvironment)
+        if (isOcm(testInfo)) {
+          config.federatedServer = true
+          // need to set tokens for federated oCIS admin
+          await api.token.setAccessAndRefreshToken(user)
+          config.federatedServer = false
+        }
       }
       await use()
     },
@@ -178,4 +196,8 @@ const cleanUpSpaces = async (adminUser: User) => {
     )
   }
   store.createdSpaceStore.clear()
+}
+
+const isOcm = (testInfo): boolean => {
+  return testInfo.tags.includes('@ocm')
 }
