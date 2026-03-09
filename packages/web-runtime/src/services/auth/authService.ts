@@ -123,6 +123,10 @@ export class AuthService implements AuthServiceInterface {
       }
     }
 
+    if (to.params.scope === 'vault') {
+      this.requireAcr('advanced', to.fullPath)
+    }
+
     if (isPublicLinkContextRequired(this.router, to)) {
       const user = await this.userManager.getUser()
 
