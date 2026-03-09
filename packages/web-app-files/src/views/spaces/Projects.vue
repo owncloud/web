@@ -232,7 +232,7 @@ const loadResourcesTask = useTask(function* (signal) {
   yield spacesStore.reloadProjectSpaces({
     graphClient: clientService.graphAuthenticated,
     signal,
-    isInVault: unref(route).params.scope === 'vault'
+    isInVault: unref(route)?.params?.scope === 'vault'
   })
   initResourceList({ currentFolder: null, resources: unref(spaces) })
 })
