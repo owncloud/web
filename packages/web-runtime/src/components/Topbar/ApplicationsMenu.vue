@@ -91,6 +91,19 @@ export default defineComponent({
     const getAdditionalEventBindings = (item: AppMenuItemExtension) => {
       return item.handler ? { click: item.handler } : {}
     }
+
+    const getScopeAwarePath = (rawPath?: string) => {
+      if (!rawPath) {
+        return rawPath
+      }
+
+      const normalizedPath = rawPath.startsWith('/') ? rawPath : `/${rawPath}`
+      const pathWithoutVault = normalizedPath.replace(/^\/vault(?=\/|$)/, '')
+      const isVaultScope = unref(router.currentRoute).params?.scope === 'vault'
+
+      return isVaultScope ? `/vault${pathWithoutVault}` : pathWithoutVault
+    }
+
     const getAdditionalAttributes = (item: AppMenuItemExtension) => {
       let type: string
       if (item.handler) {
@@ -103,12 +116,13 @@ export default defineComponent({
 
       return {
         type,
-        ...(type === 'router-link' && { to: item.path }),
+        ...(type === 'router-link' && { to: getScopeAwarePath(item.path) }),
         ...(type === 'a' && { href: item.url, target: '_blank' })
       }
     }
     const isMenuItemActive = (item: AppMenuItemExtension) => {
-      return unref(activeRoutePath)?.startsWith(item.path)
+      const routePath = getScopeAwarePath(item.path)
+      return !!routePath && unref(activeRoutePath)?.startsWith(routePath)
     }
 
     return {

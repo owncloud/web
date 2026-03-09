@@ -46,7 +46,7 @@ const route = useRoute()
 const addNewSpace = async (name: string) => {
   let driveType = 'project'
   try {
-    if (route.params.scope === 'vault') {
+    if (route?.params?.scope === 'vault') {
       driveType = 'protected-project'
     }
 

@@ -1,7 +1,7 @@
 <template>
   <nav id="shares-navigation" class="oc-py-s" :aria-label="$gettext('Shares pages navigation')">
     <oc-list class="oc-flex oc-visible@s">
-      <li v-for="navItem in navItems" :key="`shares-navigation-desktop-${navItem.to}`">
+      <li v-for="navItem in navItems" :key="`shares-navigation-desktop-${navItem.id}`">
         <oc-button
           type="router-link"
           class="oc-mr-m oc-py-s shares-nav-desktop"
@@ -20,7 +20,7 @@
       </oc-button>
       <oc-drop toggle="#shares_navigation_mobile" mode="click" close-on-click padding-size="small">
         <oc-list>
-          <li v-for="navItem in navItems" :key="`shares-navigation-mobile-${navItem.to}`">
+          <li v-for="navItem in navItems" :key="`shares-navigation-mobile-${navItem.id}`">
             <oc-button
               type="router-link"
               class="oc-my-xs shares-nav-mobile"
@@ -53,16 +53,45 @@ import { computed, unref } from 'vue'
 import { useRouter } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { RouteRecordNormalized } from 'vue-router'
+import { RouteLocationRaw } from 'vue-router'
 
 const { $gettext } = useGettext()
 const router = useRouter()
-const sharesRoutes = [locationSharesWithMe, locationSharesWithOthers, locationSharesViaLink].reduce<
-  Record<string, RouteRecordNormalized>
->((routes, route) => {
-  routes[route.name as string] = router.getRoutes().find((r) => r.name === route.name)
-  return routes
-}, {})
+
+const resolveScopeTemplatePath = (path: string, scopePrefix: string) =>
+  path.replace(/^\/:scope\(vault\)\?/, scopePrefix)
+
+const locationToPath = (location: RouteLocationRaw) => {
+  const scope = unref(router.currentRoute).params?.scope
+  const scopePrefix = scope === 'vault' ? '/vault' : ''
+
+  if (typeof location === 'string') {
+    return location
+  }
+
+  const locationWithScope: RouteLocationRaw = {
+    ...location,
+    ...(scope && {
+      params: {
+        ...((location as { params?: Record<string, unknown> }).params || {}),
+        scope
+      }
+    })
+  }
+
+  const resolvedPath = router.resolve(locationWithScope).path
+  if (resolvedPath) {
+    return resolvedPath
+  }
+
+  const routeName = (location as { name?: string }).name
+  const route = routeName ? router.getRoutes().find((r) => r.name === routeName) : undefined
+  if (route?.path) {
+    return resolveScopeTemplatePath(route.path, scopePrefix)
+  }
+
+  return ''
+}
 const sharesWithMeActive = useActiveLocation(
   isLocationSharesActive,
   locationSharesWithMe.name as RouteShareTypes
@@ -77,20 +106,23 @@ const sharesViaLinkActive = useActiveLocation(
 )
 const navItems = computed(() => [
   {
+    id: locationSharesWithMe.name as string,
     icon: 'share-forward',
-    to: sharesRoutes[locationSharesWithMe.name as string].path,
+    to: locationToPath(locationSharesWithMe),
     text: $gettext('Shared with me'),
     active: unref(sharesWithMeActive)
   },
   {
+    id: locationSharesWithOthers.name as string,
     icon: 'reply',
-    to: sharesRoutes[locationSharesWithOthers.name as string].path,
+    to: locationToPath(locationSharesWithOthers),
     text: $gettext('Shared with others'),
     active: unref(sharesWithOthersActive)
   },
   {
+    id: locationSharesViaLink.name as string,
     icon: 'link',
-    to: sharesRoutes[locationSharesViaLink.name as string].path,
+    to: locationToPath(locationSharesViaLink),
     text: $gettext('Shared via link'),
     active: unref(sharesViaLinkActive)
   }

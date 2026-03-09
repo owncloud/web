@@ -179,7 +179,7 @@ describe('spaces', () => {
           const spaces = [mock<SpaceResource>({ id: '1' })]
           const graphClient = mockDeep<Graph>()
           graphClient.drives.listMyDrives.mockResolvedValue(spaces)
-          await instance.loadSpaces({ graphClient })
+          await instance.loadSpaces({ graphClient, isInVault: false })
 
           expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(2)
           expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(
@@ -226,7 +226,7 @@ describe('spaces', () => {
               ]
               const graphClient = mockDeep<Graph>()
               graphClient.drives.listMyDrives.mockResolvedValue(spaces)
-              await instance.loadSpaces({ graphClient })
+              await instance.loadSpaces({ graphClient, isInVault: false })
 
               expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(2)
               expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(
@@ -290,7 +290,7 @@ describe('spaces', () => {
           const spaces = [mock<SpaceResource>({ id: '1' })]
           const graphClient = mockDeep<Graph>()
           graphClient.drives.listMyDrives.mockResolvedValue(spaces)
-          await instance.reloadProjectSpaces({ graphClient })
+          await instance.reloadProjectSpaces({ graphClient, isInVault: false })
 
           expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(1)
           expect(graphClient.drives.listMyDrives).toHaveBeenCalledWith(
