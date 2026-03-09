@@ -1,35 +1,62 @@
 import { defineStore } from 'pinia'
 import { ref, Ref, unref } from 'vue'
 import { useConfigStore } from '../config'
-import path from 'path'
 import { Extension, ExtensionPoint, ExtensionType, SidebarNavExtension } from './types'
+
+const withScopePrefix = (routePath: string, isVaultScope: boolean) => {
+  const normalizedPath = routePath.replace(/^\/vault(?=\/|$)/, '')
+  const basePath = normalizedPath.startsWith('/') ? normalizedPath : `/${normalizedPath}`
+
+  if (!isVaultScope) {
+    return basePath
+  }
+
+  return basePath === '/' ? '/vault' : `/vault${basePath}`
+}
+
+const mapNavRoute = (navRoute: SidebarNavExtension['navItem']['route'], isVaultScope: boolean) => {
+  if (typeof navRoute === 'string') {
+    return withScopePrefix(navRoute, isVaultScope)
+  }
+
+  if (!navRoute || typeof navRoute !== 'object' || !('path' in navRoute)) {
+    return navRoute
+  }
+
+  if (typeof navRoute.path !== 'string') {
+    return navRoute
+  }
+
+  return {
+    ...navRoute,
+    path: withScopePrefix(navRoute.path, isVaultScope)
+  }
+}
 
 export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const configStore = useConfigStore()
 
   const extensions = ref<Ref<Extension[]>[]>([])
   const rebuild = ({ route }) => {
-    extensions.value = unref(extensions).map((extension) =>
-      unref(extension).map((ext) => {
-        if (ext.type === 'sidebarNav') {
-          const e = ext as SidebarNavExtension
-          const routeType =
-            typeof e.navItem.route === 'string' ? e.navItem.route : e.navItem.route.path
+    const isVaultScope = unref(route).params?.scope === 'vault'
 
+    extensions.value = unref(extensions).map((extension) =>
+      ref(
+        unref(extension).map((ext) => {
+          if (ext.type !== 'sidebarNav') {
+            return ext
+          }
+
+          const sidebarExtension = ext as SidebarNavExtension
           return {
-            ...e,
+            ...sidebarExtension,
             navItem: {
-              ...e.navItem,
-              route:
-                unref(route).params?.scope === 'vault'
-                  ? path.join('/vault', routeType)
-                  : e.navItem.route
+              ...sidebarExtension.navItem,
+              route: mapNavRoute(sidebarExtension.navItem.route, isVaultScope)
             }
           }
-        }
-
-        return ext
-      })
+        })
+      )
     )
   }
 

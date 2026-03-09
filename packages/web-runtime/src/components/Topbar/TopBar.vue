@@ -132,7 +132,8 @@ export default {
         }
       }
 
-      return '/'
+      const isVaultScope = unref(router.currentRoute).params?.scope === 'vault'
+      return isVaultScope ? '/vault/files' : '/'
     })
 
     const isFilesPublicUpoad = computed(() => {

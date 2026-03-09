@@ -118,7 +118,7 @@ const publicLinkSpace = computed(() =>
   })
 )
 
-const item = computed(() => queryItemAsString(unref(route).params.driveAliasAndItem))
+const item = computed(() => queryItemAsString(unref(route)?.params?.driveAliasAndItem))
 
 const detailsQuery = useRouteQuery('details')
 const details = computed(() => queryItemAsString(unref(detailsQuery)))
