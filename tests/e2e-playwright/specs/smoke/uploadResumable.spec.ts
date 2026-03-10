@@ -33,7 +33,7 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following user using API
     // | id    |
     // | Alice |
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
+    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
   })
 
   test('Upload large resources in personal space', async () => {
@@ -41,7 +41,7 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     await userCreatesAFileOfSizeInTempUploadDir({ fileName: 'largefile.txt', fileSize: '1GB' })
 
     // Given "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // When "Alice" starts uploading the following large resources from the temp upload directory
     // | resource      |
@@ -96,6 +96,6 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     })
 
     // When "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

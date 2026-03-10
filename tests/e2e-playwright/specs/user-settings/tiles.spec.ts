@@ -26,13 +26,13 @@ test.describe('tiles view', { tag: '@predefined-users' }, () => {
     await setAccessAndRefreshToken(usersEnvironment)
 
     // Given "Admin" creates following user using API
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
     })
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" creates the following resources
     await api.userHasCreatedFolder({
       usersEnvironment,
@@ -43,12 +43,12 @@ test.describe('tiles view', { tag: '@predefined-users' }, () => {
 
   test('Users can navigate web via tiles', async () => {
     // When "Alice" switches to the tiles-view
-    await ui.switchToTilesViewMode({
+    await ui.userSwitchesToTilesViewMode({
       actorsEnvironment,
       stepUser: 'Alice'
     })
     // Then "Alice" sees the resources displayed as tiles
-    await ui.shouldSeeResourcesAsTiles({
+    await ui.userShouldSeeResourcesAsTiles({
       actorsEnvironment,
       stepUser: 'Alice'
     })
@@ -65,11 +65,11 @@ test.describe('tiles view', { tag: '@predefined-users' }, () => {
       resources: [{ name: 'tile_folder/tile_folder2', type: 'folder' }]
     })
     // And "Alice" sees the resources displayed as tiles
-    await ui.shouldSeeResourcesAsTiles({
+    await ui.userShouldSeeResourcesAsTiles({
       actorsEnvironment,
       stepUser: 'Alice'
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

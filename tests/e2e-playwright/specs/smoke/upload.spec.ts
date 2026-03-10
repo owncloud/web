@@ -33,10 +33,10 @@ test.describe('internal link share', () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
+    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
 
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" opens the "files" app
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
@@ -88,19 +88,19 @@ test.describe('internal link share', () => {
     //   | new-lorem-big.txt | replace   |
     //   | lorem.txt         | skip      |
     //   | textfile.txt      | keep both |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
       resources: [{ name: 'new-lorem-big.txt', option: 'replace' }]
     })
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', option: 'skip' }]
     })
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -156,7 +156,7 @@ test.describe('internal link share', () => {
       actionType: 'SIDEBAR_PANEL'
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
   test('upload multiple small files', { tag: '@predefined-users' }, async () => {
     // When "Alice" uploads 50 small files in personal space
@@ -167,19 +167,19 @@ test.describe('internal link share', () => {
       numberOfFiles: 50
     })
     // Then "Alice" should see 50 resources in the personal space files view
-    await ui.assertToHaveNoOfFiles({
+    await ui.userShouldSeeNumberOfResources({
       actorsEnvironment,
       stepUser: 'Alice',
       expectedNumberOfResources: 50
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
   test('upload folder', async () => {
     // When "Alice" uploads the following resources
     //   | resource | type   |
     //   | PARENT   | folder |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -195,7 +195,7 @@ test.describe('internal link share', () => {
     // And "Alice" opens the following file in pdfviewer
     //   | resource   |
     //   | simple.pdf |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'simple.pdf',
@@ -234,7 +234,7 @@ test.describe('internal link share', () => {
     // When "Alice" uploads the following resources
     //   | resource | type   |
     //   | FOLDER   | folder |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -247,11 +247,11 @@ test.describe('internal link share', () => {
       resources: ['FOLDER']
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
   test('Upload large file when insufficient quota', async () => {
     // Given "Admin" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
     // And "Admin" opens the "admin-settings" app
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
     // And "Admin" navigates to the users management page
@@ -264,11 +264,11 @@ test.describe('internal link share', () => {
       value: '0.00001'
     })
     // And "Admin" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Admin' })
     // And "Alice" uploads the following resource
     //   | resource        |
     //   | simple.pdf      |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -286,6 +286,6 @@ test.describe('internal link share', () => {
       to: ''
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

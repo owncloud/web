@@ -20,7 +20,7 @@ import { config } from '../../../e2e/config'
 import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
 import { substitute } from '../../../e2e/support/utils'
 
-export async function uploadResource({
+export async function userUploadsResources({
   actorsEnvironment,
   filesEnvironment,
   stepUser,
@@ -43,7 +43,7 @@ export async function uploadResource({
   }
 }
 
-export async function isAbleToEditFileOrFolder({
+export async function userShouldNotBeAbleToEditResource({
   actorsEnvironment,
   stepUser,
   resource
@@ -51,11 +51,11 @@ export async function isAbleToEditFileOrFolder({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const userCanEdit = await resourceObject.canManageResource({ resource })
-  return userCanEdit
+  expect(userCanEdit).toBeFalsy()
 }
 
 export async function userCreatesResources({
@@ -79,7 +79,7 @@ export async function userCreatesResources({
   }
 }
 
-export async function searchGloballyWithFilter({
+export async function userSearchesGloballyWithFilter({
   actorsEnvironment,
   stepUser,
   keyword,
@@ -105,7 +105,7 @@ export async function searchGloballyWithFilter({
   })
 }
 
-export async function switchToTilesViewMode({
+export async function userSwitchesToTilesViewMode({
   actorsEnvironment,
   stepUser
 }: {
@@ -117,7 +117,7 @@ export async function switchToTilesViewMode({
   await resourceObject.switchToTilesViewMode()
 }
 
-export async function shouldSeeResourcesAsTiles({
+export async function userShouldSeeResourcesAsTiles({
   actorsEnvironment,
   stepUser
 }: {
@@ -143,7 +143,7 @@ export async function userOpensResources({
   await resourceObject.openFolder(resource)
 }
 
-export async function openResourceInViewer({
+export async function userOpensResourceInViewer({
   actorsEnvironment,
   stepUser,
   resource,
@@ -225,7 +225,7 @@ export async function userShouldNotSeeTheResources({
   }
 }
 
-export async function navigateToPageNumber({
+export async function userNavigatesToPageNumber({
   actorsEnvironment,
   stepUser,
   pageNumber
@@ -254,7 +254,7 @@ export async function expectFooterTextToBe({
   expect(actualText).toBe(expectedText)
 }
 
-export async function assertToHaveNoOfFiles({
+export async function userShouldSeeNumberOfResources({
   actorsEnvironment,
   stepUser,
   expectedNumberOfResources
@@ -269,7 +269,7 @@ export async function assertToHaveNoOfFiles({
   expect(actualNumberOfResources).toBe(expectedNumberOfResources)
 }
 
-export async function showHiddenFiles({
+export async function userShowsHiddenFiles({
   actorsEnvironment,
   stepUser
 }: {
@@ -295,7 +295,7 @@ export async function getCurrentPageNumber({
   return await resourceObject.getCurrentPageNumber({ pageNumber })
 }
 
-export async function changeItemsPerPage({
+export async function userChangesItemsPerPage({
   actorsEnvironment,
   stepUser,
   itemsPerPage
@@ -309,7 +309,7 @@ export async function changeItemsPerPage({
   await resourceObject.changeItemsPerPage({ itemsPerPage })
 }
 
-export async function expectPageNumberNotToBeVisible({
+export async function userShouldNotSeePagination({
   actorsEnvironment,
   stepUser
 }: {
@@ -321,7 +321,7 @@ export async function expectPageNumberNotToBeVisible({
   await resourceObject.expectPageNumberNotToBeVisible()
 }
 
-export async function toggleFlatList({
+export async function userTogglesFlatList({
   actorsEnvironment,
   stepUser
 }: {
@@ -456,7 +456,7 @@ export async function userDeletesResources({
   }
 }
 
-export async function deleteResourceFromTrashbin({
+export async function userDeletesResourceFromTrashbin({
   actorsEnvironment,
   stepUser,
   resource,
@@ -478,7 +478,7 @@ export async function deleteResourceFromTrashbin({
   }
 }
 
-export async function restoreDeletedResourceFromTrashbin({
+export async function userRestoresDeletedResourceFromTrashbin({
   actorsEnvironment,
   stepUser,
   resource,
@@ -751,7 +751,7 @@ export async function userOpensMediaUsingSidebarPanel({
   await resourceObject.previewMediaFromSidebarPanel(resource)
 }
 
-export async function userNavigatesMediaResource({
+export async function userNavigatesToMediaResource({
   actorsEnvironment,
   stepUser,
   navigationType
@@ -781,7 +781,7 @@ export async function userRenamesResource({
   await resourceObject.rename({ resource, newName: newResourceName })
 }
 
-export async function shouldNotSeeVersionPanelForFiles({
+export async function userShouldNotSeeVersionPanelForFiles({
   actorsEnvironment,
   filesEnvironment,
   stepUser,

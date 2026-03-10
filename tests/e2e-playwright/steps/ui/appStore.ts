@@ -2,7 +2,7 @@ import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { objects } from '../../../e2e/support'
 import { Download } from '@playwright/test'
 
-export async function openAppStore({
+export async function userOpensAppStore({
   actorsEnvironment,
   stepUser
 }: {
@@ -14,7 +14,7 @@ export async function openAppStore({
   await pageObject.openAppStore()
 }
 
-export async function waitForAppStoreIsVisible({
+export async function userShouldSeeAppStore({
   actorsEnvironment,
   stepUser
 }: {
@@ -23,10 +23,10 @@ export async function waitForAppStoreIsVisible({
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  await pageObject.waitForAppStoreIsVisible()
+  await pageObject.waitForAppStoreToBeVisible()
 }
 
-export async function selectApp({
+export async function userSelectsApp({
   actorsEnvironment,
   stepUser,
   app
@@ -39,7 +39,7 @@ export async function selectApp({
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.selectApp(app)
 }
-export async function waitForAppDetailsIsVisible({
+export async function userShouldSeeAppDetails({
   actorsEnvironment,
   stepUser,
   app
@@ -50,10 +50,10 @@ export async function waitForAppDetailsIsVisible({
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  await pageObject.waitForAppDetailsIsVisible(app)
+  await pageObject.waitForAppDetailsToBeVisible(app)
 }
 
-export async function downloadAppVersion({
+export async function userDownloadsAppVersion({
   actorsEnvironment,
   stepUser,
   version
@@ -67,7 +67,7 @@ export async function downloadAppVersion({
   return await pageObject.downloadAppVersion(version)
 }
 
-export async function downloadApp({
+export async function userDownloadsApp({
   actorsEnvironment,
   stepUser,
   app
@@ -81,7 +81,7 @@ export async function downloadApp({
   return await pageObject.downloadApp(app)
 }
 
-export async function navigateToAppStoreOverview({
+export async function userNavigatesToAppStoreOverview({
   actorsEnvironment,
   stepUser
 }: {
@@ -93,7 +93,7 @@ export async function navigateToAppStoreOverview({
   await pageObject.navigateToAppStoreOverview()
 }
 
-export async function getAppsList({
+export async function userShouldSeeApps({
   actorsEnvironment,
   stepUser
 }: {
@@ -105,7 +105,7 @@ export async function getAppsList({
   return await pageObject.getAppsList()
 }
 
-export async function setSearchTerm({
+export async function userSetsSearchTerm({
   actorsEnvironment,
   stepUser,
   searchTerm
@@ -119,7 +119,7 @@ export async function setSearchTerm({
   await pageObject.setSearchTerm(searchTerm)
 }
 
-export async function selectAppTag({
+export async function userSelectsAppTag({
   actorsEnvironment,
   stepUser,
   tag,
@@ -135,7 +135,7 @@ export async function selectAppTag({
   await pageObject.selectAppTag({ tag, app })
 }
 
-export async function selectTag({
+export async function userSelectsTag({
   actorsEnvironment,
   stepUser,
   tag

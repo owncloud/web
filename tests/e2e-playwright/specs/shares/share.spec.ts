@@ -34,7 +34,7 @@ test.describe('share', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -43,9 +43,9 @@ test.describe('share', () => {
 
   test('folder', { tag: '@predefined-users' }, async () => {
     // Given "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // And "Alice" creates the following folder in personal space using API
     //   | name               |
     //   | folder_to_shared   |
@@ -94,7 +94,7 @@ test.describe('share', () => {
     // | resource      | to                 |
     // | lorem.txt     | folder_to_shared   |
     // | lorem-big.txt | folder_to_shared_2 |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -104,7 +104,7 @@ test.describe('share', () => {
       ]
     })
     // And "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" opens folder "folder_to_shared"
     await ui.userOpensResources({
       actorsEnvironment,
@@ -122,7 +122,7 @@ test.describe('share', () => {
       resources: ['lorem.txt']
     })
     // When "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" disables the sync for the following shares
     //   | name               |
     //   | folder_to_shared   |
@@ -170,7 +170,7 @@ test.describe('share', () => {
     //   | resource        | to                 |
     //   | simple.pdf      | folder_to_shared   |
     //   | testavatar.jpeg | folder_to_shared_2 |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
@@ -195,7 +195,7 @@ test.describe('share', () => {
     // And "Alice" uploads the following resource
     //   | resource          | to               | option  |
     //   | PARENT/simple.pdf | folder_to_shared | replace |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -204,7 +204,7 @@ test.describe('share', () => {
     // And "Brian" should not see the version panel for the file
     //   | resource   | to               |
     //   | simple.pdf | folder_to_shared |
-    await ui.shouldNotSeeVersionPanelForFiles({
+    await ui.userShouldNotSeeVersionPanelForFiles({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
@@ -214,7 +214,7 @@ test.describe('share', () => {
     // And "Alice" removes following sharee
     //   | resource           | recipient |
     //   | folder_to_shared_2 | Brian     |
-    await ui.removeSharee({
+    await ui.userRemovesSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -234,7 +234,7 @@ test.describe('share', () => {
     })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
     // Then "Brian" should not be able to see the following shares
     //   | resource           | owner                    |
     //   | folder_to_shared_2 | %user_alice_displayName% |
@@ -253,6 +253,6 @@ test.describe('share', () => {
       owner: '%user_alice_displayName%'
     })
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
   })
 })

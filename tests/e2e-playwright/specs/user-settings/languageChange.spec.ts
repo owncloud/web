@@ -33,14 +33,14 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
     // Given "Admin" creates following users using API
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
 
     // Given "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('system language change', async () => {
@@ -69,13 +69,17 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
       ]
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // When "Brian" opens the user menu
-    await ui.openAccountPage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userOpensAccountPage({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" changes the language to "Deutsch - German"
-    await ui.changeLanguage({ actorsEnvironment, stepUser: 'Brian', language: 'Deutsch - German' })
+    await ui.userChangesLanguage({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      language: 'Deutsch - German'
+    })
     // Then "Brian" should see the following account page title "Mein Konto"
     const actualTitle = await ui.getAccountPageTitle({ actorsEnvironment, stepUser: 'Brian' })
     expect(actualTitle).toEqual('Mein Konto')
@@ -84,7 +88,7 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
     const messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
     expect(messages).toContain('Alice Hansen hat check_message mit Ihnen geteilt')
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
   })
 
   test('anonymous user language change', async () => {
@@ -115,7 +119,7 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
       password: '%public%'
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
     // When "Anonymous" opens the public link "Unnamed link"
     await ui.anonymousUserOpensPublicLink({
       actorsEnvironment,
@@ -130,9 +134,9 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
       stepUser: 'Anonymous'
     })
     // And "Anonymous" opens the user menu
-    await ui.openAccountPage({ actorsEnvironment, stepUser: 'Anonymous' })
+    await ui.userOpensAccountPage({ actorsEnvironment, stepUser: 'Anonymous' })
     // And "Anonymous" changes the language to "Deutsch - German"
-    await ui.changeLanguage({
+    await ui.userChangesLanguage({
       actorsEnvironment,
       stepUser: 'Anonymous',
       language: 'Deutsch - German'

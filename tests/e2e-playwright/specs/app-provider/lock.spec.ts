@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
@@ -29,13 +28,13 @@ test.describe('lock', { tag: '@sse' }, () => {
     //   | Alice |
     //   | Brian |
     //   | Carol |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol']
     })
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('file lock indication', async () => {
@@ -64,13 +63,13 @@ test.describe('lock', { tag: '@sse' }, () => {
       ]
     })
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     // When "Brian" opens the following file in Collabora
     //   | resource |
     //   | test.odt |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'test.odt',
@@ -100,13 +99,11 @@ test.describe('lock', { tag: '@sse' }, () => {
 
     // checking that user cannot 'move', 'rename', 'delete' locked file
     // And "Alice" should not be able to edit file "test.odt"
-    expect(
-      await ui.isAbleToEditFileOrFolder({
-        actorsEnvironment,
-        stepUser: 'Alice',
-        resource: 'test.odt'
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotBeAbleToEditResource({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      resource: 'test.odt'
+    })
 
     // checking that user cannot delete or change share of the locked file
     // https://github.com/owncloud/web/issues/10507
@@ -123,7 +120,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource | password |
     //   | test.odt | %public% |
-    await ui.createPublicLink({
+    await ui.userCreatesPublicLink({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'test.odt',
@@ -175,8 +172,8 @@ test.describe('lock', { tag: '@sse' }, () => {
       recipient: 'Brian'
     })
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

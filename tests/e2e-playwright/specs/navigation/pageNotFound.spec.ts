@@ -30,20 +30,20 @@ test.describe('Page not found', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
     })
 
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // When "Alice" navigates to a non-existing page
     await ui.userNavigatesToNonExistingPage({ actorsEnvironment, stepUser: 'Alice' })
     // Then "Alice" should see the not found page
     await ui.userShouldSeeNotFoundPage({ actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

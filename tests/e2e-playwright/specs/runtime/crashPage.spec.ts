@@ -25,12 +25,12 @@ test.describe('crash page', () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
     })
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('when spaces loading fails, the crash page is displayed', async () => {
@@ -42,7 +42,7 @@ test.describe('crash page', () => {
     await page.reload()
 
     await ui.expectCrashPageToBeVisible({ page })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('the crash page does not have any accessibility violations', async () => {

@@ -32,7 +32,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | Carol |
     //   | David |
     //   | Edith |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol', 'David', 'Edith']
@@ -51,17 +51,17 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | Brian | sales    |
     //   | Brian | finance  |
     //   | Brian | security |
-    await api.addUserToGroup({
+    await api.usersHaveBeenAddedToGroup({
       usersEnvironment,
       stepUser: 'Admin',
-      userToAdd: [
+      usersToAdd: [
         { user: 'Brian', group: 'sales' },
         { user: 'Brian', group: 'finance' },
         { user: 'Brian', group: 'security' }
       ]
     })
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
   })
 
   test('batch share a resource to multiple users and groups', async () => {
@@ -148,7 +148,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       ]
     })
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // # multiple share
     // And "Alice" shares the following resources using the sidebar panel
@@ -219,14 +219,14 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     })
 
     // And "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" enables the sync for all shares using the batch action
     await ui.userEnablesSyncForAllShares({ actorsEnvironment, stepUser: 'Brian' })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
   })
 })

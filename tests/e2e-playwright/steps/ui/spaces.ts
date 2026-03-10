@@ -5,7 +5,7 @@ import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/s
 import { expect } from '@playwright/test'
 import { substitute } from '../../../e2e/support/utils'
 
-export async function navigateToPersonalSpacePage({
+export async function userNavigatesToPersonalSpacePage({
   actorsEnvironment,
   stepUser
 }: {
@@ -17,7 +17,7 @@ export async function navigateToPersonalSpacePage({
   await pageObject.navigate()
 }
 
-export async function navigateToSpacesPage({
+export async function userNavigatesToSpacesPage({
   actorsEnvironment,
   stepUser
 }: {
@@ -29,7 +29,7 @@ export async function navigateToSpacesPage({
   await pageObject.navigate()
 }
 
-export async function navigateToSpace({
+export async function userNavigatesToSpace({
   actorsEnvironment,
   stepUser,
   space
@@ -45,7 +45,7 @@ export async function navigateToSpace({
   await spacesObject.open({ key: space })
 }
 
-export async function createProjectSpace({
+export async function userCreatesProjectSpace({
   actorsEnvironment,
   stepUser,
   name,
@@ -89,7 +89,7 @@ export async function userAddsMembersToSpace({
   }
 }
 
-export async function addExpirationDate({
+export async function userAddsExpirationDate({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
@@ -108,7 +108,7 @@ export async function addExpirationDate({
   await spacesObject.addExpirationDate({ member, expirationDate })
 }
 
-export async function removeExpirationDate({
+export async function userRemovesExpirationDate({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
@@ -125,7 +125,7 @@ export async function removeExpirationDate({
   await spacesObject.removeExpirationDate({ member })
 }
 
-export async function removeAccessToMember({
+export async function userRemovesAccessToMember({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
@@ -147,7 +147,7 @@ export async function removeAccessToMember({
   await spacesObject.removeAccessToMember({ users: [member] })
 }
 
-export async function navigateToProjectSpaceManagementPage({
+export async function userNavigatesToProjectSpaceManagementPage({
   actorsEnvironment,
   stepUser
 }: {
@@ -159,7 +159,7 @@ export async function navigateToProjectSpaceManagementPage({
   await pageObject.navigate()
 }
 
-export async function manageSpaceUsingContexMenu({
+export async function userManagesSpaceUsingContexMenu({
   actorsEnvironment,
   stepUser,
   action,
@@ -201,22 +201,32 @@ export async function userDownloadsSpace({
   expect(downloadedResource).toContain('download.zip')
 }
 
-export async function navigateToTrashbin({
+export async function userNavigatesToTrashbin({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.trashbin.Overview({ page })
+  await pageObject.navigate()
+}
+
+export async function userNavigatesToTrashbinOfSpace({
   actorsEnvironment,
   stepUser,
   space
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  space?: string
+  space: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.trashbin.Overview({ page })
   await pageObject.navigate()
-  if (space) {
-    const trashbinObject = new objects.applicationFiles.Trashbin({ page })
-    await trashbinObject.open(space)
-  }
+  const trashbinObject = new objects.applicationFiles.Trashbin({ page })
+  await trashbinObject.open(space)
 }
 
 export async function userShouldSeeSpace({

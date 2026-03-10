@@ -33,7 +33,7 @@ test.describe('spaces member expiry', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -42,7 +42,7 @@ test.describe('spaces member expiry', () => {
     // And "Admin" assigns following roles to the users using API
     //  | id    | role        |
     //  | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Alice',
@@ -50,7 +50,7 @@ test.describe('spaces member expiry', () => {
     })
 
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" creates the following project space using API
     //  | name | id     |
@@ -64,7 +64,7 @@ test.describe('spaces member expiry', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
@@ -77,7 +77,7 @@ test.describe('spaces member expiry', () => {
     })
 
     // And "Alice" sets the expiration date of the member "Brian" of the project space to "+5 days"
-    await ui.addExpirationDate({
+    await ui.userAddsExpirationDate({
       usersEnvironment,
       actorsEnvironment,
       stepUser: 'Alice',
@@ -86,19 +86,19 @@ test.describe('spaces member expiry', () => {
     })
 
     // When "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
 
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" removes the expiration date of the member "Brian" of the project space
-    await ui.removeExpirationDate({
+    await ui.userRemovesExpirationDate({
       usersEnvironment,
       actorsEnvironment,
       stepUser: 'Alice',
@@ -106,6 +106,6 @@ test.describe('spaces member expiry', () => {
     })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

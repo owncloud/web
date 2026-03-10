@@ -1,19 +1,7 @@
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment } from '../../../e2e/support/environment'
 
-export async function openAccountPage({
-  actorsEnvironment,
-  stepUser
-}: {
-  actorsEnvironment: ActorsEnvironment
-  stepUser: string
-}): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const accountObject = new objects.account.Account({ page })
-  await accountObject.openAccountPage()
-}
-
-export async function changeLanguage({
+export async function userChangesLanguage({
   actorsEnvironment,
   stepUser,
   language
@@ -40,7 +28,7 @@ export async function getAccountPageTitle({
   return await accountObject.getTitle()
 }
 
-export async function requestGdprExport({
+export async function userRequestsGdprExport({
   actorsEnvironment,
   stepUser
 }: {
@@ -52,7 +40,7 @@ export async function requestGdprExport({
   await accountObject.requestGdprExport()
 }
 
-export async function downloadGdprExport({
+export async function userDownloadsGdprExport({
   actorsEnvironment,
   stepUser
 }: {
@@ -88,16 +76,18 @@ export async function userOpensAccountPage({
   await accountObject.openAccountPage()
 }
 
-export async function disableNotificationEvent({
+export async function userDisablesNotificationEvents({
   actorsEnvironment,
   stepUser,
-  event
+  events
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  event: string
+  events: string[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
-  await accountObject.disableNotificationEvent(event)
+  for (const event of events) {
+    await accountObject.disableNotificationEvent(event)
+  }
 }

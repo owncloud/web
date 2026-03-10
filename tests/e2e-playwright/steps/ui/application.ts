@@ -28,7 +28,7 @@ export async function getNotificationMessages({
   return await application.getNotificationMessages()
 }
 
-export async function waitsForTokenRenewal({
+export async function userWaitsForTokenRenewal({
   actorsEnvironment,
   stepUser,
   renewalType

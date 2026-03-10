@@ -12,7 +12,7 @@ import fs from 'fs'
 import { checkResponseStatus, request } from '../../../e2e/support/api/http'
 import { join } from 'path'
 
-export async function usersHasBeenCreated({
+export async function usersHaveBeenCreated({
   usersEnvironment,
   stepUser,
   users
@@ -165,7 +165,7 @@ export async function userHasCreatedPublicLinkOfSpace({
   })
 }
 
-export async function userHasAssignRolesToUsers({
+export async function userHasAssignedRolesToUsers({
   usersEnvironment,
   stepUser,
   targetUserId,
@@ -255,7 +255,7 @@ export async function userHasCreatedFoldersInSpace({
   }
 }
 
-export async function createFilesInsideSpaceBySpaceName({
+export async function userHasCreatedFilesInsideSpace({
   usersEnvironment,
   stepUser,
   files
@@ -275,17 +275,17 @@ export async function createFilesInsideSpaceBySpaceName({
   }
 }
 
-export async function addUserToGroup({
+export async function usersHaveBeenAddedToGroup({
   usersEnvironment,
   stepUser,
-  userToAdd
+  usersToAdd
 }: {
   usersEnvironment: UsersEnvironment
   stepUser: string
-  userToAdd: { user: string; group: string }[]
+  usersToAdd: { user: string; group: string }[]
 }) {
   const admin = usersEnvironment.getUser({ key: stepUser })
-  for (const info of userToAdd) {
+  for (const info of usersToAdd) {
     const group = usersEnvironment.getGroup({ key: info.group })
     const user = usersEnvironment.getUser({ key: info.user })
     await api.graph.addUserToGroup({ user, group, admin })

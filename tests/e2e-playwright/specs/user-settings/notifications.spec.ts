@@ -37,7 +37,7 @@ test.describe('Notifications', () => {
     //   | Alice |
     //   | Brian |
     //   | Carol |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol']
@@ -46,7 +46,7 @@ test.describe('Notifications', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Alice',
@@ -55,9 +55,9 @@ test.describe('Notifications', () => {
   })
 
   test.afterEach(async () => {
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Carol' })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Carol' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('user should be able to read and dismiss notifications', async () => {
@@ -73,10 +73,10 @@ test.describe('Notifications', () => {
     //   | user  | group |
     //   | Alice | sales |
     //   | Brian | sales |
-    await api.addUserToGroup({
+    await api.usersHaveBeenAddedToGroup({
       usersEnvironment,
       stepUser: 'Admin',
-      userToAdd: [
+      usersToAdd: [
         { user: 'Alice', group: 'sales' },
         { user: 'Brian', group: 'sales' }
       ]
@@ -104,7 +104,7 @@ test.describe('Notifications', () => {
     })
 
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // When "Alice" shares the following resource using the sidebar panel
     //   | resource         | recipient | type  | role                      | resourceType |
@@ -134,7 +134,7 @@ test.describe('Notifications', () => {
     })
 
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // Then "Brian" should see the following notifications
     // | message                                                   |
@@ -157,7 +157,7 @@ test.describe('Notifications', () => {
     // When "Alice" removes following sharee
     //   | resource         | recipient |
     //   | folder_to_shared | Brian     |
-    await ui.removeSharee({
+    await ui.userRemovesSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -166,7 +166,7 @@ test.describe('Notifications', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
@@ -205,7 +205,7 @@ test.describe('Notifications', () => {
     // When "Alice" removes access to following users from the project space
     //   | user  | role                      | kind |
     //   | Carol | Can edit without versions | user |
-    await ui.removeAccessToMember({
+    await ui.userRemovesAccessToMember({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -214,7 +214,7 @@ test.describe('Notifications', () => {
     })
 
     // And "Carol" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Carol' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Carol' })
 
     // And "Carol" should see the following notifications
     //   | message                                              |
@@ -228,10 +228,10 @@ test.describe('Notifications', () => {
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
 
     // And "Alice" navigates to the project spaces management page
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" disables the space "team.1" using the context-menu
-    await ui.manageSpaceUsingContexMenu({
+    await ui.userManagesSpaceUsingContexMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       action: 'disables',
@@ -245,7 +245,7 @@ test.describe('Notifications', () => {
     expect(messages).toContain(substitute('%user_alice_displayName% disabled Space team'))
 
     // When "Alice" deletes the space "team.1" using the context-menu
-    await ui.manageSpaceUsingContexMenu({
+    await ui.userManagesSpaceUsingContexMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       action: 'deletes',
@@ -283,7 +283,7 @@ test.describe('Notifications', () => {
     })
 
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" opens the user menu
     await ui.userOpensAccountPage({ actorsEnvironment, stepUser: 'Brian' })
@@ -294,29 +294,19 @@ test.describe('Notifications', () => {
     //   | Share Removed           |
     //   | Added as space member   |
     //   | Removed as space member |
-    await ui.disableNotificationEvent({
+    await ui.userDisablesNotificationEvents({
       actorsEnvironment,
       stepUser: 'Brian',
-      event: 'Share Received'
-    })
-    await ui.disableNotificationEvent({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      event: 'Share Removed'
-    })
-    await ui.disableNotificationEvent({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      event: 'Added as space member'
-    })
-    await ui.disableNotificationEvent({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      event: 'Removed as space member'
+      events: [
+        'Share Received',
+        'Share Removed',
+        'Added as space member',
+        'Removed as space member'
+      ]
     })
 
     // And "Carol" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Carol' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Carol' })
 
     // And "Carol" opens the user menu
     await ui.userOpensAccountPage({ actorsEnvironment, stepUser: 'Carol' })
@@ -325,19 +315,14 @@ test.describe('Notifications', () => {
     //   | event          |
     //   | Space disabled |
     //   | Space deleted  |
-    await ui.disableNotificationEvent({
+    await ui.userDisablesNotificationEvents({
       actorsEnvironment,
       stepUser: 'Brian',
-      event: 'Space disabled'
-    })
-    await ui.disableNotificationEvent({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      event: 'Space deleted'
+      events: ['Space disabled', 'Space deleted']
     })
 
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" shares the following resource using the sidebar panel
     //   | resource         | recipient | type  | role                      | resourceType |
@@ -361,7 +346,7 @@ test.describe('Notifications', () => {
     // When "Alice" removes following sharee
     //   | resource         | recipient |
     //   | folder_to_shared | Brian     |
-    await ui.removeSharee({
+    await ui.userRemovesSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -370,35 +355,27 @@ test.describe('Notifications', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
     //   | Brian | Can edit | user |
     //   | Carol | Can edit | user |
-    await ui.addUserToProjectSpace({
+    await ui.userAddsUsersToProjectSpace({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
       space: 'team.1',
-      reciver: 'Brian',
-      role: 'Can edit with versions and trashbin',
-      kind: 'user'
-    })
-    await ui.addUserToProjectSpace({
-      actorsEnvironment,
-      usersEnvironment,
-      stepUser: 'Alice',
-      space: 'team.1',
-      reciver: 'Carol',
-      role: 'Can edit with versions and trashbin',
-      kind: 'user'
+      members: [
+        { reciver: 'Brian', role: 'Can edit with versions and trashbin', kind: 'user' },
+        { reciver: 'Carol', role: 'Can edit with versions and trashbin', kind: 'user' }
+      ]
     })
 
     // And "Alice" removes access to following users from the project space
     //   | user  | role     | kind |
     //   | Brian | Can edit | user |
-    await ui.removeAccessToMember({
+    await ui.userRemovesAccessToMember({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -414,10 +391,10 @@ test.describe('Notifications', () => {
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
 
     // And "Alice" navigates to the project spaces management page
-    await ui.navigateToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" disables the space "team.1" using the context-menu
-    await ui.manageSpaceUsingContexMenu({
+    await ui.userManagesSpaceUsingContexMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       action: 'disables',
@@ -425,7 +402,7 @@ test.describe('Notifications', () => {
     })
 
     // When "Alice" deletes the space "team.1" using the context-menu
-    await ui.manageSpaceUsingContexMenu({
+    await ui.userManagesSpaceUsingContexMenu({
       actorsEnvironment,
       stepUser: 'Alice',
       action: 'deletes',

@@ -1,7 +1,8 @@
+import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
 
-export async function navigateToGeneralManagementPage({
+export async function userNavigatesToGeneralManagementPage({
   actorsEnvironment,
   stepUser
 }: {
@@ -13,7 +14,7 @@ export async function navigateToGeneralManagementPage({
   await pageObject.navigate()
 }
 
-export async function uploadLogoFromLocalPath({
+export async function userUploadsLogoFromLocalPath({
   actorsEnvironment,
   stepUser,
   localFile,
@@ -30,7 +31,7 @@ export async function uploadLogoFromLocalPath({
   await generalObject.uploadLogo({ path: logoPath })
 }
 
-export async function resetLogo({
+export async function userResetsLogo({
   actorsEnvironment,
   stepUser
 }: {
@@ -70,7 +71,7 @@ export async function userCreatesGroups({
   }
 }
 
-export async function checkGroupsPresenceById({
+export async function userShouldSeeGroupIds({
   actorsEnvironment,
   stepUser,
   expectedGroupIds
@@ -78,19 +79,33 @@ export async function checkGroupsPresenceById({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   expectedGroupIds: string[]
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   const actualGroupsIds = await groupsObject.getDisplayedGroupsIds()
   for (const group of expectedGroupIds) {
-    if (!actualGroupsIds.includes(groupsObject.getUUID({ key: group }))) {
-      return false
-    }
+    expect(actualGroupsIds).toContain(groupsObject.getUUID({ key: group }))
   }
-  return true
 }
 
-export async function groupDisplayNameExists({
+export async function userShouldNotSeeGroupIds({
+  actorsEnvironment,
+  stepUser,
+  expectedGroupIds
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedGroupIds: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+  const actualGroupsIds = await groupsObject.getDisplayedGroupsIds()
+  for (const group of expectedGroupIds) {
+    expect(actualGroupsIds).not.toContain(groupsObject.getUUID({ key: group }))
+  }
+}
+
+export async function userShouldSeeGroupDisplayName({
   actorsEnvironment,
   stepUser,
   groupDisplayName
@@ -98,11 +113,11 @@ export async function groupDisplayNameExists({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   groupDisplayName: string
-}): Promise<boolean> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   const groups = await groupsObject.getGroupsDisplayName()
-  return groups.includes(groupDisplayName)
+  expect(groups).toContain(groupDisplayName)
 }
 
 export async function userDeletesGroups({

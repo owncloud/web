@@ -30,13 +30,13 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
     })
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile          | content                 |
     //   | OpenDocument.odt    | OpenDocument Content    |
@@ -138,6 +138,6 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       editor: 'OnlyOffice'
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

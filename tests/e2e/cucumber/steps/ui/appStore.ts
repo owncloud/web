@@ -17,7 +17,7 @@ Then(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.waitForAppStoreIsVisible()
+    await pageObject.waitForAppStoreToBeVisible()
   }
 )
 
@@ -74,7 +74,7 @@ Then(
   async function (this: World, stepUser: string, app: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.waitForAppDetailsIsVisible(app)
+    await pageObject.waitForAppDetailsToBeVisible(app)
   }
 )
 

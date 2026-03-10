@@ -28,7 +28,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       browser: browser
     })
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -38,8 +38,8 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
   test('download resources', async () => {
     // Given "Alice" logs in
     // Given "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Alice" creates the following folders in personal space using API
     //   | name         |
@@ -123,7 +123,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource       |
     //   | testavatar.jpg |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testavatar.jpg',
@@ -145,10 +145,10 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
 
     // When "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" downloads the following resources using the batch action
     //   | resource       | type   |
     //   | folderPublic   | folder |
@@ -183,7 +183,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     // And "Brian" opens the following file in mediaviewer
     //   | resource       |
     //   | testavatar.jpg |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
@@ -201,6 +201,6 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     })
 
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
   })
 })

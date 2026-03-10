@@ -36,7 +36,7 @@ test.describe(
       //    | id    |
       //    | Alice |
       //    | Brian |
-      await api.usersHasBeenCreated({
+      await api.usersHaveBeenCreated({
         usersEnvironment,
         stepUser: 'Admin',
         users: ['Alice', 'Brian']
@@ -45,9 +45,9 @@ test.describe(
 
     test('shortcut', async () => {
       // Given "Alice" logs in
-      await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+      await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
       // And "Brian" logs in
-      await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+      await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
       // And "Alice" creates the following folders in personal space using API
       //   | name |
@@ -158,7 +158,7 @@ test.describe(
         url: 'https://owncloud.com/news/'
       })
       // And "Alice" logs out
-      await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+      await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
 
       // # create a shortcut to the shared file
       // When "Brian" creates a shortcut for the following resources
@@ -214,7 +214,7 @@ test.describe(
         fileViewerType: 'text-editor'
       })
       // And "Brian" logs out
-      await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+      await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
     })
   }
 )

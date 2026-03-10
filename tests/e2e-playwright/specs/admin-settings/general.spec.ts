@@ -28,20 +28,20 @@ test.describe('general management', () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
   })
 
   test('logo can be changed in the admin settings', async () => {
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.navigateToGeneralManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.uploadLogoFromLocalPath({
+    await ui.userNavigatesToGeneralManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userUploadsLogoFromLocalPath({
       actorsEnvironment,
       stepUser: 'Admin',
       localFile: 'filesForUpload/testavatar.png',
       filesEnvironment
     })
-    await ui.navigateToGeneralManagementPage({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.resetLogo({ actorsEnvironment, stepUser: 'Admin' })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userNavigatesToGeneralManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userResetsLogo({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Admin' })
   })
 })

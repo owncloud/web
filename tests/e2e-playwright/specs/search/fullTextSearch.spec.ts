@@ -36,7 +36,7 @@ test.describe('Search', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -45,7 +45,7 @@ test.describe('Search', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Brian | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Brian',
@@ -139,7 +139,7 @@ test.describe('Search', () => {
     // And "Brian" creates the following file in space "FullTextSearch" using API
     //   | name                          | content                   |
     //   | spaceFolder/spaceTextfile.txt | This is test file. Cheers |
-    await api.createFilesInsideSpaceBySpaceName({
+    await api.userHasCreatedFilesInsideSpace({
       usersEnvironment,
       stepUser: 'Brian',
       files: [
@@ -165,12 +165,12 @@ test.describe('Search', () => {
     })
 
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
   })
 
   test('Search for content of file', async () => {
     // When "Brian" searches "" using the global search and the "all files" filter and presses enter
-    await ui.searchGloballyWithFilter({
+    await ui.userSearchesGloballyWithFilter({
       actorsEnvironment,
       stepUser: 'Brian',
       keyword: 'Cheers',
@@ -224,7 +224,7 @@ test.describe('Search', () => {
     })
 
     // When "Brian" searches "file" using the global search and the "all files" filter and presses enter
-    await ui.searchGloballyWithFilter({
+    await ui.userSearchesGloballyWithFilter({
       actorsEnvironment,
       stepUser: 'Brian',
       keyword: 'file',
@@ -265,7 +265,7 @@ test.describe('Search', () => {
     })
 
     // When "Brian" searches "Cheers" using the global search and the "all files" filter and presses enter
-    await ui.searchGloballyWithFilter({
+    await ui.userSearchesGloballyWithFilter({
       actorsEnvironment,
       stepUser: 'Brian',
       keyword: 'Cheers',
@@ -296,7 +296,7 @@ test.describe('Search', () => {
     // When "Brian" opens the following file in texteditor
     //   | resource     |
     //   | textfile.txt |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'textfile.txt',
@@ -326,6 +326,6 @@ test.describe('Search', () => {
       ]
     })
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
   })
 })
