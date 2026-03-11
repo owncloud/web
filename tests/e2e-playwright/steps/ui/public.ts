@@ -85,31 +85,27 @@ export async function userUnlocksPublicLink({
   await pageObject.authenticate({ password: substitute(password) })
 }
 
-export async function uploadResourceInPublicLink({
+export async function userUploadsResourcesInPublicLink({
   actorsEnvironment,
   filesEnvironment,
   stepUser,
-  resource,
-  to,
-  option,
-  type
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   filesEnvironment: FilesEnvironment
   stepUser: string
-  resource: string
-  to?: string
-  option?: string
-  type?: string
+  resources: { name: string; to?: string; option?: string; type?: string }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
-  await pageObject.upload({
-    to: to,
-    resources: [filesEnvironment.getFile({ name: resource })],
-    option: option,
-    type: type
-  })
+  for (const resource of resources) {
+    await pageObject.upload({
+      to: resource.to,
+      resources: [filesEnvironment.getFile({ name: resource.name })],
+      option: resource.option,
+      type: resource.type
+    })
+  }
 }
 
 export async function userDeletesResourcesFromPublicLink({
@@ -188,7 +184,7 @@ export async function userUnlocksPasswordProtectedFolderWithPassword({
   })
 }
 
-export async function userUploadsResourceViaDrop({
+export async function userDropUploadsResources({
   actorsEnvironment,
   filesEnvironment,
   stepUser,

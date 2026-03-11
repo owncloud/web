@@ -232,11 +232,11 @@ test.describe('check files pagination in project space', () => {
     // And "Anonymous" uploads the following resources in public link page
     //   | resource     |
     //   | textfile.txt |
-    await ui.uploadResourceInPublicLink({
+    await ui.userUploadsResourcesInPublicLink({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Anonymous',
-      resource: 'textfile.txt'
+      resources: [{ name: 'textfile.txt' }]
     })
 
     // And "Anonymous" deletes the following resources from public link using sidebar panel

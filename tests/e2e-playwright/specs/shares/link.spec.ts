@@ -121,7 +121,7 @@ test.describe('link', () => {
     // And "Anonymous" drop uploads following resources
     //   | resource     |
     //   | textfile.txt |
-    await ui.userUploadsResourceViaDrop({
+    await ui.userDropUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Anonymous',
@@ -147,7 +147,7 @@ test.describe('link', () => {
     // And "Brian" drop uploads following resources
     //   | resource   |
     //   | simple.pdf |
-    await ui.userUploadsResourceViaDrop({
+    await ui.userDropUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
@@ -230,18 +230,11 @@ test.describe('link', () => {
     //   | resource      | option  |
     //   | new-lorem.txt |         |
     //   | lorem.txt     | replace |
-    await ui.uploadResourceInPublicLink({
+    await ui.userUploadsResourcesInPublicLink({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Anonymous',
-      resource: 'new-lorem.txt'
-    })
-    await ui.uploadResourceInPublicLink({
-      actorsEnvironment,
-      filesEnvironment,
-      stepUser: 'Anonymous',
-      resource: 'lorem.txt',
-      option: 'replace'
+      resources: [{ name: 'new-lorem.txt' }, { name: 'lorem.txt', option: 'replace' }]
     })
     // And "Anonymous" creates the following resources
     //   | resource       | type   |
@@ -255,12 +248,11 @@ test.describe('link', () => {
     // And "Anonymous" uploads the following resources in public link page
     //   | resource | type   |
     //   | PARENT   | folder |
-    await ui.uploadResourceInPublicLink({
+    await ui.userUploadsResourcesInPublicLink({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Anonymous',
-      resource: 'PARENT',
-      type: 'folder'
+      resources: [{ name: 'PARENT', type: 'folder' }]
     })
     // And "Anonymous" should see the resource "PARENT" in the files list
     await ui.userShouldSeeTheResources({
