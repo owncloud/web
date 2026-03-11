@@ -1,35 +1,14 @@
 import { test } from '../../support/test'
-import { config } from './../../../e2e/config.js'
-import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('create Space shortcut', () => {
-  let actorsEnvironment: ActorsEnvironment
-  const filesEnvironment = new FilesEnvironment()
-
-  test.beforeEach(async ({ browser, usersEnvironment }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-
+  test.beforeEach(async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
@@ -37,41 +16,40 @@ test.describe('create Space shortcut', () => {
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       targetUserId: 'Alice',
       role: 'Space Admin'
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
   })
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ world }) => {
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 
-  test('create Space from folder', async ({ usersEnvironment, spacesEnvironment }) => {
+  test('create Space from folder', async ({ world }) => {
     // And "Alice" creates the following folder in personal space using API
     //   | name             |
     //   | spaceFolder      |
     //   | spaceFolder/test |
     await api.userHasCreatedFolders({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderNames: ['spaceFolder', 'spaceFolder/test']
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ world, stepUser: 'Alice' })
 
     // And "Alice" uploads the following resources
     //   | resource          | to           |
     //   | data.zip          | spaceFolder  |
     //   | lorem.txt         | spaceFolder  |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [
         { name: 'data.zip', to: 'spaceFolder' },
@@ -80,80 +58,77 @@ test.describe('create Space shortcut', () => {
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ world, stepUser: 'Alice' })
 
     // And "Alice" creates space "folderSpace" from folder "spaceFolder" using the context menu
     await ui.userCreatesSpaceFromFolderUsingContexMenu({
-      actorsEnvironment,
-      spacesEnvironment,
+      world,
       stepUser: 'Alice',
       spaceName: 'folderSpace',
       folderName: 'spaceFolder'
     })
 
     // And "Alice" navigates to the project space "folderSpace"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'folderSpace' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'folderSpace' })
 
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource  |
     //   | data.zip  |
     //   | lorem.txt |
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Alice',
       resources: ['data.zip', 'lorem.txt']
     })
   })
 
-  test('create space from resources', async ({ usersEnvironment, spacesEnvironment }) => {
+  test('create space from resources', async ({ world }) => {
     // And "Alice" creates the following folder in personal space using API
     //   | name             |
     //   | resourceFolder   |
     await api.userHasCreatedFolder({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderName: 'resourceFolder'
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ world, stepUser: 'Alice' })
 
     // And "Alice" uploads the following resources
     //   | resource          | to             |
     //   | data.zip          | resourceFolder |
     //   | lorem.txt         |                |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'data.zip', to: 'resourceFolder' }, { name: 'lorem.txt' }]
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ world, stepUser: 'Alice' })
 
     // And "Alice" creates space "resourceSpace" from resources using the context menu
     //   | resource                |
     //   | resourceFolder          |
     //   | lorem.txt               |
     await ui.userCreatesSpaceFromResourcesUsingContexMenu({
-      actorsEnvironment,
-      spacesEnvironment,
+      world,
       stepUser: 'Alice',
       spaceName: 'resourceSpace',
       resources: ['resourceFolder', 'lorem.txt']
     })
 
     // And "Alice" navigates to the project space "resourceSpace"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'resourceSpace' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'resourceSpace' })
 
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource        |
     //   | resourceFolder  |
     //   | lorem.txt       |
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Alice',
       resources: ['resourceFolder', 'lorem.txt']

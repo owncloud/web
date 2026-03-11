@@ -1,48 +1,29 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('lock', { tag: '@sse' }, () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-    await setAccessAndRefreshToken(usersEnvironment)
+  test.beforeEach(async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
     //   | Carol |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol']
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
   })
 
-  test('file lock indication', async () => {
+  test('file lock indication', async ({ world }) => {
     // When "Alice" creates the following resources
     //   | resource | type         | content      |
     //   | test.odt | OpenDocument | some content |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'test.odt', type: 'OpenDocument', content: 'some content' }]
     })
@@ -50,7 +31,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     // | resource | recipient | type | role                                | resourceType |
     // | test.odt | Brian     | user | Can edit with versions and trashbin | file         |
     await api.userHasSharedResources({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -63,21 +44,21 @@ test.describe('lock', { tag: '@sse' }, () => {
       ]
     })
     // And "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     // When "Brian" opens the following file in Collabora
     //   | resource |
     //   | test.odt |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'test.odt',
       application: 'Collabora'
     })
     // Then "Brian" should see the content "some content" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       expectedContent: 'some content',
       editor: 'Collabora'
@@ -86,13 +67,13 @@ test.describe('lock', { tag: '@sse' }, () => {
     // file-locked
     // And "Alice" should get "file-locked" SSE event
     await ui.userShouldGetSSEEvent({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       event: 'file-locked'
     })
     // And for "Alice" file "test.odt" should be locked
     await ui.resourceShouldBeLockedForUser({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'test.odt'
     })
@@ -100,7 +81,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     // checking that user cannot 'move', 'rename', 'delete' locked file
     // And "Alice" should not be able to edit file "test.odt"
     await ui.userShouldNotBeAbleToEditResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'test.odt'
     })
@@ -109,8 +90,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     // https://github.com/owncloud/web/issues/10507
     // And "Alice" should not be able to manage share of a file "test.odt" for user "Brian"
     await ui.userShouldNotBeAbleToManageShareOfFile({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'test.odt',
       recipient: 'Brian'
@@ -121,7 +101,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     //   | resource | password |
     //   | test.odt | %public% |
     await ui.userCreatesPublicLink({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'test.odt',
       password: '%public%'
@@ -130,8 +110,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     //   | resource | recipient | type | role     | resourceType |
     //   | test.odt | Carol     | user | Can view | file         |
     await ui.userSharesResources({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
       shares: [
@@ -148,32 +127,31 @@ test.describe('lock', { tag: '@sse' }, () => {
     // file-unlocked
     // When "Brian" closes the file viewer
     await ui.userClosesFileViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian'
     })
     // Then "Alice" should get "file-unlocked" SSE event
     await ui.userShouldGetSSEEvent({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       event: 'file-unlocked'
     })
     // And for "Alice" file "test.odt" should not be locked
     await ui.resourceShouldNotBeLockedForUser({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'test.odt'
     })
     // And "Alice" should be able to manage share of a file "test.odt" for user "Brian"
     await ui.userShouldBeAbleToManageShareOfFile({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'test.odt',
       recipient: 'Brian'
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

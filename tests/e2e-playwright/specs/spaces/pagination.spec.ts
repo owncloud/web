@@ -1,37 +1,14 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import { ActorsEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { editor } from '../../../e2e/support/objects/app-files/utils/index.js'
 
 test.describe('check files pagination in project space', () => {
-  let actorsEnvironment
-
-  test.beforeEach(async ({ browser, usersEnvironment }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('pagination', async ({ usersEnvironment, spacesEnvironment }) => {
+  test('pagination', async ({ world }) => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
@@ -40,21 +17,20 @@ test.describe('check files pagination in project space', () => {
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       targetUserId: 'Alice',
       role: 'Space Admin'
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // And "Alice" creates the following project space using API
     //   | name       | id    |
     //   | Developers | dev.1 |
     await api.userHasCreatedProjectSpace({
-      usersEnvironment,
-      spacesEnvironment,
+      world,
       stepUser: 'Alice',
       name: 'Developers',
       id: 'dev.1'
@@ -62,7 +38,7 @@ test.describe('check files pagination in project space', () => {
 
     // And "Alice" creates 55 folders in space "Developers" using API
     await api.userHasCreatedFoldersInSpace({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       spaceName: 'Developers',
       folders: Array.from({ length: 55 }, (_, i) => `testFolder${i + 1}`)
@@ -70,7 +46,7 @@ test.describe('check files pagination in project space', () => {
 
     // And "Alice" creates 55 files in space "Developers" using API
     await api.userHasCreatedFilesInsideSpace({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       files: Array.from({ length: 55 }, (_, i) => ({
         name: `testfile${i + 1}.txt`,
@@ -83,7 +59,7 @@ test.describe('check files pagination in project space', () => {
     //   | name                 | content                |
     //   | .hidden-testFile.txt | This is a hidden file. |
     await api.userHasCreatedFilesInsideSpace({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       files: [
         { name: '.hidden-testFile.txt', space: 'Developers', content: 'This is a hidden file.' }
@@ -91,14 +67,14 @@ test.describe('check files pagination in project space', () => {
     })
 
     // And "Alice" navigates to the project space "dev.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'dev.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'dev.1' })
 
     // When "Alice" navigates to page "2" of the project space files view
-    await ui.userNavigatesToPageNumber({ actorsEnvironment, stepUser: 'Alice', pageNumber: '2' })
+    await ui.userNavigatesToPageNumber({ world, stepUser: 'Alice', pageNumber: '2' })
 
     // Then "Alice" should see the text "112 items with 1 kB in total (56 files including 1 hidden, 56 folders including 1 hidden)" at the footer of the page
     await ui.userShouldSeeFooterText({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       expectedText:
         '112 items with 1 kB in total (56 files including 1 hidden, 56 folders including 1 hidden)'
@@ -106,52 +82,51 @@ test.describe('check files pagination in project space', () => {
 
     // And "Alice" should see 10 resources in the project space files view
     await ui.userShouldSeeNumberOfResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       expectedNumberOfResources: 10
     })
 
     // When "Alice" enables the option to display the hidden file
-    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ world, stepUser: 'Alice' })
 
     // And "Alice" should see 12 resources in the project space files view
     await ui.userShouldSeeNumberOfResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       expectedNumberOfResources: 12
     })
 
     // When "Alice" opens file "testfile45.txt"
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'testfile45.txt'
     })
 
     // And "Alice" closes the file viewer
-    const { page } = actorsEnvironment.getActor({ key: 'Alice' })
-    await editor.close(page)
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
 
     // Then "Alice" should be on page "2"
     await ui.userShouldBeOnPage({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       pageNumber: '2'
     })
 
     // When "Alice" changes the items per page to "500"
-    await ui.userChangesItemsPerPage({ actorsEnvironment, stepUser: 'Alice', itemsPerPage: '500' })
+    await ui.userChangesItemsPerPage({ world, stepUser: 'Alice', itemsPerPage: '500' })
 
     // Then "Alice" should not see the pagination in the project space files view
-    await ui.userShouldNotSeePagination({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userShouldNotSeePagination({ world, stepUser: 'Alice' })
 
     // When "Alice" enables flat list
-    await ui.userEnablesFlatList({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesFlatList({ world, stepUser: 'Alice' })
 
     // Then "Alice" should see files being sorted in alphabetic order
-    await ui.userShouldSeeFilesSortedAlphabetically({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userShouldSeeFilesSortedAlphabetically({ world, stepUser: 'Alice' })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

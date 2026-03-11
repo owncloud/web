@@ -1,33 +1,34 @@
 import { test as base } from '@playwright/test'
-import { UsersEnvironment } from '../../e2e/support/environment'
 import { User, UserState, Group } from '../../e2e/support/types'
 import { config } from '../../e2e/config.js'
 import { api, store, environment, utils } from '../../e2e/support'
-
-const usersEnvironment = new UsersEnvironment()
-const spacesEnvironment = new environment.SpacesEnvironment()
+import { World } from './world'
+import { state } from './shared'
+import { setAccessAndRefreshToken } from '../helpers/setAccessAndRefreshToken'
+import { getBrowserLaunchOptions } from '../../e2e/support/environment/actor/shared'
+import { Browser, chromium, firefox, webkit } from '@playwright/test'
 
 export const test = base.extend<{
-  usersEnvironment: UsersEnvironment
-  spacesEnvironment: environment.SpacesEnvironment
+  world: World
   globalCleanup: void
+  globalBeforeHook: void
 }>({
-  usersEnvironment: async ({}, use) => {
-    await use(usersEnvironment)
-  },
-  spacesEnvironment: async ({}, use) => {
-    await use(spacesEnvironment)
+  world: async ({}, use) => {
+    const world = new World()
+    await use(world)
   },
   globalCleanup: [
-    async ({ usersEnvironment }, use) => {
+    async ({ world }: { world: World }, use) => {
       await use()
 
       config.federatedServer = false
-      const adminUser = usersEnvironment.getUser({ key: config.adminUsername })
+      const adminUser = world.usersEnvironment.getUser({ key: config.adminUsername })
 
       if (!config.predefinedUsers && adminUser) {
         if (config.keycloak) {
-          const keycloakAdminUser = usersEnvironment.getUser({ key: config.keycloakAdminUser })
+          const keycloakAdminUser = world.usersEnvironment.getUser({
+            key: config.keycloakAdminUser
+          })
           await api.keycloak.refreshAccessTokenForKeycloakUser(keycloakAdminUser)
           await api.keycloak.refreshAccessTokenForKeycloakOcisUser(keycloakAdminUser)
         } else {
@@ -48,7 +49,32 @@ export const test = base.extend<{
       environment.closeSSEConnections()
     },
     { auto: true }
+  ],
+  globalBeforeHook: [
+    async ({ world }: { world: World }, use) => {
+      if (!config.basicAuth && !config.predefinedUsers) {
+        await setAccessAndRefreshToken(world.usersEnvironment)
+      }
+      await use()
+    },
+    { auto: true }
   ]
+})
+
+test.beforeAll(async () => {
+  const browserConfiguration = getBrowserLaunchOptions()
+  const browsers: Record<string, () => Promise<Browser>> = {
+    firefox: async () => await firefox.launch(browserConfiguration),
+    webkit: async () => await webkit.launch(browserConfiguration),
+    chrome: async () => await chromium.launch({ ...browserConfiguration, channel: 'chrome' }),
+    chromium: async () => await chromium.launch(browserConfiguration)
+  }
+  state.browser = await browsers[config.browser]()
+
+  if (config.keycloak) {
+    const usersEnvironment = new environment.UsersEnvironment()
+    api.keycloak.setupKeycloakAdminUser(usersEnvironment.getUser({ key: config.keycloakAdminUser }))
+  }
 })
 
 const cleanUpUser = async (createdUserStore, adminUser: User) => {

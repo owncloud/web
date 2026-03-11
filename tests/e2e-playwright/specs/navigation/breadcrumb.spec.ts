@@ -1,98 +1,78 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
+  test.beforeEach(async ({ world }) => {
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
   })
 
-  test('Breadcrumb navigation', async () => {
+  test('Breadcrumb navigation', async ({ world }) => {
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'parent/folder%2Fwith%2FSlashes', type: 'folder' }]
     })
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'parent/folder%2Fwith%2FSlashes'
     })
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: `'single-double quotes"`, type: 'folder' }]
     })
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: `'single-double quotes"`
     })
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: `"inner" double quote`, type: 'folder' }]
     })
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: `"inner" double quote`
     })
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'sub-folder', type: 'folder' }]
     })
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'sub-folder'
     })
     await ui.userNavigatesToFolderViaBreadcrumb({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: `"inner" double quote`
     })
     await ui.userNavigatesToFolderViaBreadcrumb({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: `'single-double quotes"`
     })
     await ui.userNavigatesToFolderViaBreadcrumb({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folder%2Fwith%2FSlashes'
     })
     await ui.userNavigatesToFolderViaBreadcrumb({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'parent'
     })
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

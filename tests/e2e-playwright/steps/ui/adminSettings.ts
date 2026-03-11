@@ -1,70 +1,68 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
-import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
+import { World } from '../../support/world'
 
 export async function userNavigatesToGeneralManagementPage({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationAdminSettings.page.General({ page })
   await pageObject.navigate()
 }
 
 export async function userUploadsLogoFromLocalPath({
-  actorsEnvironment,
+  world,
   stepUser,
-  localFile,
-  filesEnvironment
+  localFile
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   localFile: string
-  filesEnvironment: FilesEnvironment
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const generalObject = new objects.applicationAdminSettings.General({ page })
-  const logoPath = filesEnvironment.getFile({ name: localFile.split('/').pop() }).path
+  const logoPath = world.filesEnvironment.getFile({ name: localFile.split('/').pop() }).path
   await generalObject.uploadLogo({ path: logoPath })
 }
 
 export async function userResetsLogo({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const generalObject = new objects.applicationAdminSettings.General({ page })
   await generalObject.resetLogo()
 }
 
 export async function userNavigatesToGroupsManagementPage({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.page.Groups({ page })
   await groupsObject.navigate()
 }
 
 export async function userCreatesGroups({
-  actorsEnvironment,
+  world,
   stepUser,
   groupIds
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   groupIds: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   for (const groupId of groupIds) {
     await groupsObject.createGroup({ key: groupId })
@@ -72,15 +70,15 @@ export async function userCreatesGroups({
 }
 
 export async function userShouldSeeGroupIds({
-  actorsEnvironment,
+  world,
   stepUser,
   expectedGroupIds
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   expectedGroupIds: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   const actualGroupsIds = await groupsObject.getDisplayedGroupsIds()
   for (const group of expectedGroupIds) {
@@ -89,15 +87,15 @@ export async function userShouldSeeGroupIds({
 }
 
 export async function userShouldNotSeeGroupIds({
-  actorsEnvironment,
+  world,
   stepUser,
   expectedGroupIds
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   expectedGroupIds: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   const actualGroupsIds = await groupsObject.getDisplayedGroupsIds()
   for (const group of expectedGroupIds) {
@@ -106,32 +104,32 @@ export async function userShouldNotSeeGroupIds({
 }
 
 export async function userShouldSeeGroupDisplayName({
-  actorsEnvironment,
+  world,
   stepUser,
   groupDisplayName
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   groupDisplayName: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   const groups = await groupsObject.getGroupsDisplayName()
   expect(groups).toContain(groupDisplayName)
 }
 
 export async function userDeletesGroups({
-  actorsEnvironment,
+  world,
   stepUser,
   actionType,
   groupsToBeDeleted
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   actionType: string
   groupsToBeDeleted: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   const groupIds = []
   switch (actionType) {
@@ -153,21 +151,21 @@ export async function userDeletesGroups({
 }
 
 export async function userChangesGroup({
-  actorsEnvironment,
+  world,
   stepUser,
   key,
   attribute,
   value,
   action
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   key: string
   attribute: string
   value: string
   action: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   await groupsObject.changeGroup({
     key,
@@ -178,29 +176,29 @@ export async function userChangesGroup({
 }
 
 export async function userNavigatesToUserManagementPage({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationAdminSettings.page.Users({ page })
   await pageObject.navigate()
 }
 
 export async function userChangesUserQuota({
-  actorsEnvironment,
+  world,
   stepUser,
   key,
   value
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   key: string
   value: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
   await usersObject.changeQuota({ key, value, action: 'context-menu' })
 }

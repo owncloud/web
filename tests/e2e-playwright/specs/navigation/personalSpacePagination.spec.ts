@@ -1,53 +1,30 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 
 test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment: ActorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('pagination', async () => {
+  test('pagination', async ({ world }) => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // And "Alice" creates 15 folders in personal space using API
     await api.userHasCreatedFolders({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderNames: Array.from({ length: 15 }, (_, i) => `folder${i + 1}`)
     })
     // And "Alice" creates 10 files in personal space using API
     await api.userHasCreatedFiles({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       files: Array.from({ length: 10 }, (_, i) => ({
         pathToFile: `file${i + 1}`,
@@ -58,43 +35,43 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
     //   | pathToFile           | content                |
     //   | .hidden-testFile.txt | This is a hidden file. |
     await api.userHasCreatedFiles({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       files: [{ pathToFile: '.hidden-testFile.txt', content: 'This is a hidden file.' }]
     })
     // When "Alice" opens the "files" app
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
     // And "Alice" changes the items per page to "20"
-    await ui.userChangesItemsPerPage({ actorsEnvironment, stepUser: 'Alice', itemsPerPage: '20' })
+    await ui.userChangesItemsPerPage({ world, stepUser: 'Alice', itemsPerPage: '20' })
     // Then "Alice" should see the text "26 items with 223 B in total (11 files including 1 hidden, 15 folders)" at the footer of the page
     await ui.userShouldSeeFooterText({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       expectedText: '26 items with 223 B in total (11 files including 1 hidden, 15 folders)'
     })
     // When "Alice" navigates to page "2" of the personal space files view
-    await ui.userNavigatesToPageNumber({ actorsEnvironment, stepUser: 'Alice', pageNumber: '2' })
+    await ui.userNavigatesToPageNumber({ world, stepUser: 'Alice', pageNumber: '2' })
     // Then "Alice" should see 5 resources in the personal space files view
     await ui.userShouldSeeNumberOfResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       expectedNumberOfResources: 5
     })
     // When "Alice" enables the option to display the hidden file
-    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ world, stepUser: 'Alice' })
     // Then "Alice" should see 6 resources in the personal space files view
     await ui.userShouldSeeNumberOfResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       expectedNumberOfResources: 6
     })
     // When "Alice" changes the items per page to "500"
-    await ui.userChangesItemsPerPage({ actorsEnvironment, stepUser: 'Alice', itemsPerPage: '500' })
+    await ui.userChangesItemsPerPage({ world, stepUser: 'Alice', itemsPerPage: '500' })
 
     // Then "Alice" should not see the pagination in the personal space files view
-    await ui.userShouldNotSeePagination({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userShouldNotSeePagination({ world, stepUser: 'Alice' })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

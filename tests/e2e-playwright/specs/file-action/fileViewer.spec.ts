@@ -1,54 +1,27 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  FilesEnvironment
-} from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment: ActorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const filesEnvironment = new FilesEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('file viewers', async () => {
+  test('file viewers', async ({ world }) => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // When "Alice" creates the following resources
     //   | resource  | type    | content   |
     //   | lorem.txt | txtFile | some text |
     //   | lorem.md  | mdFile  | readme    |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [
         { name: 'lorem.txt', type: 'txtFile', content: 'some text' },
@@ -61,7 +34,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     //   | lorem.txt | new content edited        |
     //   | lorem.md  | new readme content edited |
     await ui.userEditsFile({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [
         { name: 'lorem.txt', content: 'new content edited' },
@@ -80,8 +53,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     //   | testavatar.jpeg |
     //   | testavatar.png  |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [
         { name: 'simple.pdf' },
@@ -97,47 +69,47 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
 
     // Then "Alice" should see thumbnail and preview for file "sampleGif.gif"
     await ui.userShouldSeeThumbnailAndPreview({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'sampleGif.gif'
     })
 
     // And "Alice" should see thumbnail and preview for file "testavatar.jpeg"
     await ui.userShouldSeeThumbnailAndPreview({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'testavatar.jpeg'
     })
 
     // And "Alice" should see thumbnail and preview for file "testavatar.png"
     await ui.userShouldSeeThumbnailAndPreview({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'testavatar.png'
     })
 
     // When "Alice" opens a file "testavatar.png" in the media-viewer using the sidebar panel
     await ui.userOpensMediaUsingSidebarPanel({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'testavatar.png'
     })
 
     // Then "Alice" is in a media-viewer
     await ui.userIsInFileViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
     })
 
     // When "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
 
     // And "Alice" opens the following file in mediaviewer
     //   | resource        |
     //   | testavatar.jpeg |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'testavatar.jpeg',
       application: 'mediaviewer'
@@ -145,33 +117,33 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
 
     // Then "Alice" is in a media-viewer
     await ui.userIsInFileViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
     })
 
     // When "Alice" navigates to the next media resource
     await ui.userNavigatesToMediaResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       navigationType: 'next'
     })
 
     // And "Alice" navigates to the previous media resource
     await ui.userNavigatesToMediaResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       navigationType: 'previous'
     })
 
     // And "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
 
     // And "Alice" opens the following file in mediaviewer
     //   | resource      |
     //   | sampleGif.gif |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'sampleGif.gif',
       application: 'mediaviewer'
@@ -179,19 +151,19 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
 
     // Then "Alice" is in a media-viewer
     await ui.userIsInFileViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
     })
 
     // When "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
 
     // And "Alice" opens the following file in mediaviewer
     //   | resource      |
     //   | testimage.mp3 |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'testimage.mp3',
       application: 'mediaviewer'
@@ -199,19 +171,19 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
 
     // Then "Alice" is in a media-viewer
     await ui.userIsInFileViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
     })
 
     // When "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
 
     // And "Alice" opens the following file in mediaviewer
     //   | resource      |
     //   | sampleOgg.ogg |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'sampleOgg.ogg',
       application: 'mediaviewer'
@@ -219,19 +191,19 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
 
     // Then "Alice" is in a media-viewer
     await ui.userIsInFileViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
     })
 
     // When "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
 
     // And "Alice" opens the following file in mediaviewer
     //   | resource        |
     //   | sampleWebm.webm |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'sampleWebm.webm',
       application: 'mediaviewer'
@@ -239,19 +211,19 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
 
     // Then "Alice" is in a media-viewer
     await ui.userIsInFileViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
     })
 
     // When "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
 
     // And "Alice" opens the following file in mediaviewer
     //   | resource       |
     //   | test_video.mp4 |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'test_video.mp4',
       application: 'mediaviewer'
@@ -259,15 +231,15 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
 
     // Then "Alice" is in a media-viewer
     await ui.userIsInFileViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
     })
 
     // And "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

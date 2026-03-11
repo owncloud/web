@@ -1,55 +1,27 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  LinksEnvironment
-} from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('rename', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const linksEnvironment = new LinksEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('rename resources', async () => {
+  test('rename resources', async ({ world }) => {
     // Given "Admin" creates following user using API
     // | id    |
     // | Alice |
     // | Brian |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
     // And "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
     // And "Alice" creates the following folders in personal space using API
     //   | name   |
     //   | folder |
     await api.userHasCreatedFolders({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderNames: ['folder']
     })
@@ -57,7 +29,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     //   | pathToFile         | content      |
     //   | folder/example.txt | example text |
     await api.userHasCreatedFiles({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       files: [
         {
@@ -70,7 +42,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     //   | resource | resourceType | recipient | type | role     |
     //   | folder   | folder       | Brian     | user | Can edit |
     await api.userHasSharedResources({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -86,7 +58,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     //   | resource | role     | password |
     //   | folder   | Can edit | %public% |
     await api.userHasCreatedPublicLinkOfResource({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folder',
       role: 'Can edit',
@@ -94,35 +66,34 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     })
 
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     // And "Brian" opens folder "folder"
-    await ui.userOpensResources({ actorsEnvironment, stepUser: 'Brian', resource: 'folder' })
+    await ui.userOpensResources({ world, stepUser: 'Brian', resource: 'folder' })
 
     // rename in the shares with me page
     // When "Brian" renames the following resource
     //   | resource    | as                 |
     //   | example.txt | renamedByBrian.txt |
     await ui.userRenamesResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'example.txt',
       newResourceName: 'renamedByBrian.txt'
     })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
 
     // rename in the public link
     // When "Anonymous" opens the public link "Unnamed link"
     await ui.userOpensPublicLink({
-      actorsEnvironment,
-      linksEnvironment,
+      world,
       stepUser: 'Anonymous',
       name: 'Unnamed link'
     })
     // And "Anonymous" unlocks the public link with password "%public%"
     await ui.userUnlocksPublicLink({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       password: '%public%'
     })
@@ -131,7 +102,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     //   | resource           | as                     |
     //   | renamedByBrian.txt | renamedByAnonymous.txt |
     await ui.userRenamesResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       resource: 'renamedByBrian.txt',
       newResourceName: 'renamedByAnonymous.txt'
@@ -139,19 +110,19 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
 
     // rename in the shares with other page
     // And "Alice" navigates to the shared with others page
-    await ui.userNavigatesToSharedWithOthersPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToSharedWithOthersPage({ world, stepUser: 'Alice' })
     // And "Alice" opens folder "folder"
-    await ui.userOpensResources({ actorsEnvironment, stepUser: 'Alice', resource: 'folder' })
+    await ui.userOpensResources({ world, stepUser: 'Alice', resource: 'folder' })
     // When "Alice" renames the following resource
     //   | resource               | as             |
     //   | renamedByAnonymous.txt | renamedByAlice |
     await ui.userRenamesResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'renamedByAnonymous.txt',
       newResourceName: 'renamedByAlice.txt'
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

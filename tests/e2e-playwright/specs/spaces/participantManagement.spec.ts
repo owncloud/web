@@ -1,41 +1,9 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  SpacesEnvironment,
-  FilesEnvironment,
-  LinksEnvironment
-} from '../../../e2e/support/environment/index.js'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 
 test.describe('check files pagination in project space', () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const spacesEnvironment = new SpacesEnvironment()
-  const filesEnvironment = new FilesEnvironment()
-  const linksEnvironment = new LinksEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('pagination', async () => {
+  test('pagination', async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
@@ -44,7 +12,7 @@ test.describe('check files pagination in project space', () => {
     //   | David |
     //   | Edith |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol', 'David', 'Edith']
     })
@@ -54,8 +22,9 @@ test.describe('check files pagination in project space', () => {
     //   | sales    |
     //   | security |
     await api.groupsHaveBeenCreated({
+      world,
       groupIds: ['sales', 'security'],
-      admin: usersEnvironment.getUser({ key: 'Admin' })
+      stepUser: 'Admin'
     })
 
     // And "Admin" adds user to the group using API
@@ -63,7 +32,7 @@ test.describe('check files pagination in project space', () => {
     //   | David | sales    |
     //   | Edith | security |
     await api.usersHaveBeenAddedToGroup({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       usersToAdd: [
         { user: 'David', group: 'sales' },
@@ -75,28 +44,27 @@ test.describe('check files pagination in project space', () => {
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       targetUserId: 'Alice',
       role: 'Space Admin'
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // And "Alice" creates the following project space using API
     //   | name | id     |
     //   | team | team.1 |
     await api.userHasCreatedProjectSpace({
-      usersEnvironment,
-      spacesEnvironment,
+      world,
       stepUser: 'Alice',
       name: 'team',
       id: 'team.1'
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user     | role     | kind  |
@@ -105,8 +73,7 @@ test.describe('check files pagination in project space', () => {
     //   | sales    | Can view | group |
     //   | security | Can edit | group |
     await ui.userAddsMembersToSpace({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       members: [
         { user: 'Brian', role: 'Can edit', kind: 'user' },
@@ -117,16 +84,16 @@ test.describe('check files pagination in project space', () => {
     })
 
     // When "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Brian', space: 'team.1' })
 
     // And "Brian" creates the following resources
     //   | resource | type   |
     //   | parent   | folder |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resources: [{ name: 'parent', type: 'folder' }]
     })
@@ -135,39 +102,38 @@ test.describe('check files pagination in project space', () => {
     //   | resource  | to     |
     //   | lorem.txt | parent |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Brian',
       resources: [{ name: 'lorem.txt', to: 'parent' }]
     })
 
     // When "David" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'David' })
+    await ui.userLogsIn({ world, stepUser: 'David' })
 
     // And "David" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'David', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'David', space: 'team.1' })
 
     // Then "David" should not be able to edit folder "parent"
     await ui.userShouldNotBeAbleToEditResource({
-      actorsEnvironment,
+      world,
       stepUser: 'David',
       resource: 'parent'
     })
 
     // And "David" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'David' })
+    await ui.userLogsOut({ world, stepUser: 'David' })
 
     // When "Edith" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Edith' })
+    await ui.userLogsIn({ world, stepUser: 'Edith' })
 
     // And "Edith" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Edith', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Edith', space: 'team.1' })
 
     // And "Edith" creates the following resources
     //   | resource | type   |
     //   | edith    | folder |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Edith',
       resources: [{ name: 'edith', type: 'folder' }]
     })
@@ -176,24 +142,23 @@ test.describe('check files pagination in project space', () => {
     //   | resource  | to    |
     //   | lorem.txt | edith |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Edith',
       resources: [{ name: 'lorem.txt', to: 'edith' }]
     })
 
     // And "Edith" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Edith' })
+    await ui.userLogsOut({ world, stepUser: 'Edith' })
 
     // When "Carol" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Carol' })
+    await ui.userLogsIn({ world, stepUser: 'Carol' })
 
     // And "Carol" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Carol', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Carol', space: 'team.1' })
 
     // Then "Carol" should not be able to edit folder "parent"
     await ui.userShouldNotBeAbleToEditResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Carol',
       resource: 'parent'
     })
@@ -202,7 +167,7 @@ test.describe('check files pagination in project space', () => {
     //   | resource | role     | password |
     //   | parent   | Can edit | %public% |
     await ui.userCreatesPublicLink({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'parent',
       role: 'Can edit',
@@ -211,15 +176,14 @@ test.describe('check files pagination in project space', () => {
 
     // And "Anonymous" opens the public link "Unnamed link"
     await ui.userOpensPublicLink({
-      actorsEnvironment,
-      linksEnvironment,
+      world,
       stepUser: 'Anonymous',
       name: 'Unnamed link'
     })
 
     // And "Anonymous" unlocks the public link with password "%public%"
     await ui.userUnlocksPublicLink({
-      actorsEnvironment,
+      world,
       password: '%public%',
       stepUser: 'Anonymous'
     })
@@ -228,8 +192,7 @@ test.describe('check files pagination in project space', () => {
     //   | resource     |
     //   | textfile.txt |
     await ui.userUploadsResourcesInPublicLink({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Anonymous',
       resources: [{ name: 'textfile.txt' }]
     })
@@ -238,7 +201,7 @@ test.describe('check files pagination in project space', () => {
     //   | resource  | from |
     //   | lorem.txt |      |
     await ui.userDeletesResourcesFromPublicLink({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       actionType: 'SIDEBAR_PANEL',
       resources: [{ resource: 'lorem.txt' }]
@@ -248,7 +211,7 @@ test.describe('check files pagination in project space', () => {
     //   | resource     | from   |
     //   | textfile.txt | parent |
     await ui.userDeletesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       actionType: 'SIDEBAR_PANEL',
       resources: [{ name: 'textfile.txt', from: 'parent' }]
@@ -256,7 +219,7 @@ test.describe('check files pagination in project space', () => {
 
     // When "Carol" navigates to the trashbin of the project space "team.1"
     await ui.userNavigatesToTrashbinOfSpace({
-      actorsEnvironment,
+      world,
       stepUser: 'Carol',
       space: 'team.1'
     })
@@ -266,13 +229,13 @@ test.describe('check files pagination in project space', () => {
     //   | parent/lorem.txt    |
     //   | parent/textfile.txt |
     await ui.userDeletesResourceFromTrashbin({
-      actorsEnvironment,
+      world,
       stepUser: 'Carol',
       resource: 'parent/textfile.txt',
       actionType: 'should not'
     })
     await ui.userDeletesResourceFromTrashbin({
-      actorsEnvironment,
+      world,
       stepUser: 'Carol',
       resource: 'parent/lorem.txt',
       actionType: 'should not'
@@ -283,13 +246,13 @@ test.describe('check files pagination in project space', () => {
     //   | parent/lorem.txt    |
     //   | parent/textfile.txt |
     await ui.userRestoresDeletedResourceFromTrashbin({
-      actorsEnvironment,
+      world,
       stepUser: 'Carol',
       resource: 'parent/lorem.txt',
       actionType: 'should not'
     })
     await ui.userRestoresDeletedResourceFromTrashbin({
-      actorsEnvironment,
+      world,
       stepUser: 'Carol',
       resource: 'parent/textfile.txt',
       actionType: 'should not'
@@ -297,7 +260,7 @@ test.describe('check files pagination in project space', () => {
 
     // When "Brian" navigates to the trashbin of the project space "team.1"
     await ui.userNavigatesToTrashbinOfSpace({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       space: 'team.1'
     })
@@ -306,7 +269,7 @@ test.describe('check files pagination in project space', () => {
     //   | resource         |
     //   | parent/lorem.txt |
     await ui.userRestoresDeletedResourceFromTrashbin({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'parent/lorem.txt',
       actionType: 'should'
@@ -316,21 +279,20 @@ test.describe('check files pagination in project space', () => {
     //   | resource            |
     //   | parent/textfile.txt |
     await ui.userDeletesResourceFromTrashbin({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'parent/textfile.txt',
       actionType: 'should not'
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" removes access to following users from the project space
     //   | user  |
     //   | Brian |
     await ui.userRemovesAccessToMember({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       reciver: 'Brian',
       role: 'role'
@@ -338,20 +300,19 @@ test.describe('check files pagination in project space', () => {
 
     // Then "Brian" should not see space "team.1"
     await ui.userShouldNotSeeSpace({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       space: 'team.1'
     })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
 
     // When "Alice" changes the roles of the following users in the project space
     //   | user  | role       |
     //   | Carol | Can manage |
     await ui.userChangesMemberRole({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       role: 'Can manage',
       sharee: 'Carol'
@@ -359,7 +320,7 @@ test.describe('check files pagination in project space', () => {
 
     // And "Carol" navigates to the trashbin of the project space "team.1"
     await ui.userNavigatesToTrashbinOfSpace({
-      actorsEnvironment,
+      world,
       stepUser: 'Carol',
       space: 'team.1'
     })
@@ -368,19 +329,18 @@ test.describe('check files pagination in project space', () => {
     //   | resource            |
     //   | parent/textfile.txt |
     await ui.userDeletesResourceFromTrashbin({
-      actorsEnvironment,
+      world,
       stepUser: 'Carol',
       resource: 'parent/textfile.txt',
       actionType: 'should'
     })
 
     // And "Carol" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Carol' })
+    await ui.userLogsOut({ world, stepUser: 'Carol' })
 
     // And "Alice" as project manager removes their own access to the project space
     await ui.userRemovesAccessToMember({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       reciver: 'Alice',
       role: 'Can manage'
@@ -388,12 +348,12 @@ test.describe('check files pagination in project space', () => {
 
     // Then "Alice" should not see space "team.1"
     await ui.userShouldNotSeeSpace({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       space: 'team.1'
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

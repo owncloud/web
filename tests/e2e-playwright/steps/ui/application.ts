@@ -1,74 +1,63 @@
 import { expect } from '@playwright/test'
-import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { objects } from '../../../e2e/support'
 import { config } from '../../../e2e/config'
+import { World } from '../../support/world'
+import { substitute } from '../../../e2e/support/utils'
 
 export async function userOpensApplication({
-  actorsEnvironment,
+  world,
   stepUser,
   name
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   name: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const applicationObject = new objects.runtime.Application({ page })
   await applicationObject.open({ name })
 }
 
-export async function getNotificationMessages({
-  actorsEnvironment,
-  stepUser
-}: {
-  actorsEnvironment: ActorsEnvironment
-  stepUser: string
-}): Promise<string[]> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const application = new objects.runtime.Application({ page })
-  return await application.getNotificationMessages()
-}
-
 export async function userShouldSeeNotifications({
-  actorsEnvironment,
+  world,
   stepUser,
   expectedMessages
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   expectedMessages: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const application = new objects.runtime.Application({ page })
   const messages = await application.getNotificationMessages()
   for (const message of expectedMessages) {
-    expect(messages).toContain(message)
+    expect(messages).toContain(substitute(message))
   }
 }
 
 export async function userShouldSeeNoNotifications({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const application = new objects.runtime.Application({ page })
   const messages = await application.getNotificationMessages()
   expect(messages).toHaveLength(0)
 }
 
 export async function userWaitsForTokenRenewal({
-  actorsEnvironment,
+  world,
   stepUser,
   renewalType
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   renewalType: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const application = new objects.runtime.Application({ page })
 
   if (renewalType === 'iframe') {
@@ -78,17 +67,17 @@ export async function userWaitsForTokenRenewal({
 }
 
 export async function userOpensClipboardUrl({
-  actorsEnvironment,
+  world,
   stepUser,
   url
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   url: string
 }): Promise<void> {
-  const { page } = await actorsEnvironment.createActor({
+  const { page } = await world.actorsEnvironment.createActor({
     key: stepUser,
-    namespace: actorsEnvironment.generateNamespace(stepUser, stepUser)
+    namespace: world.actorsEnvironment.generateNamespace(stepUser, stepUser)
   })
 
   const applicationObject = new objects.runtime.Application({ page })

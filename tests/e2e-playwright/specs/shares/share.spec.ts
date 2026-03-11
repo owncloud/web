@@ -1,58 +1,32 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  FilesEnvironment
-} from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('share', () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const filesEnvironment = new FilesEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-
+  test.beforeEach(async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
   })
 
-  test('folder', { tag: '@predefined-users' }, async () => {
+  test('folder', { tag: '@predefined-users' }, async ({ world }) => {
     // Given "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
     // And "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
     // And "Alice" creates the following folder in personal space using API
     //   | name               |
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
     //   | shared_folder      |
     await api.userHasCreatedFolders({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderNames: ['folder_to_shared', 'folder_to_shared_2', 'shared_folder']
     })
@@ -62,8 +36,7 @@ test.describe('share', () => {
     //   | shared_folder      | Brian     | user | Can edit with trashbin | folder       |
     //   | folder_to_shared_2 | Brian     | user | Can edit with trashbin | folder       |
     await ui.userSharesResources({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       actionType: 'SIDEBAR_PANEL',
       stepUser: 'Alice',
       shares: [
@@ -95,8 +68,7 @@ test.describe('share', () => {
     // | lorem.txt     | folder_to_shared   |
     // | lorem-big.txt | folder_to_shared_2 |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [
         { name: 'lorem.txt', to: 'folder_to_shared' },
@@ -104,10 +76,10 @@ test.describe('share', () => {
       ]
     })
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     // And "Brian" opens folder "folder_to_shared"
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
     })
@@ -116,26 +88,26 @@ test.describe('share', () => {
     //   | lorem.txt |
     // user should have access to unsynced shares
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['lorem.txt']
     })
     // When "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     // And "Brian" disables the sync for the following shares
     //   | name               |
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
     await ui.userDisablesSyncForShares({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       shares: ['folder_to_shared', 'folder_to_shared_2']
     })
     // Then "Brian" should not see a sync status for the folder "folder_to_shared"
     // And "Brian" should not see a sync status for the folder "folder_to_shared_2"
     await ui.sharesShouldNotHaveSyncStatus({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       shares: ['folder_to_shared', 'folder_to_shared_2']
     })
@@ -144,7 +116,7 @@ test.describe('share', () => {
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
     await ui.userEnablesSyncForShares({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       shares: ['folder_to_shared', 'folder_to_shared_2']
     })
@@ -152,7 +124,7 @@ test.describe('share', () => {
     // Then "Brian" should see a sync status for the folder "folder_to_shared"
     // And "Brian" should see a sync status for the folder "folder_to_shared_2"
     await ui.sharesShouldHaveSyncStatus({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       shares: ['folder_to_shared', 'folder_to_shared_2']
     })
@@ -161,7 +133,7 @@ test.describe('share', () => {
     //   | resource                   | as            |
     //   | folder_to_shared/lorem.txt | lorem_new.txt |
     await ui.userRenamesResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'folder_to_shared/lorem.txt',
       newResourceName: 'lorem_new.txt'
@@ -171,8 +143,7 @@ test.describe('share', () => {
     //   | simple.pdf      | folder_to_shared   |
     //   | testavatar.jpeg | folder_to_shared_2 |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Brian',
       resources: [
         { name: 'simple.pdf', to: 'folder_to_shared' },
@@ -184,20 +155,19 @@ test.describe('share', () => {
     //   | resource      | from               |
     //   | lorem-big.txt | folder_to_shared_2 |
     await ui.userDeletesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       actionType: 'SIDEBAR_PANEL',
       resources: [{ name: 'lorem-big.txt', from: 'folder_to_shared_2' }]
     })
 
     // And "Alice" opens the "files" app
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
     // And "Alice" uploads the following resource
     //   | resource          | to               | option  |
     //   | PARENT/simple.pdf | folder_to_shared | replace |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'simple.pdf', to: 'folder_to_shared', option: 'replace' }]
     })
@@ -205,8 +175,7 @@ test.describe('share', () => {
     //   | resource   | to               |
     //   | simple.pdf | folder_to_shared |
     await ui.userShouldNotSeeVersionPanelForFiles({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Brian',
       file: 'simple.pdf',
       to: 'folder_to_shared'
@@ -215,8 +184,7 @@ test.describe('share', () => {
     //   | resource           | recipient |
     //   | folder_to_shared_2 | Brian     |
     await ui.userRemovesSharee({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folder_to_shared_2',
       recipient: 'Brian'
@@ -227,32 +195,32 @@ test.describe('share', () => {
     //   | lorem_new.txt    | folder_to_shared |
     //   | folder_to_shared |                  |
     await ui.userDeletesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
       resources: [{ name: 'lorem_new.txt', from: 'folder_to_shared' }, { name: 'folder_to_shared' }]
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
     // Then "Brian" should not be able to see the following shares
     //   | resource           | owner                    |
     //   | folder_to_shared_2 | %user_alice_displayName% |
     //   | folder_to_shared   | %user_alice_displayName% |
     await ui.userShouldNotSeeShare({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'folder_to_shared_2',
       owner: '%user_alice_displayName%'
     })
 
     await ui.userShouldNotSeeShare({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'folder_to_shared',
       owner: '%user_alice_displayName%'
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
   })
 })

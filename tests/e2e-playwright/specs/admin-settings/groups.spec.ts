@@ -1,93 +1,76 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import { ActorsEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('groups management', () => {
-  let actorsEnvironment
-
-  test.beforeEach(async ({ browser, usersEnvironment }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
+  test.beforeEach(async ({ world }) => {
+    await ui.userLogsIn({ world, stepUser: 'Admin' })
   })
 
-  test.afterEach(async () => {
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Admin' })
+  test.afterEach(async ({ world }) => {
+    await ui.userLogsOut({ world, stepUser: 'Admin' })
   })
 
-  test('admin creates group', async () => {
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.userNavigatesToGroupsManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+  test('admin creates group', async ({ world }) => {
+    await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
+    await ui.userNavigatesToGroupsManagementPage({ world, stepUser: 'Admin' })
     await ui.userCreatesGroups({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       groupIds: ['sales', 'security']
     })
     await ui.userShouldSeeGroupIds({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       expectedGroupIds: ['sales', 'security']
     })
   })
 
-  test('admin deletes group', async ({ usersEnvironment }) => {
+  test('admin deletes group', async ({ world }) => {
     await api.groupsHaveBeenCreated({
+      world,
       groupIds: ['sales', 'security', 'finance'],
-      admin: usersEnvironment.getUser({ key: 'Admin' })
+      stepUser: 'Admin'
     })
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.userNavigatesToGroupsManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
+    await ui.userNavigatesToGroupsManagementPage({ world, stepUser: 'Admin' })
     await ui.userDeletesGroups({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       actionType: 'context menu',
       groupsToBeDeleted: ['sales']
     })
 
     await ui.userShouldNotSeeGroupIds({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       expectedGroupIds: ['sales']
     })
 
     await ui.userDeletesGroups({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       actionType: 'batch actions',
       groupsToBeDeleted: ['security', 'finance']
     })
 
     await ui.userShouldNotSeeGroupIds({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       expectedGroupIds: ['security', 'finance']
     })
   })
 
-  test('edit groups', async ({ usersEnvironment }) => {
+  test('edit groups', async ({ world }) => {
     await api.groupsHaveBeenCreated({
+      world,
       groupIds: ['sales'],
-      admin: usersEnvironment.getUser({ key: 'Admin' })
+      stepUser: 'Admin'
     })
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
-    await ui.userNavigatesToGroupsManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
+    await ui.userNavigatesToGroupsManagementPage({ world, stepUser: 'Admin' })
     await ui.userChangesGroup({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       key: 'sales',
       attribute: 'displayName',
@@ -95,7 +78,7 @@ test.describe('groups management', () => {
       action: 'context-menu'
     })
     await ui.userShouldSeeGroupDisplayName({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       groupDisplayName: 'a renamed group'
     })
