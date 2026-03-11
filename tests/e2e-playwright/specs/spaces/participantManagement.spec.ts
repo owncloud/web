@@ -266,7 +266,7 @@ test.describe('check files pagination in project space', () => {
     //   | resource            |
     //   | parent/lorem.txt    |
     //   | parent/textfile.txt |
-    await ui.userShouldNotAbleToDeleteResourceFromTrashbin({
+    await ui.userShouldNotBeAbleToDeleteResourceFromTrashbin({
       actorsEnvironment,
       stepUser: 'Carol',
       resources: ['parent/lorem.txt', 'parent/textfile.txt']
@@ -275,7 +275,7 @@ test.describe('check files pagination in project space', () => {
     //   | resource            |
     //   | parent/lorem.txt    |
     //   | parent/textfile.txt |
-    await ui.userShouldNotAbleToRestoreResourceFromTrashbin({
+    await ui.userShouldNotBeAbleToRestoreResourceFromTrashbin({
       actorsEnvironment,
       stepUser: 'Carol',
       resources: ['parent/lorem.txt', 'parent/textfile.txt']
@@ -287,7 +287,7 @@ test.describe('check files pagination in project space', () => {
     // Then "Brian" should be able to restore following resource from the trashbin
     //   | resource         |
     //   | parent/lorem.txt |
-    await ui.userShouldAbleToRestoreResourcesFromTrashbin({
+    await ui.userShouldBeAbleToDeleteRestoreResourcesFromTrashbin({
       actorsEnvironment,
       stepUser: 'Brian',
       resources: ['parent/lorem.txt']
@@ -296,7 +296,7 @@ test.describe('check files pagination in project space', () => {
     // And "Brian" should not be able to delete following resource from the trashbin
     //   | resource            |
     //   | parent/textfile.txt |
-    await ui.userShouldNotAbleToDeleteResourceFromTrashbin({
+    await ui.userShouldNotBeAbleToDeleteResourceFromTrashbin({
       actorsEnvironment,
       stepUser: 'Brian',
       resources: ['parent/textfile.txt']

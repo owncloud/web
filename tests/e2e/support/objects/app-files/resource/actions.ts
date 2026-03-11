@@ -18,7 +18,6 @@ import { environment, objects, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
-import { a11y } from '../..'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -1511,7 +1510,7 @@ export const deleteTrashbinMultipleResources = async (
   const { page, resources } = args
   for (const resource of resources) {
     await page.locator(util.format(checkBox, resource)).click()
-    await a11y.Accessibility.assertNoSevereA11yViolations(
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['filesView'],
       'files view when selecting multiple resources in trashbin for deletion'
@@ -1519,7 +1518,7 @@ export const deleteTrashbinMultipleResources = async (
   }
 
   await page.locator(permanentDeleteButton).first().click()
-  await a11y.Accessibility.assertNoSevereA11yViolations(
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
     'confirmation modal when deleting multiple resources in trashbin'
@@ -1529,7 +1528,7 @@ export const deleteTrashbinMultipleResources = async (
     page.locator(util.format(actionConfirmationButton, 'Delete')).click()
   ])
 
-  await a11y.Accessibility.assertNoSevereA11yViolations(
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['filesView'],
     'files view after deleting multiple resources in trashbin'

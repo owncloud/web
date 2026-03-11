@@ -474,7 +474,7 @@ export async function userShouldAbleToDeleteResourcesFromTrashbin({
   }
 }
 
-export async function userShouldNotAbleToDeleteResourceFromTrashbin({
+export async function userShouldNotBeAbleToDeleteResourceFromTrashbin({
   actorsEnvironment,
   stepUser,
   resources
@@ -490,7 +490,7 @@ export async function userShouldNotAbleToDeleteResourceFromTrashbin({
   }
 }
 
-export async function userShouldAbleToRestoreResourcesFromTrashbin({
+export async function userShouldBeAbleToDeleteRestoreResourcesFromTrashbin({
   actorsEnvironment,
   stepUser,
   resources
@@ -510,7 +510,7 @@ export async function userShouldAbleToRestoreResourcesFromTrashbin({
   }
 }
 
-export async function userShouldNotAbleToRestoreResourceFromTrashbin({
+export async function userShouldNotBeAbleToRestoreResourceFromTrashbin({
   actorsEnvironment,
   stepUser,
   resources
