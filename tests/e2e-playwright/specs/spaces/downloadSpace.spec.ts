@@ -80,7 +80,7 @@ test.describe('download space', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // When "Alice" downloads the space "team.1"
     await ui.userDownloadsSpace({ actorsEnvironment, stepUser: 'Alice' })
@@ -101,7 +101,7 @@ test.describe('download space', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
 
     // When "Alice" downloads the space "team.1"
     await ui.userDownloadsSpace({ actorsEnvironment, stepUser: 'Brian' })

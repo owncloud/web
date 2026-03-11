@@ -92,7 +92,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // And "Alice" navigates to the project space "dev.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'dev.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'dev.1' })
 
     // When "Alice" navigates to page "2" of the project space files view
     await ui.navigateToPageNumber({ actorsEnvironment, stepUser: 'Alice', pageNumber: '2' })

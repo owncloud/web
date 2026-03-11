@@ -94,7 +94,7 @@ test.describe('share', () => {
     // | resource      | to                 |
     // | lorem.txt     | folder_to_shared   |
     // | lorem-big.txt | folder_to_shared_2 |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -170,7 +170,7 @@ test.describe('share', () => {
     //   | resource        | to                 |
     //   | simple.pdf      | folder_to_shared   |
     //   | testavatar.jpeg | folder_to_shared_2 |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
@@ -195,7 +195,7 @@ test.describe('share', () => {
     // And "Alice" uploads the following resource
     //   | resource          | to               | option  |
     //   | PARENT/simple.pdf | folder_to_shared | replace |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -214,7 +214,7 @@ test.describe('share', () => {
     // And "Alice" removes following sharee
     //   | resource           | recipient |
     //   | folder_to_shared_2 | Brian     |
-    await ui.removeSharee({
+    await ui.userRemovesSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',

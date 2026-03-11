@@ -258,7 +258,7 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
@@ -324,7 +324,7 @@ test.describe('password-protected folder operation', () => {
     await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" opens folder "space-folder1.psec"
     await ui.userOpensResources({
@@ -357,7 +357,7 @@ test.describe('password-protected folder operation', () => {
     await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
 
     // And "Brian" opens folder "space-folder1.psec"
     await ui.userOpensResources({
@@ -404,7 +404,7 @@ test.describe('password-protected folder operation', () => {
     await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" deletes the following resources using the sidebar panel
     //   | resource           |
@@ -420,7 +420,7 @@ test.describe('password-protected folder operation', () => {
     await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // Then following resources should not be displayed in the files list for user "Alice"
     //   | resource           |
