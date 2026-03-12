@@ -381,3 +381,112 @@ export async function userEnablesSyncForAllShares({
   const shareObject = new objects.applicationFiles.Share({ page })
   await shareObject.syncAll()
 }
+
+export async function userSetsExpirationDateOfShare({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  resource,
+  collaboratorType,
+  collaboratorName,
+  expirationDate
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  collaboratorType: 'user' | 'group'
+  collaboratorName: string
+  expirationDate: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const collaborator =
+    collaboratorType === 'group'
+      ? usersEnvironment.getGroup({ key: collaboratorName })
+      : usersEnvironment.getUser({ key: collaboratorName })
+  await shareObject.addExpirationDate({
+    resource,
+    collaborator: { collaborator, type: collaboratorType } as ICollaborator,
+    expirationDate
+  })
+}
+
+// When(
+//   /^"([^"]*)" checks the following access details of share "([^"]*)" for (user|group) "([^"]*)"$/,
+//   async function (
+//     this: World,
+//     stepUser: string,
+//     resource: string,
+//     collaboratorType: string,
+//     collaboratorName: string,
+//     stepTable: DataTable
+//   ): Promise<void> {
+//     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+//     const shareObject = new objects.applicationFiles.Share({ page })
+//     const expectedDetails = stepTable.rowsHash()
+
+//     let selectorType = collaboratorType
+//     // NOTE: external users have group type element selector
+//     if (expectedDetails.hasOwnProperty('Type') && expectedDetails.Type === 'External') {
+//       selectorType = 'group'
+//     }
+//     expectedDetails.Name = substitute(expectedDetails.Name)
+
+//     const actualDetails = await shareObject.getAccessDetails({
+//       resource,
+//       collaborator: {
+//         collaborator:
+//           collaboratorType === 'group'
+//             ? this.usersEnvironment.getGroup({ key: collaboratorName })
+//             : this.usersEnvironment.getUser({ key: collaboratorName }),
+//         type: selectorType
+//       } as ICollaborator
+//     })
+
+//     expect(actualDetails).toMatchObject(expectedDetails)
+//   }
+// )
+
+export async function userChecksAccessDetailsOfShare({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  resource,
+  sharee
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  sharee: { name: string; type: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+
+  for (const shareeDetails of sharee) {
+    const expectedDetails = {
+      Name: substitute(shareeDetails.name),
+      Type: shareeDetails.type
+    }
+
+    let selectorType = shareeDetails.type
+    // NOTE: external users have group type element selector
+    if (expectedDetails.hasOwnProperty('Type') && expectedDetails.Type === 'External') {
+      selectorType = 'group'
+    }
+
+    const actualDetails = await shareObject.getAccessDetails({
+      resource,
+      collaborator: {
+        collaborator:
+          shareeDetails.type === 'group'
+            ? usersEnvironment.getGroup({ key: shareeDetails.name })
+            : usersEnvironment.getUser({ key: shareeDetails.name }),
+        type: selectorType as CollaboratorType
+      } as ICollaborator
+    })
+
+    expect(actualDetails).toMatchObject(expectedDetails)
+  }
+}
