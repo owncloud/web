@@ -84,53 +84,49 @@ export async function userUnlocksPublicLink({
   await pageObject.authenticate({ password: substitute(password) })
 }
 
-export async function uploadResourceInPublicLink({
+export async function userUploadsResourcesInPublicLink({
   actorsEnvironment,
   filesEnvironment,
   stepUser,
-  resource,
-  to,
-  option,
-  type
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   filesEnvironment: FilesEnvironment
   stepUser: string
-  resource: string
-  to?: string
-  option?: string
-  type?: string
+  resources: { name: string; to?: string; option?: string; type?: string }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
-  await pageObject.upload({
-    to: to,
-    resources: [filesEnvironment.getFile({ name: resource })],
-    option: option,
-    type: type
-  })
+  for (const resource of resources) {
+    await pageObject.upload({
+      to: resource.to,
+      resources: [filesEnvironment.getFile({ name: resource.name })],
+      option: resource.option,
+      type: resource.type
+    })
+  }
 }
 
-export async function deleteResourceFromPublicLink({
+export async function userDeletesResourcesFromPublicLink({
   actorsEnvironment,
   stepUser,
-  file,
-  actionType,
-  parentFolder = ''
+  actionType = 'SIDEBAR_PANEL',
+  resources
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-  file: string
-  actionType: string
-  parentFolder?: string
+  actionType: 'BATCH_ACTION' | 'SIDEBAR_PANEL'
+  resources: { resource: string; parentFolder?: string }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
-  await pageObject.delete({
-    folder: parentFolder === '' ? null : parentFolder,
-    resourcesWithInfo: [{ name: file }],
-    via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
-  })
+  for (const resource of resources) {
+    await pageObject.delete({
+      folder: resource.parentFolder ? resource.parentFolder : null,
+      resourcesWithInfo: [{ name: resource.resource }],
+      via: actionType
+    })
+  }
 }
 
 export async function userIsInFileViewer({
@@ -185,4 +181,69 @@ export async function userUnlocksPasswordProtectedFolderWithPassword({
     password,
     passwordProtectedFolder: true
   })
+}
+
+export async function userDropUploadsResources({
+  actorsEnvironment,
+  filesEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  filesEnvironment: FilesEnvironment
+  stepUser: string
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  for (const resource of resources) {
+    await pageObject.dropUpload({
+      resources: [filesEnvironment.getFile({ name: resource })]
+    })
+  }
+}
+
+export async function userRefreshesTheOldLink({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await pageObject.reload()
+}
+
+export async function userShouldNotBeAbleToOpenTheOldLink({
+  actorsEnvironment,
+  linksEnvironment,
+  stepUser,
+  linkName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  linksEnvironment: LinksEnvironment
+  stepUser: string
+  linkName: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  const { url } = linksEnvironment.getLink({ name: linkName })
+  await pageObject.expectThatLinkIsDeleted({ url })
+}
+
+export async function userRenamesPublicLinkResources({
+  actorsEnvironment,
+  stepUser,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  resources: { resource: string; newName: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  for (const resource of resources) {
+    await pageObject.rename({ resource: resource.resource, newName: resource.newName })
+  }
 }

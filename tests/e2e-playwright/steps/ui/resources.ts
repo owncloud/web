@@ -1013,3 +1013,73 @@ export async function userShouldSeeActivityOfResources({
     })
   }
 }
+
+export async function userCopiesResource({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: 'keyboard' | 'sidebar-panel' | 'dropdown-menu' | 'batch-action'
+  resources: { resource: string; to: string; option?: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  for (const { resource, to, option } of resources) {
+    await resourceObject.copy({
+      resource,
+      newLocation: to,
+      method: actionType,
+      option: option
+    })
+  }
+}
+
+export async function userMovesResource({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType:
+    | 'keyboard'
+    | 'sidebar-panel'
+    | 'dropdown-menu'
+    | 'batch-action'
+    | 'drag-drop'
+    | 'drag-drop-breadcrumb'
+  resources: { resource: string; to: string; option?: string }[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  for (const { resource, to, option } of resources) {
+    await resourceObject.move({
+      resource,
+      newLocation: to,
+      method: actionType,
+      option: option
+    })
+  }
+}
+
+export async function userDownloadsThePublicLinkResources({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  resources: resourceToDownload[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await processDownload(pageObject, actionType, resources)
+}
