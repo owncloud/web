@@ -79,7 +79,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     //   | test_video.mp4  |
     //   | testavatar.jpeg |
     //   | testavatar.png  |
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',

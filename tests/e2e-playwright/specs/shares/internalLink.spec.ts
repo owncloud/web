@@ -74,13 +74,13 @@ test.describe('internal link share', () => {
       name: 'Unnamed link'
     })
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.uploadResource({
+    await ui.userUploadsResource({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
       resources: [{ name: 'simple.pdf', to: 'myfolder' }]
     })
-    await ui.updateShareeRole({
+    await ui.userUpdatesShareeRole({
       usersEnvironment,
       actorsEnvironment,
       stepUser: 'Alice',
@@ -92,13 +92,11 @@ test.describe('internal link share', () => {
     })
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
 
-    expect(
-      await ui.isAbleToEditFileOrFolder({
-        actorsEnvironment,
-        stepUser: 'Brian',
-        resource: 'myfolder'
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotAbleToEditResource({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      resource: 'myfolder'
+    })
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
   })
 })

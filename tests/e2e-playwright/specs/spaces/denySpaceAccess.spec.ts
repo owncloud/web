@@ -84,7 +84,7 @@ test.describe('deny space access', () => {
     })
 
     // When "Alice" navigates to the project space "sales"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'sales' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'sales' })
 
     // When "Alice" shares the following resource using the sidebar panel
     //   | resource | recipient | type | role          | resourceType |
@@ -109,7 +109,7 @@ test.describe('deny space access', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "sales"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'sales' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'sales' })
 
     // Then following resources should not be displayed in the files list for user "Brian"
     //   | resource |
@@ -134,7 +134,7 @@ test.describe('deny space access', () => {
     // When "Alice" removes following sharee
     //   | resource | recipient |
     //   | f1       | Brian     |
-    await ui.removeSharee({
+    await ui.userRemovesSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -143,7 +143,7 @@ test.describe('deny space access', () => {
     })
 
     // And "Brian" navigates to the project space "sales"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'sales' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'sales' })
 
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource |

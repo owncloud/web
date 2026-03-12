@@ -157,7 +157,7 @@ test.describe('Notifications', () => {
     // When "Alice" removes following sharee
     //   | resource         | recipient |
     //   | folder_to_shared | Brian     |
-    await ui.removeSharee({
+    await ui.userRemovesSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -166,7 +166,7 @@ test.describe('Notifications', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
@@ -205,7 +205,7 @@ test.describe('Notifications', () => {
     // When "Alice" removes access to following users from the project space
     //   | user  | role                      | kind |
     //   | Carol | Can edit without versions | user |
-    await ui.removeAccessToMember({
+    await ui.userRemoveAccessToMember({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -361,7 +361,7 @@ test.describe('Notifications', () => {
     // When "Alice" removes following sharee
     //   | resource         | recipient |
     //   | folder_to_shared | Brian     |
-    await ui.removeSharee({
+    await ui.userRemovesSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -370,7 +370,7 @@ test.describe('Notifications', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
@@ -398,7 +398,7 @@ test.describe('Notifications', () => {
     // And "Alice" removes access to following users from the project space
     //   | user  | role     | kind |
     //   | Brian | Can edit | user |
-    await ui.removeAccessToMember({
+    await ui.userRemoveAccessToMember({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
