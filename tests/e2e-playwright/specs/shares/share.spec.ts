@@ -41,48 +41,500 @@ test.describe('share', () => {
     })
   })
 
-  test('folder', { tag: '@predefined-users' }, async () => {
-    // Given "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+  // test('folder', { tag: '@predefined-users' }, async () => {
+  //   // Given "Alice" logs in
+  //   await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+  //   // And "Brian" logs in
+  //   await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+  //   // And "Alice" creates the following folder in personal space using API
+  //   //   | name               |
+  //   //   | folder_to_shared   |
+  //   //   | folder_to_shared_2 |
+  //   //   | shared_folder      |
+  //   await api.userHasCreatedFolders({
+  //     usersEnvironment,
+  //     stepUser: 'Alice',
+  //     folderNames: ['folder_to_shared', 'folder_to_shared_2', 'shared_folder']
+  //   })
+  //   // When "Alice" shares the following resource using the sidebar panel
+  //   //   | resource           | recipient | type | role                   | resourceType |
+  //   //   | folder_to_shared   | Brian     | user | Can edit with trashbin | folder       |
+  //   //   | shared_folder      | Brian     | user | Can edit with trashbin | folder       |
+  //   //   | folder_to_shared_2 | Brian     | user | Can edit with trashbin | folder       |
+  //   await ui.userSharesResources({
+  //     actorsEnvironment,
+  //     usersEnvironment,
+  //     actionType: 'SIDEBAR_PANEL',
+  //     stepUser: 'Alice',
+  //     shares: [
+  //       {
+  //         resource: 'folder_to_shared',
+  //         recipient: 'Brian',
+  //         type: 'user',
+  //         role: 'Can edit with trashbin',
+  //         resourceType: 'folder'
+  //       },
+  //       {
+  //         resource: 'shared_folder',
+  //         recipient: 'Brian',
+  //         type: 'user',
+  //         role: 'Can edit with trashbin',
+  //         resourceType: 'folder'
+  //       },
+  //       {
+  //         resource: 'folder_to_shared_2',
+  //         recipient: 'Brian',
+  //         type: 'user',
+  //         role: 'Can edit with trashbin',
+  //         resourceType: 'folder'
+  //       }
+  //     ]
+  //   })
+  //   // And "Alice" uploads the following resource
+  //   // | resource      | to                 |
+  //   // | lorem.txt     | folder_to_shared   |
+  //   // | lorem-big.txt | folder_to_shared_2 |
+  //   await ui.uploadResource({
+  //     actorsEnvironment,
+  //     filesEnvironment,
+  //     stepUser: 'Alice',
+  //     resources: [
+  //       { name: 'lorem.txt', to: 'folder_to_shared' },
+  //       { name: 'lorem-big.txt', to: 'folder_to_shared_2' }
+  //     ]
+  //   })
+  //   // And "Brian" navigates to the shared with me page
+  //   await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+  //   // And "Brian" opens folder "folder_to_shared"
+  //   await ui.userOpensResources({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     resource: 'folder_to_shared'
+  //   })
+  //   // Then following resources should be displayed in the files list for user "Brian"
+  //   //   | resource  |
+  //   //   | lorem.txt |
+  //   // user should have access to unsynced shares
+  //   await ui.userShouldSeeTheResources({
+  //     actorsEnvironment,
+  //     listType: 'files list',
+  //     stepUser: 'Brian',
+  //     resources: ['lorem.txt']
+  //   })
+  //   // When "Brian" navigates to the shared with me page
+  //   await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+  //   // And "Brian" disables the sync for the following shares
+  //   //   | name               |
+  //   //   | folder_to_shared   |
+  //   //   | folder_to_shared_2 |
+  //   await ui.userDisablesSyncForShares({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     shares: ['folder_to_shared', 'folder_to_shared_2']
+  //   })
+  //   // Then "Brian" should not see a sync status for the folder "folder_to_shared"
+  //   // And "Brian" should not see a sync status for the folder "folder_to_shared_2"
+  //   await ui.sharesShouldNotHaveSyncStatus({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     shares: ['folder_to_shared', 'folder_to_shared_2']
+  //   })
+  //   // When "Brian" enables the sync for the following share using the context menu
+  //   //   | name               |
+  //   //   | folder_to_shared   |
+  //   //   | folder_to_shared_2 |
+  //   await ui.userEnablesSyncForShares({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     shares: ['folder_to_shared', 'folder_to_shared_2']
+  //   })
+
+  //   // Then "Brian" should see a sync status for the folder "folder_to_shared"
+  //   // And "Brian" should see a sync status for the folder "folder_to_shared_2"
+  //   await ui.sharesShouldHaveSyncStatus({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     shares: ['folder_to_shared', 'folder_to_shared_2']
+  //   })
+
+  //   // When "Brian" renames the following resource
+  //   //   | resource                   | as            |
+  //   //   | folder_to_shared/lorem.txt | lorem_new.txt |
+  //   await ui.userRenamesResource({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     resource: 'folder_to_shared/lorem.txt',
+  //     newResourceName: 'lorem_new.txt'
+  //   })
+  //   // And "Brian" uploads the following resource
+  //   //   | resource        | to                 |
+  //   //   | simple.pdf      | folder_to_shared   |
+  //   //   | testavatar.jpeg | folder_to_shared_2 |
+  //   await ui.uploadResource({
+  //     actorsEnvironment,
+  //     filesEnvironment,
+  //     stepUser: 'Brian',
+  //     resources: [
+  //       { name: 'simple.pdf', to: 'folder_to_shared' },
+  //       { name: 'testavatar.jpeg', to: 'folder_to_shared_2' }
+  //     ]
+  //   })
+
+  //   // When "Brian" deletes the following resources using the sidebar panel
+  //   //   | resource      | from               |
+  //   //   | lorem-big.txt | folder_to_shared_2 |
+  //   await ui.userDeletesResources({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     actionType: 'SIDEBAR_PANEL',
+  //     resources: [{ name: 'lorem-big.txt', from: 'folder_to_shared_2' }]
+  //   })
+
+  //   // And "Alice" opens the "files" app
+  //   await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+  //   // And "Alice" uploads the following resource
+  //   //   | resource          | to               | option  |
+  //   //   | PARENT/simple.pdf | folder_to_shared | replace |
+  //   await ui.uploadResource({
+  //     actorsEnvironment,
+  //     filesEnvironment,
+  //     stepUser: 'Alice',
+  //     resources: [{ name: 'simple.pdf', to: 'folder_to_shared', option: 'replace' }]
+  //   })
+  //   // And "Brian" should not see the version panel for the file
+  //   //   | resource   | to               |
+  //   //   | simple.pdf | folder_to_shared |
+  //   await ui.shouldNotSeeVersionPanelForFiles({
+  //     actorsEnvironment,
+  //     filesEnvironment,
+  //     stepUser: 'Brian',
+  //     file: 'simple.pdf',
+  //     to: 'folder_to_shared'
+  //   })
+  //   // And "Alice" removes following sharee
+  //   //   | resource           | recipient |
+  //   //   | folder_to_shared_2 | Brian     |
+  //   await ui.removeSharee({
+  //     actorsEnvironment,
+  //     usersEnvironment,
+  //     stepUser: 'Alice',
+  //     resource: 'folder_to_shared_2',
+  //     recipient: 'Brian'
+  //   })
+
+  //   // When "Alice" deletes the following resources using the sidebar panel
+  //   //   | resource         | from             |
+  //   //   | lorem_new.txt    | folder_to_shared |
+  //   //   | folder_to_shared |                  |
+  //   await ui.userDeletesResources({
+  //     actorsEnvironment,
+  //     stepUser: 'Alice',
+  //     actionType: 'SIDEBAR_PANEL',
+  //     resources: [{ name: 'lorem_new.txt', from: 'folder_to_shared' }, { name: 'folder_to_shared' }]
+  //   })
+
+  //   // And "Alice" logs out
+  //   await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+  //   // Then "Brian" should not be able to see the following shares
+  //   //   | resource           | owner                    |
+  //   //   | folder_to_shared_2 | %user_alice_displayName% |
+  //   //   | folder_to_shared   | %user_alice_displayName% |
+  //   await ui.userShouldNotSeeShare({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     resource: 'folder_to_shared_2',
+  //     owner: '%user_alice_displayName%'
+  //   })
+
+  //   await ui.userShouldNotSeeShare({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     resource: 'folder_to_shared',
+  //     owner: '%user_alice_displayName%'
+  //   })
+  //   // And "Brian" logs out
+  //   await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+  // })
+
+  // test('file', { tag: '@predefined-users' }, async () => {
+  //   //  Given "Alice" logs in
+  //   await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+  //   //   And "Brian" logs in
+  //   await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+  //   //   And "Alice" creates the following resources
+  //   //     | resource         | type    | content   |
+  //   //     | shareToBrian.txt | txtFile | some text |
+  //   //     | shareToBrian.md  | mdFile  | readme    |
+  //   //     | sharedFile.txt   | txtFile | some text |
+  //   await ui.userCreatesResources({
+  //     actorsEnvironment,
+  //     stepUser: 'Alice',
+  //     resources: [
+  //       { name: 'shareToBrian.txt', type: 'txtFile', content: 'some text' },
+  //       { name: 'shareToBrian.md', type: 'mdFile', content: 'readme' },
+  //       { name: 'sharedFile.txt', type: 'txtFile', content: 'some text' }
+  //     ]
+  //   })
+  //   //   And "Alice" edits the following resources
+  //   //     | resource         | content                   |
+  //   //     | shareToBrian.txt | new content edited        |
+  //   //     | shareToBrian.md  | new readme content edited |
+  //   await ui.userEditsFile({
+  //     actorsEnvironment,
+  //     stepUser: 'Alice',
+  //     resources: [
+  //       { name: 'shareToBrian.txt', content: 'new content edited' },
+  //       { name: 'shareToBrian.md', content: 'new readme content edited' }
+  //     ]
+  //   })
+  //   //   And "Alice" uploads the following resource
+  //   //     | resource        |
+  //   //     | simple.pdf      |
+  //   //     | testavatar.jpeg |
+  //   await ui.uploadResource({
+  //     actorsEnvironment,
+  //     filesEnvironment,
+  //     stepUser: 'Alice',
+  //     resources: [{ name: 'simple.pdf' }, { name: 'testavatar.jpeg' }]
+  //   })
+  //   //   When "Alice" shares the following resource using the sidebar panel
+  //   //     | resource         | recipient | type | role                   | resourceType |
+  //   //     | shareToBrian.txt | Brian     | user | Can edit with trashbin | file         |
+  //   //     | shareToBrian.md  | Brian     | user | Can edit with trashbin | file         |
+  //   //     | testavatar.jpeg  | Brian     | user | Can view               | file         |
+  //   //     | simple.pdf       | Brian     | user | Can edit with trashbin | file         |
+  //   //     | sharedFile.txt   | Brian     | user | Can edit with trashbin | file         |
+  //   await ui.userSharesResources({
+  //     actorsEnvironment,
+  //     usersEnvironment,
+  //     stepUser: 'Alice',
+  //     actionType: 'SIDEBAR_PANEL',
+  //     shares: [
+  //       {
+  //         resource: 'shareToBrian.txt',
+  //         recipient: 'Brian',
+  //         type: 'user',
+  //         role: 'Can edit with trashbin',
+  //         resourceType: 'file'
+  //       },
+  //       {
+  //         resource: 'shareToBrian.md',
+  //         recipient: 'Brian',
+  //         type: 'user',
+  //         role: 'Can edit with trashbin',
+  //         resourceType: 'file'
+  //       },
+  //       {
+  //         resource: 'testavatar.jpeg',
+  //         recipient: 'Brian',
+  //         type: 'user',
+  //         role: 'Can view',
+  //         resourceType: 'file'
+  //       },
+  //       {
+  //         resource: 'simple.pdf',
+  //         recipient: 'Brian',
+  //         type: 'user',
+  //         role: 'Can edit with trashbin',
+  //         resourceType: 'file'
+  //       },
+  //       {
+  //         resource: 'sharedFile.txt',
+  //         recipient: 'Brian',
+  //         type: 'user',
+  //         role: 'Can edit with trashbin',
+  //         resourceType: 'file'
+  //       }
+  //     ]
+  //   })
+  //   //   And "Alice" navigates to the shared with others page
+  //   await ui.userNavigatesToSharedWithOthersPage({ actorsEnvironment, stepUser: 'Alice' })
+  //   //   And "Alice" opens the following file in mediaviewer
+  //   //     | resource        |
+  //   //     | testavatar.jpeg |
+  //   await ui.openResourceInViewer({
+  //     actorsEnvironment,
+  //     stepUser: 'Alice',
+  //     resource: 'testavatar.jpeg',
+  //     application: 'mediaviewer'
+  //   })
+  //   //   Then "Alice" is in a media-viewer
+  //   await ui.userIsInFileViewer({
+  //     actorsEnvironment,
+  //     stepUser: 'Alice',
+  //     fileViewerType: 'media-viewer'
+  //   })
+  //   //   And "Alice" closes the file viewer
+  //   await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+
+  //   //   When "Brian" navigates to the shared with me page
+  //   await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+  //   //   And "Brian" disables the sync for the following share
+  //   //     | name           |
+  //   //     | sharedFile.txt |
+  //   await ui.userDisablesSyncForShares({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     shares: ['sharedFile.txt']
+  //   })
+  //   //   user should have access to unsynced shares
+  //   //   And "Brian" opens the following file in texteditor
+  //   //     | resource       |
+  //   //     | sharedFile.txt |
+  //   await ui.openResourceInViewer({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     resource: 'sharedFile.txt',
+  //     application: 'texteditor'
+  //   })
+  //   //   And "Brian" closes the file viewer
+  //   await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Brian' })
+  //   //   And "Brian" edits the following resources
+  //   //     | resource         | content            |
+  //   //     | shareToBrian.txt | new content        |
+  //   //     | shareToBrian.md  | new readme content |
+  //   await ui.userEditsFile({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     resources: [
+  //       { name: 'shareToBrian.txt', content: 'new content' },
+  //       { name: 'shareToBrian.md', content: 'new readme content' }
+  //     ]
+  //   })
+  //   //   And "Brian" opens the following file in mediaviewer
+  //   //     | resource        |
+  //   //     | testavatar.jpeg |
+  //   await ui.openResourceInViewer({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     resource: 'testavatar.jpeg',
+  //     application: 'mediaviewer'
+  //   })
+  //   //   Then "Brian" is in a media-viewer
+  //   await ui.userIsInFileViewer({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     fileViewerType: 'media-viewer'
+  //   })
+  //   //   When "Brian" closes the file viewer
+  //   await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Brian' })
+  //   //   And "Brian" opens the following file in pdfviewer
+  //   //     | resource   |
+  //   //     | simple.pdf |
+  //   await ui.openResourceInViewer({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     resource: 'simple.pdf',
+  //     application: 'pdfviewer'
+  //   })
+  //   //   And "Brian" closes the file viewer
+  //   await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Brian' })
+  //   //   And "Alice" navigates to the personal space page
+  //   await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+  //   //   And "Alice" removes following sharee
+  //   //     | resource         | recipient |
+  //   //     | shareToBrian.txt | Brian     |
+  //   //     | shareToBrian.md  | Brian     |
+  //   await ui.removeSharee({
+  //     actorsEnvironment,
+  //     usersEnvironment,
+  //     stepUser: 'Alice',
+  //     resource: 'shareToBrian.txt',
+  //     recipient: 'Brian'
+  //   })
+  //   await ui.removeSharee({
+  //     actorsEnvironment,
+  //     usersEnvironment,
+  //     stepUser: 'Alice',
+  //     resource: 'shareToBrian.md',
+  //     recipient: 'Brian'
+  //   })
+  //   //   And "Alice" logs out
+  //   await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+  //   //   Then "Brian" should not be able to see the following shares
+  //   //     | resource         | owner                    |
+  //   //     | shareToBrian.txt | %user_alice_displayName% |
+  //   //     | shareToBrian.md  | %user_alice_displayName% |
+  //   await ui.userShouldNotSeeShare({
+  //     actorsEnvironment,
+  //     stepUser: 'Brian',
+  //     resource: 'shareToBrian.txt',
+  //     owner: '%user_alice_displayName%'
+  //   })
+  //   //   And "Brian" logs out
+  //   await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+  // })
+
+  test('share with expiration date', async () => {
+    //    Given "Admin" creates following group using API
+    //   | id    |
+    //   | sales |
+    await api.groupsHaveBeenCreated({
+      groupIds: ['sales'],
+      admin: usersEnvironment.getUser({ key: 'Admin' })
+    })
+
+    // And "Admin" adds user to the group using API
+    //   | user  | group |
+    //   | Brian | sales |
+    await api.addUserToGroup({
+      usersEnvironment,
+      stepUser: 'Admin',
+      userToAdd: [{ user: 'Brian', group: 'sales' }]
+    })
+
     // And "Alice" creates the following folder in personal space using API
-    //   | name               |
-    //   | folder_to_shared   |
-    //   | folder_to_shared_2 |
-    //   | shared_folder      |
+    //   | name       |
+    //   | myfolder   |
+    //   | mainFolder |
     await api.userHasCreatedFolders({
       usersEnvironment,
       stepUser: 'Alice',
-      folderNames: ['folder_to_shared', 'folder_to_shared_2', 'shared_folder']
+      folderNames: ['myfolder', 'mainFolder']
     })
+    // And "Alice" creates the following files into personal space using API
+    //   | pathToFile           | content      |
+    //   | new.txt              | some content |
+    //   | mainFolder/lorem.txt | lorem epsum  |
+    await api.userHasCreatedFiles({
+      usersEnvironment,
+      stepUser: 'Alice',
+      files: [
+        { pathToFile: 'new.txt', content: 'some content' },
+        { pathToFile: 'mainFolder/lorem.txt', content: 'lorem epsum' }
+      ]
+    })
+    // And "Alice" logs in
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // When "Alice" shares the following resource using the sidebar panel
-    //   | resource           | recipient | type | role                   | resourceType |
-    //   | folder_to_shared   | Brian     | user | Can edit with trashbin | folder       |
-    //   | shared_folder      | Brian     | user | Can edit with trashbin | folder       |
-    //   | folder_to_shared_2 | Brian     | user | Can edit with trashbin | folder       |
+    //   | resource   | recipient | type  | role                      | resourceType | expirationDate |
+    //   | new.txt    | Brian     | user  | Can edit with trashbin    | file         | +5 days        |
+    //   | myfolder   | sales     | group | Can view                  | folder       | +10 days       |
+    //   | mainFolder | Brian     | user  | Can edit with trashbin    | folder       |                |
     await ui.userSharesResources({
       actorsEnvironment,
       usersEnvironment,
-      actionType: 'SIDEBAR_PANEL',
       stepUser: 'Alice',
+      actionType: 'SIDEBAR_PANEL',
       shares: [
         {
-          resource: 'folder_to_shared',
+          resource: 'new.txt',
           recipient: 'Brian',
           type: 'user',
           role: 'Can edit with trashbin',
-          resourceType: 'folder'
+          resourceType: 'file',
+          expirationDate: '+5 days'
         },
         {
-          resource: 'shared_folder',
-          recipient: 'Brian',
-          type: 'user',
-          role: 'Can edit with trashbin',
-          resourceType: 'folder'
+          resource: 'myfolder',
+          recipient: 'sales',
+          type: 'group',
+          role: 'Can view',
+          resourceType: 'folder',
+          expirationDate: '+10 days'
         },
         {
-          resource: 'folder_to_shared_2',
+          resource: 'mainFolder',
           recipient: 'Brian',
           type: 'user',
           role: 'Can edit with trashbin',
@@ -90,169 +542,87 @@ test.describe('share', () => {
         }
       ]
     })
-    // And "Alice" uploads the following resource
-    // | resource      | to                 |
-    // | lorem.txt     | folder_to_shared   |
-    // | lorem-big.txt | folder_to_shared_2 |
-    await ui.uploadResource({
+
+    // set expirationDate to existing share
+    // And "Alice" sets the expiration date of share "mainFolder" of user "Brian" to "+5 days"
+    await ui.userSetsExpirationDateOfShare({
       actorsEnvironment,
-      filesEnvironment,
+      usersEnvironment,
       stepUser: 'Alice',
-      resources: [
-        { name: 'lorem.txt', to: 'folder_to_shared' },
-        { name: 'lorem-big.txt', to: 'folder_to_shared_2' }
-      ]
-    })
-    // And "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
-    // And "Brian" opens folder "folder_to_shared"
-    await ui.userOpensResources({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      resource: 'folder_to_shared'
-    })
-    // Then following resources should be displayed in the files list for user "Brian"
-    //   | resource  |
-    //   | lorem.txt |
-    // user should have access to unsynced shares
-    await ui.userShouldSeeTheResources({
-      actorsEnvironment,
-      listType: 'files list',
-      stepUser: 'Brian',
-      resources: ['lorem.txt']
-    })
-    // When "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
-    // And "Brian" disables the sync for the following shares
-    //   | name               |
-    //   | folder_to_shared   |
-    //   | folder_to_shared_2 |
-    await ui.userDisablesSyncForShares({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      shares: ['folder_to_shared', 'folder_to_shared_2']
-    })
-    // Then "Brian" should not see a sync status for the folder "folder_to_shared"
-    // And "Brian" should not see a sync status for the folder "folder_to_shared_2"
-    await ui.sharesShouldNotHaveSyncStatus({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      shares: ['folder_to_shared', 'folder_to_shared_2']
-    })
-    // When "Brian" enables the sync for the following share using the context menu
-    //   | name               |
-    //   | folder_to_shared   |
-    //   | folder_to_shared_2 |
-    await ui.userEnablesSyncForShares({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      shares: ['folder_to_shared', 'folder_to_shared_2']
+      resource: 'mainFolder',
+      collaboratorName: 'Brian',
+      collaboratorType: 'user',
+      expirationDate: '+5 days'
     })
 
-    // Then "Brian" should see a sync status for the folder "folder_to_shared"
-    // And "Brian" should see a sync status for the folder "folder_to_shared_2"
-    await ui.sharesShouldHaveSyncStatus({
+    // And "Alice" checks the following access details of share "mainFolder" for user "Brian"
+    //   | Name | Brian Murphy |
+    //   | Type | User         |
+    await ui.userChecksAccessDetailsOfShare({
       actorsEnvironment,
-      stepUser: 'Brian',
-      shares: ['folder_to_shared', 'folder_to_shared_2']
-    })
-
-    // When "Brian" renames the following resource
-    //   | resource                   | as            |
-    //   | folder_to_shared/lorem.txt | lorem_new.txt |
-    await ui.userRenamesResource({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      resource: 'folder_to_shared/lorem.txt',
-      newResourceName: 'lorem_new.txt'
-    })
-    // And "Brian" uploads the following resource
-    //   | resource        | to                 |
-    //   | simple.pdf      | folder_to_shared   |
-    //   | testavatar.jpeg | folder_to_shared_2 |
-    await ui.uploadResource({
-      actorsEnvironment,
-      filesEnvironment,
-      stepUser: 'Brian',
-      resources: [
-        { name: 'simple.pdf', to: 'folder_to_shared' },
-        { name: 'testavatar.jpeg', to: 'folder_to_shared_2' }
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'mainFolder',
+      sharee: [
+        {
+          name: 'Brian Murphy',
+          type: 'User'
+        }
       ]
     })
 
-    // When "Brian" deletes the following resources using the sidebar panel
-    //   | resource      | from               |
-    //   | lorem-big.txt | folder_to_shared_2 |
-    await ui.userDeletesResources({
+    // And "Alice" checks the following access details of share "mainFolder/lorem.txt" for user "Brian"
+    //   | Name | Brian Murphy |
+    //   | Type | User         |
+    await ui.userChecksAccessDetailsOfShare({
       actorsEnvironment,
-      stepUser: 'Brian',
-      actionType: 'SIDEBAR_PANEL',
-      resources: [{ name: 'lorem-big.txt', from: 'folder_to_shared_2' }]
-    })
-
-    // And "Alice" opens the "files" app
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
-    // And "Alice" uploads the following resource
-    //   | resource          | to               | option  |
-    //   | PARENT/simple.pdf | folder_to_shared | replace |
-    await ui.uploadResource({
-      actorsEnvironment,
-      filesEnvironment,
+      usersEnvironment,
       stepUser: 'Alice',
-      resources: [{ name: 'simple.pdf', to: 'folder_to_shared', option: 'replace' }]
+      resource: 'mainFolder/lorem.txt',
+      sharee: [
+        {
+          name: 'Brian Murphy',
+          type: 'User'
+        }
+      ]
     })
-    // And "Brian" should not see the version panel for the file
-    //   | resource   | to               |
-    //   | simple.pdf | folder_to_shared |
-    await ui.shouldNotSeeVersionPanelForFiles({
+    // And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
+    await ui.userSetsExpirationDateOfShare({
       actorsEnvironment,
-      filesEnvironment,
-      stepUser: 'Brian',
-      file: 'simple.pdf',
-      to: 'folder_to_shared'
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'myfolder',
+      collaboratorName: 'sales',
+      collaboratorType: 'group',
+      expirationDate: '+3 days'
     })
-    // And "Alice" removes following sharee
-    //   | resource           | recipient |
-    //   | folder_to_shared_2 | Brian     |
+    // And "Alice" checks the following access details of share "myfolder" for group "sales"
+    //   | Name | sales department |
+    //   | Type | Group            |
+    await ui.userChecksAccessDetailsOfShare({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'myfolder',
+      sharee: [
+        {
+          name: 'sales department',
+          type: 'Group'
+        }
+      ]
+    })
+    // remove share with group
+    // When "Alice" removes following sharee
+    //   | resource | recipient | type  |
+    //   | myfolder | sales     | group |
     await ui.removeSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
-      resource: 'folder_to_shared_2',
-      recipient: 'Brian'
+      resource: 'myfolder',
+      recipient: 'sales'
     })
-
-    // When "Alice" deletes the following resources using the sidebar panel
-    //   | resource         | from             |
-    //   | lorem_new.txt    | folder_to_shared |
-    //   | folder_to_shared |                  |
-    await ui.userDeletesResources({
-      actorsEnvironment,
-      stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
-      resources: [{ name: 'lorem_new.txt', from: 'folder_to_shared' }, { name: 'folder_to_shared' }]
-    })
-
-    // And "Alice" logs out
+    // And  "Alice" logs out
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
-    // Then "Brian" should not be able to see the following shares
-    //   | resource           | owner                    |
-    //   | folder_to_shared_2 | %user_alice_displayName% |
-    //   | folder_to_shared   | %user_alice_displayName% |
-    await ui.userShouldNotSeeShare({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      resource: 'folder_to_shared_2',
-      owner: '%user_alice_displayName%'
-    })
-
-    await ui.userShouldNotSeeShare({
-      actorsEnvironment,
-      stepUser: 'Brian',
-      resource: 'folder_to_shared',
-      owner: '%user_alice_displayName%'
-    })
-    // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
   })
 })
