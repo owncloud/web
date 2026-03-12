@@ -3,12 +3,13 @@ import {
   CustomComponentExtension,
   Extension,
   ExtensionPoint,
+  SidebarNavExtension,
   SidebarPanelExtension,
   useExtensionRegistry
 } from '../../../../../src'
 import { getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { createPinia, setActivePinia } from 'pinia'
-import { computed, unref } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { mock } from 'vitest-mock-extended'
 
 describe('useExtensionRegistry', () => {
@@ -246,6 +247,52 @@ describe('useExtensionRegistry', () => {
 
           const result2 = instance.getExtensionPoints({ extensionType: 'customComponent' })
           expect(result2.length).toBe(0)
+        }
+      })
+    })
+  })
+
+  describe('rebuild', () => {
+    it('returns a non-vault route when scope is not vault', () => {
+      const sidebarExtension = mock<SidebarNavExtension>({
+        id: 'sidebar-non-vault',
+        type: 'sidebarNav',
+        navItem: {
+          name: 'Files',
+          route: 'files'
+        }
+      })
+
+      getWrapper({
+        setup: (instance) => {
+          instance.registerExtensions(ref<Extension[]>([sidebarExtension]))
+
+          instance.rebuild({ route: ref({ params: { scope: 'projects' } }) })
+
+          const rebuiltExtension = unref(unref(instance.extensions)[0])[0] as SidebarNavExtension
+          expect(rebuiltExtension.navItem.route).toBe('/files')
+        }
+      })
+    })
+
+    it('returns a vault-prefixed route when scope is vault', () => {
+      const sidebarExtension = mock<SidebarNavExtension>({
+        id: 'sidebar-vault',
+        type: 'sidebarNav',
+        navItem: {
+          name: 'Files',
+          route: 'files'
+        }
+      })
+
+      getWrapper({
+        setup: (instance) => {
+          instance.registerExtensions(ref<Extension[]>([sidebarExtension]))
+
+          instance.rebuild({ route: ref({ params: { scope: 'vault' } }) })
+
+          const rebuiltExtension = unref(unref(instance.extensions)[0])[0] as SidebarNavExtension
+          expect(rebuiltExtension.navItem.route).toBe('/vault/files')
         }
       })
     })
