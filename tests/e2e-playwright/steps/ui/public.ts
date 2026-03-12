@@ -7,7 +7,6 @@ import {
 import { editor } from '../../../e2e/support/objects/app-files/utils'
 import { substitute } from '../../../e2e/support/utils'
 import { expect } from '@playwright/test'
-import { processDownload, resourceToDownload } from './resources'
 
 export async function userOpensPublicLink({
   actorsEnvironment,
@@ -214,22 +213,6 @@ export async function userRefreshesTheOldLink({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await pageObject.reload()
-}
-
-export async function userDownloadsThePublicLinkResources({
-  actorsEnvironment,
-  stepUser,
-  actionType,
-  resources
-}: {
-  actorsEnvironment: ActorsEnvironment
-  stepUser: string
-  actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
-  resources: resourceToDownload[]
-}): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const pageObject = new objects.applicationFiles.page.Public({ page })
-  await processDownload(pageObject, actionType, resources)
 }
 
 export async function userShouldNotBeAbleToOpenTheOldLink({

@@ -4,7 +4,6 @@ import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { clickResource } from '../resource/actions'
 import { objects } from '../../..'
-import { a11y } from '../..'
 
 export interface createLinkArgs {
   page: Page
@@ -313,13 +312,13 @@ export const addExpiration = async (args: addExpirationArgs): Promise<void> => {
   await sidebar.open({ page: page, resource: resourceName })
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, linkName)).click()
-  await a11y.Accessibility.assertNoSevereA11yViolations(
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tippyBox'],
     'Edit public link dropdown'
   )
   await page.locator(editPublicLinkSetExpirationButton).click()
-  await a11y.Accessibility.assertNoSevereA11yViolations(
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
     'Set expiration date modal'
@@ -332,7 +331,7 @@ export const addExpiration = async (args: addExpirationArgs): Promise<void> => {
 
   await page.locator(linkExpiryDatepicker).fill(newExpiryDate.toISOString().split('T')[0])
   await page.locator(linkExpiryDatepickerConfirmButton).click()
-  await a11y.Accessibility.assertNoSevereA11yViolations(
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     [linkUpdateDialog],
     'Set expiration date success message'
@@ -350,26 +349,26 @@ export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {
   await sidebar.open({ page: page, resource: resourceName })
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, name)).click()
-  await a11y.Accessibility.assertNoSevereA11yViolations(
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tippyBox'],
     'Edit public link dropdown'
   )
   await page.locator(util.format(deleteLinkButton, name)).click()
-  await a11y.Accessibility.assertNoSevereA11yViolations(
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
     'Delete public link confirmation modal'
   )
   await page.locator(confirmDeleteButton).click()
-  await a11y.Accessibility.assertNoSevereA11yViolations(
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     [linkUpdateDialog],
     'Delete public link success message'
   )
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was deleted successfully')
-  await a11y.Accessibility.assertNoSevereA11yViolations(
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['sidebarPaneSharing'],
     'Public link list after deletion'

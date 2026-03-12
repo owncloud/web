@@ -524,7 +524,7 @@ export async function userCreatesShortcutForResources({
   }
 }
 
-export type resourceToDownload = {
+type resourceToDownload = {
   resource: string
   type: string
   from?: string
@@ -1066,4 +1066,20 @@ export async function userMovesResource({
       option: option
     })
   }
+}
+
+export async function userDownloadsThePublicLinkResources({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  resources: resourceToDownload[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.Public({ page })
+  await processDownload(pageObject, actionType, resources)
 }
