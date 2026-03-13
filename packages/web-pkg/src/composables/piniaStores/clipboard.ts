@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref, unref, watch } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { ClipboardActions } from '../../helpers'
 import { useGettext } from 'vue3-gettext'

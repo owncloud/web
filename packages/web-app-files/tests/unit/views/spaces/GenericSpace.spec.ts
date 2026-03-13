@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { AbilityRule, Resource, SpaceResource } from '@ownclouders/web-client'
 import GenericSpace from '../../../../src/views/spaces/GenericSpace.vue'
 import { useResourcesViewDefaults } from '../../../../src/composables/resourcesViewDefaults'
 import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
@@ -113,6 +113,105 @@ describe('GenericSpace view', () => {
       expect(wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs.length).toBe(
         expectedItems
       )
+    })
+    describe('personal space with vault access', () => {
+      it('shows "Drive" as root breadcrumb when scope is not vault', () => {
+        const space = mock<SpaceResource>({
+          id: '1',
+          getDriveAliasAndItem: vi.fn(),
+          driveType: 'personal',
+          name: 'Personal space',
+          isOwner: () => true
+        })
+        const { wrapper } = getMountedWrapper({
+          files: [mockDeep<Resource>()],
+          props: { space },
+          abilities: [{ action: 'read-all', subject: 'Vault' }]
+        })
+        const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
+        expect(breadcrumbs.length).toBe(2)
+        expect(breadcrumbs[0].text).toBe('Drive')
+        expect(breadcrumbs[1].text).toBe('Personal space')
+      })
+      it('shows "Vault" as root breadcrumb when scope is vault', () => {
+        const space = mock<SpaceResource>({
+          id: '1',
+          getDriveAliasAndItem: vi.fn(),
+          driveType: 'personal',
+          name: 'Personal space',
+          isOwner: () => true
+        })
+        const { wrapper } = getMountedWrapper({
+          files: [mockDeep<Resource>()],
+          props: { space },
+          abilities: [{ action: 'read-all', subject: 'Vault' }],
+          currentRoute: { name: 'files-spaces-generic', path: '/', params: { scope: 'vault' } }
+        })
+        const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
+        expect(breadcrumbs.length).toBe(2)
+        expect(breadcrumbs[0].text).toBe('Vault')
+        expect(breadcrumbs[1].text).toBe('Personal space')
+      })
+      it('shows only space name when user cannot access vault', () => {
+        const space = mock<SpaceResource>({
+          id: '1',
+          getDriveAliasAndItem: vi.fn(),
+          driveType: 'personal',
+          name: 'Personal space',
+          isOwner: () => true
+        })
+        const { wrapper } = getMountedWrapper({
+          files: [mockDeep<Resource>()],
+          props: { space }
+        })
+        const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
+        expect(breadcrumbs.length).toBe(1)
+        expect(breadcrumbs[0].text).toBe('Personal space')
+      })
+    })
+    describe('project space breadcrumbs', () => {
+      it('shows "Spaces" when user cannot access vault', () => {
+        const space = mock<SpaceResource>({
+          id: '1',
+          getDriveAliasAndItem: vi.fn(),
+          driveType: 'project'
+        })
+        const { wrapper } = getMountedWrapper({
+          files: [mockDeep<Resource>()],
+          props: { space }
+        })
+        const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
+        expect(breadcrumbs[0].text).toBe('Spaces')
+      })
+      it('shows "Drive" when user can access vault and scope is not vault', () => {
+        const space = mock<SpaceResource>({
+          id: '1',
+          getDriveAliasAndItem: vi.fn(),
+          driveType: 'project'
+        })
+        const { wrapper } = getMountedWrapper({
+          files: [mockDeep<Resource>()],
+          props: { space },
+          abilities: [{ action: 'read-all', subject: 'Vault' }]
+        })
+        const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
+        expect(breadcrumbs[0].text).toBe('Drive')
+      })
+      it('shows "Vault" when user can access vault and scope is vault', () => {
+        const space = mock<SpaceResource>({
+          id: '1',
+          getDriveAliasAndItem: vi.fn(),
+          driveType: 'project'
+        })
+        const { wrapper } = getMountedWrapper({
+          files: [mockDeep<Resource>()],
+          props: { space },
+          abilities: [{ action: 'read-all', subject: 'Vault' }],
+          currentRoute: { name: 'files-spaces-generic', path: '/', params: { scope: 'vault' } }
+        })
+        const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
+        expect(breadcrumbs[0].text).toBe('Vault')
+      })
     })
     it('include the root item and the current folder', () => {
       const folderName = 'someFolder'
@@ -258,20 +357,23 @@ function getMountedWrapper({
     driveType: ''
   }),
   breadcrumbsFromPath = [],
-  stubs = {}
+  stubs = {},
+  abilities = []
 }: {
   mocks?: Record<string, unknown>
   props?: PartialComponentProps<typeof GenericSpace>
   files?: Resource[]
   loading?: boolean
-  currentRoute?: { name?: string; path?: string }
+  currentRoute?: { name?: string; path?: string; params?: Record<string, string> }
   currentFolder?: Resource
   runningOnEos?: boolean
   space?: SpaceResource
   breadcrumbsFromPath?: BreadcrumbItem[]
   stubs?: any
+  abilities?: AbilityRule[]
 } = {}) {
   const plugins = defaultPlugins({
+    abilities,
     piniaOptions: {
       configState: { options: { runningOnEos } },
       resourcesStore: { currentFolder }

@@ -1,4 +1,4 @@
-Enhancement: Show correct modal when user clicks on 3 dots menu to trigger saveAs/open
+Enhancement: Show correct modal for saveAs and open actions
 
 We've added logic to show the correct modal when the user clicks on "Save As" or "Open" from the 3 dots context menu.
 

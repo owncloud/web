@@ -123,6 +123,39 @@ describe('Projects view', () => {
     })
     expect(wrapper.find('create-space-stub').exists()).toBeTruthy()
   })
+  describe('breadcrumbs', () => {
+    it('shows "Spaces" when user cannot access vault', async () => {
+      const { wrapper } = getMountedWrapper({ spaces: spacesResources })
+      await (wrapper.vm as any).loadResourcesTask.last
+      expect(wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs[0].text).toBe(
+        'Spaces'
+      )
+    })
+    it('shows "Drive" when user can access vault and scope is not vault', async () => {
+      const { wrapper } = getMountedWrapper({
+        spaces: spacesResources,
+        abilities: [{ action: 'read-all', subject: 'Vault' }]
+      })
+      await (wrapper.vm as any).loadResourcesTask.last
+      expect(wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs[0].text).toBe(
+        'Drive'
+      )
+    })
+    it('shows "Vault" when user can access vault and scope is vault', async () => {
+      const { wrapper } = getMountedWrapper({
+        spaces: spacesResources,
+        abilities: [{ action: 'read-all', subject: 'Vault' }],
+        currentRoute: mock<RouteLocation>({
+          name: 'files-spaces-projects',
+          params: { scope: 'vault' }
+        })
+      })
+      await (wrapper.vm as any).loadResourcesTask.last
+      expect(wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs[0].text).toBe(
+        'Vault'
+      )
+    })
+  })
   it('should not pass selected resource as space to sidebar when driveType is not "project"', () => {
     const resource = mock<SpaceResource>({ id: 'selected-resource', driveType: 'personal' })
     const { wrapper } = getMountedWrapper({
@@ -147,7 +180,8 @@ function getMountedWrapper({
   abilities = [],
   stubAppBar = true,
   includeDisabled = false,
-  store = {}
+  store = {},
+  currentRoute = mock<RouteLocation>({ name: 'files-spaces-projects' })
 }: {
   mocks?: Record<string, unknown>
   spaces?: SpaceResource[]
@@ -155,6 +189,7 @@ function getMountedWrapper({
   stubAppBar?: boolean
   includeDisabled?: boolean
   store?: PiniaMockOptions
+  currentRoute?: RouteLocation
 } = {}) {
   const plugins = defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces }, ...store } })
 
@@ -184,9 +219,7 @@ function getMountedWrapper({
   vi.mocked(requestExtensions).mockReturnValue(extensions)
 
   const defaultMocks = {
-    ...defaultComponentMocks({
-      currentRoute: mock<RouteLocation>({ name: 'files-spaces-projects' })
-    }),
+    ...defaultComponentMocks({ currentRoute }),
     ...(mocks && mocks)
   }
 

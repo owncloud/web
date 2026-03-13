@@ -335,6 +335,7 @@ watch(filterTerm, async () => {
 })
 
 const hasCreatePermission = computed(() => can('create-all', 'Drive'))
+const canAccessVault = computed(() => can('read-all', 'Vault'))
 
 const extensionRegistry = useExtensionRegistry()
 const viewModes = computed(() => {
@@ -459,10 +460,22 @@ const spacesHelpList = computed(() => {
     }
   ]
 })
+const getBreadcrumbText = () => {
+  if (!unref(canAccessVault)) {
+    return $gettext('Spaces')
+  }
+
+  if (unref(route).params.scope === 'vault') {
+    return $gettext('Vault')
+  }
+
+  return $gettext('Drive')
+}
+
 const breadcrumbs = computed(() => {
   return [
     {
-      text: $gettext('Spaces'),
+      text: getBreadcrumbText(),
       onClick: () => loadResourcesTask.perform(),
       isStativNav: true
     }

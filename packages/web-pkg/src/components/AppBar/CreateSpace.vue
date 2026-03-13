@@ -23,7 +23,6 @@ import {
   useSpacesStore,
   useResourcesStore
 } from '../../composables'
-import { useRoute } from 'vue-router'
 import { SpaceResource } from '@ownclouders/web-client'
 
 interface Props {
