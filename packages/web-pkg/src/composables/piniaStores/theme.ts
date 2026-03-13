@@ -5,6 +5,7 @@ import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { z } from 'zod'
 import { applyCustomProp } from '@ownclouders/design-system/helpers'
 import { ShareRole } from '@ownclouders/web-client'
+import { useVault } from '../vault'
 
 const AppBanner = z.object({
   title: z.string().optional(),
@@ -76,6 +77,11 @@ const WebTheme = z.object({
   common: CommonSection.optional(),
   designTokens: DesignTokens.optional(),
   isDark: z.boolean(),
+  /**
+   * Specifies whether the theme is suitable for regular mode or vault mode.
+   * If not specified, the theme is suitable for regular mode.
+   */
+  mode: z.optional(z.enum(['regular', 'vault']).default('regular')),
   name: z.string(),
   loginPage: LoginPage.optional(),
   logo: Logo.optional(),
@@ -103,13 +109,24 @@ export const useThemeStore = defineStore('theme', () => {
   const currentLocalStorageThemeName = useLocalStorage(themeStorageKey, null)
 
   const isDark = usePreferredDark()
+  const { isInVault } = useVault()
 
   const currentTheme = ref<WebThemeType | undefined>()
 
-  const availableThemes = ref<WebThemeType[]>([])
+  const themes = ref<WebThemeType[]>([])
+
+  const availableThemes = computed(() => {
+    return unref(themes).filter((theme) => {
+      if (unref(isInVault)) {
+        return theme.mode === 'vault'
+      }
+
+      return theme.mode === 'regular' || theme.mode === undefined
+    })
+  })
 
   const initializeThemes = (themeConfig: WebThemeConfigType) => {
-    availableThemes.value = themeConfig.themes.map((theme) =>
+    themes.value = themeConfig.themes.map((theme) =>
       merge<WebThemeType>(themeConfig.defaults, theme)
     )
     setThemeFromStorageOrSystem()
