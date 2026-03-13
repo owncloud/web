@@ -37,7 +37,7 @@ export type PiniaMockOptions = {
     userContextReady?: boolean
     publicLinkContextReady?: boolean
   }
-  themeState?: { availableThemes?: WebThemeType[]; currentTheme?: WebThemeType }
+  themeState?: { themes?: WebThemeType[]; currentTheme?: WebThemeType }
   clipboardState?: { action?: ClipboardActions; resources?: Resource[] }
   configState?: {
     server?: string
@@ -135,7 +135,7 @@ export function createMockStore({
           ...defaultOwnCloudTheme.defaults,
           ...defaultOwnCloudTheme.themes[0]
         },
-        availableThemes: defaultOwnCloudTheme.themes,
+        themes: defaultOwnCloudTheme.themes,
         ...themeState
       },
       resources: { resources: [], ...resourcesStore },
