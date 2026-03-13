@@ -70,7 +70,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     // When "Brian" opens the following file in Collabora
     //   | resource |
     //   | test.odt |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'test.odt',
@@ -123,7 +123,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource | password |
     //   | test.odt | %public% |
-    await ui.createPublicLink({
+    await ui.userCreatesPublicLinkUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'test.odt',

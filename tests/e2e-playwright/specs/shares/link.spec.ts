@@ -75,7 +75,7 @@ test.describe('link', () => {
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource     | role             | password |
     //   | folderPublic | Secret File Drop | %public% |
-    await ui.createPublicLink({
+    await ui.userCreatesPublicLinkUsingSidebarPanel({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'folderPublic',

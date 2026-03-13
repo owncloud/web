@@ -276,6 +276,11 @@ export const openTemplateFile = async ({
   webOffice: string
 }): Promise<void> => {
   await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'context menu tippy box'
+  )
   await page.locator(util.format(contextMenuAction, `Open in ${webOffice}`)).click()
 }
 
@@ -283,25 +288,35 @@ export const createFileFromTemplate = async ({
   page,
   resource,
   webOffice,
-  via
+  actionType
 }: {
   page: Page
   resource: string
   webOffice: string
-  via: string
+  actionType: string
 }): Promise<void> => {
   const menuItem = `Create from template via ${webOffice}`
-  if (via.startsWith('sidebar')) {
+  if (actionType.startsWith('sidebar')) {
     await sidebar.open({ page, resource })
     await sidebar.openPanel({ page, name: 'actions' })
     await page.locator(util.format(sideBarActionButton, menuItem)).click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'sidebar panel'
+    )
     return
-  } else if (via.startsWith('context')) {
+  } else if (actionType.startsWith('context')) {
     await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'context menu tippy box'
+    )
     await page.locator(util.format(contextMenuAction, menuItem)).click()
     return
   }
-  throw new Error(`Invalid action '${via}' was provided`)
+  throw new Error(`Invalid action '${actionType}' was provided`)
 }
 
 export const createSpaceFromSelection = async ({

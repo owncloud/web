@@ -123,7 +123,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource       |
     //   | testavatar.jpg |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testavatar.jpg',
@@ -183,7 +183,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     // And "Brian" opens the following file in mediaviewer
     //   | resource       |
     //   | testavatar.jpg |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
