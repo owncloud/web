@@ -34,7 +34,7 @@ describe('ThemeSwitcher component', () => {
 })
 
 function getWrapper({ hasOnlyOneTheme = false } = {}) {
-  const availableThemes = hasOnlyOneTheme
+  const themes = hasOnlyOneTheme
     ? [defaultTheme.clients.web.themes[0]]
     : defaultTheme.clients.web.themes
 
@@ -46,7 +46,7 @@ function getWrapper({ hasOnlyOneTheme = false } = {}) {
             piniaOptions: {
               stubActions: false,
               themeState: {
-                availableThemes,
+                themes,
                 currentTheme: mock<WebThemeType>({
                   ...defaultOwnCloudTheme.defaults,
                   ...defaultOwnCloudTheme.themes[0]

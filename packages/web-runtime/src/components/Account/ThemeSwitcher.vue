@@ -47,9 +47,11 @@ export default defineComponent({
       return unref(currentTheme)
     })
 
-    const translatedThemeNames = unref(availableThemes).map((theme) => {
-      return { ...theme, name: $gettext(theme.name) }
-    })
+    const translatedThemeNames = computed(() =>
+      unref(availableThemes).map((theme) => {
+        return { ...theme, name: $gettext(theme.name) }
+      })
+    )
 
     const availableThemesAndAuto = computed(() => [
       unref(autoTheme),
