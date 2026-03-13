@@ -121,6 +121,7 @@ import { Resource } from '@ownclouders/web-client'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
+  isProtectedProjectSpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource,
   SpaceResource
@@ -258,10 +259,10 @@ useDocumentTitle({ titleSegments })
 const route = useRoute()
 const breadcrumbs = computed(() => {
   const rootBreadcrumbItems: BreadcrumbItem[] = []
-  if (isProjectSpaceResource(unref(space))) {
+  if (isProjectSpaceResource(unref(space)) || isProtectedProjectSpaceResource(unref(space))) {
     rootBreadcrumbItems.push({
       id: uuidV4(),
-      text: $gettext('Spaces'),
+      text: unref(route).params.scope === 'vault' ? $gettext('Vault') : $gettext('Drive'),
       to: createLocationSpaces('files-spaces-projects'),
       isStaticNav: true
     })
