@@ -84,7 +84,7 @@ const routes = [
     meta: { title: $gettext('Access denied'), authContext: 'anonymous' }
   },
   {
-    path: '/account',
+    path: '/:scope(vault)?/account',
     name: 'account',
     component: Account,
     meta: { title: $gettext('Account'), authContext: 'hybrid' }
