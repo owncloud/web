@@ -25,14 +25,14 @@ test.describe('deny share access', () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
 
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
 
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     await api.userHasCreatedFolders({
       usersEnvironment,
@@ -93,7 +93,7 @@ test.describe('deny share access', () => {
       name: 'files'
     })
 
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     await ui.userOpensResources({
       actorsEnvironment,
       stepUser: 'Brian',
@@ -121,7 +121,7 @@ test.describe('deny share access', () => {
 
     // allow access - deleting "Cannot access" share
 
-    await ui.removeSharee({
+    await ui.userRemovesSharee({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -129,7 +129,7 @@ test.describe('deny share access', () => {
       recipient: 'Brian'
     })
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Brian', name: 'files' })
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     await ui.userOpensResources({
       actorsEnvironment,
       stepUser: 'Brian',
@@ -142,7 +142,7 @@ test.describe('deny share access', () => {
       resources: ['folder_to_deny']
     })
 
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

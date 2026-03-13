@@ -36,15 +36,15 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     // | id    |
     // | Alice |
     // | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // And "Alice" creates the following folders in personal space using API
     //   | name   |
     //   | folder |
@@ -94,7 +94,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     })
 
     // And "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" opens folder "folder"
     await ui.userOpensResources({ actorsEnvironment, stepUser: 'Brian', resource: 'folder' })
 
@@ -110,7 +110,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     })
 
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
 
     // rename in the public link
     // When "Anonymous" opens the public link "Unnamed link"
@@ -152,6 +152,6 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
       newResourceName: 'renamedByAlice.txt'
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

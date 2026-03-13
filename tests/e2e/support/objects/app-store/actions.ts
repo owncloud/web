@@ -50,7 +50,7 @@ export const navigateToAppStoreOverview = async (args: { page: Page }): Promise<
   )
 }
 
-export const waitForAppStoreIsVisible = async (args: { page: Page }): Promise<void> => {
+export const waitForAppStoreToBeVisible = async (args: { page: Page }): Promise<void> => {
   const { page } = args
   await page.locator(selectors.appStoreHeadline).waitFor()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
@@ -118,7 +118,7 @@ export const selectApp = async (args: { page: Page; app: string }): Promise<void
   )
 }
 
-export const waitForAppDetailsIsVisible = async (args: { page: Page; app }): Promise<void> => {
+export const waitForAppDetailsToBeVisible = async (args: { page: Page; app }): Promise<void> => {
   const { page, app } = args
   await page.locator(util.format(selectors.appDetailsTitle, app)).waitFor()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(

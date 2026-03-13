@@ -23,7 +23,7 @@ test.describe('password-protected folder operation', () => {
       browser: browser
     })
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
@@ -32,7 +32,7 @@ test.describe('password-protected folder operation', () => {
 
   test('password-protected folder in personal space', { tag: '@predefined-users' }, async () => {
     // Given "Alice" has logged in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // When "Alice" creates the following resources
     //   | resource | type                      | password |
@@ -48,7 +48,7 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" enables the option to display the hidden file
-    await ui.showHiddenFiles({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Alice' })
 
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource                  |
@@ -188,7 +188,7 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And following resources should not be displayed in the files list for user "Alice"
     //   | resource     |
@@ -201,7 +201,7 @@ test.describe('password-protected folder operation', () => {
     })
 
     // When "Alice" navigates to the trashbin
-    await ui.navigateToTrashbin({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToTrashbin({ actorsEnvironment, stepUser: 'Alice' })
 
     // Then following resources should be displayed in the trashbin for user "Alice"
     //   | resource     |
@@ -215,14 +215,14 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('password-protected folder in project space', async () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Brian']
@@ -231,7 +231,7 @@ test.describe('password-protected folder operation', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Alice',
@@ -239,18 +239,18 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" has logged in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" enables the option to display the hidden file
-    await ui.showHiddenFiles({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" navigates to the projects space page
-    await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" creates the following project spaces
     //   | name | id     |
     //   | team | team.1 |
-    await ui.createProjectSpace({
+    await ui.userCreatesProjectSpace({
       actorsEnvironment,
       stepUser: 'Alice',
       name: 'team',
@@ -258,7 +258,7 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
@@ -298,7 +298,7 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
 
     // When "Alice" opens folder ".PasswordProtectedFolders/projects/team"
     await ui.userOpensResources({
@@ -321,10 +321,10 @@ test.describe('password-protected folder operation', () => {
 
     // Opening
     // When "Alice" navigates to the projects space page
-    await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" opens folder "space-folder1.psec"
     await ui.userOpensResources({
@@ -348,16 +348,16 @@ test.describe('password-protected folder operation', () => {
 
     // Opening by space member
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" enables the option to display the hidden file
-    await ui.showHiddenFiles({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Brian' })
 
     // When "Brian" navigates to the projects space page
-    await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSpacesPage({ actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
 
     // And "Brian" opens folder "space-folder1.psec"
     await ui.userOpensResources({
@@ -381,7 +381,7 @@ test.describe('password-protected folder operation', () => {
 
     // Deletion
     // When "Alice" navigates to the personal space page
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" opens folder ".PasswordProtectedFolders/projects/team"
     await ui.userOpensResources({
@@ -401,10 +401,10 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" navigates to the projects space page
-    await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" deletes the following resources using the sidebar panel
     //   | resource           |
@@ -417,10 +417,10 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" navigates to the projects space page
-    await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // Then following resources should not be displayed in the files list for user "Alice"
     //   | resource           |
@@ -445,7 +445,11 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Brian" navigates to the trashbin of the project space "team.1"
-    await ui.navigateToTrashbin({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToTrashbinOfSpace({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      space: 'team.1'
+    })
 
     // Then following resources should be displayed in the trashbin for user "Brian"
     //   | resource           |
@@ -460,7 +464,11 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" navigates to the trashbin of the project space "team.1"
-    await ui.navigateToTrashbin({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToTrashbinOfSpace({
+      actorsEnvironment,
+      stepUser: 'Alice',
+      space: 'team.1'
+    })
 
     // Then following resources should be displayed in the trashbin for user "Alice"
     //   | resource           |
@@ -475,7 +483,7 @@ test.describe('password-protected folder operation', () => {
     })
 
     // When "Alice" navigates to the personal space page
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" opens folder ".PasswordProtectedFolders/projects/team"
     await ui.userOpensResources({
@@ -506,9 +514,9 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

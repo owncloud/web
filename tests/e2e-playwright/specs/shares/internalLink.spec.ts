@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import {
@@ -33,14 +32,14 @@ test.describe('internal link share', () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
 
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
 
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     await api.userHasCreatedFolder({ usersEnvironment, stepUser: 'Alice', folderName: 'myfolder' })
 
@@ -73,14 +72,14 @@ test.describe('internal link share', () => {
       stepUser: 'Brian',
       name: 'Unnamed link'
     })
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.uploadResource({
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Brian',
       resources: [{ name: 'simple.pdf', to: 'myfolder' }]
     })
-    await ui.updateShareeRole({
+    await ui.userUpdatesShareeRole({
       usersEnvironment,
       actorsEnvironment,
       stepUser: 'Alice',
@@ -90,15 +89,13 @@ test.describe('internal link share', () => {
       role: 'Can view',
       resourceType: 'folder'
     })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
 
-    expect(
-      await ui.isAbleToEditFileOrFolder({
-        actorsEnvironment,
-        stepUser: 'Brian',
-        resource: 'myfolder'
-      })
-    ).toBeFalsy()
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userShouldNotBeAbleToEditResource({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      resource: 'myfolder'
+    })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
   })
 })

@@ -24,12 +24,12 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
     })
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('Open text editor via application menu', async () => {
@@ -48,6 +48,6 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
       stepUser: 'Alice',
       resources: ['New file.txt']
     })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

@@ -12,8 +12,8 @@ export class AppStore {
     await po.openAppStore({ page: this.#page })
   }
 
-  waitForAppStoreIsVisible(): Promise<void> {
-    return po.waitForAppStoreIsVisible({ page: this.#page })
+  waitForAppStoreToBeVisible(): Promise<void> {
+    return po.waitForAppStoreToBeVisible({ page: this.#page })
   }
 
   getAppsList(): Promise<string[]> {
@@ -36,8 +36,8 @@ export class AppStore {
     return po.selectApp({ page: this.#page, app })
   }
 
-  waitForAppDetailsIsVisible(app: string): Promise<void> {
-    return po.waitForAppDetailsIsVisible({ page: this.#page, app })
+  waitForAppDetailsToBeVisible(app: string): Promise<void> {
+    return po.waitForAppDetailsToBeVisible({ page: this.#page, app })
   }
 
   downloadApp(app: string): Promise<Download> {

@@ -34,14 +34,14 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
     })
 
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // When "Alice" creates the following resources
     //   | resource  | type    | content   |
@@ -79,7 +79,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     //   | test_video.mp4  |
     //   | testavatar.jpeg |
     //   | testavatar.png  |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -136,7 +136,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource        |
     //   | testavatar.jpeg |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testavatar.jpeg',
@@ -151,14 +151,14 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     })
 
     // When "Alice" navigates to the next media resource
-    await ui.userNavigatesMediaResource({
+    await ui.userNavigatesToMediaResource({
       actorsEnvironment,
       stepUser: 'Alice',
       navigationType: 'next'
     })
 
     // And "Alice" navigates to the previous media resource
-    await ui.userNavigatesMediaResource({
+    await ui.userNavigatesToMediaResource({
       actorsEnvironment,
       stepUser: 'Alice',
       navigationType: 'previous'
@@ -170,7 +170,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource      |
     //   | sampleGif.gif |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleGif.gif',
@@ -190,7 +190,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource      |
     //   | testimage.mp3 |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'testimage.mp3',
@@ -210,7 +210,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource      |
     //   | sampleOgg.ogg |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleOgg.ogg',
@@ -230,7 +230,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource        |
     //   | sampleWebm.webm |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'sampleWebm.webm',
@@ -250,7 +250,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     // And "Alice" opens the following file in mediaviewer
     //   | resource       |
     //   | test_video.mp4 |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'test_video.mp4',
@@ -268,6 +268,6 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

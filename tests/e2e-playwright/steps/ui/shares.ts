@@ -53,7 +53,7 @@ const parseShareTable = function (
   }, {})
 }
 
-export async function navigateToSharedWithMePage({
+export async function userNavigatesToSharedWithMePage({
   actorsEnvironment,
   stepUser
 }: {
@@ -77,7 +77,7 @@ export async function userNavigatesToSharedWithOthersPage({
   await pageObject.navigate()
 }
 
-export async function updateShareeRole({
+export async function userUpdatesShareeRole({
   usersEnvironment,
   actorsEnvironment,
   stepUser,
@@ -179,7 +179,7 @@ export async function userSharesResources({
   }
 }
 
-export async function removeSharee({
+export async function userRemovesSharee({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
@@ -200,36 +200,35 @@ export async function removeSharee({
   })
 }
 
-export async function addUserToProjectSpace({
+export async function userAddsUsersToProjectSpace({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
-  reciver,
-  role,
-  kind
+  space,
+  members
 }: {
   actorsEnvironment: ActorsEnvironment
   usersEnvironment: UsersEnvironment
   stepUser: string
   space: string
-  reciver: string
-  role: string
-  kind: string
+  members: { reciver: string; role: string; kind: 'user' | 'group' }[]
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const sharer = usersEnvironment.getUser({ key: stepUser })
 
-  const collaborator =
-    kind === 'user'
-      ? usersEnvironment.getUser({ key: reciver })
-      : usersEnvironment.getGroup({ key: reciver })
-  const roleId = await getDynamicRoleIdByName(sharer, role, 'space' as ResourceType)
-  const collaboratorWithRole = {
-    collaborator,
-    role: roleId
+  for (const member of members) {
+    const collaborator =
+      member.kind === 'user'
+        ? usersEnvironment.getUser({ key: member.reciver })
+        : usersEnvironment.getGroup({ key: member.reciver })
+    const roleId = await getDynamicRoleIdByName(sharer, member.role, 'space' as ResourceType)
+    const collaboratorWithRole = {
+      collaborator,
+      role: roleId
+    }
+    await spacesObject.addMembers({ users: [collaboratorWithRole] })
   }
-  await spacesObject.addMembers({ users: [collaboratorWithRole] })
 }
 
 export async function userShouldBeAbleToManageShareOfFile({

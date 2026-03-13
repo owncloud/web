@@ -40,7 +40,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -48,7 +48,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Alice',
@@ -162,7 +162,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     })
 
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" renames the following resource
     //   | resource                  | as      |
     //   | sharedFolder/textfile.txt | new.txt |
@@ -242,13 +242,13 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
 
     // see activity in the project space
     // When "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" navigates to the project space "team.1"
-    await ui.navigateToSpace({
+    await ui.userNavigatesToSpace({
       actorsEnvironment,
       stepUser: 'Brian',
       space: 'team.1'
@@ -270,7 +270,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
 
     // see activity in the shared resources
     // When "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
 
     // Then "Brian" should not see any activity of the following resource
     //   | resource             |
@@ -281,6 +281,6 @@ test.describe('Users can see all activities of the resources and spaces', () => 
       resources: ['sharedFolder/new.txt']
     })
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
   })
 })

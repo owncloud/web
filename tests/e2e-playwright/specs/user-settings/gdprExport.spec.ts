@@ -23,22 +23,22 @@ test.describe('GDPR export', { tag: '@predefined-users' }, () => {
       browser: browser
     })
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
     })
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('create and download a GDPR export', async () => {
     // And "Alice" opens the user menu
-    await ui.openAccountPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userOpensAccountPage({ actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" requests a new GDPR export
-    await ui.requestGdprExport({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userRequestsGdprExport({ actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" downloads the GDPR export
-    await ui.downloadGdprExport({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userDownloadsGdprExport({ actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

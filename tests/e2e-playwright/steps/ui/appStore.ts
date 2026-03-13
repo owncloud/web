@@ -1,8 +1,8 @@
+import { expect } from '@playwright/test'
 import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { objects } from '../../../e2e/support'
-import { Download } from '@playwright/test'
 
-export async function openAppStore({
+export async function userOpensAppStore({
   actorsEnvironment,
   stepUser
 }: {
@@ -14,7 +14,7 @@ export async function openAppStore({
   await pageObject.openAppStore()
 }
 
-export async function waitForAppStoreIsVisible({
+export async function userShouldSeeAppStore({
   actorsEnvironment,
   stepUser
 }: {
@@ -23,10 +23,10 @@ export async function waitForAppStoreIsVisible({
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  await pageObject.waitForAppStoreIsVisible()
+  await pageObject.waitForAppStoreToBeVisible()
 }
 
-export async function selectApp({
+export async function userSelectsApp({
   actorsEnvironment,
   stepUser,
   app
@@ -39,7 +39,7 @@ export async function selectApp({
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.selectApp(app)
 }
-export async function waitForAppDetailsIsVisible({
+export async function userShouldSeeAppDetails({
   actorsEnvironment,
   stepUser,
   app
@@ -50,10 +50,10 @@ export async function waitForAppDetailsIsVisible({
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  await pageObject.waitForAppDetailsIsVisible(app)
+  await pageObject.waitForAppDetailsToBeVisible(app)
 }
 
-export async function downloadAppVersion({
+export async function userDownloadsAppVersion({
   actorsEnvironment,
   stepUser,
   version
@@ -61,13 +61,14 @@ export async function downloadAppVersion({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   version: string
-}): Promise<string> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  return await pageObject.downloadAppVersion(version)
+  const downloadedVersion = await pageObject.downloadAppVersion(version)
+  expect(downloadedVersion).toContain(version)
 }
 
-export async function downloadApp({
+export async function userDownloadsApp({
   actorsEnvironment,
   stepUser,
   app
@@ -75,13 +76,14 @@ export async function downloadApp({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   app: string
-}): Promise<Download> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  return await pageObject.downloadApp(app)
+  const download = await pageObject.downloadApp(app)
+  expect(download).toBeDefined()
 }
 
-export async function navigateToAppStoreOverview({
+export async function userNavigatesToAppStoreOverview({
   actorsEnvironment,
   stepUser
 }: {
@@ -93,19 +95,24 @@ export async function navigateToAppStoreOverview({
   await pageObject.navigateToAppStoreOverview()
 }
 
-export async function getAppsList({
+export async function userShouldSeeApps({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  expectedApps
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-}): Promise<Array<string>> {
+  expectedApps: string[]
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  return await pageObject.getAppsList()
+  const apps = await pageObject.getAppsList()
+  for (const app of expectedApps) {
+    expect(apps).toContain(app)
+  }
 }
 
-export async function setSearchTerm({
+export async function userSetsSearchTerm({
   actorsEnvironment,
   stepUser,
   searchTerm
@@ -119,7 +126,7 @@ export async function setSearchTerm({
   await pageObject.setSearchTerm(searchTerm)
 }
 
-export async function selectAppTag({
+export async function userSelectsAppTag({
   actorsEnvironment,
   stepUser,
   tag,
@@ -135,7 +142,7 @@ export async function selectAppTag({
   await pageObject.selectAppTag({ tag, app })
 }
 
-export async function selectTag({
+export async function userSelectsTag({
   actorsEnvironment,
   stepUser,
   tag
