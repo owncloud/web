@@ -381,3 +381,73 @@ export async function userEnablesSyncForAllShares({
   const shareObject = new objects.applicationFiles.Share({ page })
   await shareObject.syncAll()
 }
+
+export async function userChecksAccessDetailsOfShare({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  resource,
+  collaboratorType,
+  collaboratorName,
+  accessDetails
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  collaboratorType: string
+  collaboratorName: string
+  accessDetails: { Name: string; Type: string }
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+
+  let selectorType = collaboratorType
+  // NOTE: external users have group type element selector
+  if (accessDetails.hasOwnProperty('Type') && accessDetails.Type === 'External') {
+    selectorType = 'group'
+  }
+  accessDetails.Name = substitute(accessDetails.Name)
+
+  const actualDetails = await shareObject.getAccessDetails({
+    resource,
+    collaborator: {
+      collaborator:
+        collaboratorType === 'group'
+          ? usersEnvironment.getGroup({ key: collaboratorName })
+          : usersEnvironment.getUser({ key: collaboratorName }),
+      type: selectorType
+    } as ICollaborator
+  })
+
+  expect(actualDetails).toMatchObject(accessDetails)
+}
+
+export async function userShouldSeeAccessDetailsOfShareForFederatedUser({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  resource,
+  collaboratorName,
+  detail
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  collaboratorName: string
+  detail: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+
+  const actualDetails = await shareObject.getAccessDetails({
+    resource,
+    collaborator: {
+      collaborator: usersEnvironment.getUser({ key: collaboratorName }),
+      type: 'group'
+    } as ICollaborator
+  })
+
+  expect(actualDetails).toHaveProperty(detail)
+}

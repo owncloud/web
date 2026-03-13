@@ -105,3 +105,16 @@ export async function userClosesTheCurrentTab({
   const actor = actorsEnvironment.getActor({ key: stepUser })
   await actor.closeCurrentTab()
 }
+
+export async function useServer({ server }: { server: 'LOCAL' | 'FEDERATED' }): Promise<void> {
+  switch (server) {
+    case 'LOCAL':
+      config.federatedServer = false
+      break
+    case 'FEDERATED':
+      config.federatedServer = true
+      break
+    default:
+      throw new Error(`Invalid server type: ${server}\nUse one of these: [LOCAL, FEDERATED]`)
+  }
+}

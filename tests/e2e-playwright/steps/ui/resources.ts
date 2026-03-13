@@ -722,7 +722,7 @@ export async function userEditsFile({
   }
 }
 
-export async function userShouldSeeThumbnailAndPreview({
+export async function userShouldSeeThumbnailAndPreviewForResource({
   actorsEnvironment,
   stepUser,
   resource

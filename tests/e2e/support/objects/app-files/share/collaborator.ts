@@ -341,7 +341,17 @@ export default class Collaborator {
     await page
       .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
       .click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'Tippy box collaborator edit dropdown'
+    )
     await page.locator(util.format(Collaborator.showAccessDetailsButton, collaboratorRow)).click()
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'Tippy box share access details'
+    )
 
     return page.locator('.share-access-details-drop dl').evaluate((el) => {
       const nodes = el.childNodes
