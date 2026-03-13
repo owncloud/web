@@ -33,14 +33,14 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
+    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
   })
 
   test('Search in personal spaces', async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Brian |
-    await api.usersHasBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
+    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Brian'] })
     // And "Brian" logs in
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 

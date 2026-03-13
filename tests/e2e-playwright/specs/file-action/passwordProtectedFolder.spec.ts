@@ -23,7 +23,7 @@ test.describe('password-protected folder operation', () => {
       browser: browser
     })
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
@@ -222,7 +222,7 @@ test.describe('password-protected folder operation', () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Brian']
@@ -231,11 +231,10 @@ test.describe('password-protected folder operation', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" has logged in
@@ -250,11 +249,10 @@ test.describe('password-protected folder operation', () => {
     // And "Alice" creates the following project spaces
     //   | name | id     |
     //   | team | team.1 |
-    await ui.createProjectSpace({
+    await ui.userCreatesProjectSpaces({
       actorsEnvironment,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Alice" navigates to the project space "team.1"

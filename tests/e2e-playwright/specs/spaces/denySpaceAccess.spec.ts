@@ -30,7 +30,7 @@ test.describe('deny space access', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -39,11 +39,10 @@ test.describe('deny space access', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" logs in
@@ -52,12 +51,11 @@ test.describe('deny space access', () => {
     // And "Alice" creates the following project space using API
     //   | name  | id    |
     //   | sales | sales |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       usersEnvironment,
       spacesEnvironment,
       stepUser: 'Alice',
-      name: 'sales',
-      id: 'sales'
+      spaces: [{ name: 'sales', id: 'sales' }]
     })
 
     // And "Alice" creates the following folder in space "sales" using API
@@ -78,9 +76,7 @@ test.describe('deny space access', () => {
       usersEnvironment,
       stepUser: 'Alice',
       space: 'sales',
-      shareType: 'user',
-      sharee: 'Brian',
-      role: 'Can edit with versions and trashbin'
+      sharee: [{ user: 'Brian', shareType: 'user', role: 'Can edit with versions and trashbin' }]
     })
 
     // When "Alice" navigates to the project space "sales"
