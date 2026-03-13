@@ -66,7 +66,6 @@ config = {
             "earlyFail": True,
             "skip": False,
             "suites": [
-                "journeys",
                 "smoke",
             ],
         },
@@ -138,7 +137,6 @@ config = {
             "earlyFail": True,
             "skip": False,
             "features": [
-                "cucumber/features/journeys",
                 "cucumber/features/admin-settings/users.feature:20",
                 "cucumber/features/admin-settings/users.feature:43",
                 "cucumber/features/admin-settings/users.feature:106",
@@ -170,6 +168,7 @@ config = {
             "earlyFail": True,
             "skip": False,
             "suites": [
+                "journeys",
                 "smoke",
             ],
         },
