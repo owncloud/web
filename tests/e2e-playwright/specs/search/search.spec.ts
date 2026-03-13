@@ -110,7 +110,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     })
 
     // And "Alice" enables the option to display the hidden file
-    await ui.userShowsHiddenFiles({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" uploads the following resources
     //   | resource         |

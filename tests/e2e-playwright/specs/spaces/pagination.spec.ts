@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment } from '../../../e2e/support/environment'
@@ -98,7 +97,7 @@ test.describe('check files pagination in project space', () => {
     await ui.userNavigatesToPageNumber({ actorsEnvironment, stepUser: 'Alice', pageNumber: '2' })
 
     // Then "Alice" should see the text "112 items with 1 kB in total (56 files including 1 hidden, 56 folders including 1 hidden)" at the footer of the page
-    await ui.expectFooterTextToBe({
+    await ui.userShouldSeeFooterText({
       actorsEnvironment,
       stepUser: 'Alice',
       expectedText:
@@ -113,7 +112,7 @@ test.describe('check files pagination in project space', () => {
     })
 
     // When "Alice" enables the option to display the hidden file
-    await ui.userShowsHiddenFiles({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" should see 12 resources in the project space files view
     await ui.userShouldSeeNumberOfResources({
@@ -134,12 +133,11 @@ test.describe('check files pagination in project space', () => {
     await editor.close(page)
 
     // Then "Alice" should be on page "2"
-    const currentPage = await ui.getCurrentPageNumber({
+    await ui.userShouldBeOnPage({
       actorsEnvironment,
       stepUser: 'Alice',
       pageNumber: '2'
     })
-    expect(currentPage).toBe('2')
 
     // When "Alice" changes the items per page to "500"
     await ui.userChangesItemsPerPage({ actorsEnvironment, stepUser: 'Alice', itemsPerPage: '500' })
@@ -148,14 +146,10 @@ test.describe('check files pagination in project space', () => {
     await ui.userShouldNotSeePagination({ actorsEnvironment, stepUser: 'Alice' })
 
     // When "Alice" enables flat list
-    await ui.userTogglesFlatList({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesFlatList({ actorsEnvironment, stepUser: 'Alice' })
 
     // Then "Alice" should see files being sorted in alphabetic order
-    const allFiles = await ui.getFilesList({ actorsEnvironment, stepUser: 'Alice' })
-    const sortedFiles = [...allFiles].sort((a, b) =>
-      a.localeCompare(b, 'en-us', { numeric: true, ignorePunctuation: true })
-    )
-    expect(allFiles).toEqual(sortedFiles)
+    await ui.userShouldSeeFilesSortedAlphabetically({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" logs out
     await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })

@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
 import { config } from './../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
@@ -51,12 +50,11 @@ test.describe('details', { tag: '@predefined-users' }, () => {
     })
 
     // And "Admin" downloads app version "0.1.0"
-    const downloadedVersion = await ui.userDownloadsAppVersion({
+    await ui.userDownloadsAppVersion({
       actorsEnvironment,
       stepUser: 'Admin',
       version: '0.1.0'
     })
-    expect(downloadedVersion).toContain('0.1.0')
 
     // When "Admin" navigates back to the app store overview
     await ui.userNavigatesToAppStoreOverview({
@@ -68,12 +66,11 @@ test.describe('details', { tag: '@predefined-users' }, () => {
     await ui.userShouldSeeAppStore({ actorsEnvironment, stepUser: 'Admin' })
 
     // And "Admin" downloads the latest version of the app "Development boilerplate"
-    const downloadedApp = await ui.userDownloadsApp({
+    await ui.userDownloadsApp({
       actorsEnvironment,
       stepUser: 'Admin',
       app: 'Development boilerplate'
     })
-    expect(downloadedApp).toBeDefined()
 
     // And "Admin" logs out
     await ui.userLogsOut({ actorsEnvironment, stepUser: 'Admin' })

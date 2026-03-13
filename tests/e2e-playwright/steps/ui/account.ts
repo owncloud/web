@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment } from '../../../e2e/support/environment'
 
@@ -16,16 +17,19 @@ export async function userChangesLanguage({
   await accountObject.changeLanguage(language, isAnonymousUser)
 }
 
-export async function getAccountPageTitle({
+export async function userShouldSeeAccountPageTitle({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  expectedTitle
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-}): Promise<string> {
+  expectedTitle: string
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
-  return await accountObject.getTitle()
+  const actualTitle = await accountObject.getTitle()
+  expect(actualTitle).toEqual(expectedTitle)
 }
 
 export async function userRequestsGdprExport({
@@ -52,7 +56,7 @@ export async function userDownloadsGdprExport({
   await accountObject.downloadGdprExport()
 }
 
-export async function userMarksNotificationsAsRead({
+export async function userMarksAllNotificationsAsRead({
   actorsEnvironment,
   stepUser
 }: {

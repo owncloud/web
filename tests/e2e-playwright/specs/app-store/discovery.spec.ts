@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment/index.js'
@@ -41,10 +40,11 @@ test.describe('details', { tag: '@predefined-users' }, () => {
     //   | Draw.io     |
     //   | JSON Viewer |
     //   | Unzip       |
-    let apps = await ui.userShouldSeeApps({ actorsEnvironment, stepUser: 'Admin' })
-    expect(apps).toContain('Draw.io')
-    expect(apps).toContain('JSON Viewer')
-    expect(apps).toContain('Unzip')
+    await ui.userShouldSeeApps({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      expectedApps: ['Draw.io', 'JSON Viewer', 'Unzip']
+    })
 
     // When "Admin" enters the search term "draw"
     await ui.userSetsSearchTerm({ actorsEnvironment, stepUser: 'Admin', searchTerm: 'draw' })
@@ -52,9 +52,11 @@ test.describe('details', { tag: '@predefined-users' }, () => {
     // Then "Admin" should see the following apps
     //   | app     |
     //   | Draw.io |
-    apps = []
-    apps = await ui.userShouldSeeApps({ actorsEnvironment, stepUser: 'Admin' })
-    expect(apps).toContain('Draw.io')
+    await ui.userShouldSeeApps({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      expectedApps: ['Draw.io']
+    })
 
     // When "Admin" clicks on the tag "viewer" of the app "Draw.io"
     await ui.userSelectsAppTag({
@@ -68,10 +70,11 @@ test.describe('details', { tag: '@predefined-users' }, () => {
     //   | app         |
     //   | JSON Viewer |
     //   | Draw.io     |
-    apps = []
-    apps = await ui.userShouldSeeApps({ actorsEnvironment, stepUser: 'Admin' })
-    expect(apps).toContain('Draw.io')
-    expect(apps).toContain('JSON Viewer')
+    await ui.userShouldSeeApps({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      expectedApps: ['Draw.io', 'JSON Viewer']
+    })
 
     // When "Admin" clicks on the app "JSON Viewer"
     await ui.userSelectsApp({ actorsEnvironment, stepUser: 'Admin', app: 'JSON Viewer' })
@@ -93,10 +96,11 @@ test.describe('details', { tag: '@predefined-users' }, () => {
     //   | app         |
     //   | JSON Viewer |
     //   | Draw.io     |
-    apps = []
-    apps = await ui.userShouldSeeApps({ actorsEnvironment, stepUser: 'Admin' })
-    expect(apps).toContain('Draw.io')
-    expect(apps).toContain('JSON Viewer')
+    await ui.userShouldSeeApps({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      expectedApps: ['Draw.io', 'JSON Viewer']
+    })
 
     // And "Admin" logs out
     await ui.userLogsOut({ actorsEnvironment, stepUser: 'Admin' })

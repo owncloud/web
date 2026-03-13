@@ -48,7 +48,7 @@ test.describe('password-protected folder operation', () => {
     })
 
     // And "Alice" enables the option to display the hidden file
-    await ui.userShowsHiddenFiles({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Alice' })
 
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource                  |
@@ -242,7 +242,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" enables the option to display the hidden file
-    await ui.userShowsHiddenFiles({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" navigates to the projects space page
     await ui.userNavigatesToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
@@ -351,7 +351,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" enables the option to display the hidden file
-    await ui.userShowsHiddenFiles({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Brian' })
 
     // When "Brian" navigates to the projects space page
     await ui.userNavigatesToSpacesPage({ actorsEnvironment, stepUser: 'Brian' })

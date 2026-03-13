@@ -1,6 +1,6 @@
+import { expect } from '@playwright/test'
 import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { objects } from '../../../e2e/support'
-import { Download } from '@playwright/test'
 
 export async function userOpensAppStore({
   actorsEnvironment,
@@ -61,10 +61,11 @@ export async function userDownloadsAppVersion({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   version: string
-}): Promise<string> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  return await pageObject.downloadAppVersion(version)
+  const downloadedVersion = await pageObject.downloadAppVersion(version)
+  expect(downloadedVersion).toContain(version)
 }
 
 export async function userDownloadsApp({
@@ -75,10 +76,11 @@ export async function userDownloadsApp({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   app: string
-}): Promise<Download> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  return await pageObject.downloadApp(app)
+  const download = await pageObject.downloadApp(app)
+  expect(download).toBeDefined()
 }
 
 export async function userNavigatesToAppStoreOverview({
@@ -95,14 +97,19 @@ export async function userNavigatesToAppStoreOverview({
 
 export async function userShouldSeeApps({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  expectedApps
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-}): Promise<Array<string>> {
+  expectedApps: string[]
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
-  return await pageObject.getAppsList()
+  const apps = await pageObject.getAppsList()
+  for (const app of expectedApps) {
+    expect(apps).toContain(app)
+  }
 }
 
 export async function userSetsSearchTerm({

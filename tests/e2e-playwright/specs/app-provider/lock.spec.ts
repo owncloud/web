@@ -91,7 +91,7 @@ test.describe('lock', { tag: '@sse' }, () => {
       event: 'file-locked'
     })
     // And for "Alice" file "test.odt" should be locked
-    await ui.resourceShouldBeLocked({
+    await ui.resourceShouldBeLockedForUser({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'test.odt'
@@ -158,7 +158,7 @@ test.describe('lock', { tag: '@sse' }, () => {
       event: 'file-unlocked'
     })
     // And for "Alice" file "test.odt" should not be locked
-    await ui.resourceShouldNotBeLocked({
+    await ui.resourceShouldNotBeLockedForUser({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'test.odt'

@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
 import { config } from './../../../e2e/config.js'
 import {
@@ -140,16 +139,17 @@ test.describe('Notifications', () => {
     // | message                                                   |
     // | %user_alice_displayName% shared folder_to_shared with you |
     // | %user_alice_displayName% shared share_to_group with you   |
-    let messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
-    expect(messages).toContain(
-      substitute('%user_alice_displayName% shared folder_to_shared with you')
-    )
-    expect(messages).toContain(
-      substitute('%user_alice_displayName% shared share_to_group with you')
-    )
+    await ui.userShouldSeeNotifications({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      expectedMessages: [
+        substitute('%user_alice_displayName% shared folder_to_shared with you'),
+        substitute('%user_alice_displayName% shared share_to_group with you')
+      ]
+    })
 
     // And "Brian" marks all notifications as read
-    await ui.userMarksNotificationsAsRead({
+    await ui.userMarksAllNotificationsAsRead({
       actorsEnvironment,
       stepUser: 'Brian'
     })
@@ -183,21 +183,23 @@ test.describe('Notifications', () => {
     })
 
     // Then "Alice" should see no notifications
-    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Alice' })
-    expect(messages).toHaveLength(0)
+    await ui.userShouldSeeNoNotifications({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Brian" should see the following notifications
     //   | message                                         |
     //   | %user_alice_displayName% unshared folder_to_shared with you |
     //   | %user_alice_displayName% added you to Space team            |
-    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
-    expect(messages).toContain(
-      substitute('%user_alice_displayName% unshared folder_to_shared with you')
-    )
-    expect(messages).toContain(substitute('%user_alice_displayName% added you to Space team'))
+    await ui.userShouldSeeNotifications({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      expectedMessages: [
+        substitute('%user_alice_displayName% unshared folder_to_shared with you'),
+        substitute('%user_alice_displayName% added you to Space team')
+      ]
+    })
 
     // And "Brian" marks all notifications as read
-    await ui.userMarksNotificationsAsRead({
+    await ui.userMarksAllNotificationsAsRead({
       actorsEnvironment,
       stepUser: 'Brian'
     })
@@ -220,9 +222,14 @@ test.describe('Notifications', () => {
     //   | message                                              |
     //   | %user_alice_displayName% added you to Space team     |
     //   | %user_alice_displayName% removed you from Space team |
-    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Carol' })
-    expect(messages).toContain(substitute('%user_alice_displayName% added you to Space team'))
-    expect(messages).toContain(substitute('%user_alice_displayName% removed you from Space team'))
+    await ui.userShouldSeeNotifications({
+      actorsEnvironment,
+      stepUser: 'Carol',
+      expectedMessages: [
+        substitute('%user_alice_displayName% added you to Space team'),
+        substitute('%user_alice_displayName% removed you from Space team')
+      ]
+    })
 
     // When "Alice" opens the "admin-settings" app
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
@@ -241,8 +248,11 @@ test.describe('Notifications', () => {
     // Then "Brian" should see the following notifications
     //  | message                          |
     //  | %user_alice_displayName% disabled Space team |
-    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
-    expect(messages).toContain(substitute('%user_alice_displayName% disabled Space team'))
+    await ui.userShouldSeeNotifications({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      expectedMessages: [substitute('%user_alice_displayName% disabled Space team')]
+    })
 
     // When "Alice" deletes the space "team.1" using the context-menu
     await ui.userManagesSpaceUsingContexMenu({
@@ -255,8 +265,11 @@ test.describe('Notifications', () => {
     // Then "Brian" should see the following notifications
     //   | message                         |
     //   | %user_alice_displayName% deleted Space team |
-    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
-    expect(messages).toContain(substitute('%user_alice_displayName% deleted Space team'))
+    await ui.userShouldSeeNotifications({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      expectedMessages: [substitute('%user_alice_displayName% deleted Space team')]
+    })
 
     await api.userHasDeletedGroup({ usersEnvironment, stepUser: 'Admin', name: 'sales' })
   })
@@ -384,8 +397,7 @@ test.describe('Notifications', () => {
     })
 
     // Then "Alice" should see no notifications
-    let messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
-    expect(messages).toHaveLength(0)
+    await ui.userShouldSeeNoNotifications({ actorsEnvironment, stepUser: 'Brian' })
 
     // When "Alice" opens the "admin-settings" app
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'admin-settings' })
@@ -410,7 +422,6 @@ test.describe('Notifications', () => {
     })
 
     // Then "Carol" should see no notifications
-    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Carol' })
-    expect(messages).toHaveLength(0)
+    await ui.userShouldSeeNoNotifications({ actorsEnvironment, stepUser: 'Carol' })
   })
 })

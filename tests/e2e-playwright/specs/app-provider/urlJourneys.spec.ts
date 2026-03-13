@@ -56,7 +56,7 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       ]
     })
     // And for "Alice" file "MicrosoftWord.docx" should not be locked
-    await ui.resourceShouldNotBeLocked({
+    await ui.resourceShouldNotBeLockedForUser({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'MicrosoftWord.docx'

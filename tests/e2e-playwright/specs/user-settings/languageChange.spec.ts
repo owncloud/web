@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import {
@@ -81,12 +80,18 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
       language: 'Deutsch - German'
     })
     // Then "Brian" should see the following account page title "Mein Konto"
-    const actualTitle = await ui.getAccountPageTitle({ actorsEnvironment, stepUser: 'Brian' })
-    expect(actualTitle).toEqual('Mein Konto')
+    await ui.userShouldSeeAccountPageTitle({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      expectedTitle: 'Mein Konto'
+    })
     // And "Brian" should see the following notifications
     // | Alice hat check_message mit Ihnen geteilt |
-    const messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
-    expect(messages).toContain('Alice Hansen hat check_message mit Ihnen geteilt')
+    await ui.userShouldSeeNotifications({
+      actorsEnvironment,
+      stepUser: 'Brian',
+      expectedMessages: ['Alice Hansen hat check_message mit Ihnen geteilt']
+    })
     // And "Brian" logs out
     await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
   })
@@ -142,7 +147,10 @@ test.describe('language settings', { tag: '@predefined-users' }, () => {
       language: 'Deutsch - German'
     })
     // Then "Anonymous" should see the following account page title "Mein Konto"
-    const actualTitle = await ui.getAccountPageTitle({ actorsEnvironment, stepUser: 'Anonymous' })
-    expect(actualTitle).toEqual('Mein Konto')
+    await ui.userShouldSeeAccountPageTitle({
+      actorsEnvironment,
+      stepUser: 'Anonymous',
+      expectedTitle: 'Mein Konto'
+    })
   })
 })

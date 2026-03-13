@@ -67,7 +67,7 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
     // And "Alice" changes the items per page to "20"
     await ui.userChangesItemsPerPage({ actorsEnvironment, stepUser: 'Alice', itemsPerPage: '20' })
     // Then "Alice" should see the text "26 items with 223 B in total (11 files including 1 hidden, 15 folders)" at the footer of the page
-    await ui.expectFooterTextToBe({
+    await ui.userShouldSeeFooterText({
       actorsEnvironment,
       stepUser: 'Alice',
       expectedText: '26 items with 223 B in total (11 files including 1 hidden, 15 folders)'
@@ -81,7 +81,7 @@ test.describe('Personal space pagination', { tag: '@predefined-users' }, () => {
       expectedNumberOfResources: 5
     })
     // When "Alice" enables the option to display the hidden file
-    await ui.userShowsHiddenFiles({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ actorsEnvironment, stepUser: 'Alice' })
     // Then "Alice" should see 6 resources in the personal space files view
     await ui.userShouldSeeNumberOfResources({
       actorsEnvironment,

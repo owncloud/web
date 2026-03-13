@@ -239,7 +239,7 @@ export async function userNavigatesToPageNumber({
   await resourceObject.changePage({ pageNumber })
 }
 
-export async function expectFooterTextToBe({
+export async function userShouldSeeFooterText({
   actorsEnvironment,
   stepUser,
   expectedText
@@ -269,7 +269,7 @@ export async function userShouldSeeNumberOfResources({
   expect(actualNumberOfResources).toBe(expectedNumberOfResources)
 }
 
-export async function userShowsHiddenFiles({
+export async function userEnablesShowHiddenFilesOption({
   actorsEnvironment,
   stepUser
 }: {
@@ -281,7 +281,7 @@ export async function userShowsHiddenFiles({
   await resourceObject.showHiddenFiles()
 }
 
-export async function getCurrentPageNumber({
+export async function userShouldBeOnPage({
   actorsEnvironment,
   stepUser,
   pageNumber
@@ -289,10 +289,11 @@ export async function getCurrentPageNumber({
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   pageNumber: string
-}): Promise<string> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  return await resourceObject.getCurrentPageNumber({ pageNumber })
+  const currentPage = await resourceObject.getCurrentPageNumber({ pageNumber })
+  expect(currentPage).toBe(pageNumber)
 }
 
 export async function userChangesItemsPerPage({
@@ -321,7 +322,7 @@ export async function userShouldNotSeePagination({
   await resourceObject.expectPageNumberNotToBeVisible()
 }
 
-export async function userTogglesFlatList({
+export async function userEnablesFlatList({
   actorsEnvironment,
   stepUser
 }: {
@@ -333,16 +334,20 @@ export async function userTogglesFlatList({
   await resourceObject.toggleFlatList()
 }
 
-export async function getFilesList({
+export async function userShouldSeeFilesSortedAlphabetically({
   actorsEnvironment,
   stepUser
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
-}): Promise<string[]> {
+}): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  return await resourceObject.getAllFiles()
+  const allFiles = await resourceObject.getAllFiles()
+  const sortedFiles = [...allFiles].sort((a, b) =>
+    a.localeCompare(b, 'en-us', { numeric: true, ignorePunctuation: true })
+  )
+  expect(allFiles).toEqual(sortedFiles)
 }
 
 export async function userCreatesSpaceFromFolderUsingContexMenu({
@@ -656,7 +661,7 @@ export async function userShouldSeeContentInEditor({
   expect(actualFileContent.trim()).toBe(expectedContent)
 }
 
-export async function resourceShouldBeLocked({
+export async function resourceShouldBeLockedForUser({
   actorsEnvironment,
   stepUser,
   resource
@@ -671,7 +676,7 @@ export async function resourceShouldBeLocked({
   expect(lockLocator).toBeVisible()
 }
 
-export async function resourceShouldNotBeLocked({
+export async function resourceShouldNotBeLockedForUser({
   actorsEnvironment,
   stepUser,
   resource

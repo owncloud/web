@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { objects } from '../../../e2e/support'
 import { config } from '../../../e2e/config'
@@ -26,6 +27,36 @@ export async function getNotificationMessages({
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const application = new objects.runtime.Application({ page })
   return await application.getNotificationMessages()
+}
+
+export async function userShouldSeeNotifications({
+  actorsEnvironment,
+  stepUser,
+  expectedMessages
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  expectedMessages: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const application = new objects.runtime.Application({ page })
+  const messages = await application.getNotificationMessages()
+  for (const message of expectedMessages) {
+    expect(messages).toContain(message)
+  }
+}
+
+export async function userShouldSeeNoNotifications({
+  actorsEnvironment,
+  stepUser
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const application = new objects.runtime.Application({ page })
+  const messages = await application.getNotificationMessages()
+  expect(messages).toHaveLength(0)
 }
 
 export async function userWaitsForTokenRenewal({
