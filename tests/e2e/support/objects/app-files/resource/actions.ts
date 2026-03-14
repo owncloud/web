@@ -1021,6 +1021,11 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
 
   if (method === 'dropdown-menu') {
     await page.locator(filesView).click({ button: 'right' })
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['filesContextMenu'],
+      'Personal page'
+    )
     await page.locator(util.format(filesContextMenuAction, 'copy')).click()
   } else {
     await page.locator(pasteButton).click()
@@ -1052,6 +1057,11 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
 
 const selectBatchAction = async (page: Page, action: string): Promise<void> => {
   await page.locator(util.format(filesBatchAction, action)).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['filesAppBarActions'],
+    'files app bar'
+  )
   await page.mouse.move(0, 0)
 }
 
@@ -1082,7 +1092,17 @@ export const moveOrCopyMultipleResources = async (
     case 'dropdown-menu': {
       // after selecting multiple resources, resources can be copied or moved by clicking on any of the selected resources
       await page.locator(highlightedFileRowSelector).first().click({ button: 'right' })
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['contextMenuContainer'],
+        'Personal page'
+      )
       await page.locator(util.format(filesContextMenuAction, action)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['filesAppBarActions'],
+        'files app bar'
+      )
 
       await page.locator(breadcrumbRoot).click()
       const newLocationPath = newLocation.split('/')
@@ -1092,6 +1112,11 @@ export const moveOrCopyMultipleResources = async (
         }
       }
       await page.locator(filesView).click({ button: 'right' })
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['filesContextMenu'],
+        'Personal page'
+      )
       await page.locator(util.format(filesContextMenuAction, 'copy')).click()
       break
     }
@@ -1111,6 +1136,11 @@ export const moveOrCopyMultipleResources = async (
     case 'keyboard': {
       const keyValue = action === 'copy' ? 'c' : 'x'
       await page.keyboard.press(`ControlOrMeta+${keyValue}`)
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['filesAppBarActions'],
+        'files app bar'
+      )
       await page.locator(breadcrumbRoot).click()
       const newLocationPath = newLocation.split('/')
       for (const path of newLocationPath) {
@@ -1162,12 +1192,22 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
   switch (method) {
     case 'dropdown-menu': {
       await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['contextMenuContainer'],
+        'Personal page'
+      )
       await page.locator(util.format(filesContextMenuAction, action)).click()
       await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
     }
     case 'batch-action': {
       await page.locator(util.format(checkBox, resourceBase)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['filesAppBarActions'],
+        'files app bar'
+      )
       await selectBatchAction(page, action)
       await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
@@ -2456,6 +2496,11 @@ export const duplicateResource = async ({
   switch (method) {
     case 'dropdown-menu': {
       await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['tippyBoxVisible', 'filesAppBarActions'],
+        'file context menu'
+      )
       await Promise.all([
         waitForResourceDuplicationResponse(page, resource),
         page.locator(util.format(filesContextMenuAction, 'duplicate')).click()
@@ -2464,6 +2509,11 @@ export const duplicateResource = async ({
     }
     case 'batch-action': {
       await page.locator(util.format(checkBox, resource)).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        page,
+        ['filesAppBarActions'],
+        'files app bar'
+      )
       await Promise.all([
         waitForResourceDuplicationResponse(page, resource),
         selectBatchAction(page, 'duplicate')

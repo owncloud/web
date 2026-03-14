@@ -1014,7 +1014,7 @@ export async function userShouldSeeActivityOfResources({
   }
 }
 
-export async function userCopiesResource({
+export async function userCopiesResources({
   actorsEnvironment,
   stepUser,
   actionType,
@@ -1038,7 +1038,7 @@ export async function userCopiesResource({
   }
 }
 
-export async function userMovesResource({
+export async function userMovesResources({
   actorsEnvironment,
   stepUser,
   actionType,
@@ -1083,3 +1083,58 @@ export async function userDownloadsThePublicLinkResources({
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await processDownload(pageObject, actionType, resources)
 }
+
+export async function userDuplicatesResources({
+  actorsEnvironment,
+  stepUser,
+  method,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  method: 'sidebar-panel' | 'dropdown-menu' | 'batch-action'
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    await resourceObject.duplicate(resource, method)
+  }
+}
+
+async function performCopyOrMoveMultipleResources({
+  actorsEnvironment,
+  stepUser,
+  actionType,
+  newLocation,
+  method,
+  resources
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  actionType: 'copy' | 'move'
+  newLocation: string
+  method: 'dropdown-menu' | 'batch-action' | 'drag-drop' | 'drag-drop-breadcrumb' | 'keyboard'
+  resources: string[]
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+
+  // drag-n-drop always does MOVE
+  if (method.includes('drag-drop')) {
+    expect(actionType).toBe('move')
+  }
+
+  const normalizedResources = [].concat(...resources)
+  await resourceObject[actionType === 'copy' ? 'copyMultipleResources' : 'moveMultipleResources']({
+    newLocation,
+    method,
+    resources: normalizedResources
+  })
+}
+
+export const userCopiesMultipleResources = (args) =>
+  performCopyOrMoveMultipleResources({ ...args, actionType: 'copy' })
+
+export const userMovesMultipleResources = (args) =>
+  performCopyOrMoveMultipleResources({ ...args, actionType: 'move' })
