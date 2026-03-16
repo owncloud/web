@@ -27,7 +27,7 @@ async function initUserStates(userKey: string, user: User, usersEnvironment: Use
   })
 }
 
-export async function logInUser({
+export async function userLogsIn({
   usersEnvironment,
   actorsEnvironment,
   stepUser
@@ -67,7 +67,7 @@ export async function logInUser({
   }
 }
 
-export async function logOutUser({
+export async function userLogsOut({
   actorsEnvironment,
   stepUser
 }: {

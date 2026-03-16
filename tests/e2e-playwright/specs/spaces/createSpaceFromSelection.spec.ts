@@ -28,7 +28,7 @@ test.describe('create Space shortcut', () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
@@ -36,19 +36,19 @@ test.describe('create Space shortcut', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Alice',
       role: 'Space Admin'
     })
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
 
   test.afterEach(async () => {
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('create Space from folder', async ({ usersEnvironment, spacesEnvironment }) => {
@@ -63,13 +63,13 @@ test.describe('create Space shortcut', () => {
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" uploads the following resources
     //   | resource          | to           |
     //   | data.zip          | spaceFolder  |
     //   | lorem.txt         | spaceFolder  |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -80,7 +80,7 @@ test.describe('create Space shortcut', () => {
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" creates space "folderSpace" from folder "spaceFolder" using the context menu
     await ui.userCreatesSpaceFromFolderUsingContexMenu({
@@ -92,7 +92,7 @@ test.describe('create Space shortcut', () => {
     })
 
     // And "Alice" navigates to the project space "folderSpace"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'folderSpace' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'folderSpace' })
 
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource  |
@@ -117,13 +117,13 @@ test.describe('create Space shortcut', () => {
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" uploads the following resources
     //   | resource          | to             |
     //   | data.zip          | resourceFolder |
     //   | lorem.txt         |                |
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
@@ -131,7 +131,7 @@ test.describe('create Space shortcut', () => {
     })
 
     // And "Alice" navigates to the personal space page
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" creates space "resourceSpace" from resources using the context menu
     //   | resource                |
@@ -146,7 +146,7 @@ test.describe('create Space shortcut', () => {
     })
 
     // And "Alice" navigates to the project space "resourceSpace"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'resourceSpace' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'resourceSpace' })
 
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource        |

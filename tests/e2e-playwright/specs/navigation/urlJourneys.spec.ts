@@ -38,7 +38,7 @@ test.describe('Navigate web directly through urls', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -46,7 +46,7 @@ test.describe('Navigate web directly through urls', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Alice',
@@ -101,7 +101,7 @@ test.describe('Navigate web directly through urls', () => {
     // And "Alice" creates the following file in space "Development" using API
     //   | name              | content                   |
     //   | spaceTextfile.txt | This is test file. Cheers |
-    await api.createFilesInsideSpaceBySpaceName({
+    await api.userHasCreatedFilesInsideSpace({
       usersEnvironment,
       stepUser: 'Alice',
       files: [
@@ -113,7 +113,7 @@ test.describe('Navigate web directly through urls', () => {
       ]
     })
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // When "Alice" navigates to "versions" details panel of file "lorem.txt" of space "personal" through the URL
     await ui.userOpensResourceDetailsPanelViaUrl({
       actorsEnvironment,
@@ -215,7 +215,7 @@ test.describe('Navigate web directly through urls', () => {
     // And "Alice" opens the following file in texteditor
     //   | resource               |
     //   | file_inside_folder.txt |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'file_inside_folder.txt',
@@ -239,7 +239,7 @@ test.describe('Navigate web directly through urls', () => {
     // And "Alice" opens the following file in texteditor
     //   | resource          |
     //   | spaceTextfile.txt |
-    await ui.openResourceInViewer({
+    await ui.userOpensResourceInViewer({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'spaceTextfile.txt',
@@ -254,6 +254,6 @@ test.describe('Navigate web directly through urls', () => {
     // And "Alice" closes the file viewer
     await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

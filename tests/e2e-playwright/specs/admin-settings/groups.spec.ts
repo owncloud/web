@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
 import { config } from '../../../e2e/config.js'
 import { ActorsEnvironment } from '../../../e2e/support/environment'
@@ -24,11 +23,11 @@ test.describe('groups management', () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
   })
 
   test.afterEach(async () => {
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Admin' })
   })
 
   test('admin creates group', async () => {
@@ -39,13 +38,11 @@ test.describe('groups management', () => {
       stepUser: 'Admin',
       groupIds: ['sales', 'security']
     })
-    expect(
-      await ui.checkGroupsPresenceById({
-        actorsEnvironment,
-        stepUser: 'Admin',
-        expectedGroupIds: ['sales', 'security']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeGroupIds({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      expectedGroupIds: ['sales', 'security']
+    })
   })
 
   test('admin deletes group', async ({ usersEnvironment }) => {
@@ -62,13 +59,11 @@ test.describe('groups management', () => {
       groupsToBeDeleted: ['sales']
     })
 
-    expect(
-      await ui.checkGroupsPresenceById({
-        actorsEnvironment,
-        stepUser: 'Admin',
-        expectedGroupIds: ['sales']
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotSeeGroupIds({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      expectedGroupIds: ['sales']
+    })
 
     await ui.userDeletesGroups({
       actorsEnvironment,
@@ -77,13 +72,11 @@ test.describe('groups management', () => {
       groupsToBeDeleted: ['security', 'finance']
     })
 
-    expect(
-      await ui.checkGroupsPresenceById({
-        actorsEnvironment,
-        stepUser: 'Admin',
-        expectedGroupIds: ['security', 'finance']
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotSeeGroupIds({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      expectedGroupIds: ['security', 'finance']
+    })
   })
 
   test('edit groups', async ({ usersEnvironment }) => {
@@ -101,12 +94,10 @@ test.describe('groups management', () => {
       value: 'a renamed group',
       action: 'context-menu'
     })
-    expect(
-      await ui.groupDisplayNameExists({
-        actorsEnvironment,
-        stepUser: 'Admin',
-        groupDisplayName: 'a renamed group'
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeGroupDisplayName({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      groupDisplayName: 'a renamed group'
+    })
   })
 })

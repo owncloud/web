@@ -30,7 +30,7 @@ test.describe('download space', () => {
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
@@ -39,7 +39,7 @@ test.describe('download space', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Alice',
@@ -47,7 +47,7 @@ test.describe('download space', () => {
     })
 
     // Given "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" creates the following project spaces using API
     //   | name | id     |
@@ -73,14 +73,14 @@ test.describe('download space', () => {
     // And "Alice" creates the following file in space "team" using API
     //   | name                  | content    |
     //   | spaceFolder/lorem.txt | space team |
-    await api.createFilesInsideSpaceBySpaceName({
+    await api.userHasCreatedFilesInsideSpace({
       usersEnvironment,
       stepUser: 'Alice',
       files: [{ name: 'spaceFolder/lorem.txt', space: 'team', content: 'space team' }]
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // When "Alice" downloads the space "team.1"
     await ui.userDownloadsSpace({ actorsEnvironment, stepUser: 'Alice' })
@@ -96,16 +96,16 @@ test.describe('download space', () => {
     })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
 
     // When "Alice" downloads the space "team.1"
     await ui.userDownloadsSpace({ actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
   })
 })

@@ -24,12 +24,12 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
     })
 
     await setAccessAndRefreshToken(usersEnvironment)
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
     })
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('Breadcrumb navigation', async () => {
@@ -93,6 +93,6 @@ test.describe('Access breadcrumb', { tag: '@predefined-users' }, () => {
       stepUser: 'Alice',
       resource: 'parent'
     })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

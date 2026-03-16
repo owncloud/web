@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
 import { config } from './../../../e2e/config.js'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
@@ -28,50 +27,52 @@ test.describe('details', { tag: '@predefined-users' }, () => {
 
   test('Apps can be viewed and downloaded', async () => {
     // When "Admin" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
 
     // And "Admin" navigates to the app store
-    await ui.openAppStore({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userOpensAppStore({ actorsEnvironment, stepUser: 'Admin' })
 
     // Then "Admin" should see the app store
-    await ui.waitForAppStoreIsVisible({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userShouldSeeAppStore({ actorsEnvironment, stepUser: 'Admin' })
 
     // When "Admin" clicks on the app "Development boilerplate"
-    await ui.selectApp({ actorsEnvironment, stepUser: 'Admin', app: 'Development boilerplate' })
+    await ui.userSelectsApp({
+      actorsEnvironment,
+      stepUser: 'Admin',
+      app: 'Development boilerplate'
+    })
 
     // Then "Admin" should see the app details of "Development boilerplate"
-    await ui.waitForAppDetailsIsVisible({
+    await ui.userShouldSeeAppDetails({
       actorsEnvironment,
       stepUser: 'Admin',
       app: 'Development boilerplate'
     })
 
     // And "Admin" downloads app version "0.1.0"
-    const downloadedVersion = await ui.downloadAppVersion({
+    await ui.userDownloadsAppVersion({
       actorsEnvironment,
       stepUser: 'Admin',
       version: '0.1.0'
     })
-    expect(downloadedVersion).toContain('0.1.0')
 
     // When "Admin" navigates back to the app store overview
-    await ui.navigateToAppStoreOverview({
+    await ui.userNavigatesToAppStoreOverview({
       actorsEnvironment,
       stepUser: 'Admin'
     })
 
     // Then "Admin" should see the app store
-    await ui.waitForAppStoreIsVisible({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userShouldSeeAppStore({ actorsEnvironment, stepUser: 'Admin' })
 
     // And "Admin" downloads the latest version of the app "Development boilerplate"
-    const downloadedApp = await ui.downloadApp({
+    await ui.userDownloadsApp({
       actorsEnvironment,
       stepUser: 'Admin',
       app: 'Development boilerplate'
     })
-    expect(downloadedApp).toBeDefined()
 
     // And "Admin" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Admin' })
   })
 })

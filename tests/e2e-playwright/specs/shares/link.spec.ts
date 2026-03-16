@@ -35,7 +35,7 @@ test.describe('link', () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
@@ -46,7 +46,7 @@ test.describe('link', () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Brian |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Brian']
@@ -71,11 +71,11 @@ test.describe('link', () => {
     })
 
     // When "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource     | role             | password |
     //   | folderPublic | Secret File Drop | %public% |
-    await ui.createPublicLink({
+    await ui.userCreatesPublicLink({
       actorsEnvironment,
       stepUser: 'Alice',
       resource: 'folderPublic',
@@ -130,7 +130,7 @@ test.describe('link', () => {
 
     // authenticated user
     // When "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
     // And "Brian" opens the public link "myPublicLink"
     await ui.userOpensPublicLink({
       actorsEnvironment,
@@ -209,7 +209,7 @@ test.describe('link', () => {
       resources: [{ resource: 'simple.pdf' }]
     })
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
 
     // And "Anonymous" refreshes the old link
     await ui.userRefreshesTheOldLink({ actorsEnvironment, stepUser: 'Anonymous' })
@@ -319,6 +319,6 @@ test.describe('link', () => {
       linkName: 'myPublicLink'
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

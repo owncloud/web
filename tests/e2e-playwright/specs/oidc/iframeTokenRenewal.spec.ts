@@ -30,7 +30,7 @@ test.describe('details', () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
@@ -39,7 +39,7 @@ test.describe('details', () => {
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Alice',
@@ -47,18 +47,18 @@ test.describe('details', () => {
     })
 
     // And "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" opens the "files" app
     await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
 
     // And "Alice" navigates to the projects space page
-    await ui.navigateToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
 
     // And "Alice" creates the following project spaces
     //   | name | id     |
     //   | team | team.1 |
-    await ui.createProjectSpace({
+    await ui.userCreatesProjectSpace({
       actorsEnvironment,
       stepUser: 'Alice',
       name: 'team',
@@ -66,14 +66,14 @@ test.describe('details', () => {
     })
 
     // When "Alice" waits for token renewal via iframe
-    await ui.waitsForTokenRenewal({
+    await ui.userWaitsForTokenRenewal({
       actorsEnvironment,
       stepUser: 'Alice',
       renewalType: 'iframe'
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" creates the following resources
     //   | resource     | type   |
@@ -95,6 +95,6 @@ test.describe('details', () => {
     })
 
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })

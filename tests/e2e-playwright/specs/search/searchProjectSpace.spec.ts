@@ -32,20 +32,20 @@ test.describe('Search in the project space', () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
 
-    await api.usersHasBeenCreated({
+    await api.usersHaveBeenCreated({
       usersEnvironment,
       stepUser: 'Admin',
       users: ['Alice']
     })
 
-    await api.userHasAssignRolesToUsers({
+    await api.userHasAssignedRolesToUsers({
       usersEnvironment,
       stepUser: 'Admin',
       targetUserId: 'Alice',
       role: 'Space Admin'
     })
 
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
 
     await api.userHasCreatedProjectSpace({
       usersEnvironment,
@@ -55,7 +55,7 @@ test.describe('Search in the project space', () => {
       id: 'team.1'
     })
 
-    await ui.navigateToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
 
     await ui.userCreatesResources({
       actorsEnvironment,
@@ -63,19 +63,19 @@ test.describe('Search in the project space', () => {
       resources: [{ name: 'folder(WithSymbols:!;_+-&)', type: 'folder' }]
     })
 
-    await ui.uploadResource({
+    await ui.userUploadsResources({
       actorsEnvironment,
       filesEnvironment,
       stepUser: 'Alice',
       resources: [{ name: "new-'single'quotes.txt", to: 'folder(WithSymbols:!;_+-&)' }]
     })
 
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
   })
 
   test('Search in the project spaces', async () => {
     // search for project space objects
-    await ui.searchGloballyWithFilter({
+    await ui.userSearchesGloballyWithFilter({
       actorsEnvironment,
       stepUser: 'Alice',
       keyword: "-'s",
@@ -96,7 +96,7 @@ test.describe('Search in the project space', () => {
       resources: ['folder(WithSymbols:!;_+-&)']
     })
 
-    await ui.searchGloballyWithFilter({
+    await ui.userSearchesGloballyWithFilter({
       actorsEnvironment,
       stepUser: 'Alice',
       keyword: '!;_+-&)',
@@ -117,6 +117,6 @@ test.describe('Search in the project space', () => {
       resources: ["new-'single'quotes.txt"]
     })
 
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
   })
 })
