@@ -4,7 +4,7 @@ import { isShareSpaceResource } from '@ownclouders/web-client'
 import { routeToContextQuery } from '../../appDefaults'
 import { isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
-import { useRouter } from '../../router'
+import { useRouter, useRoute } from '../../router'
 import { useGettext } from 'vue3-gettext'
 import {
   Action,
@@ -53,6 +53,7 @@ export interface GetFileActionsOptions extends FileActionOptions {
 export const useFileActions = () => {
   const appsStore = useAppsStore()
   const router = useRouter()
+  const route = useRoute()
   const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
   const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
@@ -221,6 +222,7 @@ export const useFileActions = () => {
         driveAliasAndItem: space?.getDriveAliasAndItem(resource),
         filePath: resource.path,
         fileId: resource.fileId,
+        scope: route.value.params.scope,
         mode
       },
       query: {
