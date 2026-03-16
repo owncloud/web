@@ -81,6 +81,52 @@ describe('useKeyboardActions', () => {
 
     wrapper.unmount()
   })
+
+  it('should not execute callback when checkbox input is focused', () => {
+    const wrapper = getWrapper()
+    const { keyboardActions } = wrapper.vm
+    const counter = ref(0)
+
+    keyboardActions.bindKeyAction({ primary: Key.Space }, () => {
+      counter.value += 1
+    })
+
+    const checkbox = document.createElement('input')
+    checkbox.type = 'checkbox'
+    document.body.appendChild(checkbox)
+    checkbox.focus()
+
+    const event = new KeyboardEvent('keydown', { key: ' ' })
+    document.dispatchEvent(event)
+
+    expect(counter.value).toBe(0)
+
+    checkbox.remove()
+    wrapper.unmount()
+  })
+
+  it('should execute modifier callback when checkbox input is focused', () => {
+    const wrapper = getWrapper()
+    const { keyboardActions } = wrapper.vm
+    const counter = ref(0)
+
+    keyboardActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.C }, () => {
+      counter.value += 1
+    })
+
+    const checkbox = document.createElement('input')
+    checkbox.type = 'checkbox'
+    document.body.appendChild(checkbox)
+    checkbox.focus()
+
+    const event = new KeyboardEvent('keydown', { key: 'c', ctrlKey: true })
+    document.dispatchEvent(event)
+
+    expect(counter.value).toBe(1)
+
+    checkbox.remove()
+    wrapper.unmount()
+  })
 })
 
 function getWrapper() {

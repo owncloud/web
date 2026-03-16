@@ -40,16 +40,28 @@ export interface KeyboardAction {
   callback: (event: KeyboardEvent) => void
 }
 
-const areCustomKeyBindingsDisabled = () => {
-  const activeElementTag = document.activeElement.tagName
-  const type = document.activeElement.getAttribute('type')
-  if (
-    ['textarea', 'input', 'select'].includes(activeElementTag.toLowerCase()) &&
-    type !== 'checkbox'
-  ) {
+const areCustomKeyBindingsDisabled = (event: KeyboardEvent) => {
+  const activeElement = document.activeElement
+  const activeElementTag = activeElement?.tagName?.toLowerCase()
+
+  if (!activeElementTag) {
+    return false
+  }
+
+  if (activeElementTag === 'input') {
+    const type = activeElement.getAttribute('type')
+    if (type === 'checkbox') {
+      return event.key === Key.Space && !event.ctrlKey && !event.metaKey
+    }
+
     return true
   }
-  const closestSelectionEl = document.activeElement
+
+  if (['textarea', 'select'].includes(activeElementTag)) {
+    return true
+  }
+
+  const closestSelectionEl = activeElement
   if (!closestSelectionEl) {
     return false
   }
@@ -74,7 +86,7 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
   const selectionCursor = ref(0)
 
   const listener = (event: KeyboardEvent): void => {
-    if (!options?.skipDisabledKeyBindingsCheck && areCustomKeyBindingsDisabled()) {
+    if (!options?.skipDisabledKeyBindingsCheck && areCustomKeyBindingsDisabled(event)) {
       return
     }
 

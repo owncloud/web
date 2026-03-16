@@ -9,7 +9,7 @@ import {
   SpaceResource
 } from '@ownclouders/web-client'
 import { defaultPlugins, mount, PartialComponentProps } from '@ownclouders/web-test-helpers'
-import { CapabilityStore } from '../../../../src/composables/piniaStores'
+import { CapabilityStore, useResourcesStore } from '../../../../src/composables/piniaStores'
 import { useCanBeOpenedWithSecureView } from '../../../../src/composables/resources'
 import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
 import { eventBus } from '../../../../src/services/eventBus'
@@ -525,9 +525,11 @@ describe('ResourceTable', () => {
   describe('resource details', () => {
     it('emits select event when clicking on the row', async () => {
       const { wrapper } = getMountedWrapper()
+      const setLastSelectedIdSpy = vi.spyOn(useResourcesStore(), 'setLastSelectedId')
       const tableRow = await wrapper.find('.oc-tbody-tr-forest .oc-table-data-cell-size')
       await tableRow.trigger('click')
       expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
+      expect(setLastSelectedIdSpy).toHaveBeenCalledWith('forest')
     })
 
     it('does not emit select event when clicking on the row of a disabled resource', async () => {
