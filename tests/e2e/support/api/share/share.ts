@@ -35,7 +35,7 @@ export const shareRoles: Readonly<{
   'Can upload': string
   'Can manage': string
   'Can edit': string
-  'Can edit with versions and trashbin': string
+  'Can edit with versions and trash bin': string
   'Can edit with trashbin': string
   'Can view': string
   'Secret File Drop': string
@@ -45,7 +45,7 @@ export const shareRoles: Readonly<{
   'Can upload': 'contributor',
   'Can manage': 'manager',
   'Can edit': 'editor',
-  'Can edit with versions and trashbin': 'editor',
+  'Can edit with versions and trash bin': 'editor',
   'Can edit with trashbin': 'editor',
   'Can view': 'viewer',
   'Secret File Drop': 'uploader',
@@ -77,7 +77,7 @@ const defaultRoles = {
   },
   'space editor': {
     id: '58c63c02-1d89-4572-916a-870abc5a1b7d',
-    displayName: 'Can edit with versions and trashbin'
+    displayName: 'Can edit with versions and trash bin'
   },
   manager: { id: '312c0871-5ef7-4b3a-85b6-0e4074c64049', displayName: 'Can Manage' },
   uploader: { id: '1c996275-f1c9-4e71-abdf-a42f6495e960', displayName: 'Can upload' },
@@ -121,7 +121,7 @@ const getRecipientId = (shareType: string, shareWith: string): string => {
 const dynamicRoles = {}
 const requiredDynamicRoles = [
   'Can view',
-  'Can edit with versions and trashbin',
+  'Can edit with versions and trash bin',
   'Can edit (file)',
   'Can edit with trashbin',
   'Can edit without versions (file)'
@@ -138,7 +138,7 @@ export const getDynamicRoleIdByName = async (
 
   if (
     resourceType === 'file' &&
-    ['Can edit with versions and trashbin', 'Can edit with trashbin'].includes(roleName)
+    ['Can edit with versions and trash bin', 'Can edit with trashbin'].includes(roleName)
   ) {
     roleName = `${roleName} (file)`
   } else if (resourceType === 'space' && !['Can manage'].includes(roleName)) {

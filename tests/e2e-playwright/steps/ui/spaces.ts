@@ -522,7 +522,7 @@ export async function userShouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
   const actualMemberList = {
     manager: await spacesObject.listMembers({ filter: 'Can manage' }),
     viewer: await spacesObject.listMembers({ filter: 'Can view' }),
-    editor: await spacesObject.listMembers({ filter: 'Can edit with versions and trashbin' })
+    editor: await spacesObject.listMembers({ filter: 'Can edit with versions and trash bin' })
   }
   for (const member of expectedMembers) {
     const shareRole = shareRoles[member.role as keyof typeof shareRoles]

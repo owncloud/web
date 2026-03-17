@@ -38,7 +38,7 @@ test.describe('lock', { tag: '@sse' }, () => {
           resource: 'test.odt',
           recipient: 'Brian',
           type: 'user',
-          role: 'Can edit with versions and trashbin',
+          role: 'Can edit with versions and trash bin',
           resourceType: 'file'
         }
       ]

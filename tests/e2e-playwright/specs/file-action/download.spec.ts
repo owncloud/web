@@ -58,21 +58,21 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
           resource: 'folderPublic',
           recipient: 'Brian',
           type: 'user',
-          role: 'Can edit with versions and trashbin',
+          role: 'Can edit with versions and trash bin',
           resourceType: 'folder'
         },
         {
           resource: 'emptyFolder',
           recipient: 'Brian',
           type: 'user',
-          role: 'Can edit with versions and trashbin',
+          role: 'Can edit with versions and trash bin',
           resourceType: 'folder'
         },
         {
           resource: 'testavatar.jpg',
           recipient: 'Brian',
           type: 'user',
-          role: 'Can edit with versions and trashbin',
+          role: 'Can edit with versions and trash bin',
           resourceType: 'file'
         }
       ]

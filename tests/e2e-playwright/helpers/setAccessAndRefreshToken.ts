@@ -4,7 +4,13 @@ import { UsersEnvironment } from '../../e2e/support/environment'
 
 export async function setAccessAndRefreshToken(usersEnvironment: UsersEnvironment) {
   if (!config.basicAuth && !config.predefinedUsers) {
-    const user = usersEnvironment.getUser({ key: config.adminUsername })
-    await api.token.setAccessAndRefreshToken(user)
+    let user = usersEnvironment.getUser({ key: config.adminUsername })
+    if (config.keycloak) {
+      user = usersEnvironment.getUser({ key: config.keycloakAdminUser })
+      await api.keycloak.setAccessTokenForKeycloakOcisUser(user)
+      await api.keycloak.setAccessTokenForKeycloakUser(user)
+    } else {
+      await api.token.setAccessAndRefreshToken(user)
+    }
   }
 }

@@ -96,6 +96,9 @@ jobs:
             oidc_iframe: true
           - suite: smoke
             test_suites: smoke
+          - suite: mfa
+            test_suites: mfa
+            mfa: true
           - suite: keycloak
             feature_files: specs/admin-settings/spaces.spec.ts
             keycloak: true
@@ -160,6 +163,9 @@ jobs:
           if [[ "${{ matrix.suites.keycloak }}" == "true" ]]; then
             flags="$flags --keycloak"
           fi
+          if [[ "${{ matrix.suites.mfa }}" == "true" ]]; then
+            flags="$flags --mfa"
+          fi
           cd "${{ github.workspace }}/tests/actions"
           bash setup-services.sh $flags
 
@@ -178,6 +184,8 @@ jobs:
           FEATURE_FILES: ${{ matrix.suites.feature_files || '' }}
           TEST_SUITES: ${{ matrix.suites.test_suites || '' }}
           KEYCLOAK: ${{ matrix.suites.keycloak || '' }}
+          MFA: ${{ matrix.suites.mfa || '' }}
+          RETRY: ${{ matrix.suites.mfa && 0 || 1 }}
           KEYCLOAK_HOST: ${{ matrix.suites.keycloak && 'localhost:8443' || '' }}
         run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright
 

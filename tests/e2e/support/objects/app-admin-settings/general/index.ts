@@ -12,4 +12,7 @@ export class General {
   async resetLogo(): Promise<void> {
     await po.resetLogo(this.#page)
   }
+  async userAuthenticatesWithOTP({ deviceName }: { deviceName: string }): Promise<void> {
+    await po.userAuthenticatesWithOTP(this.#page, deviceName)
+  }
 }

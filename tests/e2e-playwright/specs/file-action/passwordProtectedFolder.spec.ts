@@ -249,7 +249,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userAddsMembersToSpace({
       world,
       stepUser: 'Alice',
-      members: [{ user: 'Brian', role: 'Can edit with versions and trashbin', kind: 'user' }]
+      members: [{ user: 'Brian', role: 'Can edit with versions and trash bin', kind: 'user' }]
     })
 
     // When "Alice" creates the following resources

@@ -17,6 +17,8 @@ COLLABORATION_ENABLED=false
 OIDC_ENABLED=false
 OIDC_IFRAME_ENABLED=false
 KEYCLOAK_ENABLED=false
+MFA=false
+KEYCLOAK_CONFIG="ocis-ci-realm.dist.json"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -42,6 +44,11 @@ while [[ $# -gt 0 ]]; do
       ;;
     --keycloak)
       KEYCLOAK_ENABLED=true
+      shift
+      ;;
+    --mfa)
+      MFA=true
+	  KEYCLOAK_CONFIG="ocis-mfa-ci-realm.dist.json"
       shift
       ;;
     *)
@@ -149,7 +156,26 @@ setup_ocis() {
       export IDM_CREATE_DEMO_USERS=false
     fi
 
-    $OCIS_BIN init --insecure true && cp $GITHUB_WORKSPACE/tests/drone/app-registry.yaml $OCIS_CONFIG_DIR/app-registry.yaml && $OCIS_BIN server
+    if $MFA; then
+      export OCIS_EXCLUDE_RUN_SERVICES=idp
+      export PROXY_AUTOPROVISION_ACCOUNTS=true
+      export PROXY_ROLE_ASSIGNMENT_DRIVER=oidc
+      export OCIS_OIDC_ISSUER=https://localhost:8443/realms/oCIS
+      export PROXY_OIDC_REWRITE_WELLKNOWN=true
+      export WEB_OIDC_CLIENT_ID=web
+      export PROXY_USER_OIDC_CLAIM=preferred_username
+      export PROXY_USER_CS3_CLAIM=username
+      export OCIS_ADMIN_USER_ID=""
+      export GRAPH_ASSIGN_DEFAULT_USER_ROLE=false
+      export GRAPH_USERNAME_MATCH=none
+      export KEYCLOAK_DOMAIN=localhost:8443
+      export IDM_CREATE_DEMO_USERS=false
+      export OCIS_MFA_ENABLED=true
+      export WEB_OIDC_SCOPE="openid profile email acr"
+      export MFA=true
+    fi
+
+    $OCIS_BIN init --insecure true --force-overwrite && cp $GITHUB_WORKSPACE/tests/drone/app-registry.yaml $OCIS_CONFIG_DIR/app-registry.yaml && $OCIS_BIN server
   ) &
   wait_for_service "https://localhost:$2" "$1"
 }
@@ -288,7 +314,7 @@ setup_postgres() {
 setup_keycloak() {
   # Patch realm: replace Drone Docker hostname with localhost
   sed 's|https://ocis:9200|https://localhost:9200|g' \
-    $GITHUB_WORKSPACE/tests/drone/ocis_keycloak/ocis-ci-realm.dist.json > /tmp/ocis-realm.json
+    $GITHUB_WORKSPACE/tests/drone/ocis_keycloak/$KEYCLOAK_CONFIG > /tmp/ocis-realm.json
   docker run -d --name keycloak --network host \
     -e OCIS_DOMAIN=https://localhost:9200 \
     -e KC_HOSTNAME=localhost \
@@ -303,7 +329,7 @@ setup_keycloak() {
     -e KC_HTTPS_CERTIFICATE_FILE=/keycloak-certs/keycloakcrt.pem \
     -e KC_HTTPS_CERTIFICATE_KEY_FILE=/keycloak-certs/keycloakkey.pem \
     -v "$GITHUB_WORKSPACE/keycloak-certs:/keycloak-certs:ro" \
-    -v "/tmp/ocis-realm.json:/opt/keycloak/data/import/oCIS-realm.json:ro" \
+    -v "/tmp/ocis-realm.json:/opt/keycloak/data/import/$KEYCLOAK_CONFIG:ro" \
     $KEYCLOAK_IMAGE \
     start-dev --proxy-headers xforwarded \
       --spi-connections-http-client-default-disable-trust-manager=true \
@@ -317,7 +343,7 @@ if $TIKA_ENABLED; then
   setup_tika
 fi
 
-if $KEYCLOAK_ENABLED; then
+if $KEYCLOAK_ENABLED || $MFA; then
   generate_keycloak_certs
   setup_postgres
   setup_keycloak

@@ -45,7 +45,7 @@ test.describe('spaces public link', () => {
       stepUser: 'Alice',
       space: 'team',
       sharee: [
-        { user: 'Brian', role: 'Can edit with versions and trashbin', shareType: 'user' },
+        { user: 'Brian', role: 'Can edit with versions and trash bin', shareType: 'user' },
         { user: 'Carol', role: 'Can view', shareType: 'user' },
         { user: 'David', role: 'Can manage', shareType: 'user' }
       ]
