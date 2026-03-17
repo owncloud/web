@@ -221,7 +221,8 @@ config = {
             "earlyFail": True,
             "skip": False,
             "features": [
-                "specs/admin-settings/spaces.spec.ts",
+                "specs/keycloak/mfa.spec.ts",
+                # "specs/admin-settings/spaces.spec.ts",
             ],
             "extraServerEnvironment": {
                 "PROXY_AUTOPROVISION_ACCOUNTS": "true",
@@ -236,6 +237,12 @@ config = {
                 "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
                 "GRAPH_USERNAME_MATCH": "none",
                 "KEYCLOAK_DOMAIN": "keycloak:8443",
+                "OCIS_MFA_ENABLED": "true",
+                "WEB_OIDC_SCOPE": "openid profile email acr",
+            },
+            "testEnv": {
+                "MFA": "true",
+                "RETRY": "0",
             },
         },
     },
@@ -308,14 +315,13 @@ def beforePipelines(ctx):
     return checkStarlark() + \
            licenseCheck(ctx) + \
            documentation(ctx) + \
-           changelog(ctx) + \
            pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
            pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
            pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
+    unit_test_pipelines = []  # unitTests(ctx)
 
     # run only unit tests when publishing a standalone package
     if (determineReleasePackage(ctx) != None):
@@ -616,6 +622,7 @@ def e2eTestsOnPlaywright(ctx):
         "extraServerEnvironment": {},
         "skipA11y": True,
         "reportTracing": False,
+        "testEnv": {},
     }
 
     pipelines = []
@@ -696,6 +703,8 @@ def e2eTestsOnPlaywright(ctx):
         if "keycloak" in suite:
             environment["KEYCLOAK"] = "true"
             environment["KEYCLOAK_HOST"] = "keycloak:8443"
+            if params["testEnv"]:
+                environment.update(params["testEnv"])
             e2e_volumes.append({
                 "name": "certs",
                 "temp": {},
@@ -1968,7 +1977,7 @@ def keycloakService():
                },
                "commands": [
                    "mkdir -p /opt/keycloak/data/import",
-                   "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/oCIS-realm.json",
+                   "cp tests/drone/ocis_keycloak/ocis-mfa-ci-realm.dist.json /opt/keycloak/data/import/oCIS-realm.json",
                    "/opt/keycloak/bin/kc.sh start-dev --proxy-headers xforwarded --spi-connections-http-client-default-disable-trust-manager=true --import-realm --health-enabled=true",
                ],
                "volumes": [

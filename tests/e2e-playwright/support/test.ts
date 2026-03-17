@@ -22,34 +22,25 @@ export const test = base.extend<{
 
       config.federatedServer = false
       await world.actorsEnvironment.close()
-      const adminUser = world.usersEnvironment.getUser({ key: config.adminUsername })
-
-      if (!config.predefinedUsers && adminUser) {
+      if (!config.predefinedUsers && !config.mfa) {
+        let adminUser = world.usersEnvironment.getUser({ key: config.adminUsername })
         if (config.keycloak) {
-          const keycloakAdminUser = world.usersEnvironment.getUser({
+          adminUser = world.usersEnvironment.getUser({
             key: config.keycloakAdminUser
           })
-          await api.keycloak.refreshAccessTokenForKeycloakUser(keycloakAdminUser)
-          await api.keycloak.refreshAccessTokenForKeycloakOcisUser(keycloakAdminUser)
+          await api.keycloak.refreshAccessTokenForKeycloakUser(adminUser)
+          await api.keycloak.refreshAccessTokenForKeycloakOcisUser(adminUser)
         } else {
           await api.token.refreshAccessToken(adminUser)
         }
-
-        if (isOcm(testInfo)) {
-          // need to set federatedServer config to true to delete federated oCIS users
-          config.federatedServer = true
-          await api.token.refreshAccessToken(adminUser)
-          await cleanUpUser(
-            store.federatedUserStore,
-            world.usersEnvironment.getUser({ key: config.adminUsername })
-          )
-          config.federatedServer = false
-        }
       }
 
-      await cleanUpUser(store.createdUserStore, adminUser)
-      await cleanUpGroup(adminUser)
-      await cleanUpSpaces(adminUser)
+      await cleanUpUser(
+        store.createdUserStore,
+        world.usersEnvironment.getUser({ key: config.adminUsername })
+      )
+      await cleanUpGroup(world.usersEnvironment.getUser({ key: config.adminUsername }))
+      await cleanUpSpaces(world.usersEnvironment.getUser({ key: config.adminUsername }))
 
       store.createdLinkStore.clear()
       store.createdTokenStore.clear()
@@ -63,7 +54,7 @@ export const test = base.extend<{
   ],
   globalBeforeHook: [
     async ({ world }: { world: World }, use, testInfo) => {
-      if (!config.basicAuth && !config.predefinedUsers) {
+      if (!config.basicAuth && !config.predefinedUsers && !config.mfa) {
         if (config.keycloak) {
           const user = world.usersEnvironment.getUser({ key: config.keycloakAdminUser })
           await api.keycloak.setAccessTokenForKeycloakOcisUser(user)
