@@ -175,23 +175,32 @@ export async function userSharesResources({
   }
 }
 
-export async function userRemovesSharee({
+export async function userRemovesSharees({
   world,
   stepUser,
-  resource,
-  recipient
+  sharees
 }: {
   world: World
   stepUser: string
-  resource: string
-  recipient: string
+  sharees: { resource: string; recipient: string; type?: 'group' | 'user' }[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
-  await shareObject.removeSharee({
-    resource,
-    recipients: [{ collaborator: world.usersEnvironment.getUser({ key: recipient }) }]
-  })
+
+  for (const sharee of sharees) {
+    await shareObject.removeSharee({
+      resource: sharee.resource,
+      recipients: [
+        {
+          collaborator:
+            sharee.type === 'group'
+              ? world.usersEnvironment.getGroup({ key: sharee.recipient })
+              : world.usersEnvironment.getUser({ key: sharee.recipient }),
+          type: sharee.type as CollaboratorType
+        }
+      ]
+    })
+  }
 }
 
 export async function userAddsUsersToProjectSpace({
@@ -439,4 +448,32 @@ export async function userShouldSeeAccessDetailsOfShareForFederatedUser({
   })
 
   expect(actualDetails).toHaveProperty(detail)
+}
+
+export async function userSetsExpirationDateOfShare({
+  world,
+  stepUser,
+  resource,
+  collaboratorType,
+  collaboratorName,
+  expirationDate
+}: {
+  world: World
+  stepUser: string
+  resource: string
+  collaboratorType: 'user' | 'group'
+  collaboratorName: string
+  expirationDate: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const collaborator =
+    collaboratorType === 'group'
+      ? world.usersEnvironment.getGroup({ key: collaboratorName })
+      : world.usersEnvironment.getUser({ key: collaboratorName })
+  await shareObject.addExpirationDate({
+    resource,
+    collaborator: { collaborator, type: collaboratorType } as ICollaborator,
+    expirationDate
+  })
 }

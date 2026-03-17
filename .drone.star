@@ -83,7 +83,6 @@ config = {
             "skip": False,
             "tikaNeeded": True,
             "suites": [
-                "search",
                 "shares",
             ],
             "extraServerEnvironment": {

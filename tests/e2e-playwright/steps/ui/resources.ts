@@ -1315,3 +1315,24 @@ export const userCopiesResourcesAtOnce = (args) =>
 
 export const userMovesResourcesAtOnce = (args) =>
   performCopyOrMoveMultipleResources({ ...args, actionType: 'move' })
+
+export async function userShouldSeeIndicatorOnResource({
+  world,
+  stepUser,
+  buttonLabel,
+  resource
+}: {
+  world: World
+  stepUser: string
+  buttonLabel: 'link-direct' | 'link-indirect' | 'user-direct' | 'user-indirect'
+  resource: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const showShareIndicator = resourceObject.showShareIndicatorSelector({
+    buttonLabel,
+    resource
+  })
+
+  await expect(showShareIndicator).toBeVisible()
+}

@@ -87,7 +87,7 @@ export async function userHasSharedResources({
     recipient: string
     type: string
     role: string
-    resourceType: string
+    resourceType?: string
   }[]
 }): Promise<void> {
   const user = world.usersEnvironment.getUser({ key: stepUser })
