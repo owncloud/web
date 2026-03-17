@@ -5,6 +5,8 @@ import { listenSSE } from '../../../e2e/support/environment/sse.js'
 import { test } from '@playwright/test'
 import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
 import { World } from '../../support/world'
+import { Jimp } from 'jimp'
+import { getOtpFromImage } from '../../../e2e/support/utils/mfa.js'
 
 async function createNewSession(world: World, stepUser: string) {
   const { page } = await world.actorsEnvironment.createActor({
@@ -62,6 +64,32 @@ export async function userLogsIn({
     // test should run with English language
     await api.settings.changeLanguage({ user, language: 'en' })
     await page.reload({ waitUntil: 'load' })
+  }
+}
+
+export async function logInWithOTP({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const sessionObject = await createNewSession(world, stepUser)
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+
+  const image = await Jimp.read('./qr.png')
+  const { data, width, height } = image.bitmap
+  const errorLocator = page.locator('#input-error-otp')
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const otp = await getOtpFromImage(data, width, height)
+    console.log(otp)
+    await sessionObject.keycloakOTPSignIn(String(otp))
+    await new Promise(r => setTimeout(r, 1000));
+    if (!(await errorLocator.isVisible())) {
+      break
+    } else {
+      await page.waitForTimeout(25000)
+    }
   }
 }
 

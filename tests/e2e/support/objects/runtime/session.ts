@@ -42,6 +42,11 @@ export class Session {
     await this.#page.locator('#kc-login').click()
   }
 
+  async keycloakOTPSignIn(otp: string): Promise<void> {
+    await this.#page.locator('#otp').fill(otp)
+    await this.#page.locator('#kc-login').click()
+  }
+
   async login(user: User): Promise<void> {
     const { id, password } = user
 
