@@ -1,49 +1,26 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment/index.js'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 
 test.describe('Page not found', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('not found page', async () => {
+  test('not found page', async ({ world }) => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // When "Alice" navigates to a non-existing page
-    await ui.userNavigatesToNonExistingPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToNonExistingPage({ world, stepUser: 'Alice' })
     // Then "Alice" should see the not found page
-    await ui.userShouldSeeNotFoundPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userShouldSeeNotFoundPage({ world, stepUser: 'Alice' })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

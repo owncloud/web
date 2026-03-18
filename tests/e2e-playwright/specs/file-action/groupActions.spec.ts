@@ -1,30 +1,9 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('Group actions', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-
+  test.beforeEach(async ({ world }) => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
@@ -33,7 +12,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | David |
     //   | Edith |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol', 'David', 'Edith']
     })
@@ -43,8 +22,9 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | finance  |
     //   | security |
     await api.groupsHaveBeenCreated({
+      world,
       groupIds: ['sales', 'finance', 'security'],
-      admin: usersEnvironment.getUser({ key: 'Admin' })
+      stepUser: 'Admin'
     })
     // And "Admin" adds user to the group using API
     //   | user  | group    |
@@ -52,7 +32,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | Brian | finance  |
     //   | Brian | security |
     await api.usersHaveBeenAddedToGroup({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       usersToAdd: [
         { user: 'Brian', group: 'sales' },
@@ -61,13 +41,13 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       ]
     })
     // And "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
   })
 
-  test('batch share a resource to multiple users and groups', async () => {
+  test('batch share a resource to multiple users and groups', async ({ world }) => {
     // disabling auto accepting to check accepting share
     // And "Brian" disables auto-accepting using API
-    await api.userHasDisabledAutoAcceptingShare({ usersEnvironment, stepUser: 'Brian' })
+    await api.userHasDisabledAutoAcceptingShare({ world, stepUser: 'Brian' })
 
     // And "Alice" creates the following folders in personal space using API
     //   | name                   |
@@ -79,7 +59,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | folder5                |
     //   | parentFolder/SubFolder |
     await api.userHasCreatedFolders({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderNames: [
         'sharedFolder',
@@ -100,7 +80,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     // | folder5      | Brian     | user | Can edit with trashbin | folder       |
     // | parentFolder | Brian     | user | Can edit with trashbin | folder       |
     await api.userHasSharedResources({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -148,7 +128,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       ]
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // # multiple share
     // And "Alice" shares the following resources using the sidebar panel
@@ -161,8 +141,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     // | sharedFolder | finance   | group | Can edit with trashbin | folder       |
     // | sharedFolder | security  | group | Can edit with trashbin | folder       |
     await ui.userSharesResources({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       actionType: 'SIDEBAR_PANEL',
       stepUser: 'Alice',
       shares: [
@@ -219,14 +198,14 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     })
 
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
 
     // And "Brian" enables the sync for all shares using the batch action
-    await ui.userEnablesSyncForAllShares({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userEnablesSyncForAllShares({ world, stepUser: 'Brian' })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
   })
 })

@@ -1,40 +1,15 @@
 import { test } from '../../support/test'
-import { config } from './../../../e2e/config.js'
-import { ActorsEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('spaces member expiry', () => {
-  let actorsEnvironment: ActorsEnvironment
-
-  test.beforeEach(async ({ browser, usersEnvironment }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('space members can be invited with an expiration date', async ({
-    usersEnvironment,
-    spacesEnvironment
-  }) => {
+  test('space members can be invited with an expiration date', async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
@@ -43,69 +18,65 @@ test.describe('spaces member expiry', () => {
     //  | id    | role        |
     //  | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       targetUserId: 'Alice',
       role: 'Space Admin'
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // And "Alice" creates the following project space using API
     //  | name | id     |
     //  | team | team.1 |
     await api.userHasCreatedProjectSpace({
-      usersEnvironment,
-      spacesEnvironment,
+      world,
       stepUser: 'Alice',
       name: 'team',
       id: 'team.1'
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
     //   | Brian | Can edit | user |
     await ui.userAddsMembersToSpace({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       members: [{ user: 'Brian', role: 'Can edit with versions and trashbin', kind: 'user' }]
     })
 
     // And "Alice" sets the expiration date of the member "Brian" of the project space to "+5 days"
     await ui.userAddsExpirationDate({
-      usersEnvironment,
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       memberName: 'Brian',
       expirationDate: '+5 days'
     })
 
     // When "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Brian', space: 'team.1' })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" removes the expiration date of the member "Brian" of the project space
     await ui.userRemovesExpirationDate({
-      usersEnvironment,
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       memberName: 'Brian'
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

@@ -1,95 +1,95 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
-import { ActorsEnvironment } from '../../../e2e/support/environment'
+import { World } from '../../support/world'
 
 export async function userChangesLanguage({
-  actorsEnvironment,
+  world,
   stepUser,
   language
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   language: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   const isAnonymousUser = stepUser === 'Anonymous'
   await accountObject.changeLanguage(language, isAnonymousUser)
 }
 
 export async function userShouldSeeAccountPageTitle({
-  actorsEnvironment,
+  world,
   stepUser,
   expectedTitle
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   expectedTitle: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   const actualTitle = await accountObject.getTitle()
   expect(actualTitle).toEqual(expectedTitle)
 }
 
 export async function userRequestsGdprExport({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   await accountObject.requestGdprExport()
 }
 
 export async function userDownloadsGdprExport({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment
-  stepUser
+  world: World
+  stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   await accountObject.downloadGdprExport()
 }
 
 export async function userMarksAllNotificationsAsRead({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const application = new objects.runtime.Application({ page })
   await application.markNotificationsAsRead()
 }
 
 export async function userOpensAccountPage({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   await accountObject.openAccountPage()
 }
 
 export async function userDisablesNotificationEvents({
-  actorsEnvironment,
+  world,
   stepUser,
   events
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   events: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   for (const event of events) {
     await accountObject.disableNotificationEvent(event)

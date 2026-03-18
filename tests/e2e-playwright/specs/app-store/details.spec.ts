@@ -1,78 +1,55 @@
 import { test } from '../../support/test'
-import { config } from './../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 
 test.describe('details', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment: ActorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('Apps can be viewed and downloaded', async () => {
+  test('Apps can be viewed and downloaded', async ({ world }) => {
     // When "Admin" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsIn({ world, stepUser: 'Admin' })
 
     // And "Admin" navigates to the app store
-    await ui.userOpensAppStore({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userOpensAppStore({ world, stepUser: 'Admin' })
 
     // Then "Admin" should see the app store
-    await ui.userShouldSeeAppStore({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userShouldSeeAppStore({ world, stepUser: 'Admin' })
 
     // When "Admin" clicks on the app "Development boilerplate"
     await ui.userSelectsApp({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       app: 'Development boilerplate'
     })
 
     // Then "Admin" should see the app details of "Development boilerplate"
     await ui.userShouldSeeAppDetails({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       app: 'Development boilerplate'
     })
 
     // And "Admin" downloads app version "0.1.0"
     await ui.userDownloadsAppVersion({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       version: '0.1.0'
     })
 
     // When "Admin" navigates back to the app store overview
     await ui.userNavigatesToAppStoreOverview({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin'
     })
 
     // Then "Admin" should see the app store
-    await ui.userShouldSeeAppStore({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userShouldSeeAppStore({ world, stepUser: 'Admin' })
 
     // And "Admin" downloads the latest version of the app "Development boilerplate"
     await ui.userDownloadsApp({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       app: 'Development boilerplate'
     })
 
     // And "Admin" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsOut({ world, stepUser: 'Admin' })
   })
 })

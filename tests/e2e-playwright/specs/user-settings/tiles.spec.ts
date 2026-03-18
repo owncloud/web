@@ -1,75 +1,54 @@
 import { test } from '../../support/test'
-import { config } from './../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('tiles view', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment: ActorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-
+  test.beforeEach(async ({ world }) => {
     // Given "Admin" creates following user using API
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
     // And "Alice" creates the following resources
     await api.userHasCreatedFolder({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderName: 'tile_folder'
     })
   })
 
-  test('Users can navigate web via tiles', async () => {
+  test('Users can navigate web via tiles', async ({ world }) => {
     // When "Alice" switches to the tiles-view
     await ui.userSwitchesToTilesViewMode({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice'
     })
     // Then "Alice" sees the resources displayed as tiles
     await ui.userShouldSeeResourcesAsTiles({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice'
     })
     // And "Alice" opens folder "tile_folder"
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'tile_folder'
     })
     // And "Alice" creates the following resources
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'tile_folder/tile_folder2', type: 'folder' }]
     })
     // And "Alice" sees the resources displayed as tiles
     await ui.userShouldSeeResourcesAsTiles({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice'
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

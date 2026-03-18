@@ -1,29 +1,22 @@
 import { config } from '../../../e2e/config.js'
-import {
-  FilesEnvironment,
-  UsersEnvironment,
-  SpacesEnvironment
-} from '../../../e2e/support/environment'
-import { api, store } from '../../../e2e/support'
+import { api } from '../../../e2e/support'
 import { ResourceType } from '../../../e2e/support/api/share/share'
-import { Group, Space, User } from '../../../e2e/support/types'
+import { Space } from '../../../e2e/support/types'
 import fs from 'fs'
-
-import { checkResponseStatus, request } from '../../../e2e/support/api/http'
-import { join } from 'path'
+import { World } from '../../support/world'
 
 export async function usersHaveBeenCreated({
-  usersEnvironment,
+  world,
   stepUser,
   users
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   users: Array<string>
 }): Promise<void> {
-  const admin = usersEnvironment.getUser({ key: stepUser })
+  const admin = world.usersEnvironment.getUser({ key: stepUser })
   for (const userToBeCreated of users) {
-    const user = usersEnvironment.getUser({ key: userToBeCreated })
+    const user = world.usersEnvironment.getUser({ key: userToBeCreated })
     // do not try to create users when using predefined users
     if (!config.predefinedUsers) {
       await api.provision.createUser({ user, admin })
@@ -32,28 +25,28 @@ export async function usersHaveBeenCreated({
 }
 
 export async function userHasCreatedFolder({
-  usersEnvironment,
+  world,
   stepUser,
   folderName
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   folderName: string
 }): Promise<void> {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   await api.dav.createFolderInsidePersonalSpace({ user, folder: folderName })
 }
 
 export async function userHasCreatedFolders({
-  usersEnvironment,
+  world,
   stepUser,
   folderNames
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   folderNames: string[]
 }): Promise<void> {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   for (const folderName of folderNames) {
     await api.dav.createFolderInsidePersonalSpace({
       user,
@@ -63,15 +56,15 @@ export async function userHasCreatedFolders({
 }
 
 export async function userHasCreatedFiles({
-  usersEnvironment,
+  world,
   stepUser,
   files
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   files: { pathToFile: string; content: string; mtimeDeltaDays?: string }[]
 }): Promise<void> {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   for (const file of files) {
     await api.dav.uploadFileInPersonalSpace({
       user,
@@ -83,11 +76,11 @@ export async function userHasCreatedFiles({
 }
 
 export async function userHasSharedResources({
-  usersEnvironment,
+  world,
   stepUser,
   shares
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   shares: {
     resource: string
@@ -97,7 +90,7 @@ export async function userHasSharedResources({
     resourceType: string
   }[]
 }): Promise<void> {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   for (const resource of shares) {
     await api.share.createShare({
       user,
@@ -111,7 +104,7 @@ export async function userHasSharedResources({
 }
 
 export async function userHasCreatedPublicLinkOfResource({
-  usersEnvironment,
+  world,
   stepUser,
   resource,
   role,
@@ -119,7 +112,7 @@ export async function userHasCreatedPublicLinkOfResource({
   password,
   space
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   resource: string
   role?: string
@@ -127,7 +120,7 @@ export async function userHasCreatedPublicLinkOfResource({
   password?: string
   space?: 'Personal'
 }) {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
 
   await api.share.createLinkShare({
     user,
@@ -140,21 +133,21 @@ export async function userHasCreatedPublicLinkOfResource({
 }
 
 export async function userHasCreatedPublicLinkOfSpace({
-  usersEnvironment,
+  world,
   stepUser,
   space,
   password,
   role,
   name
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   space: string
   password: string
   role?: string
   name?: string
 }) {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
 
   await api.share.createSpaceLinkShare({
     user,
@@ -166,18 +159,18 @@ export async function userHasCreatedPublicLinkOfSpace({
 }
 
 export async function userHasAssignedRolesToUsers({
-  usersEnvironment,
+  world,
   stepUser,
   targetUserId,
   role
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   targetUserId: string
   role: string
 }) {
-  const admin = usersEnvironment.getUser({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: targetUserId })
+  const admin = world.usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: targetUserId })
   /**
    The oCIS API request for assigning roles allows only one role per user,
     whereas the Keycloak API request can assign multiple roles to a user.
@@ -191,40 +184,36 @@ export async function userHasAssignedRolesToUsers({
 }
 
 export async function userHasCreatedProjectSpace({
-  usersEnvironment,
-  spacesEnvironment,
+  world,
   stepUser,
   name,
   id
 }: {
-  usersEnvironment: UsersEnvironment
-  spacesEnvironment: SpacesEnvironment
+  world: World
   stepUser: string
   name: string
   id: string
 }) {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   const spaceId = await api.graph.createSpace({ user, space: { id, name } as unknown as Space })
-  spacesEnvironment.createSpace({
+  world.spacesEnvironment.createSpace({
     key: id || name,
     space: { name: name, id: spaceId }
   })
 }
 
 export async function userHasUploadedFilesInPersonalSpace({
-  usersEnvironment,
+  world,
   stepUser,
-  filesEnvironment,
   filesToUpload
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
-  filesEnvironment: FilesEnvironment
   filesToUpload: { localFile: string; to: string }[]
 }) {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   for (const file of filesToUpload) {
-    const fileInfo = filesEnvironment.getFile({ name: file.localFile.split('/').pop()! })
+    const fileInfo = world.filesEnvironment.getFile({ name: file.localFile.split('/').pop()! })
     const content = fs.readFileSync(fileInfo.path)
     await api.dav.uploadFileInPersonalSpace({
       user,
@@ -235,17 +224,17 @@ export async function userHasUploadedFilesInPersonalSpace({
 }
 
 export async function userHasCreatedFoldersInSpace({
-  usersEnvironment,
+  world,
   stepUser,
   spaceName,
   folders
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   spaceName: string
   folders: Array<string>
 }) {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   for (const folder of folders) {
     await api.dav.createFolderInsideSpaceBySpaceName({
       user,
@@ -256,15 +245,15 @@ export async function userHasCreatedFoldersInSpace({
 }
 
 export async function userHasCreatedFilesInsideSpace({
-  usersEnvironment,
+  world,
   stepUser,
   files
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   files: { name: string; space: string; content?: string }[]
 }) {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   for (const file of files) {
     await api.dav.uploadFileInsideSpaceBySpaceName({
       user,
@@ -276,67 +265,52 @@ export async function userHasCreatedFilesInsideSpace({
 }
 
 export async function usersHaveBeenAddedToGroup({
-  usersEnvironment,
+  world,
   stepUser,
   usersToAdd
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   usersToAdd: { user: string; group: string }[]
 }) {
-  const admin = usersEnvironment.getUser({ key: stepUser })
+  const admin = world.usersEnvironment.getUser({ key: stepUser })
   for (const info of usersToAdd) {
-    const group = usersEnvironment.getGroup({ key: info.group })
-    const user = usersEnvironment.getUser({ key: info.user })
+    const group = world.usersEnvironment.getGroup({ key: info.group })
+    const user = world.usersEnvironment.getUser({ key: info.user })
     await api.graph.addUserToGroup({ user, group, admin })
   }
 }
 
 export async function userHasDeletedGroup({
-  usersEnvironment,
+  world,
   stepUser,
   name
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   name: string
 }): Promise<void> {
-  const admin = usersEnvironment.getUser({ key: stepUser })
-  const group = usersEnvironment.getGroup({ key: name })
+  const admin = world.usersEnvironment.getUser({ key: stepUser })
+  const group = world.usersEnvironment.getGroup({ key: name })
   await api.graph.deleteGroup({ group, admin })
-}
-export async function userHasDeletedProjectSpace({
-  usersEnvironment,
-  stepUser,
-  name,
-  id
-}: {
-  usersEnvironment: UsersEnvironment
-  stepUser: string
-  name: string
-  id: string
-}) {
-  const user = usersEnvironment.getUser({ key: stepUser })
-  await api.graph.deleteSpace({ user, space: { id, name } as unknown as Space })
-  store.createdSpaceStore.clear()
 }
 
 export async function userHasAddedMembersToSpace({
-  usersEnvironment,
+  world,
   stepUser,
   space,
   shareType,
   role,
   sharee
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   space: string
   shareType: string
   role: string
   sharee: string
 }) {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   await api.share.addMembersToTheProjectSpace({
     user,
     spaceName: space,
@@ -346,59 +320,44 @@ export async function userHasAddedMembersToSpace({
   })
 }
 
-export const groupsHaveBeenCreated = async ({
+export async function groupsHaveBeenCreated({
+  world,
   groupIds,
-  admin
+  stepUser
 }: {
+  world: World
   groupIds: string[]
-  admin: User
-}): Promise<Group[]> => {
-  const usersEnvironment = new UsersEnvironment()
-  const createdGroups: Group[] = []
-  for (const id of groupIds) {
-    const group = usersEnvironment.getGroup({ key: id })
-    const body = JSON.stringify({
-      displayName: group.displayName
-    })
-
-    const response = await request({
-      method: 'POST',
-      path: join('graph', 'v1.0', 'groups'),
-      body,
-      user: admin
-    })
-
-    checkResponseStatus(response, 'Failed while creating group')
-
-    const resBody = (await response.json()) as Group
-    usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: resBody.id } })
-    createdGroups.push({ ...group, uuid: resBody.id })
+  stepUser: string
+}): Promise<void> {
+  const admin = world.usersEnvironment.getUser({ key: stepUser })
+  for (const groupId of groupIds) {
+    const group = world.usersEnvironment.getGroup({ key: groupId })
+    await api.graph.createGroup({ group, admin })
   }
-  return createdGroups
 }
 
 export async function userHasAddedTagsToResources({
-  usersEnvironment,
+  world,
   stepUser,
   tags
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   tags: { resource: string; tags: string }[]
 }): Promise<void> {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   for (const resource of tags) {
     await api.dav.addTagToResource({ user, resource: resource.resource, tags: resource.tags })
   }
 }
 
 export async function userHasDisabledAutoAcceptingShare({
-  usersEnvironment,
+  world,
   stepUser
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   await api.settings.configureAutoAcceptShare({ user, state: false })
 }

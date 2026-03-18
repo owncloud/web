@@ -1,11 +1,6 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import {
-  ActorsEnvironment,
-  FilesEnvironment,
-  SpacesEnvironment
-} from '../../../e2e/support/environment'
-import {
   ActionViaType,
   createResourceTypes,
   displayedResourceType,
@@ -19,24 +14,23 @@ import { Resource } from '../../../e2e/support/objects/app-files/resource'
 import { config } from '../../../e2e/config'
 import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
 import { substitute } from '../../../e2e/support/utils'
+import { World } from '../../support/world'
 
 export async function userUploadsResources({
-  actorsEnvironment,
-  filesEnvironment,
+  world,
   stepUser,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
-  filesEnvironment: FilesEnvironment
+  world: World
   stepUser: string
   resources: { name: string; to?: string; type?: string; option?: string }[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
     await resourceObject.upload({
       to: resource.to,
-      resources: [filesEnvironment.getFile({ name: resource.name })],
+      resources: [world.filesEnvironment.getFile({ name: resource.name })],
       option: resource.option,
       type: resource.type
     })
@@ -44,30 +38,30 @@ export async function userUploadsResources({
 }
 
 export async function userShouldNotBeAbleToEditResource({
-  actorsEnvironment,
+  world,
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const userCanEdit = await resourceObject.canManageResource({ resource })
   expect(userCanEdit).toBeFalsy()
 }
 
 export async function userCreatesResources({
-  actorsEnvironment,
+  world,
   stepUser,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resources: { name: string; type: createResourceTypes; content?: string; password?: string }[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
     await resourceObject.create({
@@ -80,13 +74,13 @@ export async function userCreatesResources({
 }
 
 export async function userSearchesGloballyWithFilter({
-  actorsEnvironment,
+  world,
   stepUser,
   keyword,
   filter,
   command
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   keyword: string
   filter: searchFilter
@@ -94,7 +88,7 @@ export async function userSearchesGloballyWithFilter({
 }): Promise<void> {
   keyword = keyword ?? ''
   const pressEnter = !!command && command.endsWith('presses enter')
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   // let search indexing to complete
   await page.waitForTimeout(1000)
   const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -106,55 +100,55 @@ export async function userSearchesGloballyWithFilter({
 }
 
 export async function userSwitchesToTilesViewMode({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.switchToTilesViewMode()
 }
 
 export async function userShouldSeeResourcesAsTiles({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.expectThatResourcesAreTiles()
 }
 
 export async function userOpensResources({
-  actorsEnvironment,
+  world,
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFolder(resource)
 }
 
 export async function userOpensResourceInViewer({
-  actorsEnvironment,
+  world,
   stepUser,
   resource,
   application
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
   application: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFileInViewer({
     name: resource,
@@ -163,17 +157,17 @@ export async function userOpensResourceInViewer({
 }
 
 export async function userShouldSeeTheResources({
-  actorsEnvironment,
+  world,
   listType,
   stepUser,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   listType: displayedResourceType
   stepUser: string
   resources: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   // For search results, use polling to wait for tika indexing in CI
   if (listType === 'search list') {
@@ -205,17 +199,17 @@ export async function userShouldSeeTheResources({
 }
 
 export async function userShouldNotSeeTheResources({
-  actorsEnvironment,
+  world,
   listType,
   stepUser,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   listType: displayedResourceType
   stepUser: string
   resources: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualList = await resourceObject.getDisplayedResources({
     keyword: listType
@@ -226,122 +220,122 @@ export async function userShouldNotSeeTheResources({
 }
 
 export async function userNavigatesToPageNumber({
-  actorsEnvironment,
+  world,
   stepUser,
   pageNumber
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   pageNumber: string
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.changePage({ pageNumber })
 }
 
 export async function userShouldSeeFooterText({
-  actorsEnvironment,
+  world,
   stepUser,
   expectedText
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   expectedText: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualText = await resourceObject.getFileListFooterText()
   expect(actualText).toBe(expectedText)
 }
 
 export async function userShouldSeeNumberOfResources({
-  actorsEnvironment,
+  world,
   stepUser,
   expectedNumberOfResources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   expectedNumberOfResources: number
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualNumberOfResources = await resourceObject.countNumberOfResourcesInThePage()
   expect(actualNumberOfResources).toBe(expectedNumberOfResources)
 }
 
 export async function userEnablesShowHiddenFilesOption({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.showHiddenFiles()
 }
 
 export async function userShouldBeOnPage({
-  actorsEnvironment,
+  world,
   stepUser,
   pageNumber
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   pageNumber: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const currentPage = await resourceObject.getCurrentPageNumber({ pageNumber })
   expect(currentPage).toBe(pageNumber)
 }
 
 export async function userChangesItemsPerPage({
-  actorsEnvironment,
+  world,
   stepUser,
   itemsPerPage
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   itemsPerPage: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.changeItemsPerPage({ itemsPerPage })
 }
 
 export async function userShouldNotSeePagination({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.expectPageNumberNotToBeVisible()
 }
 
 export async function userEnablesFlatList({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.toggleFlatList()
 }
 
 export async function userShouldSeeFilesSortedAlphabetically({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const allFiles = await resourceObject.getAllFiles()
   const sortedFiles = [...allFiles].sort((a, b) =>
@@ -351,64 +345,60 @@ export async function userShouldSeeFilesSortedAlphabetically({
 }
 
 export async function userCreatesSpaceFromFolderUsingContexMenu({
-  actorsEnvironment,
-  spacesEnvironment,
+  world,
   stepUser,
   spaceName,
   folderName
 }: {
-  actorsEnvironment: ActorsEnvironment
-  spacesEnvironment: SpacesEnvironment
+  world: World
   stepUser: string
   spaceName: string
   folderName: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const space = await resourceObject.createSpaceFromFolder({
     folderName: folderName,
     spaceName: spaceName
   })
-  spacesEnvironment.createSpace({
+  world.spacesEnvironment.createSpace({
     key: space.name,
     space: { name: space.name, id: space.id }
   })
 }
 
 export async function userCreatesSpaceFromResourcesUsingContexMenu({
-  actorsEnvironment,
-  spacesEnvironment,
+  world,
   stepUser,
   spaceName,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
-  spacesEnvironment: SpacesEnvironment
+  world: World
   stepUser: string
   spaceName: string
   resources: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const space = await resourceObject.createSpaceFromSelection({ resources, spaceName })
-  spacesEnvironment.createSpace({
+  world.spacesEnvironment.createSpace({
     key: space.name,
     space: { name: space.name, id: space.id }
   })
 }
 
 export async function userAddsContentInTextEditor({
-  actorsEnvironment,
+  world,
   stepUser,
   text,
   editor
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   text: string
   editor: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await pageObject.fillDocumentContent({
     page,
@@ -418,39 +408,39 @@ export async function userAddsContentInTextEditor({
 }
 
 export async function userSavesTextEditor({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   await editor.save(page)
 }
 
 export async function userClosesFileViewer({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   await editor.close(page)
 }
 
 export async function userDeletesResources({
-  actorsEnvironment,
+  world,
   stepUser,
   actionType = 'SIDEBAR_PANEL',
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   actionType: 'BATCH_ACTION' | 'SIDEBAR_PANEL'
   resources: { name: string; from?: string }[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
     await pageObject.delete({
@@ -462,17 +452,17 @@ export async function userDeletesResources({
 }
 
 export async function userDeletesResourceFromTrashbin({
-  actorsEnvironment,
+  world,
   stepUser,
   resource,
   actionType
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
   actionType: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   if (actionType === 'should') {
     const message = await resourceObject.deleteTrashBin({ resource: resource })
@@ -484,17 +474,17 @@ export async function userDeletesResourceFromTrashbin({
 }
 
 export async function userRestoresDeletedResourceFromTrashbin({
-  actorsEnvironment,
+  world,
   stepUser,
   resource,
   actionType
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
   actionType: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   if (actionType === 'should') {
     const message = await resourceObject.restoreTrashBin({
@@ -509,15 +499,15 @@ export async function userRestoresDeletedResourceFromTrashbin({
   }
 }
 export async function userCreatesShortcutForResources({
-  actorsEnvironment,
+  world,
   stepUser,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resources: { resource: string; name: string; type: string }[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
   for (const resource of resources) {
@@ -536,17 +526,17 @@ type resourceToDownload = {
 }
 
 export async function userDownloadsResource({
-  actorsEnvironment,
+  world,
   stepUser,
   resourceToDownload,
   actionType
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resourceToDownload: resourceToDownload[]
   actionType: ActionViaType
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await processDownload(resourceObject, actionType, resourceToDownload)
 }
@@ -613,46 +603,46 @@ export const processDownload = async (
 }
 
 export async function userOpensShortcut({
-  actorsEnvironment,
+  world,
   stepUser,
   name
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   name: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openShotcut({ name })
 }
 export async function userCanOpenShortcutWithExternalUrl({
-  actorsEnvironment,
+  world,
   stepUser,
   name,
   url
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   name: string
   url: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openShotcut({ name, url })
 }
 
 export async function userShouldSeeContentInEditor({
-  actorsEnvironment,
+  world,
   stepUser,
   expectedContent,
   editor
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   expectedContent: string
   editor: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   const actualFileContent = await pageObject.getDocumentContent({
     page,
@@ -662,30 +652,30 @@ export async function userShouldSeeContentInEditor({
 }
 
 export async function resourceShouldBeLockedForUser({
-  actorsEnvironment,
+  world,
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const lockLocator = await resourceObject.getLockLocator({ resource })
   expect(lockLocator).toBeVisible()
 }
 
 export async function resourceShouldNotBeLockedForUser({
-  actorsEnvironment,
+  world,
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const lockLocator = await resourceObject.getLockLocator({ resource })
 
@@ -694,29 +684,29 @@ export async function resourceShouldNotBeLockedForUser({
 }
 
 export async function userNavigatesToFolderViaBreadcrumb({
-  actorsEnvironment,
+  world,
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFolderViaBreadcrumb(resource)
 }
 
 export async function userEditsFile({
-  actorsEnvironment,
+  world,
   stepUser,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resources: { name: string; content: string; type?: string }[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
     await resourceObject.editResource({
@@ -728,80 +718,78 @@ export async function userEditsFile({
 }
 
 export async function userShouldSeeThumbnailAndPreview({
-  actorsEnvironment,
+  world,
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await expect(resourceObject.getFileThumbnailLocator(resource)).toBeVisible()
   await resourceObject.shouldSeeFilePreview({ resource })
 }
 
 export async function userOpensMediaUsingSidebarPanel({
-  actorsEnvironment,
+  world,
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.previewMediaFromSidebarPanel(resource)
 }
 
 export async function userNavigatesToMediaResource({
-  actorsEnvironment,
+  world,
   stepUser,
   navigationType
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   navigationType: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.navigateMediaFile(navigationType)
 }
 
 export async function userRenamesResource({
-  actorsEnvironment,
+  world,
   stepUser,
   resource,
   newResourceName
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
   newResourceName: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.rename({ resource, newName: newResourceName })
 }
 
 export async function userShouldNotSeeVersionPanelForFiles({
-  actorsEnvironment,
-  filesEnvironment,
+  world,
   stepUser,
   file,
   to
 }: {
-  actorsEnvironment: ActorsEnvironment
-  filesEnvironment: FilesEnvironment
+  world: World
   stepUser: string
   file: string
   to: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  const fileInfo = filesEnvironment.getFile({ name: file })
+  const fileInfo = world.filesEnvironment.getFile({ name: file })
   await resourceObject.checkThatFileVersionPanelIsNotAvailable({
     folder: to,
     files: [fileInfo]
@@ -809,13 +797,11 @@ export async function userShouldNotSeeVersionPanelForFiles({
 }
 
 export async function userUploadsMultipleFilesInPersonalSpace({
-  actorsEnvironment,
-  filesEnvironment,
+  world,
   stepUser,
   numberOfFiles
 }: {
-  actorsEnvironment: ActorsEnvironment
-  filesEnvironment: FilesEnvironment
+  world: World
   stepUser: string
   numberOfFiles: number
 }): Promise<void> {
@@ -825,76 +811,70 @@ export async function userUploadsMultipleFilesInPersonalSpace({
     runtimeFs.createFile(file, 'test content')
 
     files.push(
-      filesEnvironment.getFile({
+      world.filesEnvironment.getFile({
         name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), file)
       })
     )
   }
 
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.uploadLargeNumberOfResources({ resources: files })
 }
 
 export async function userTriesToUploadResource({
-  actorsEnvironment,
-  filesEnvironment,
+  world,
   stepUser,
   resource,
   error,
   to
 }: {
-  actorsEnvironment: ActorsEnvironment
-  filesEnvironment: FilesEnvironment
+  world: World
   stepUser: string
   resource: string
   error: string
   to: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.tryToUpload({
     to: to,
-    resources: [filesEnvironment.getFile({ name: resource })],
+    resources: [world.filesEnvironment.getFile({ name: resource })],
     error: error
   })
 }
 
 export async function userUploadsResourceViaDragNDrop({
-  actorsEnvironment,
-  filesEnvironment,
+  world,
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment
-  filesEnvironment: FilesEnvironment
+  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  const resources = [filesEnvironment.getFile({ name: resource })]
+  const resources = [world.filesEnvironment.getFile({ name: resource })]
   await resourceObject.dropUpload({ resources })
 }
 
 export async function userRestoresResourceVersion({
-  actorsEnvironment,
-  filesEnvironment,
+  world,
   stepUser,
   file,
   to,
   version,
   openDetailsPanel
 }: {
-  actorsEnvironment: ActorsEnvironment
-  filesEnvironment: FilesEnvironment
+  world: World
   stepUser: string
   file: string
   to: string
   version: number
   openDetailsPanel: boolean
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
   const fileInfo: Record<string, any> = {}
@@ -902,7 +882,7 @@ export async function userRestoresResourceVersion({
     fileInfo[to] = []
   }
 
-  fileInfo[to].push(filesEnvironment.getFile({ name: file }))
+  fileInfo[to].push(world.filesEnvironment.getFile({ name: file }))
 
   if (version !== 1) {
     throw new Error('restoring is only supported for the most recent version')
@@ -919,26 +899,24 @@ export async function userRestoresResourceVersion({
 }
 
 export async function userStartsUploadingFileFromTheTempUploadDir({
-  actorsEnvironment,
-  filesEnvironment,
+  world,
   stepUser,
   file,
   to,
   option
 }: {
-  actorsEnvironment: ActorsEnvironment
-  filesEnvironment: FilesEnvironment
+  world: World
   stepUser: string
   file: string
   to?: string
   option?: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.startUpload({
     to: to,
     resources: [
-      filesEnvironment.getFile({
+      world.filesEnvironment.getFile({
         name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), file)
       })
     ],
@@ -947,51 +925,51 @@ export async function userStartsUploadingFileFromTheTempUploadDir({
 }
 
 export async function userPausesUpload({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.pauseUpload()
 }
 
 export async function userCancelsUpload({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.cancelUpload()
 }
 
 export async function userResumesUpload({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.resumeUpload()
 }
 
 export async function userShouldNotSeeAnyActivityOfResources({
-  actorsEnvironment,
+  world,
   stepUser,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resources: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
   for (const resource of resources) {
@@ -1000,15 +978,15 @@ export async function userShouldNotSeeAnyActivityOfResources({
 }
 
 export async function userShouldSeeActivityOfResources({
-  actorsEnvironment,
+  world,
   stepUser,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resources: { resource: string; activity: string }[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
   for (const info of resources) {
@@ -1020,17 +998,17 @@ export async function userShouldSeeActivityOfResources({
 }
 
 export async function userCopiesResource({
-  actorsEnvironment,
+  world,
   stepUser,
   actionType,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   actionType: 'keyboard' | 'sidebar-panel' | 'dropdown-menu' | 'batch-action'
   resources: { resource: string; to: string; option?: string }[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
   for (const { resource, to, option } of resources) {
@@ -1044,12 +1022,12 @@ export async function userCopiesResource({
 }
 
 export async function userMovesResource({
-  actorsEnvironment,
+  world,
   stepUser,
   actionType,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   actionType:
     | 'keyboard'
@@ -1060,7 +1038,7 @@ export async function userMovesResource({
     | 'drag-drop-breadcrumb'
   resources: { resource: string; to: string; option?: string }[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
   for (const { resource, to, option } of resources) {
@@ -1074,17 +1052,17 @@ export async function userMovesResource({
 }
 
 export async function userDownloadsThePublicLinkResources({
-  actorsEnvironment,
+  world,
   stepUser,
   actionType,
   resources
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
   resources: resourceToDownload[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await processDownload(pageObject, actionType, resources)
 }

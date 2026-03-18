@@ -1,37 +1,14 @@
 import { test } from '../../support/test'
-import { config } from './../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('details', () => {
-  let actorsEnvironment: ActorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('access token renewal via iframe', async () => {
+  test('access token renewal via iframe', async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
@@ -40,26 +17,26 @@ test.describe('details', () => {
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       targetUserId: 'Alice',
       role: 'Space Admin'
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // And "Alice" opens the "files" app
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
 
     // And "Alice" navigates to the projects space page
-    await ui.userNavigatesToSpacesPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToSpacesPage({ world, stepUser: 'Alice' })
 
     // And "Alice" creates the following project spaces
     //   | name | id     |
     //   | team | team.1 |
     await ui.userCreatesProjectSpace({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       name: 'team',
       id: 'team.1'
@@ -67,19 +44,19 @@ test.describe('details', () => {
 
     // When "Alice" waits for token renewal via refresh token
     await ui.userWaitsForTokenRenewal({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       renewalType: 'refresh token'
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" creates the following resources
     //   | resource     | type   |
     //   | space-folder | folder |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'space-folder', type: 'folder' }]
     })
@@ -88,38 +65,43 @@ test.describe('details', () => {
     //   | resource     |
     //   | space-folder |
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Alice',
       resources: ['space-folder']
     })
 
     // When "Alice" navigates to new tab
-    const actor = actorsEnvironment.getActor({ key: 'Alice' })
-    await actor.newTab()
+    await ui.userNavigatesToNewTab({
+      world,
+      stepUser: 'Alice'
+    })
 
     // And "Alice" waits for token to expire
-    await actor.page.waitForTimeout(config.tokenTimeout * 1000)
+    await ui.userWaitsForTokenToExpire({
+      world,
+      stepUser: 'Alice'
+    })
 
     // And "Alice" closes the current tab
     await ui.userClosesTheCurrentTab({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice'
     })
 
     // And "Alice" opens the "files" app
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
 
     // And "Alice" creates the following resources
     //  | resource          | type    | content   |
     //  | PARENT/parent.txt | txtFile | some text |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'PARENT/parent.txt', type: 'txtFile', content: 'some text' }]
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

@@ -1,49 +1,47 @@
 import { config } from '../../../e2e/config.js'
 import { api, objects } from '../../../e2e/support'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { User } from '../../../e2e/support/types'
 import { listenSSE } from '../../../e2e/support/environment/sse.js'
 import { test } from '@playwright/test'
 import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
+import { World } from '../../support/world'
 
-async function createNewSession(actorsEnvironment: ActorsEnvironment, stepUser: string) {
-  const { page } = await actorsEnvironment.createActor({
+async function createNewSession(world: World, stepUser: string) {
+  const { page } = await world.actorsEnvironment.createActor({
     key: stepUser,
-    namespace: actorsEnvironment.generateNamespace(stepUser, stepUser)
+    namespace: world.actorsEnvironment.generateNamespace(stepUser, stepUser)
   })
   return new objects.runtime.Session({ page })
 }
 
-async function initUserStates(userKey: string, user: User, usersEnvironment: UsersEnvironment) {
+async function initUserStates(userKey: string, user: User, world: World) {
   const userInfo = await api.graph.getMeInfo(user)
-  usersEnvironment.storeCreatedUser(userKey, {
+  world.usersEnvironment.storeCreatedUser(userKey, {
     ...user,
     uuid: userInfo.id,
     email: userInfo.mail
   })
-  usersEnvironment.saveUserState(userKey, {
+  world.usersEnvironment.saveUserState(userKey, {
     language: userInfo.preferredLanguage,
     autoAcceptShare: await api.settings.getAutoAcceptSharesValue(user)
   })
 }
 
 export async function userLogsIn({
-  usersEnvironment,
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  usersEnvironment: UsersEnvironment
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const sessionObject = await createNewSession(actorsEnvironment, stepUser)
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const sessionObject = await createNewSession(world, stepUser)
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
 
   let user = null
   if (stepUser === 'Admin' || config.predefinedUsers) {
-    user = usersEnvironment.getUser({ key: stepUser })
+    user = world.usersEnvironment.getUser({ key: stepUser })
   } else {
-    user = usersEnvironment.getCreatedUser({ key: stepUser })
+    user = world.usersEnvironment.getCreatedUser({ key: stepUser })
   }
 
   await page.goto(config.baseUrl)
@@ -60,7 +58,7 @@ export async function userLogsIn({
 
   // initialize user states: uuid, language, auto-sync
   if (config.predefinedUsers) {
-    await initUserStates(stepUser, user, usersEnvironment)
+    await initUserStates(stepUser, user, world)
     // test should run with English language
     await api.settings.changeLanguage({ user, language: 'en' })
     await page.reload({ waitUntil: 'load' })
@@ -68,13 +66,13 @@ export async function userLogsIn({
 }
 
 export async function userLogsOut({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const actor = actorsEnvironment.getActor({ key: stepUser })
+  const actor = world.actorsEnvironment.getActor({ key: stepUser })
   const canLogout = !!(await actor.page.locator('#_userMenuButton').count())
 
   const sessionObject = new objects.runtime.Session({ page: actor.page })
@@ -83,25 +81,48 @@ export async function userLogsOut({
 }
 
 export async function userShouldGetSSEEvent({
-  usersEnvironment,
+  world,
   stepUser,
   event
 }: {
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   event: string
 }): Promise<void> {
-  const user = usersEnvironment.getCreatedUser({ key: stepUser })
+  const user = world.usersEnvironment.getCreatedUser({ key: stepUser })
   await waitForSSEEvent(user, event)
 }
 
 export async function userClosesTheCurrentTab({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const actor = actorsEnvironment.getActor({ key: stepUser })
+  const actor = world.actorsEnvironment.getActor({ key: stepUser })
   await actor.closeCurrentTab()
+}
+
+export async function userNavigatesToNewTab({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const actor = world.actorsEnvironment.getActor({ key: stepUser })
+  await actor.newTab()
+}
+
+export async function userWaitsForTokenToExpire({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  // wait for the token to expire
+  await page.waitForTimeout(config.tokenTimeout * 1000)
 }

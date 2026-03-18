@@ -1,110 +1,110 @@
 import { expect } from '@playwright/test'
-import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { objects } from '../../../e2e/support'
+import { World } from '../../support/world'
 
 export async function userOpensAppStore({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.openAppStore()
 }
 
 export async function userShouldSeeAppStore({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.waitForAppStoreToBeVisible()
 }
 
 export async function userSelectsApp({
-  actorsEnvironment,
+  world,
   stepUser,
   app
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   app: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.selectApp(app)
 }
 export async function userShouldSeeAppDetails({
-  actorsEnvironment,
+  world,
   stepUser,
   app
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   app: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.waitForAppDetailsToBeVisible(app)
 }
 
 export async function userDownloadsAppVersion({
-  actorsEnvironment,
+  world,
   stepUser,
   version
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   version: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   const downloadedVersion = await pageObject.downloadAppVersion(version)
   expect(downloadedVersion).toContain(version)
 }
 
 export async function userDownloadsApp({
-  actorsEnvironment,
+  world,
   stepUser,
   app
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   app: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   const download = await pageObject.downloadApp(app)
   expect(download).toBeDefined()
 }
 
 export async function userNavigatesToAppStoreOverview({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.navigateToAppStoreOverview()
 }
 
 export async function userShouldSeeApps({
-  actorsEnvironment,
+  world,
   stepUser,
   expectedApps
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   expectedApps: string[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   const apps = await pageObject.getAppsList()
   for (const app of expectedApps) {
@@ -113,45 +113,45 @@ export async function userShouldSeeApps({
 }
 
 export async function userSetsSearchTerm({
-  actorsEnvironment,
+  world,
   stepUser,
   searchTerm
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   searchTerm: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.setSearchTerm(searchTerm)
 }
 
 export async function userSelectsAppTag({
-  actorsEnvironment,
+  world,
   stepUser,
   tag,
   app
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   tag: string
   app: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.selectAppTag({ tag, app })
 }
 
 export async function userSelectsTag({
-  actorsEnvironment,
+  world,
   stepUser,
   tag
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   tag: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.appStore.AppStore({ page })
   await pageObject.selectTag(tag)
 }

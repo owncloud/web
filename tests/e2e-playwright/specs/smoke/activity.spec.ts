@@ -1,47 +1,15 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  FilesEnvironment,
-  SpacesEnvironment,
-  LinksEnvironment
-} from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('Users can see all activities of the resources and spaces', () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const filesEnvironment = new FilesEnvironment()
-  const spacesEnvironment = new SpacesEnvironment()
-  const linksEnvironment = new LinksEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('Upload files in personal space', { tag: '@predefined-users' }, async () => {
+  test('Upload files in personal space', { tag: '@predefined-users' }, async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
@@ -49,7 +17,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       targetUserId: 'Alice',
       role: 'Space Admin'
@@ -58,8 +26,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | name | id     |
     //   | team | team.1 |
     await api.userHasCreatedProjectSpace({
-      usersEnvironment,
-      spacesEnvironment,
+      world,
       stepUser: 'Alice',
       name: 'team',
       id: 'team.1'
@@ -68,7 +35,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | user  | role     | shareType |
     //   | Brian | Can view | user      |
     await api.userHasAddedMembersToSpace({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       space: 'team',
       sharee: 'Brian',
@@ -80,7 +47,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | space | name       | password |
     //   | team  | space link | %public% |
     await api.userHasCreatedPublicLinkOfSpace({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       space: 'team',
       name: 'space link',
@@ -90,7 +57,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | name                   |
     //   | sharedFolder/subFolder |
     await api.userHasCreatedFolders({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderNames: ['sharedFolder/subFolder']
     })
@@ -98,8 +65,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | localFile                   | to                        |
     //   | filesForUpload/textfile.txt | sharedFolder/textfile.txt |
     await api.userHasUploadedFilesInPersonalSpace({
-      usersEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       filesToUpload: [{ localFile: 'filesForUpload/textfile.txt', to: 'sharedFolder/textfile.txt' }]
     })
@@ -107,7 +73,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | resource     | recipient | type | role                   | resourceType |
     //   | sharedFolder | Brian     | user | Can edit with trashbin | folder       |
     await api.userHasSharedResources({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -123,7 +89,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | resource     | role                   | password |
     //   | sharedFolder | Can edit with trashbin | %public% |
     await api.userHasCreatedPublicLinkOfResource({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'sharedFolder',
       role: 'Can edit with trashbin',
@@ -132,15 +98,14 @@ test.describe('Users can see all activities of the resources and spaces', () => 
 
     // When "Anonymous" opens the public link "Unnamed link"
     await ui.userOpensPublicLink({
-      actorsEnvironment,
-      linksEnvironment,
+      world,
       stepUser: 'Anonymous',
       name: 'Unnamed link'
     })
 
     // And "Anonymous" unlocks the public link with password "%public%"
     await ui.userUnlocksPublicLink({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       password: '%public%'
     })
@@ -148,7 +113,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | resource     | content     |
     //   | textfile.txt | new content |
     await ui.userEditsFile({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       resources: [{ name: 'textfile.txt', content: 'new content' }]
     })
@@ -156,18 +121,18 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | resource     |
     //   | textfile.txt |
     await ui.userShouldNotSeeAnyActivityOfResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       resources: ['textfile.txt']
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
     // And "Alice" renames the following resource
     //   | resource                  | as      |
     //   | sharedFolder/textfile.txt | new.txt |
     await ui.userRenamesResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'sharedFolder/textfile.txt',
       newResourceName: 'new.txt'
@@ -176,7 +141,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | resource  | from         |
     //   | subFolder | sharedFolder |
     await ui.userDeletesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'subFolder', from: 'sharedFolder' }],
       actionType: 'SIDEBAR_PANEL'
@@ -197,7 +162,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | new.txt              | Public updated textfile.txt in sharedFolder                      |
     //   | new.txt              | %user_alice_displayName% added textfile.txt to sharedFolder      |
     await ui.userShouldSeeActivityOfResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [
         {
@@ -242,14 +207,14 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
 
     // see activity in the project space
     // When "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
     // And "Brian" navigates to the project space "team.1"
     await ui.userNavigatesToSpace({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       space: 'team.1'
     })
@@ -259,7 +224,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     //   | %user_alice_displayName% added brian as member of team |
     //   | %user_alice_displayName% added readme.md to .space     |
     await ui.userShouldSeeActivitiesOfSpace({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       activities: [
         '%user_alice_displayName% shared team via link',
@@ -270,17 +235,17 @@ test.describe('Users can see all activities of the resources and spaces', () => 
 
     // see activity in the shared resources
     // When "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
 
     // Then "Brian" should not see any activity of the following resource
     //   | resource             |
     //   | sharedFolder/new.txt |
     await ui.userShouldNotSeeAnyActivityOfResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resources: ['sharedFolder/new.txt']
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
   })
 })

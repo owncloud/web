@@ -1,106 +1,98 @@
 import { objects } from '../../../e2e/support'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
+import { World } from '../../support/world'
 
 export async function userNavigatesToNonExistingPage({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
   await urlNavObject.navigateToNonExistingPage()
 }
 
 export async function userShouldSeeNotFoundPage({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
   await urlNavObject.waitForNotFoundPageToBeVisible()
 }
 
 export async function userOpensResourceViaUrl({
-  actorsEnvironment,
-  usersEnvironment,
+  world,
   stepUser,
   resource,
   space,
   editorName,
   client
 }: {
-  actorsEnvironment: ActorsEnvironment
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   resource: string
   space: string
   editorName: 'Collabora' | 'OnlyOffice'
   client: 'mobile' | 'desktop'
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
   await urlNavObject.openResourceViaUrl({ resource, user, space, editorName, client })
 }
 
 export async function userOpensSpaceResourceViaUrl({
-  actorsEnvironment,
-  usersEnvironment,
+  world,
   stepUser,
   resource,
   space
 }: {
-  actorsEnvironment: ActorsEnvironment
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   resource: string
   space: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
   await urlNavObject.openResourceViaUrl({ resource, user, space })
 }
 
 export async function userOpensResourceDetailsPanelViaUrl({
-  actorsEnvironment,
-  usersEnvironment,
+  world,
   stepUser,
   resource,
   detailsPanel,
   space
 }: {
-  actorsEnvironment: ActorsEnvironment
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   resource: string
   detailsPanel: string
   space: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
   await urlNavObject.navigateToDetailsPanelOfResource({ resource, detailsPanel, user, space })
 }
 
 export async function userOpensSpaceViaUrl({
-  actorsEnvironment,
-  usersEnvironment,
+  world,
   stepUser,
   space
 }: {
-  actorsEnvironment: ActorsEnvironment
-  usersEnvironment: UsersEnvironment
+  world: World
   stepUser: string
   space: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const user = usersEnvironment.getUser({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const user = world.usersEnvironment.getUser({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
   await urlNavObject.openSpaceViaUrl({ user, space })
 }

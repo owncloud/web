@@ -1,52 +1,28 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config'
-import {
-  ActorsEnvironment,
-  FilesEnvironment,
-  UsersEnvironment
-} from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('Download', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment: ActorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const filesEnvironment = new FilesEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-    await setAccessAndRefreshToken(usersEnvironment)
+  test.beforeEach(async ({ world }) => {
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
   })
 
-  test('download resources', async () => {
+  test('download resources', async ({ world }) => {
     // Given "Alice" logs in
     // Given "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
 
     // And "Alice" creates the following folders in personal space using API
     //   | name         |
     //   | folderPublic |
     //   | emptyFolder  |
     await api.userHasCreatedFolders({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderNames: ['folderPublic', 'emptyFolder']
     })
@@ -55,7 +31,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | pathToFile                | content     |
     //   | folderPublic/new file.txt | lorem ipsum |
     await api.userHasCreatedFiles({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       files: [{ pathToFile: 'folderPublic/new file.txt', content: 'lorem ipsum' }]
     })
@@ -64,8 +40,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | localFile                     | to             |
     //   | filesForUpload/testavatar.jpg | testavatar.jpg |
     await api.userHasUploadedFilesInPersonalSpace({
-      usersEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       filesToUpload: [{ localFile: 'filesForUpload/testavatar.jpg', to: 'testavatar.jpg' }]
     })
@@ -76,7 +51,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | emptyFolder    | Brian     | user | Can edit with versions and trashbin | folder       |
     //   | testavatar.jpg | Brian     | user | Can edit with versions and trashbin | file         |
     await api.userHasSharedResources({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -114,7 +89,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       { resource: 'testavatar.jpg', type: 'file' }
     ]
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resourceToDownload: resourceToDownloadInBatch,
       actionType: 'BATCH_ACTION'
@@ -124,7 +99,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | resource       |
     //   | testavatar.jpg |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'testavatar.jpg',
       application: 'mediaviewer'
@@ -135,27 +110,27 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | testavatar.jpg | file |
     const downloadImage = [{ resource: 'testavatar.jpg', type: 'file' }]
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resourceToDownload: downloadImage,
       actionType: 'PREVIEW_TOPBAR'
     })
 
     // And "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
 
     // When "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     // And "Brian" downloads the following resources using the batch action
     //   | resource       | type   |
     //   | folderPublic   | folder |
     //   | emptyFolder    | folder |
     //   | testavatar.jpg | file   |
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resourceToDownload: resourceToDownloadInBatch,
       actionType: 'BATCH_ACTION'
@@ -174,7 +149,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       { resource: 'emptyFolder', type: 'folder' }
     ]
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resourceToDownload: resourceToDownloadSidebar,
       actionType: 'SIDEBAR_PANEL'
@@ -184,7 +159,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | resource       |
     //   | testavatar.jpg |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
       application: 'mediaviewer'
@@ -194,13 +169,13 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | resource       | type |
     //   | testavatar.jpg | file |
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resourceToDownload: downloadImage,
       actionType: 'PREVIEW_TOPBAR'
     })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
   })
 })

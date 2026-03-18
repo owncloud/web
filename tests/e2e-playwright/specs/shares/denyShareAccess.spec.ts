@@ -1,41 +1,20 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('deny share access', () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-
+  test.beforeEach(async ({ world }) => {
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
 
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
 
     await api.userHasCreatedFolders({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderNames: [
         'folder_to_shared',
@@ -44,11 +23,10 @@ test.describe('deny share access', () => {
       ]
     })
 
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
 
     await ui.userSharesResources({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
       shares: [
@@ -63,14 +41,13 @@ test.describe('deny share access', () => {
     })
 
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folder_to_shared'
     })
 
     await ui.userSharesResources({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
       shares: [
@@ -85,36 +62,36 @@ test.describe('deny share access', () => {
     })
   })
 
-  test('deny and grant access', async () => {
+  test('deny and grant access', async ({ world }) => {
     // deny access
     await ui.userOpensApplication({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       name: 'files'
     })
 
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
     })
 
     await ui.userShouldNotSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['folder_to_deny']
     })
 
     await ui.userOpensApplication({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       name: 'files'
     })
 
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folder_to_shared'
     })
@@ -122,27 +99,26 @@ test.describe('deny share access', () => {
     // allow access - deleting "Cannot access" share
 
     await ui.userRemovesSharee({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folder_to_deny',
       recipient: 'Brian'
     })
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Brian', name: 'files' })
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userOpensApplication({ world, stepUser: 'Brian', name: 'files' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
     })
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['folder_to_deny']
     })
 
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

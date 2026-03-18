@@ -1,72 +1,46 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  FilesEnvironment
-} from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('internal link share', () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const filesEnvironment = new FilesEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-
+  test.beforeEach(async ({ world }) => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.usersHaveBeenCreated({ usersEnvironment, stepUser: 'Admin', users: ['Alice'] })
+    await api.usersHaveBeenCreated({ world, stepUser: 'Admin', users: ['Alice'] })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // And "Alice" opens the "files" app
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
   })
 
-  test('Upload files in personal space', { tag: '@predefined-users' }, async () => {
+  test('Upload files in personal space', { tag: '@predefined-users' }, async ({ world }) => {
     // Given "Alice" creates the following resources
     //   | resource          | type    | content             |
     //   | new-lorem-big.txt | txtFile | new lorem big file  |
     //   | lorem.txt         | txtFile | lorem file          |
     //   | textfile.txt      | txtFile | some random content |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'new-lorem-big.txt', type: 'txtFile', content: 'new lorem big file' }]
     })
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', type: 'txtFile', content: 'lorem file' }]
     })
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'textfile.txt', type: 'txtFile', content: 'some random content' }]
     })
     //   # Coverage for bug: https://github.com/owncloud/ocis/issues/8361
     //   | comma,.txt        | txtFile | comma               |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'comma,.txt', type: 'txtFile', content: 'comma' }]
     })
@@ -74,12 +48,12 @@ test.describe('internal link share', () => {
     //   | test#file.txt     | txtFile | some content        |
     //   | test#folder       | folder  |                     |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'test#file.txt', type: 'txtFile', content: 'some content' }]
     })
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'test#folder', type: 'folder' }]
     })
@@ -89,20 +63,17 @@ test.describe('internal link share', () => {
     //   | lorem.txt         | skip      |
     //   | textfile.txt      | keep both |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'new-lorem-big.txt', option: 'replace' }]
     })
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', option: 'skip' }]
     })
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'textfile.txt', option: 'keep both' }]
     })
@@ -111,12 +82,12 @@ test.describe('internal link share', () => {
     //   | PARENT/parent.txt  | txtFile | some text    |
     //   | PARENT/example.txt | txtFile | example text |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'PARENT/parent.txt', type: 'txtFile', content: 'some text' }]
     })
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'PARENT/example.txt', type: 'txtFile', content: 'example text' }]
     })
@@ -125,14 +96,12 @@ test.describe('internal link share', () => {
     //   | simple.pdf     |
     //   | testavatar.jpg |
     await ui.userUploadsResourceViaDragNDrop({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'simple.pdf'
     })
     await ui.userUploadsResourceViaDragNDrop({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'testavatar.jpg'
     })
@@ -145,7 +114,7 @@ test.describe('internal link share', () => {
     //   | test#file.txt | file   |
     //   | test#folder   | folder |
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resourceToDownload: [
         { resource: 'PARENT', type: 'folder' },
@@ -156,39 +125,37 @@ test.describe('internal link share', () => {
       actionType: 'SIDEBAR_PANEL'
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
-  test('upload multiple small files', { tag: '@predefined-users' }, async () => {
+  test('upload multiple small files', { tag: '@predefined-users' }, async ({ world }) => {
     // When "Alice" uploads 50 small files in personal space
     await ui.userUploadsMultipleFilesInPersonalSpace({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       numberOfFiles: 50
     })
     // Then "Alice" should see 50 resources in the personal space files view
     await ui.userShouldSeeNumberOfResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       expectedNumberOfResources: 50
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
-  test('upload folder', async () => {
+  test('upload folder', async ({ world }) => {
     // When "Alice" uploads the following resources
     //   | resource | type   |
     //   | PARENT   | folder |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'PARENT', type: 'folder' }]
     })
     // check that folder content exist
     // And "Alice" opens folder "PARENT"
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'PARENT'
     })
@@ -196,26 +163,25 @@ test.describe('internal link share', () => {
     //   | resource   |
     //   | simple.pdf |
     await ui.userOpensResourceInViewer({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'simple.pdf',
       application: 'pdfviewer'
     })
     // Then "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
     // upload a folder via drag-n-drop
     // When "Alice" uploads the following resources via drag-n-drop
     //   | resource          |
     //   | Folder,With,Comma |
     await ui.userUploadsResourceViaDragNDrop({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'Folder,With,Comma'
     })
     // And "Alice" opens folder "Folder,With,Comma"
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'Folder,With,Comma'
     })
@@ -223,54 +189,52 @@ test.describe('internal link share', () => {
     //   | resource          |
     //   | sunday,monday.txt |
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Alice',
       resources: ['sunday,monday.txt']
     })
     // And "Alice" opens the "files" app
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
     // upload empty folder
     // When "Alice" uploads the following resources
     //   | resource | type   |
     //   | FOLDER   | folder |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'FOLDER', type: 'folder' }]
     })
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Alice',
       resources: ['FOLDER']
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
-  test('Upload large file when insufficient quota', async () => {
+  test('Upload large file when insufficient quota', async ({ world }) => {
     // Given "Admin" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsIn({ world, stepUser: 'Admin' })
     // And "Admin" opens the "admin-settings" app
-    await ui.userOpensApplication({ actorsEnvironment, stepUser: 'Admin', name: 'admin-settings' })
+    await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
     // And "Admin" navigates to the users management page
-    await ui.userNavigatesToUserManagementPage({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userNavigatesToUserManagementPage({ world, stepUser: 'Admin' })
     // And "Admin" changes the quota of the user "Alice" to "0.00001" using the sidebar panel
     await ui.userChangesUserQuota({
-      actorsEnvironment,
+      world,
       stepUser: 'Admin',
       key: 'Alice',
       value: '0.00001'
     })
     // And "Admin" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Admin' })
+    await ui.userLogsOut({ world, stepUser: 'Admin' })
     // And "Alice" uploads the following resource
     //   | resource        |
     //   | simple.pdf      |
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [{ name: 'simple.pdf', to: '' }]
     })
@@ -278,14 +242,13 @@ test.describe('internal link share', () => {
     //   | resource      | error              |
     //   | lorem-big.txt | Insufficient quota |
     await ui.userTriesToUploadResource({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'lorem-big.txt',
       error: 'Insufficient quota',
       to: ''
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

@@ -1,37 +1,15 @@
 import { test } from '../../support/test'
-import { config } from './../../../e2e/config.js'
-import { ActorsEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 
 test.describe('deny space access', () => {
-  let actorsEnvironment: ActorsEnvironment
-
-  test.beforeEach(async ({ browser, usersEnvironment }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
-  test('deny and grant access', async ({ usersEnvironment, spacesEnvironment }) => {
+  test('deny and grant access', async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
@@ -40,21 +18,20 @@ test.describe('deny space access', () => {
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       targetUserId: 'Alice',
       role: 'Space Admin'
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // And "Alice" creates the following project space using API
     //   | name  | id    |
     //   | sales | sales |
     await api.userHasCreatedProjectSpace({
-      usersEnvironment,
-      spacesEnvironment,
+      world,
       stepUser: 'Alice',
       name: 'sales',
       id: 'sales'
@@ -65,7 +42,7 @@ test.describe('deny space access', () => {
     //   | f1   |
     //   | f2   |
     await api.userHasCreatedFoldersInSpace({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       spaceName: 'sales',
       folders: ['f1', 'f2']
@@ -75,7 +52,7 @@ test.describe('deny space access', () => {
     //   | user  | role     | shareType |
     //   | Brian | Can edit | user      |
     await api.userHasAddedMembersToSpace({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       space: 'sales',
       shareType: 'user',
@@ -84,14 +61,13 @@ test.describe('deny space access', () => {
     })
 
     // When "Alice" navigates to the project space "sales"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Alice', space: 'sales' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'sales' })
 
     // When "Alice" shares the following resource using the sidebar panel
     //   | resource | recipient | type | role          | resourceType |
     //   | f1       | Brian     | user | Cannot access | folder       |
     await ui.userSharesResources({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
       shares: [
@@ -106,16 +82,16 @@ test.describe('deny space access', () => {
     })
 
     // And "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "sales"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'sales' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Brian', space: 'sales' })
 
     // Then following resources should not be displayed in the files list for user "Brian"
     //   | resource |
     //   | f1       |
     await ui.userShouldNotSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['f1']
@@ -125,7 +101,7 @@ test.describe('deny space access', () => {
     //   | resource |
     //   | f2       |
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['f2']
@@ -135,30 +111,29 @@ test.describe('deny space access', () => {
     //   | resource | recipient |
     //   | f1       | Brian     |
     await ui.userRemovesSharee({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'f1',
       recipient: 'Brian'
     })
 
     // And "Brian" navigates to the project space "sales"
-    await ui.userNavigatesToSpace({ actorsEnvironment, stepUser: 'Brian', space: 'sales' })
+    await ui.userNavigatesToSpace({ world, stepUser: 'Brian', space: 'sales' })
 
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource |
     //   | f1       |
     //   | f2       |
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['f1', 'f2']
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
   })
 })

@@ -1,50 +1,22 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  LinksEnvironment,
-  FilesEnvironment
-} from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('internal link share', () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const linksEnvironment = new LinksEnvironment()
-  const filesEnvironment = new FilesEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-
+  test.beforeEach(async ({ world }) => {
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian']
     })
 
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
 
-    await api.userHasCreatedFolder({ usersEnvironment, stepUser: 'Alice', folderName: 'myfolder' })
+    await api.userHasCreatedFolder({ world, stepUser: 'Alice', folderName: 'myfolder' })
 
     await api.userHasSharedResources({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -58,30 +30,27 @@ test.describe('internal link share', () => {
     })
 
     await api.userHasCreatedPublicLinkOfResource({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'myfolder',
       role: 'Invited people'
     })
   })
 
-  test('opening a link with internal role', async () => {
+  test('opening a link with internal role', async ({ world }) => {
     await ui.userOpensPublicLink({
-      actorsEnvironment,
-      linksEnvironment,
+      world,
       stepUser: 'Brian',
       name: 'Unnamed link'
     })
-    await ui.userNavigatesToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     await ui.userUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Brian',
       resources: [{ name: 'simple.pdf', to: 'myfolder' }]
     })
     await ui.userUpdatesShareeRole({
-      usersEnvironment,
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'myfolder',
       recipient: 'Brian',
@@ -89,13 +58,13 @@ test.describe('internal link share', () => {
       role: 'Can view',
       resourceType: 'folder'
     })
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
 
     await ui.userShouldNotBeAbleToEditResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resource: 'myfolder'
     })
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
   })
 })

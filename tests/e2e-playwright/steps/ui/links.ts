@@ -1,34 +1,34 @@
 import { objects } from '../../../e2e/support'
 import { expect } from '@playwright/test'
-import { ActorsEnvironment } from '../../../e2e/support/environment'
+import { World } from '../../support/world'
 
 export async function userRenamesMostRecentlyCreatedPublicLinkOfResource({
-  actorsEnvironment,
+  world,
   stepUser,
   resource,
   newName
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
   newName: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   const linkName = await linkObject.changeName({ resource, newName })
   expect(linkName).toBe(newName)
 }
 
 export async function userCopiesTheLinkOfPasswordProtectedFolder({
-  actorsEnvironment,
+  world,
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.copyLinkToClipboard({
     resource: resource,
@@ -37,66 +37,66 @@ export async function userCopiesTheLinkOfPasswordProtectedFolder({
 }
 
 export async function userClosesThePasswordProtectedFolderModal({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.closeFolderModal()
 }
 
 export async function userChangesRoleOfThePublicLinkOfResource({
-  actorsEnvironment,
+  world,
   stepUser,
   resource,
   linkName,
   newRole
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
   linkName: string
   newRole: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   const roleText = await linkObject.changeRole({ linkName, resource, role: newRole })
   expect(roleText.toLowerCase()).toBe(newRole.toLowerCase())
 }
 
 export async function userSetsExpirationDateOfThePublicLinkOfResource({
-  actorsEnvironment,
+  world,
   stepUser,
   resource,
   linkName,
   expireDate
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
   linkName: string
   expireDate: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.addExpiration({ resource, linkName, expireDate })
 }
 
 export async function userRemovesThePublicLinkOfResource({
-  actorsEnvironment,
+  world,
   stepUser,
   resource,
   linkName
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   resource: string
   linkName: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.delete({ resourceName: resource, name: linkName })
 }

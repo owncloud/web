@@ -1,86 +1,86 @@
 import { objects } from '../../../e2e/support'
-import { ActorsEnvironment } from '../../../e2e/support/environment'
 import { substitute } from '../../../e2e/support/utils'
+import { World } from '../../support/world'
 
 export async function userShouldSeeMessageOnSearchResult({
-  actorsEnvironment,
+  world,
   stepUser,
   message
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   message: string
 }): Promise<boolean> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const searchObject = new objects.applicationFiles.Search({ page })
   const actualMessage = await searchObject.getSearchResultMessage()
   return actualMessage === substitute(message)
 }
 
 export async function userFiltersSearchResultWithTag({
-  actorsEnvironment,
+  world,
   stepUser,
   tag
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   tag: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const searchObject = new objects.applicationFiles.Search({ page })
   await searchObject.selectTagFilter({ tag })
 }
 
 export async function userClearsFilter({
-  actorsEnvironment,
+  world,
   stepUser,
   filter
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   filter: 'mediaType' | 'tags' | 'lastModified' | 'fullText'
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const searchObject = new objects.applicationFiles.Search({ page })
   await searchObject.clearFilter({ filter })
 }
 
 export async function userEnablesTitleOnlySearch({
-  actorsEnvironment,
+  world,
   stepUser
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const searchObject = new objects.applicationFiles.Search({ page })
   await searchObject.toggleSearchTitleOnly({ enableOrDisable: 'enable' })
 }
 
 export async function userFiltersSearchByMediaType({
-  actorsEnvironment,
+  world,
   stepUser,
   mediaType
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   mediaType: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const searchObject = new objects.applicationFiles.Search({ page })
   await searchObject.selectMediaTypeFilter({ mediaType })
 }
 
 export async function userFiltersSearchByLastModifiedDate({
-  actorsEnvironment,
+  world,
   stepUser,
   lastModified
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   lastModified: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const searchObject = new objects.applicationFiles.Search({ page })
   await searchObject.selectlastModifiedFilter({ lastModified })
 }

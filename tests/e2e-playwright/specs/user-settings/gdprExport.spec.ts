@@ -1,44 +1,25 @@
 import { test } from '../../support/test'
-import { config } from './../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('GDPR export', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment: ActorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-    await setAccessAndRefreshToken(usersEnvironment)
+  test.beforeEach(async ({ world }) => {
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
   })
 
-  test('create and download a GDPR export', async () => {
+  test('create and download a GDPR export', async ({ world }) => {
     // And "Alice" opens the user menu
-    await ui.userOpensAccountPage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userOpensAccountPage({ world, stepUser: 'Alice' })
     // And "Alice" requests a new GDPR export
-    await ui.userRequestsGdprExport({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userRequestsGdprExport({ world, stepUser: 'Alice' })
     // And "Alice" downloads the GDPR export
-    await ui.userDownloadsGdprExport({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userDownloadsGdprExport({ world, stepUser: 'Alice' })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

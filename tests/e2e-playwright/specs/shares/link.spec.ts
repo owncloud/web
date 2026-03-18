@@ -1,53 +1,25 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  FilesEnvironment,
-  LinksEnvironment
-} from '../../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('link', () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const filesEnvironment = new FilesEnvironment()
-  const linksEnvironment = new LinksEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-
+  test.beforeEach(async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Alice']
     })
   })
 
-  test('public link', { tag: '@predefined-users' }, async () => {
+  test('public link', { tag: '@predefined-users' }, async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Brian |
     await api.usersHaveBeenCreated({
-      usersEnvironment,
+      world,
       stepUser: 'Admin',
       users: ['Brian']
     })
@@ -57,7 +29,7 @@ test.describe('link', () => {
     //   | folderPublic           |
     //   | folderPublic/SubFolder |
     await api.userHasCreatedFolders({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       folderNames: ['folderPublic', 'folderPublic/SubFolder']
     })
@@ -65,18 +37,18 @@ test.describe('link', () => {
     //   | pathToFile             | content     |
     //   | folderPublic/lorem.txt | lorem ipsum |
     await api.userHasCreatedFiles({
-      usersEnvironment,
+      world,
       stepUser: 'Alice',
       files: [{ pathToFile: 'folderPublic/lorem.txt', content: 'lorem ipsum' }]
     })
 
     // When "Alice" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource     | role             | password |
     //   | folderPublic | Secret File Drop | %public% |
     await ui.userCreatesPublicLink({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folderPublic',
       role: 'Secret File Drop',
@@ -84,14 +56,14 @@ test.describe('link', () => {
     })
     // And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
     await ui.userRenamesMostRecentlyCreatedPublicLinkOfResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folderPublic',
       newName: 'myPublicLink'
     })
     // And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Secret File Drop"
     await ui.userChangesRoleOfThePublicLinkOfResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folderPublic',
       linkName: 'myPublicLink',
@@ -99,7 +71,7 @@ test.describe('link', () => {
     })
     // And "Alice" sets the expiration date of the public link named "myPublicLink" of resource "folderPublic" to "+5 days"
     await ui.userSetsExpirationDateOfThePublicLinkOfResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folderPublic',
       linkName: 'myPublicLink',
@@ -107,14 +79,13 @@ test.describe('link', () => {
     })
     // When "Anonymous" opens the public link "myPublicLink"
     await ui.userOpensPublicLink({
-      actorsEnvironment,
-      linksEnvironment,
+      world,
       stepUser: 'Anonymous',
       name: 'myPublicLink'
     })
     // And "Anonymous" unlocks the public link with password "%public%"
     await ui.userUnlocksPublicLink({
-      actorsEnvironment,
+      world,
       password: '%public%',
       stepUser: 'Anonymous'
     })
@@ -122,25 +93,23 @@ test.describe('link', () => {
     //   | resource     |
     //   | textfile.txt |
     await ui.userDropUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Anonymous',
       resources: ['textfile.txt']
     })
 
     // authenticated user
     // When "Brian" logs in
-    await ui.userLogsIn({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
     // And "Brian" opens the public link "myPublicLink"
     await ui.userOpensPublicLink({
-      actorsEnvironment,
-      linksEnvironment,
+      world,
       stepUser: 'Brian',
       name: 'myPublicLink'
     })
     // And "Brian" unlocks the public link with password "%public%"
     await ui.userUnlocksPublicLink({
-      actorsEnvironment,
+      world,
       password: '%public%',
       stepUser: 'Brian'
     })
@@ -148,15 +117,14 @@ test.describe('link', () => {
     //   | resource   |
     //   | simple.pdf |
     await ui.userDropUploadsResources({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Brian',
       resources: ['simple.pdf']
     })
 
     //   When "Alice" opens folder "folderPublic"
     await ui.userOpensResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folderPublic'
     })
@@ -165,27 +133,27 @@ test.describe('link', () => {
     //   | textfile.txt |
     //   | simple.pdf   |
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Alice',
       resources: ['textfile.txt', 'simple.pdf']
     })
     // And "Alice" opens the "files" app
     await ui.userOpensApplication({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       name: 'files'
     })
     // And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Can edit"
     await ui.userChangesRoleOfThePublicLinkOfResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folderPublic',
       linkName: 'myPublicLink',
       newRole: 'Can edit'
     })
     // And "Brian" refreshes the old link
-    await ui.userRefreshesTheOldLink({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userRefreshesTheOldLink({ world, stepUser: 'Brian' })
 
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource     |
@@ -194,7 +162,7 @@ test.describe('link', () => {
     //   | SubFolder    |
     //   | lorem.txt    |
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['textfile.txt', 'simple.pdf', 'SubFolder', 'lorem.txt']
@@ -203,22 +171,22 @@ test.describe('link', () => {
     //   | resource   |
     //   | simple.pdf |
     await ui.userDeletesResourcesFromPublicLink({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       actionType: 'SIDEBAR_PANEL',
       resources: [{ resource: 'simple.pdf' }]
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
 
     // And "Anonymous" refreshes the old link
-    await ui.userRefreshesTheOldLink({ actorsEnvironment, stepUser: 'Anonymous' })
+    await ui.userRefreshesTheOldLink({ world, stepUser: 'Anonymous' })
     // And "Anonymous" downloads the following public link resources using the sidebar panel
     //   | resource     | type |
     //   | lorem.txt    | file |
     //   | textfile.txt | file |
     await ui.userDownloadsThePublicLinkResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       actionType: 'SIDEBAR_PANEL',
       resources: [
@@ -231,8 +199,7 @@ test.describe('link', () => {
     //   | new-lorem.txt |         |
     //   | lorem.txt     | replace |
     await ui.userUploadsResourcesInPublicLink({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Anonymous',
       resources: [{ name: 'new-lorem.txt' }, { name: 'lorem.txt', option: 'replace' }]
     })
@@ -240,7 +207,7 @@ test.describe('link', () => {
     //   | resource       | type   |
     //   | myfolder/child | folder |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       resources: [{ name: 'myfolder/child', type: 'folder' }]
     })
@@ -249,14 +216,13 @@ test.describe('link', () => {
     //   | resource | type   |
     //   | PARENT   | folder |
     await ui.userUploadsResourcesInPublicLink({
-      actorsEnvironment,
-      filesEnvironment,
+      world,
       stepUser: 'Anonymous',
       resources: [{ name: 'PARENT', type: 'folder' }]
     })
     // And "Anonymous" should see the resource "PARENT" in the files list
     await ui.userShouldSeeTheResources({
-      actorsEnvironment,
+      world,
       listType: 'files list',
       stepUser: 'Anonymous',
       resources: ['PARENT']
@@ -265,7 +231,7 @@ test.describe('link', () => {
     //   | resource      | to        |
     //   | new-lorem.txt | SubFolder |
     await ui.userMovesResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       actionType: 'drag-drop',
       resources: [{ resource: 'new-lorem.txt', to: 'SubFolder' }]
@@ -274,7 +240,7 @@ test.describe('link', () => {
     //   | resource  | to       |
     //   | lorem.txt | myfolder |
     await ui.userCopiesResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       actionType: 'sidebar-panel',
       resources: [{ resource: 'lorem.txt', to: 'myfolder' }]
@@ -284,7 +250,7 @@ test.describe('link', () => {
     //   | lorem.txt    | lorem_new.txt    |
     //   | textfile.txt | textfile_new.txt |
     await ui.userRenamesPublicLinkResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       resources: [
         { resource: 'lorem.txt', newName: 'lorem_new.txt' },
@@ -296,7 +262,7 @@ test.describe('link', () => {
     //   | lorem.txt | myfolder |
     //   | child     | myfolder |
     await ui.userDeletesResourcesFromPublicLink({
-      actorsEnvironment,
+      world,
       stepUser: 'Anonymous',
       actionType: 'BATCH_ACTION',
       resources: [
@@ -306,19 +272,18 @@ test.describe('link', () => {
     })
     // And "Alice" removes the public link named "myPublicLink" of resource "folderPublic"
     await ui.userRemovesThePublicLinkOfResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resource: 'folderPublic',
       linkName: 'myPublicLink'
     })
     // And "Anonymous" should not be able to open the old link "myPublicLink"
     await ui.userShouldNotBeAbleToOpenTheOldLink({
-      actorsEnvironment,
-      linksEnvironment,
+      world,
       stepUser: 'Anonymous',
       linkName: 'myPublicLink'
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })
