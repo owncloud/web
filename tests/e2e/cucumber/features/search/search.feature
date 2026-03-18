@@ -168,8 +168,8 @@ Feature: Search
       | mediaTest.mp3 | I'm a Audio    |
       | mediaTest.zip | I'm a Archive  |
     And "Alice" searches "mediaTest" using the global search and the "all files" filter and presses enter
-    And "Alice" enables the option to search title only
     And "Alice" selects mediaType "Document" from the search result filter chip
+    And "Alice" enables the option to search title only
     Then following resources should be displayed in the files list for user "Alice"
       | resource      |
       | mediaTest.txt |
