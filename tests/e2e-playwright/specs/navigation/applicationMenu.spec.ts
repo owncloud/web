@@ -22,7 +22,7 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
     })
     await ui.userSavesTextEditor({ world, stepUser: 'Alice' })
     await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',

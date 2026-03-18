@@ -105,7 +105,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource |
     //   | folder   |
     //   | FolDer   |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'search list',
       stepUser: 'Alice',
@@ -135,7 +135,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource         |
     //   | .hidden-file.txt |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'search list',
       stepUser: 'Alice',
@@ -166,7 +166,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource  |
     //   | child-one |
     //   | child-two |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'search list',
       stepUser: 'Alice',
@@ -198,7 +198,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource             |
     //   | new_share_from_brian |
     //   | new-lorem-big.txt    |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'search list',
       stepUser: 'Alice',
@@ -246,7 +246,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource      |
     //   | renamedFolder |
     //   | renamedFolDer |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'search list',
       stepUser: 'Alice',
@@ -276,7 +276,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     await ui.userEnablesTitleOnlySearch({ world, stepUser: 'Alice' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | strängéनेपालीName |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -347,7 +347,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       ]
     })
     // When "Alice" opens folder "mainFolder"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'mainFolder'
@@ -364,7 +364,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | exampleInsideThePersonalSpace.txt |
     //   | exampleInsideTheMainFolder.txt    |
     //   | exampleInsideTheSubFolder.txt     |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'search list',
       stepUser: 'Alice',
@@ -386,7 +386,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource                       |
     //   | exampleInsideTheMainFolder.txt |
     //   | exampleInsideTheSubFolder.txt  |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'search list',
       stepUser: 'Alice',
@@ -459,7 +459,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest.txt |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -476,7 +476,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest.pdf |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -493,7 +493,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest.mp3 |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -510,7 +510,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest.zip |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -536,7 +536,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource      |
     //   | mediaTest     |
     //   | mediaTest.jpg |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -592,7 +592,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       ]
     })
     // When "Alice" opens folder "mainFolder"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'mainFolder'
@@ -618,7 +618,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mainFolder/mediaTest.pdf |
     //   | mainFolder/mediaTest.txt |
     //   | mainFolder/mediaTest.md  |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -634,7 +634,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource                 |
     //   | mainFolder/mediaTest.txt |
     //   | mainFolder/mediaTest.md  |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -658,7 +658,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource                |
     //   | mainFolder/mediaTest.md |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',

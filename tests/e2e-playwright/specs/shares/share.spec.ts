@@ -78,7 +78,7 @@ test.describe('share', () => {
     // And "Brian" navigates to the shared with me page
     await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     // And "Brian" opens folder "folder_to_shared"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
@@ -87,7 +87,7 @@ test.describe('share', () => {
     //   | resource  |
     //   | lorem.txt |
     // user should have access to unsynced shares
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',

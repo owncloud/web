@@ -64,7 +64,7 @@ test.describe('details', () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource     |
     //   | space-folder |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',

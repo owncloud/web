@@ -68,7 +68,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     // And "Brian" navigates to the shared with me page
     await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
     // And "Brian" opens folder "folder"
-    await ui.userOpensResources({ world, stepUser: 'Brian', resource: 'folder' })
+    await ui.userOpensResource({ world, stepUser: 'Brian', resource: 'folder' })
 
     // rename in the shares with me page
     // When "Brian" renames the following resource
@@ -112,7 +112,7 @@ test.describe('rename', { tag: '@predefined-users' }, () => {
     // And "Alice" navigates to the shared with others page
     await ui.userNavigatesToSharedWithOthersPage({ world, stepUser: 'Alice' })
     // And "Alice" opens folder "folder"
-    await ui.userOpensResources({ world, stepUser: 'Alice', resource: 'folder' })
+    await ui.userOpensResource({ world, stepUser: 'Alice', resource: 'folder' })
     // When "Alice" renames the following resource
     //   | resource               | as             |
     //   | renamedByAnonymous.txt | renamedByAlice |

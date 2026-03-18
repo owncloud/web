@@ -154,7 +154,7 @@ test.describe('internal link share', () => {
     })
     // check that folder content exist
     // And "Alice" opens folder "PARENT"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'PARENT'
@@ -180,7 +180,7 @@ test.describe('internal link share', () => {
       resource: 'Folder,With,Comma'
     })
     // And "Alice" opens folder "Folder,With,Comma"
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'Folder,With,Comma'
@@ -188,7 +188,7 @@ test.describe('internal link share', () => {
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource          |
     //   | sunday,monday.txt |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',
@@ -205,7 +205,7 @@ test.describe('internal link share', () => {
       stepUser: 'Alice',
       resources: [{ name: 'FOLDER', type: 'folder' }]
     })
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',

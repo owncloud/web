@@ -61,7 +61,7 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     // Then following resources should be displayed in the files list for user "Alice"
     // | resource      |
     // | largefile.txt |
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Alice',

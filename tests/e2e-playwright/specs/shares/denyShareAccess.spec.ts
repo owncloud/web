@@ -40,7 +40,7 @@ test.describe('deny share access', () => {
       ]
     })
 
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'folder_to_shared'
@@ -71,7 +71,7 @@ test.describe('deny share access', () => {
     })
 
     await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
@@ -90,7 +90,7 @@ test.describe('deny share access', () => {
       name: 'files'
     })
 
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Alice',
       resource: 'folder_to_shared'
@@ -106,12 +106,12 @@ test.describe('deny share access', () => {
     })
     await ui.userOpensApplication({ world, stepUser: 'Brian', name: 'files' })
     await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
-    await ui.userOpensResources({
+    await ui.userOpensResource({
       world,
       stepUser: 'Brian',
       resource: 'folder_to_shared'
     })
-    await ui.userShouldSeeTheResources({
+    await ui.userShouldSeeResources({
       world,
       listType: 'files list',
       stepUser: 'Brian',
