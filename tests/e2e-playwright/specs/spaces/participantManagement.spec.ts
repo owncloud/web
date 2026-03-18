@@ -228,36 +228,20 @@ test.describe('check files pagination in project space', () => {
     //   | resource            |
     //   | parent/lorem.txt    |
     //   | parent/textfile.txt |
-    await ui.userDeletesResourceFromTrashbin({
+    await ui.userShouldNotBeAbleToDeleteResourceFromTrashbin({
       world,
       stepUser: 'Carol',
-      resource: 'parent/textfile.txt',
-      actionType: 'should not'
+      resources: ['parent/textfile.txt', 'parent/lorem.txt']
     })
-    await ui.userDeletesResourceFromTrashbin({
-      world,
-      stepUser: 'Carol',
-      resource: 'parent/lorem.txt',
-      actionType: 'should not'
-    })
-
     // And "Carol" should not be able to restore following resources from the trashbin
     //   | resource            |
     //   | parent/lorem.txt    |
     //   | parent/textfile.txt |
-    await ui.userRestoresDeletedResourceFromTrashbin({
+    await ui.userShouldNotBeAbleToRestoreResourceFromTrashbin({
       world,
       stepUser: 'Carol',
-      resource: 'parent/lorem.txt',
-      actionType: 'should not'
+      resources: ['parent/lorem.txt', 'parent/textfile.txt']
     })
-    await ui.userRestoresDeletedResourceFromTrashbin({
-      world,
-      stepUser: 'Carol',
-      resource: 'parent/textfile.txt',
-      actionType: 'should not'
-    })
-
     // When "Brian" navigates to the trashbin of the project space "team.1"
     await ui.userNavigatesToTrashbinOfSpace({
       world,
@@ -268,21 +252,19 @@ test.describe('check files pagination in project space', () => {
     // Then "Brian" should be able to restore following resource from the trashbin
     //   | resource         |
     //   | parent/lorem.txt |
-    await ui.userRestoresDeletedResourceFromTrashbin({
+    await ui.userShouldBeAbleToRestoreResourceFromTrashbin({
       world,
       stepUser: 'Brian',
-      resource: 'parent/lorem.txt',
-      actionType: 'should'
+      resources: ['parent/lorem.txt']
     })
 
     // And "Brian" should not be able to delete following resource from the trashbin
     //   | resource            |
     //   | parent/textfile.txt |
-    await ui.userDeletesResourceFromTrashbin({
+    await ui.userShouldNotBeAbleToDeleteResourceFromTrashbin({
       world,
       stepUser: 'Brian',
-      resource: 'parent/textfile.txt',
-      actionType: 'should not'
+      resources: ['parent/textfile.txt']
     })
 
     // And "Alice" navigates to the project space "team.1"
@@ -305,7 +287,7 @@ test.describe('check files pagination in project space', () => {
       space: 'team.1'
     })
 
-    // And "Brian" logs out
+    // // And "Brian" logs out
     await ui.userLogsOut({ world, stepUser: 'Brian' })
 
     // When "Alice" changes the roles of the following users in the project space
@@ -328,11 +310,10 @@ test.describe('check files pagination in project space', () => {
     // Then "Carol" should be able to delete following resource from the trashbin
     //   | resource            |
     //   | parent/textfile.txt |
-    await ui.userDeletesResourceFromTrashbin({
+    await ui.userShouldBeAbleToDeleteResourceFromTrashbin({
       world,
       stepUser: 'Carol',
-      resource: 'parent/textfile.txt',
-      actionType: 'should'
+      resources: ['parent/textfile.txt']
     })
 
     // And "Carol" logs out
