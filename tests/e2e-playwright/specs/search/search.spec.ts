@@ -448,14 +448,14 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       filter: 'all files',
       command: 'presses enter'
     })
-    // And "Alice" enables the option to search title only
-    await ui.userEnablesTitleOnlySearch({ world, stepUser: 'Alice' })
     // And "Alice" selects mediaType "Document" from the search result filter chip
     await ui.userFiltersSearchByMediaType({
       world,
       stepUser: 'Alice',
       mediaType: 'Document'
     })
+    // And "Alice" enables the option to search title only
+    await ui.userEnablesTitleOnlySearch({ world, stepUser: 'Alice' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest.txt |
