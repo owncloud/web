@@ -31,13 +31,13 @@ When(
     const spaceId = spacesObject.getUUID({ key })
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ spaceIds: [spaceId], context: 'context-menu' })
+        await spacesObject.disable({ spaceIds: [spaceId], via: 'context-menu' })
         break
       case 'deletes':
-        await spacesObject.delete({ spaceIds: [spaceId], context: 'context-menu' })
+        await spacesObject.delete({ spaceIds: [spaceId], via: 'context-menu' })
         break
       case 'enables':
-        await spacesObject.enable({ spaceIds: [spaceId], context: 'context-menu' })
+        await spacesObject.enable({ spaceIds: [spaceId], via: 'context-menu' })
         break
       default:
         throw new Error(`${action} not implemented`)
@@ -65,7 +65,7 @@ When(
         await spacesObject.changeSubtitleUsingContextMenu({ key, value })
         break
       case 'quota':
-        await spacesObject.changeQuota({ spaceIds: [spaceId], value, context: 'context-menu' })
+        await spacesObject.changeQuota({ spaceIds: [spaceId], value, via: 'context-menu' })
         break
       default:
         throw new Error(`'${attribute}' not implemented`)
@@ -91,7 +91,7 @@ When(
     await spacesObject.changeQuota({
       spaceIds,
       value,
-      context: 'batch-actions'
+      via: 'batch-actions'
     })
   }
 )
@@ -113,13 +113,13 @@ When(
     }
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ spaceIds, context: 'batch-actions' })
+        await spacesObject.disable({ spaceIds, via: 'batch-actions' })
         break
       case 'deletes':
-        await spacesObject.delete({ spaceIds, context: 'batch-actions' })
+        await spacesObject.delete({ spaceIds, via: 'batch-actions' })
         break
       case 'enables':
-        await spacesObject.enable({ spaceIds, context: 'batch-actions' })
+        await spacesObject.enable({ spaceIds, via: 'batch-actions' })
         break
       default:
         throw new Error(`'${action}' not implemented`)

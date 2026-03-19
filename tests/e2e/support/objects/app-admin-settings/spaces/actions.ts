@@ -37,15 +37,15 @@ export const getDisplayedSpaces = async (page: Page): Promise<string[]> => {
   return spaces
 }
 
-const performActionUsingContextMenu = async (args: {
+const performSpaceAction = async (args: {
   page: Page
   action: string
-  context: string
+  via: 'context-menu' | 'batch-actions'
   id?: string
 }): Promise<void> => {
-  const { page, action, context, id } = args
+  const { page, action, via, id } = args
 
-  if (id && context === 'context-menu') {
+  if (id && via === 'context-menu') {
     await page.locator(util.format(contextMenuSelector, id)).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
@@ -54,41 +54,41 @@ const performActionUsingContextMenu = async (args: {
     )
   }
 
-  let contextMenuActionButtonSelector = `.${context} `
+  let actionButtonSelector = `.${via} `
   switch (action) {
     case 'rename':
-      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
+      actionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'edit-description':
-      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
+      actionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'edit-quota':
-      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
+      actionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'delete':
-      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
+      actionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'disable':
-      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
+      actionButtonSelector += util.format(contextMenuActionButton, action)
       break
     case 'restore':
-      contextMenuActionButtonSelector += util.format(contextMenuActionButton, action)
+      actionButtonSelector += util.format(contextMenuActionButton, action)
       break
     default:
       throw new Error(`${action} not implemented`)
   }
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'space page')
-  await page.locator(contextMenuActionButtonSelector).click()
+  await page.locator(actionButtonSelector).click()
 }
 
 export const changeSpaceQuota = async (args: {
   page: Page
   spaceIds: string[]
   value: string
-  context: string
+  via: 'context-menu' | 'batch-actions'
 }): Promise<void> => {
-  const { page, value, spaceIds, context } = args
-  await performActionUsingContextMenu({ page, action: 'edit-quota', context, id: spaceIds[0] })
+  const { page, value, spaceIds, via } = args
+  await performSpaceAction({ page, action: 'edit-quota', via, id: spaceIds[0] })
 
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
@@ -127,10 +127,10 @@ export const changeSpaceQuota = async (args: {
 export const disableSpace = async (args: {
   page: Page
   spaceIds: string[]
-  context: string
+  via: 'context-menu' | 'batch-actions'
 }): Promise<void> => {
-  const { page, spaceIds, context } = args
-  await performActionUsingContextMenu({ page, action: 'disable', context, id: spaceIds[0] })
+  const { page, spaceIds, via } = args
+  await performSpaceAction({ page, action: 'disable', via, id: spaceIds[0] })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
@@ -153,10 +153,10 @@ export const disableSpace = async (args: {
 export const enableSpace = async (args: {
   page: Page
   spaceIds: string[]
-  context: string
+  via: 'context-menu' | 'batch-actions'
 }): Promise<void> => {
-  const { page, spaceIds, context } = args
-  await performActionUsingContextMenu({ page, action: 'restore', context, id: spaceIds[0] })
+  const { page, spaceIds, via } = args
+  await performSpaceAction({ page, action: 'restore', via, id: spaceIds[0] })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
@@ -179,10 +179,10 @@ export const enableSpace = async (args: {
 export const deleteSpace = async (args: {
   page: Page
   spaceIds: string[]
-  context: string
+  via: 'context-menu' | 'batch-actions'
 }): Promise<void> => {
-  const { page, spaceIds, context } = args
-  await performActionUsingContextMenu({ page, action: 'delete', context, id: spaceIds[0] })
+  const { page, spaceIds, via } = args
+  await performSpaceAction({ page, action: 'delete', via, id: spaceIds[0] })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
@@ -223,7 +223,7 @@ export const renameSpaceUsingContextMenu = async (args: {
   value: string
 }): Promise<void> => {
   const { page, id, value } = args
-  await performActionUsingContextMenu({ page, action: 'rename', context: 'context-menu', id })
+  await performSpaceAction({ page, action: 'rename', via: 'context-menu', id })
   await page.locator(inputFieldSelector).fill(value)
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
@@ -250,10 +250,10 @@ export const changeSpaceSubtitleUsingContextMenu = async (args: {
   value: string
 }): Promise<void> => {
   const { page, id, value } = args
-  await performActionUsingContextMenu({
+  await performSpaceAction({
     page,
     action: 'edit-description',
-    context: 'context-menu',
+    via: 'context-menu',
     id
   })
   await page.locator(inputFieldSelector).fill(value)
