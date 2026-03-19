@@ -962,6 +962,8 @@ function fileClicked(data: [Resource, MouseEvent, boolean]) {
     return
   }
 
+  resourcesStore.setLastSelectedId(resource.id)
+
   return emitSelect([resource.id])
 }
 function formatDate(date: string) {
