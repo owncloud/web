@@ -235,6 +235,9 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
 
       const isInVault = window.location.pathname.startsWith('/vault')
 
+      configStore.setIsInVault(isInVault)
+      clientService.reinitializeGraphClient(isInVault)
+
       // Load spaces to make them available across the application
       try {
         await spacesStore.loadSpaces({ graphClient: clientService.graphAuthenticated, isInVault })
