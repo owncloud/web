@@ -218,6 +218,27 @@ config = {
                 "IDP_ACCESS_TOKEN_EXPIRATION": 30,
             },
         },
+        "keycloak": {
+            "earlyFail": True,
+            "skip": False,
+            "features": [
+                "specs/admin-settings/spaces.spec.ts",
+            ],
+            "extraServerEnvironment": {
+                "PROXY_AUTOPROVISION_ACCOUNTS": "true",
+                "PROXY_ROLE_ASSIGNMENT_DRIVER": "oidc",
+                "OCIS_OIDC_ISSUER": "https://keycloak:8443/realms/oCIS",
+                "PROXY_OIDC_REWRITE_WELLKNOWN": "true",
+                "WEB_OIDC_CLIENT_ID": "web",
+                "PROXY_USER_OIDC_CLAIM": "preferred_username",
+                "PROXY_USER_CS3_CLAIM": "username",
+                "OCIS_ADMIN_USER_ID": "",
+                "OCIS_EXCLUDE_RUN_SERVICES": "idp",
+                "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
+                "GRAPH_USERNAME_MATCH": "none",
+                "KEYCLOAK_DOMAIN": "keycloak:8443",
+            },
+        },
     },
     "build": True,
 }
