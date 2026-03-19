@@ -1,6 +1,7 @@
 import { objects } from '../../../e2e/support'
 import { expect } from '@playwright/test'
 import { World } from '../../support/world'
+import { substitute } from '../../../e2e/support/utils'
 
 export async function userRenamesMostRecentlyCreatedPublicLinkOfResource({
   world,
@@ -48,7 +49,7 @@ export async function userClosesThePasswordProtectedFolderModal({
   await linkObject.closeFolderModal()
 }
 
-export async function userChangesRoleOfThePublicLinkOfResource({
+export async function userChangesRoleOfPublicLinkOfResource({
   world,
   stepUser,
   resource,
@@ -99,4 +100,51 @@ export async function userRemovesThePublicLinkOfResource({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.delete({ resourceName: resource, name: linkName })
+}
+
+export async function userCreatesPublicLinkOfSpaceWithPassword({
+  world,
+  stepUser,
+  password
+}: {
+  world: World
+  stepUser: string
+  password: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const spaceObject = new objects.applicationFiles.Spaces({ page })
+  password = substitute(password)
+  await spaceObject.createPublicLink({ password })
+}
+
+export async function userRenamesTheMostRecentlyCreatedPublicLinkOfSpace({
+  world,
+  stepUser,
+  newName
+}: {
+  world: World
+  stepUser: string
+  newName: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  const linkName = await linkObject.changeName({ newName, space: true })
+  expect(linkName).toBe(newName)
+}
+
+export async function userEditsThePublicLinkOfSpaceChangingRole({
+  world,
+  stepUser,
+  linkName,
+  role
+}: {
+  world: World
+  stepUser: string
+  linkName: string
+  role: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  const newPermission = await linkObject.changeRole({ linkName, role, space: true })
+  expect(newPermission.toLowerCase()).toBe(role.toLowerCase())
 }

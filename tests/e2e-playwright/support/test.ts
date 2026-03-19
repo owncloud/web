@@ -22,6 +22,7 @@ export const test = base.extend<{
       await use()
 
       config.federatedServer = false
+      await world.actorsEnvironment.close()
       const adminUser = world.usersEnvironment.getUser({ key: config.adminUsername })
 
       if (!config.predefinedUsers && adminUser) {

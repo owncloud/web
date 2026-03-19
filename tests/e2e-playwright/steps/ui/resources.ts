@@ -722,7 +722,7 @@ export async function userNavigatesToFolderViaBreadcrumb({
   await resourceObject.openFolderViaBreadcrumb(resource)
 }
 
-export async function userEditsFile({
+export async function userEditsResources({
   world,
   stepUser,
   resources
@@ -1208,4 +1208,55 @@ export async function userRestoresResourcesFromTrashbin({
       expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
     }
   }
+}
+
+export async function userShouldNotBeAbleToEditContentOfResources({
+  world,
+  stepUser,
+  resources
+}: {
+  world: World
+  stepUser: string
+  resources: { name: string; type: string; content: string }[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  for (const resource of resources) {
+    const canEdit = await resourceObject.canEditDocumentContent({ type: resource.type })
+    expect(canEdit).toBe(false)
+  }
+}
+
+export async function userCreatesFileFromTemplateFile({
+  world,
+  stepUser,
+  file,
+  webOffice,
+  actionType
+}: {
+  world: World
+  stepUser: string
+  file: string
+  webOffice: string
+  actionType: 'sidebar panel' | 'context menu'
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.createFileFromTemplate(file, webOffice, actionType)
+}
+
+export async function userOpensTemplateFileUsingContextMenu({
+  world,
+  stepUser,
+  file,
+  webOffice
+}: {
+  world: World
+  stepUser: string
+  file: string
+  webOffice: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.openTemplateFile(file, webOffice)
 }
