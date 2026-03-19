@@ -479,7 +479,7 @@ export async function userChangesSpaceQuotaUsingBatchActions({
   })
 }
 
-export async function listMembersOfProjectSpaceUsingSidebarPanel({
+export async function userListsMembersOfProjectSpaceUsingSidebarPanel({
   world,
   stepUser,
   space
@@ -493,7 +493,7 @@ export async function listMembersOfProjectSpaceUsingSidebarPanel({
   await spacesObject.openPanel({ key: space })
   await spacesObject.openActionSideBarPanel({ action: 'SpaceMembers' })
 }
-export async function shouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
+export async function userShouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
   world,
   stepUser,
   expectedMembers

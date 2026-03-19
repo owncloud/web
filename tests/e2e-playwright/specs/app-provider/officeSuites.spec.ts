@@ -600,18 +600,16 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" creates the following project space using API
     //   | name      | id          |
     //   | Marketing | marketing.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       world,
       stepUser: 'Alice',
-      name: 'Marketing',
-      id: 'marketing.1'
+      spaces: [{ name: 'Marketing', id: 'marketing.1' }]
     })
 
     // And "Alice" creates the following folder in space "Marketing" using API
@@ -786,18 +784,16 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" creates the following project space using API
     //   | name      | id          |
     //   | Marketing | marketing.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       world,
       stepUser: 'Alice',
-      name: 'Marketing',
-      id: 'marketing.1'
+      spaces: [{ name: 'Marketing', id: 'marketing.1' }]
     })
 
     // And "Alice" creates the following folder in space "Marketing" using API

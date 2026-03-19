@@ -192,12 +192,12 @@ test.describe('spaces management', () => {
     await ui.userLogsIn({ world, stepUser: 'Alice' })
     await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'admin-settings' })
     await ui.userNavigatesToProjectSpaceManagementPage({ world, stepUser: 'Alice' })
-    await ui.listMembersOfProjectSpaceUsingSidebarPanel({
+    await ui.userListsMembersOfProjectSpaceUsingSidebarPanel({
       world,
       stepUser: 'Alice',
       space: 'team.a'
     })
-    await ui.shouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
+    await ui.userShouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
       world,
       stepUser: 'Alice',
       expectedMembers: [
