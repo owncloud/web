@@ -117,23 +117,6 @@ config = {
                 "WEB_UI_CONFIG_FILE": None,
             },
         },
-        "ocm": {
-            "earlyFail": True,
-            "skip": False,
-            "federationServer": True,
-            "suites": [
-                "ocm",
-            ],
-            "extraServerEnvironment": {
-                "OCIS_ADD_RUN_SERVICES": "ocm",
-                "OCIS_ENABLE_OCM": True,
-                "GRAPH_INCLUDE_OCM_SHAREES": True,
-                "OCM_OCM_INVITE_MANAGER_INSECURE": True,
-                "OCM_OCM_SHARE_PROVIDER_INSECURE": True,
-                "OCM_OCM_STORAGE_PROVIDER_INSECURE": True,
-                "OCM_OCM_PROVIDER_AUTHORIZER_PROVIDERS_FILE": "%s" % dir["ocmProviders"],
-            },
-        },
         "keycloak": {
             "earlyFail": True,
             "skip": False,
@@ -222,6 +205,23 @@ config = {
                 "COLLABORA_DOMAIN": "collabora:9980",
                 "ONLYOFFICE_DOMAIN": "onlyoffice:443",
                 "WEB_UI_CONFIG_FILE": None,
+            },
+        },
+        "ocm": {
+            "earlyFail": True,
+            "skip": False,
+            "federationServer": True,
+            "suites": [
+                "ocm",
+            ],
+            "extraServerEnvironment": {
+                "OCIS_ADD_RUN_SERVICES": "ocm",
+                "OCIS_ENABLE_OCM": True,
+                "GRAPH_INCLUDE_OCM_SHAREES": True,
+                "OCM_OCM_INVITE_MANAGER_INSECURE": True,
+                "OCM_OCM_SHARE_PROVIDER_INSECURE": True,
+                "OCM_OCM_STORAGE_PROVIDER_INSECURE": True,
+                "OCM_OCM_PROVIDER_AUTHORIZER_PROVIDERS_FILE": "%s" % dir["ocmProviders"],
             },
         },
         "oidc-refresh-token": {

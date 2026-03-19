@@ -86,3 +86,15 @@ export async function userOpensClipboardUrl({
   url = url === '%clipboard%' ? await page.evaluate('navigator.clipboard.readText()') : url
   await applicationObject.openUrl(url)
 }
+
+export async function userReloadsPage({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const applicationObject = new objects.runtime.Application({ page })
+  await applicationObject.reloadPage()
+}

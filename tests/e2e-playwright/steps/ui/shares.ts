@@ -376,3 +376,67 @@ export async function userEnablesSyncForAllShares({
   const shareObject = new objects.applicationFiles.Share({ page })
   await shareObject.syncAll()
 }
+
+export async function userChecksAccessDetailsOfShare({
+  world,
+  stepUser,
+  resource,
+  sharee,
+  accessDetails
+}: {
+  world: World
+  stepUser: string
+  resource: string
+  sharee: { name: string; type: 'user' | 'group' }
+  accessDetails: { Name: string; Type: string }
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+
+  let selectorType = sharee.name
+  // NOTE: external users have group type element selector
+  if (accessDetails.hasOwnProperty('Type') && accessDetails.Type === 'External') {
+    selectorType = 'group'
+  }
+  accessDetails.Name = substitute(accessDetails.Name)
+
+  const actualDetails = await shareObject.getAccessDetails({
+    resource,
+    collaborator: {
+      collaborator:
+        sharee.type === 'group'
+          ? world.usersEnvironment.getGroup({ key: sharee.name })
+          : world.usersEnvironment.getUser({ key: sharee.name }),
+      type: selectorType
+    } as ICollaborator
+  })
+
+  expect(actualDetails).toMatchObject(accessDetails)
+}
+
+export async function userShouldSeeAccessDetailsOfShareForFederatedUser({
+  world,
+  stepUser,
+  resource,
+  collaboratorName,
+  detail
+}: {
+  world: World
+  stepUser: string
+  resource: string
+  collaboratorName: string
+  detail: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+
+  const actualDetails = await shareObject.getAccessDetails({
+    resource,
+    collaborator: {
+      collaborator: world.usersEnvironment.getUser({ key: collaboratorName }),
+      type: 'group'
+    } as ICollaborator
+  })
+
+  expect(actualDetails).toHaveProperty(detail)
+}

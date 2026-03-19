@@ -2,6 +2,7 @@ import { expect, Page } from '@playwright/test'
 import util from 'util'
 import { federatedInvitationCode } from '../../store'
 import { config } from '../../../config'
+import { objects } from '../../../support'
 
 const generateInvitationButton =
   '//button[contains(@aria-label,"Generate invitation link that can be shared with one or more invitees")]'
@@ -15,6 +16,11 @@ const acceptInvitationButton = 'button:has(span:has-text("Accept invitation"))'
 export const generateInvitation = async (args: { page: Page; user: string }): Promise<void> => {
   const { page, user } = args
   await page.locator(generateInvitationButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModalGenerateNewToken'],
+    'Generate New Token modal'
+  )
   let inviteCode = ''
   await Promise.all([
     page.waitForResponse(async (resp) => {
@@ -31,6 +37,11 @@ export const generateInvitation = async (args: { page: Page; user: string }): Pr
     }),
     page.locator(generateInvitationActionConfirmButton).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['scienceMesh'],
+    'New invitation token'
+  )
 
   const serverHostname = new URL(config.baseUrl).host
 
@@ -44,6 +55,11 @@ export const acceptInvitation = async (args: { page: Page; sharer: string }): Pr
   const { page, sharer } = args
   const invitation = federatedInvitationCode.get(sharer.toLowerCase())
   await page.locator(invitationInput).fill(invitation.code)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['scienceMesh'],
+    'Enter invite token'
+  )
   await Promise.all([
     page.waitForResponse(
       (resp) =>
@@ -53,6 +69,11 @@ export const acceptInvitation = async (args: { page: Page; sharer: string }): Pr
     ),
     page.locator(acceptInvitationButton).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['scienceMesh'],
+    'Accept federated connection'
+  )
 }
 
 export const connectionExists = async (args: { page: Page; info }): Promise<boolean> => {
