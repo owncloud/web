@@ -58,6 +58,8 @@ export const useConfigStore = defineStore('config', () => {
 
   const maintenanceMode = ref(false)
 
+  const isInVault = ref(false)
+
   const serverUrl = computed(() =>
     urlJoin(unref(server) || window.location.origin, { trailingSlash: true })
   )
@@ -100,6 +102,10 @@ export const useConfigStore = defineStore('config', () => {
     maintenanceMode.value = value
   }
 
+  const setIsInVault = (value: boolean) => {
+    isInVault.value = value
+  }
+
   return {
     options,
     oAuth2,
@@ -115,6 +121,8 @@ export const useConfigStore = defineStore('config', () => {
     styles,
     serverUrl,
     maintenanceMode,
+    setIsInVault,
+    isInVault,
     loadConfig,
     setMaintenanceMode
   }
