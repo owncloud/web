@@ -100,23 +100,6 @@ config = {
                 "file-action",
             ],
         },
-        "app-provider": {
-            "skip": False,
-            "suites": [
-                "app-provider",
-            ],
-            "extraServerEnvironment": {
-                "GATEWAY_GRPC_ADDR": "0.0.0.0:9142",
-                "MICRO_REGISTRY": "nats-js-kv",
-                "MICRO_REGISTRY_ADDRESS": "0.0.0.0:9233",
-                "NATS_NATS_HOST": "0.0.0.0",
-                "NATS_NATS_PORT": 9233,
-                "COLLABORA_DOMAIN": "collabora:9980",
-                "ONLYOFFICE_DOMAIN": "onlyoffice:443",
-                "FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR": "com.owncloud.api.collaboration.Collabora",
-                "WEB_UI_CONFIG_FILE": None,
-            },
-        },
         "keycloak": {
             "earlyFail": True,
             "skip": False,
