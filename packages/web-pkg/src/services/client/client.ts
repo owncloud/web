@@ -3,7 +3,7 @@ import { graph, ocs, webdav } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
 import { OCS } from '@ownclouders/web-client/ocs'
 import { AuthParameters } from './auth'
-import axios, { AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 import { WebDAV } from '@ownclouders/web-client/webdav'
 import { Language } from 'vue3-gettext'
@@ -38,6 +38,7 @@ export class ClientService {
   private httpUnAuthenticatedClient: HttpClient
 
   private graphClient: Graph
+  private graphAxiosClient: AxiosInstance
   private ocsClient: OCS
   private webDavClient: WebDAV
 
@@ -53,7 +54,7 @@ export class ClientService {
     this.language = options.language
     this.authStore = options.authStore
 
-    this.initGraphClient()
+    this.initGraphClient(this.configStore.isInVault)
     this.initOcsClient()
     this.initWebDavClient()
 
@@ -86,6 +87,10 @@ export class ClientService {
     return this.graphClient
   }
 
+  public reinitializeGraphClient(isInVault: boolean) {
+    this.initGraphClient(isInVault)
+  }
+
   public get sseAuthenticated(): EventSource {
     return sse(
       this.configStore.serverUrl,
@@ -105,19 +110,24 @@ export class ClientService {
     return this.language.current
   }
 
-  private initGraphClient() {
-    const axiosClient = axios.create({ headers: this.staticHeaders })
-    axiosClient.interceptors.request.use((config) => {
-      Object.assign(config.headers, this.getDynamicHeaders())
-      return config
-    })
+  private initGraphClient(isInVault: boolean) {
+    if (!this.graphAxiosClient) {
+      const axiosClient = axios.create({ headers: this.staticHeaders })
+      axiosClient.interceptors.request.use((config) => {
+        Object.assign(config.headers, this.getDynamicHeaders())
+        return config
+      })
+      axiosClient.interceptors.response.use(
+        this.#handleAxiosResponse.bind(this),
+        this.#handleAxiosError.bind(this)
+      )
+      this.graphAxiosClient = axiosClient
+    }
 
-    axiosClient.interceptors.response.use(
-      this.#handleAxiosResponse.bind(this),
-      this.#handleAxiosError.bind(this)
+    this.graphClient = graph(
+      isInVault ? `${this.configStore.serverUrl}vault` : this.configStore.serverUrl,
+      this.graphAxiosClient
     )
-
-    this.graphClient = graph(this.configStore.serverUrl, axiosClient)
   }
 
   private initOcsClient() {
