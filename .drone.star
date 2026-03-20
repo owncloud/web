@@ -93,13 +93,6 @@ config = {
                 "SEARCH_EXTRACTOR_CS3SOURCE_INSECURE": True,
             },
         },
-        "4": {
-            "earlyFail": True,
-            "skip": False,
-            "suites": [
-                "file-action",
-            ],
-        },
         "keycloak": {
             "earlyFail": True,
             "skip": False,

@@ -230,7 +230,7 @@ test.describe('link', () => {
     // And "Anonymous" moves the following resource using drag-drop
     //   | resource      | to        |
     //   | new-lorem.txt | SubFolder |
-    await ui.userMovesResource({
+    await ui.userMovesResources({
       world,
       stepUser: 'Anonymous',
       actionType: 'drag-drop',
@@ -239,7 +239,7 @@ test.describe('link', () => {
     // And "Anonymous" copies the following resource using sidebar-panel
     //   | resource  | to       |
     //   | lorem.txt | myfolder |
-    await ui.userCopiesResource({
+    await ui.userCopiesResources({
       world,
       stepUser: 'Anonymous',
       actionType: 'sidebar-panel',
