@@ -19,12 +19,25 @@
           class="oc-logo-image"
         />
       </router-link>
+      <div class="oc-flex oc-flex-middle">
+        <oc-select
+          v-if="!isEmbedModeEnabled"
+          v-model="selectedMode"
+          class="oc-topbar-mode-switch"
+          :label="$gettext('Mode')"
+          :label-hidden="true"
+          :clearable="false"
+          :searchable="false"
+          :options="modeOptions"
+          option-label="label"
+        />
+      </div>
     </div>
     <div v-if="!contentOnLeftPortal" class="oc-topbar-center oc-width-1-1">
       <custom-component-target :extension-point="topBarCenterExtensionPoint" />
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle">
-      <oc-select
+      <!-- <oc-select
         v-if="!isEmbedModeEnabled"
         v-model="selectedMode"
         class="oc-topbar-mode-switch"
@@ -33,7 +46,7 @@
         :clearable="false"
         :options="modeOptions"
         option-label="label"
-      />
+      /> -->
       <portal-target name="app.runtime.header.right" multiple />
     </div>
     <template v-if="!isEmbedModeEnabled">
@@ -304,6 +317,11 @@ export default {
     .oc-topbar-mode-switch {
       min-width: 12rem;
     }
+  }
+
+  .oc-topbar-mode-switch {
+    flex-shrink: 0;
+    min-width: 12rem;
   }
 }
 </style>
