@@ -4,7 +4,6 @@ import { config } from '../../e2e/config.js'
 import { api, store, environment, utils } from '../../e2e/support'
 import { World } from './world'
 import { state } from './shared'
-import { setAccessAndRefreshToken } from '../helpers/setAccessAndRefreshToken'
 import { getBrowserLaunchOptions } from '../../e2e/support/environment/actor/shared'
 import { Browser, chromium, firefox, webkit } from '@playwright/test'
 
@@ -64,14 +63,20 @@ export const test = base.extend<{
   ],
   globalBeforeHook: [
     async ({ world }: { world: World }, use, testInfo) => {
-      const user = world.usersEnvironment.getUser({ key: config.adminUsername })
       if (!config.basicAuth && !config.predefinedUsers) {
-        await setAccessAndRefreshToken(world.usersEnvironment)
-        if (isOcm(testInfo)) {
-          config.federatedServer = true
-          // need to set tokens for federated oCIS admin
+        if (config.keycloak) {
+          const user = world.usersEnvironment.getUser({ key: config.keycloakAdminUser })
+          await api.keycloak.setAccessTokenForKeycloakOcisUser(user)
+          await api.keycloak.setAccessTokenForKeycloakUser(user)
+          await storeKeycloakGroups(user, world.usersEnvironment)
+        } else {
+          const user = world.usersEnvironment.getUser({ key: config.adminUsername })
           await api.token.setAccessAndRefreshToken(user)
-          config.federatedServer = false
+          if (isOcm(testInfo)) {
+            config.federatedServer = true
+            await api.token.setAccessAndRefreshToken(user)
+            config.federatedServer = false
+          }
         }
       }
       await use()
@@ -200,4 +205,15 @@ const cleanUpSpaces = async (adminUser: User) => {
 
 const isOcm = (testInfo): boolean => {
   return testInfo.tags.includes('@ocm')
+}
+
+const storeKeycloakGroups = async (adminUser: User, usersEnvironment) => {
+  const groups = await api.graph.getGroups(adminUser)
+
+  store.dummyKeycloakGroupStore.forEach((dummyGroup) => {
+    const matchingGroup = groups.find((group) => group.displayName === dummyGroup.displayName)
+    if (matchingGroup) {
+      usersEnvironment.storeCreatedGroup({ group: { ...dummyGroup, uuid: matchingGroup.id } })
+    }
+  })
 }
