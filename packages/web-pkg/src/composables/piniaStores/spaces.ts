@@ -11,8 +11,7 @@ import {
   buildSpace,
   extractStorageId,
   isPersonalSpaceResource,
-  isProjectSpaceResource,
-  isProtectedProjectSpaceResource
+  isProjectSpaceResource
 } from '@ownclouders/web-client'
 import type { CollaboratorShare, MountPointSpaceResource, ShareRole } from '@ownclouders/web-client'
 import { useUserStore } from './user'
@@ -215,13 +214,13 @@ export const useSpacesStore = defineStore('spaces', () => {
       const [personalSpaces, projectSpaces] = await Promise.all([
         getSpacesByType({
           graphClient,
-          driveType: isInVault ? "'protected-personal'" : 'personal',
+          driveType: 'personal',
           configStore,
           graphRoles: sharesStore.graphRoles
         }),
         getSpacesByType({
           graphClient,
-          driveType: isInVault ? "'protected-project'" : 'project',
+          driveType: 'project',
           configStore,
           graphRoles: sharesStore.graphRoles
         })
@@ -270,14 +269,12 @@ export const useSpacesStore = defineStore('spaces', () => {
   }) => {
     const projectSpaces = await getSpacesByType({
       graphClient,
-      driveType: isInVault ? "'protected-project'" : 'project',
+      driveType: 'project',
       configStore,
       graphRoles: sharesStore.graphRoles,
       signal
     })
-    spaces.value = unref(spaces).filter(
-      (s) => !isProjectSpaceResource(s) && !isProtectedProjectSpaceResource(s)
-    )
+    spaces.value = unref(spaces).filter((s) => !isProjectSpaceResource(s))
     addSpaces(projectSpaces)
   }
 

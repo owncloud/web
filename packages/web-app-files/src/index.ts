@@ -22,11 +22,7 @@ import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
-import {
-  isPersonalSpaceResource,
-  isProtectedPersonalSpaceResource,
-  isShareSpaceResource
-} from '@ownclouders/web-client'
+import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 import { ComponentCustomProperties, unref } from 'vue'
 import { extensionPoints } from './extensionPoints'
 
@@ -63,16 +59,13 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       isActive: () => {
         return !spacesStores.currentSpace || spacesStores.currentSpace?.isOwner(userStore.user)
       },
-      activeFor: [{ path: `/${appInfo.id}/spaces/protected-personal` }],
       isVisible() {
         if (!spacesStores.spacesInitialized) {
           return true
         }
 
         return !!spacesStores.spaces.find(
-          (drive) =>
-            (isPersonalSpaceResource(drive) || isProtectedPersonalSpaceResource(drive)) &&
-            drive.isOwner(userStore.user)
+          (drive) => isPersonalSpaceResource(drive) && drive.isOwner(userStore.user)
         )
       },
       priority: 10
@@ -115,10 +108,7 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       route: {
         path: `/${appInfo.id}/spaces/projects`
       },
-      activeFor: [
-        { path: `/${appInfo.id}/spaces/project` },
-        { path: `/${appInfo.id}/spaces/protected-project` }
-      ],
+      activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
       isVisible() {
         return capabilityStore.spacesProjects
       },

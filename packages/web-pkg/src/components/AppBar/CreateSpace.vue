@@ -41,16 +41,10 @@ const { checkSpaceNameModalInput } = useSpaceHelpers()
 const { dispatchModal } = useModals()
 const spacesStore = useSpacesStore()
 const { upsertResource } = useResourcesStore()
-const route = useRoute()
 
 const addNewSpace = async (name: string) => {
-  let driveType = 'project'
   try {
-    if (route?.params?.scope === 'vault') {
-      driveType = 'protected-project'
-    }
-
-    const createdSpace = await createSpace(name, driveType)
+    const createdSpace = await createSpace(name, 'project')
     upsertResource(createdSpace)
     spacesStore.upsertSpace(createdSpace)
     emit('spaceCreated', createdSpace)
