@@ -147,18 +147,18 @@ test.describe('Search', () => {
       command: 'presses enter'
     })
 
-    // Then "Brian" should see the message "Search for files" on the search result
-    await ui.userShouldSeeMessageOnSearchResult({
-      world,
-      stepUser: 'Brian',
-      message: 'Search for files'
-    })
-
     // When "Brian" selects tag "alice tag" from the search result filter chip
     await ui.userFiltersSearchResultWithTag({
       world,
       stepUser: 'Brian',
       tag: 'alice tag'
+    })
+
+    // Then "Brian" should see the message "Search for files" on the search result
+    await ui.userShouldSeeMessageOnSearchResult({
+      world,
+      stepUser: 'Brian',
+      message: 'Search for files'
     })
 
     // Then following resources should be displayed in the files list for user "Brian"
