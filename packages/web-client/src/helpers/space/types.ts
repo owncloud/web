@@ -31,15 +31,7 @@ export interface SpaceResource extends Resource {
   description: string
   disabled: boolean
   driveAlias: string
-  driveType:
-    | 'mountpoint'
-    | 'personal'
-    | 'project'
-    | 'share'
-    | 'public'
-    | 'protected-project'
-    | 'protected-personal'
-    | (string & unknown)
+  driveType: 'mountpoint' | 'personal' | 'project' | 'share' | 'public' | (string & unknown)
   root: DriveItem
   members: Record<string, SpaceMember>
   spaceQuota: Quota
@@ -101,19 +93,7 @@ export const isMountPointSpaceResource = (
 
 export interface ProtectedPersonalSpaceResource extends SpaceResource {}
 
-export function isProtectedPersonalSpaceResource(
-  resource: Resource
-): resource is ProtectedPersonalSpaceResource {
-  return (resource as SpaceResource)?.driveType === 'protected-personal'
-}
-
 export interface ProtectedProjectSpaceResource extends SpaceResource {}
-
-export function isProtectedProjectSpaceResource(
-  resource: Resource
-): resource is ProtectedPersonalSpaceResource {
-  return (resource as SpaceResource)?.driveType === 'protected-project'
-}
 
 export interface PublicSpaceResource extends SpaceResource {
   publicLinkPassword?: string

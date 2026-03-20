@@ -192,7 +192,6 @@ import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue
 import {
   getSpaceManagers,
   isProjectSpaceResource,
-  isProtectedProjectSpaceResource,
   ProjectSpaceResource,
   SpaceResource
 } from '@ownclouders/web-client'
@@ -250,11 +249,7 @@ let loadPreviewToken: string = null
 const { isSideBarOpen, sideBarActivePanel } = useSideBar()
 
 const runtimeSpaces = computed(() => {
-  return (
-    spacesStore.spaces.filter(
-      (space) => isProjectSpaceResource(space) || isProtectedProjectSpaceResource(space)
-    ) || []
-  )
+  return spacesStore.spaces.filter((space) => isProjectSpaceResource(space)) || []
 })
 const selectedSpace = computed(() => {
   if (
