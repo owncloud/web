@@ -402,7 +402,7 @@ export async function userChecksAccessDetailsOfShare({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
 
-  let selectorType = sharee.name
+  let selectorType = sharee.type
   // NOTE: external users have group type element selector
   if (accessDetails.hasOwnProperty('Type') && accessDetails.Type === 'External') {
     selectorType = 'group'

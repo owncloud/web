@@ -1316,7 +1316,7 @@ export const userCopiesResourcesAtOnce = (args) =>
 export const userMovesResourcesAtOnce = (args) =>
   performCopyOrMoveMultipleResources({ ...args, actionType: 'move' })
 
-export async function userShouldSeeIndicatorOnResource({
+export async function userShouldSeeShareIndicatorOnResource({
   world,
   stepUser,
   buttonLabel,

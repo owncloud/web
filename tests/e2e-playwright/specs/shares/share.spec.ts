@@ -621,7 +621,7 @@ test.describe('share', () => {
     // And "Alice" logs in
     await ui.userLogsIn({ world, stepUser: 'Alice' })
     // Then "Alice" should see user-direct indicator on the folder "shareFolder"
-    await ui.userShouldSeeIndicatorOnResource({
+    await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Alice',
       buttonLabel: 'user-direct',
@@ -634,7 +634,7 @@ test.describe('share', () => {
       resource: 'shareFolder'
     })
     // Then "Alice" should see user-indirect indicator on the folder "subFolder"
-    await ui.userShouldSeeIndicatorOnResource({
+    await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Alice',
       buttonLabel: 'user-indirect',
