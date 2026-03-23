@@ -541,7 +541,37 @@ function resetFocusOnInvite(event: CollaboratorAutoCompleteItem[]) {
 </script>
 <style lang="scss">
 .role-selection-dropdown {
-  max-width: 150px;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 240px;
+  max-width: 240px;
+  min-width: 0;
+
+  > span,
+  > div {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .files-recipient-role-select-btn {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .files-recipient-role-select-btn .oc-text-truncate {
+    display: block;
+    flex: 1 1 auto;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .files-recipient-role-select-btn .oc-icon {
+    flex: 0 0 auto;
+  }
 }
 
 #new-collaborators-form-create-button {
