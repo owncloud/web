@@ -37,16 +37,6 @@
       <custom-component-target :extension-point="topBarCenterExtensionPoint" />
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle">
-      <!-- <oc-select
-        v-if="!isEmbedModeEnabled"
-        v-model="selectedMode"
-        class="oc-topbar-mode-switch"
-        :label="$gettext('Mode')"
-        :label-hidden="true"
-        :clearable="false"
-        :options="modeOptions"
-        option-label="label"
-      /> -->
       <portal-target name="app.runtime.header.right" multiple />
     </div>
     <template v-if="!isEmbedModeEnabled">
@@ -86,7 +76,8 @@ import {
   useExtensionRegistry,
   useOpenEmptyEditor,
   useRouter,
-  useThemeStore
+  useThemeStore,
+  useClipboardStore
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { isRuntimeRoute } from '../../router'
@@ -118,6 +109,7 @@ export default {
     const { options: configOptions } = storeToRefs(configStore)
     const extensionRegistry = useExtensionRegistry()
     const { openEmptyEditor } = useOpenEmptyEditor()
+    const { clearClipboard } = useClipboardStore()
 
     const authStore = useAuthStore()
     const router = useRouter()
@@ -176,11 +168,11 @@ export default {
       return [
         {
           id: 'default-mode',
-          label: $gettext('Default mode'),
+          label: $gettext('Drive'),
           route: '/'
         },
         {
-          id: 'account-mode',
+          id: 'vault-mode',
           label: $gettext('Vault'),
           route: '/vault/files'
         }
@@ -193,6 +185,9 @@ export default {
         return currentPath.startsWith('/vault') ? unref(modeOptions)[1] : unref(modeOptions)[0]
       },
       set(mode) {
+        if (mode.id === 'default-mode') {
+          clearClipboard()
+        }
         if (mode?.route && mode.route !== window.location.pathname) {
           window.location.href = mode.route
         }
