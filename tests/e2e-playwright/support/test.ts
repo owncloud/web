@@ -3,7 +3,7 @@ import { User, UserState, Group } from '../../e2e/support/types'
 import { config } from '../../e2e/config.js'
 import { api, store, environment, utils } from '../../e2e/support'
 import { World } from './world'
-import { state } from './shared'
+import { state } from '../../e2e/cucumber/environment/shared'
 import { getBrowserLaunchOptions } from '../../e2e/support/environment/actor/shared'
 import { Browser, chromium, firefox, webkit } from '@playwright/test'
 
