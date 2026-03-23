@@ -18,8 +18,7 @@ test.describe('create Space shortcut', () => {
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
     // And "Alice" logs in
     await ui.userLogsIn({ world, stepUser: 'Alice' })

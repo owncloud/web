@@ -19,8 +19,7 @@ test.describe('details', () => {
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" logs in
@@ -38,8 +37,7 @@ test.describe('details', () => {
     await ui.userCreatesProjectSpace({
       world,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // When "Alice" waits for token renewal via refresh token

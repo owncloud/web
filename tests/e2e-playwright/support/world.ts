@@ -1,6 +1,6 @@
 import { config } from '../../e2e/config'
 import { environment } from '../../e2e/support'
-import { state } from './shared'
+import { state } from '../../e2e/cucumber/environment/shared'
 
 export class World {
   actorsEnvironment: environment.ActorsEnvironment

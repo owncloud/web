@@ -54,6 +54,7 @@ export const createSpace = async (args: createSpaceArgs): Promise<string> => {
   await page.locator(newSpaceMenuButton).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['ocModal'], 'spaces page')
   await page.locator(spaceNameInputField).fill(name)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['ocModal'], 'spaces page')
 
   const [responses] = await Promise.all([
     page.waitForResponse(

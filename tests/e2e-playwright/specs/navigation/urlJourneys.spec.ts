@@ -19,8 +19,7 @@ test.describe('Navigate web directly through urls', () => {
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
     // And "Alice" creates the following folders in personal space using API
     //   | name   |
@@ -61,11 +60,10 @@ test.describe('Navigate web directly through urls', () => {
     // And "Alice" creates the following project space using API
     //   | name        | id     |
     //   | Development | team.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       world,
       stepUser: 'Alice',
-      name: 'Development',
-      id: 'team.1'
+      spaces: [{ name: 'Development', id: 'team.1' }]
     })
     // And "Alice" creates the following file in space "Development" using API
     //   | name              | content                   |

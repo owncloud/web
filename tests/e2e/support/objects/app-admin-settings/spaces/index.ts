@@ -27,37 +27,65 @@ export class Spaces {
   async changeQuota({
     spaceIds,
     value,
-    context
+    via
   }: {
     spaceIds: string[]
     value: string
-    context: string
+    via: 'context-menu' | 'batch-actions'
   }): Promise<void> {
-    await po.changeSpaceQuota({ spaceIds, value, page: this.#page, context })
+    await po.changeSpaceQuota({ spaceIds, value, page: this.#page, via })
   }
 
-  async disable({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
-    await po.disableSpace({ spaceIds, page: this.#page, context })
+  async disable({
+    spaceIds,
+    via
+  }: {
+    spaceIds: string[]
+    via: 'context-menu' | 'batch-actions'
+  }): Promise<void> {
+    await po.disableSpace({ spaceIds, page: this.#page, via })
   }
 
-  async enable({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
-    await po.enableSpace({ spaceIds, page: this.#page, context })
+  async enable({
+    spaceIds,
+    via
+  }: {
+    spaceIds: string[]
+    via: 'context-menu' | 'batch-actions'
+  }): Promise<void> {
+    await po.enableSpace({ spaceIds, page: this.#page, via })
   }
 
-  async delete({ spaceIds, context }: { spaceIds: string[]; context: string }): Promise<void> {
-    await po.deleteSpace({ spaceIds, page: this.#page, context })
+  async delete({
+    spaceIds,
+    via
+  }: {
+    spaceIds: string[]
+    via: 'context-menu' | 'batch-actions'
+  }): Promise<void> {
+    await po.deleteSpace({ spaceIds, page: this.#page, via })
   }
 
   async select({ key }: { key: string }): Promise<void> {
     await po.selectSpace({ page: this.#page, id: this.getUUID({ key }) })
   }
 
-  async rename({ key, value }: { key: string; value: string }): Promise<void> {
-    await po.renameSpace({ page: this.#page, id: this.getUUID({ key }), value })
+  async renameSpaceUsingContextMenu({ key, value }: { key: string; value: string }): Promise<void> {
+    await po.renameSpaceUsingContextMenu({ page: this.#page, id: this.getUUID({ key }), value })
   }
 
-  async changeSubtitle({ key, value }: { key: string; value: string }): Promise<void> {
-    await po.changeSpaceSubtitle({ page: this.#page, id: this.getUUID({ key }), value })
+  async changeSubtitleUsingContextMenu({
+    key,
+    value
+  }: {
+    key: string
+    value: string
+  }): Promise<void> {
+    await po.changeSpaceSubtitleUsingContextMenu({
+      page: this.#page,
+      id: this.getUUID({ key }),
+      value
+    })
   }
 
   async openPanel({ key }: { key: string }): Promise<void> {

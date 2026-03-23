@@ -19,17 +19,15 @@ test.describe('Users can see all activities of the resources and spaces', () => 
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Alice',
-      role: 'Space Admin'
+      users: [{ id: 'Alice', role: 'Space Admin' }]
     })
     // Given "Alice" creates the following project space using API
     //   | name | id     |
     //   | team | team.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       world,
       stepUser: 'Alice',
-      name: 'team',
-      id: 'team.1'
+      spaces: [{ name: 'team', id: 'team.1' }]
     })
     // And "Alice" adds the following members to the space "team" using API
     //   | user  | role     | shareType |
@@ -38,9 +36,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
       world,
       stepUser: 'Alice',
       space: 'team',
-      sharee: 'Brian',
-      role: 'Can view',
-      shareType: 'user'
+      sharee: [{ user: 'Brian', role: 'Can view', shareType: 'user' }]
     })
 
     // And "Alice" creates a public link of the space using API

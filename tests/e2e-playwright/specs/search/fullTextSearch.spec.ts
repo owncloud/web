@@ -20,8 +20,7 @@ test.describe('Search', () => {
     await api.userHasAssignedRolesToUsers({
       world,
       stepUser: 'Admin',
-      targetUserId: 'Brian',
-      role: 'Space Admin'
+      users: [{ id: 'Brian', role: 'Space Admin' }]
     })
 
     // And "Alice" uploads the following local file into personal space using API
@@ -88,11 +87,10 @@ test.describe('Search', () => {
     // And "Brian" creates the following project spaces using API
     //   | name           | id               |
     //   | FullTextSearch | fulltextsearch.1 |
-    await api.userHasCreatedProjectSpace({
+    await api.userHasCreatedProjectSpaces({
       world,
       stepUser: 'Brian',
-      name: 'FullTextSearch',
-      id: 'fulltextsearch.1'
+      spaces: [{ name: 'FullTextSearch', id: 'fulltextsearch.1' }]
     })
 
     // And "Brian" creates the following folder in space "FullTextSearch" using API
