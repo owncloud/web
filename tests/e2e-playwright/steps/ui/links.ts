@@ -283,37 +283,37 @@ export async function userCopiesLinkOfResource({
   await linkObject.copyLinkToClipboard({ resource })
 }
 export async function userSetsExperationDateOfPublicLink({
-  actorsEnvironment,
+  world,
   stepUser,
   linkName,
   resource,
   expireDate
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   linkName: string
   resource: string
   expireDate: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.addExpiration({ resource, linkName, expireDate })
 }
 
 export async function userChangesThePasswordOfPublicLink({
-  actorsEnvironment,
+  world,
   stepUser,
   linkName,
   resource,
   newPassword
 }: {
-  actorsEnvironment: ActorsEnvironment
+  world: World
   stepUser: string
   linkName: string
   resource: string
   newPassword: string
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.addPassword({ resource, linkName, newPassword })
 }

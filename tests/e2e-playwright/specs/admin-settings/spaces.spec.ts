@@ -25,7 +25,7 @@ test.describe('spaces management', () => {
     await ui.userLogsIn({ world, stepUser: 'Alice' })
     await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'admin-settings' })
     await ui.userNavigatesToProjectSpaceManagementPage({ world, stepUser: 'Alice' })
-    await ui.userCreatesProjectSpace({
+    await ui.userCreatesProjectSpaces({
       world,
       stepUser: 'Alice',
       spaces: [{ name: 'team B', id: 'team.b' }]
