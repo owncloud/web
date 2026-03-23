@@ -49,7 +49,7 @@ export async function userNavigatesToSpace({
   await spacesObject.open({ key: space })
 }
 
-export async function userCreatesProjectSpace({
+export async function userCreatesProjectSpaces({
   world,
   stepUser,
   spaces
@@ -531,55 +531,41 @@ export async function userShouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
 }
 
 export async function userUpdatesSpace({
-  actorsEnvironment,
-  filesEnvironment,
+  world,
   stepUser,
-  attribute,
   key,
-  value
+  updates
 }: {
-  actorsEnvironment: ActorsEnvironment
-  filesEnvironment: FilesEnvironment
+  world: World
   stepUser: string
-  attribute: string
   key: string
-  value: string
+  updates: { attribute: string; value: string }[]
 }): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
 
-  switch (attribute) {
-    case 'name':
-      await spacesObject.changeName({ key, value })
-      break
-    case 'subtitle':
-      await spacesObject.changeSubtitle({ key, value })
-      break
-    case 'description':
-      await spacesObject.changeDescription({ value })
-      break
-    case 'quota':
-      await spacesObject.changeQuota({ key, value })
-      break
-    case 'image':
-      await spacesObject.changeSpaceImage({
-        key,
-        resource: filesEnvironment.getFile({ name: value })
-      })
-      break
-    default:
-      throw new Error(`${attribute} not implemented`)
+  for (const { attribute, value } of updates) {
+    switch (attribute) {
+      case 'name':
+        await spacesObject.changeName({ key, value })
+        break
+      case 'subtitle':
+        await spacesObject.changeSubtitle({ key, value })
+        break
+      case 'description':
+        await spacesObject.changeDescription({ value })
+        break
+      case 'quota':
+        await spacesObject.changeQuota({ key, value })
+        break
+      case 'image':
+        await spacesObject.changeSpaceImage({
+          key,
+          resource: world.filesEnvironment.getFile({ name: value })
+        })
+        break
+      default:
+        throw new Error(`${attribute} not implemented`)
+    }
   }
-}
-
-export async function userNavigatesToSharedWithMePage({
-  actorsEnvironment,
-  stepUser
-}: {
-  actorsEnvironment: ActorsEnvironment
-  stepUser: string
-}): Promise<void> {
-  const { page } = actorsEnvironment.getActor({ key: stepUser })
-  const pageObject = new objects.applicationFiles.page.shares.WithMe({ page })
-  await pageObject.navigate()
 }
