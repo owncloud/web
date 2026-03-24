@@ -1128,7 +1128,7 @@ export async function userDownloadsThePublicLinkResources({
 }: {
   world: World
   stepUser: string
-  actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION' | 'SINGLE_SHARE_VIEW'
   resources: resourceToDownload[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })

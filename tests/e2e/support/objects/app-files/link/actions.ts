@@ -261,10 +261,30 @@ export const fillPassword = async (args: addPasswordArgs): Promise<void> => {
     await clickResource({ page: page, path: resourcePaths.join('/') })
   }
   await sidebar.open({ page: page, resource: resourceName })
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['appSidebar'],
+    'sidebar after opening the resource'
+  )
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, linkName)).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['tippyBox'],
+    'edit public link tippy box'
+  )
   await page.locator(editPublicLinkAddPasswordButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'edit public link password modal'
+  )
   await page.locator(editPublicLinkPasswordInput).fill(newPassword)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'edit public link password modal after filling password'
+  )
   await page.locator(editPublicLinkRenameConfirm).click()
 }
 
@@ -282,6 +302,11 @@ export const showOrHidePassword = async (args: {
 }): Promise<void> => {
   const { page, showOrHide } = args
   await page.locator(showOrHidePasswordButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    `${showOrHide} password of public link modal`
+  )
   showOrHide === 'reveals'
     ? await expect(page.locator(editPublicLinkPasswordInput)).toHaveAttribute('type', 'text')
     : await expect(page.locator(editPublicLinkPasswordInput)).toHaveAttribute('type', 'password')
@@ -290,12 +315,22 @@ export const showOrHidePassword = async (args: {
 export const copyEnteredPassword = async (page: Page): Promise<void> => {
   const enteredPassword = await page.locator(editPublicLinkPasswordInput).inputValue()
   await page.locator(copyPasswordButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'copy password of public link modal'
+  )
   const copiedPassword = await page.evaluate('navigator.clipboard.readText()')
   expect(enteredPassword).toBe(copiedPassword)
 }
 
 export const generatePassword = async (page: Page): Promise<void> => {
   await page.locator(generatePasswordButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'generate password for public link modal'
+  )
   const generatedPassword = await page.locator(editPublicLinkPasswordInput).inputValue()
   expect(generatedPassword).toMatch(expectedRegexForGeneratedPassword)
 }
@@ -455,6 +490,11 @@ export const copyLinkToClipboard = async (args: copyLinkArgs): Promise<string> =
   } else {
     await page.getByLabel('Copy link to clipboard').click()
   }
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['.snackbar'],
+    'copy link to clipboard notification'
+  )
   return await page.evaluate('navigator.clipboard.readText()')
 }
 

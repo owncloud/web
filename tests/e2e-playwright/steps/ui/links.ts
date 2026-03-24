@@ -163,3 +163,122 @@ export async function userShouldNotBeAbleToEditThePublicLink({
   const isVisible = await linkObject.islinkEditButtonVisibile(linkName)
   expect(isVisible).toBe(false)
 }
+
+export async function userChangesPasswordOfThePublicLinkOfResource({
+  world,
+  stepUser,
+  resource,
+  linkName,
+  newPassword
+}: {
+  world: World
+  stepUser: string
+  resource: string
+  linkName: string
+  newPassword: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.fillPassword({ resource, linkName, newPassword })
+}
+
+export async function userShouldSeeAnErrorMessage({
+  world,
+  stepUser,
+  errorMessage
+}: {
+  world: World
+  stepUser: string
+  errorMessage: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  const actualErrorMessage = await linkObject.checkErrorMessage()
+  expect(actualErrorMessage).toBe(errorMessage)
+}
+
+export async function userClosesThePublicLinkPasswordDialogBox({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.clickOnCancelButton()
+}
+
+export async function userRevealsThePasswordOfThePublicLink({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.showOrHidePassword({ showOrHide: 'reveals' })
+}
+
+export async function userHidesThePasswordOfThePublicLink({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.showOrHidePassword({ showOrHide: 'hides' })
+}
+
+export async function userGeneratesThePasswordForThePublicLink({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.generatePassword()
+}
+
+export async function userCopiesThePasswordOfThePublicLink({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.copyEnteredPassword()
+}
+
+export async function userSetsThePasswordOfThePublicLink({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.setPassword()
+}
+
+export async function userCopiesLinkOfResource({
+  world,
+  stepUser,
+  resource
+}: {
+  world: World
+  stepUser: string
+  resource: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.copyLinkToClipboard({ resource })
+}

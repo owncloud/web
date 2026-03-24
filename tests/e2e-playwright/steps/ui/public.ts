@@ -76,7 +76,12 @@ export async function userUnlocksPublicLink({
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
-  await pageObject.authenticate({ password: substitute(password) })
+  if (password === '%copied_password%') {
+    password = await page.evaluate('navigator.clipboard.readText()')
+  } else {
+    password = substitute(password)
+  }
+  await pageObject.authenticate({ password })
 }
 
 export async function userUploadsResourcesInPublicLink({
