@@ -960,13 +960,13 @@ test.describe('link', () => {
       world,
       stepUser: 'Alice'
     })
-    // When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Unnamed link" of resource "lorem.txt"
+    // When "Alice" tries to sets a new password "12345678" of the public link named "Unnamed link" of resource "lorem.txt"
     await ui.userChangesPasswordOfThePublicLinkOfResource({
       world,
       stepUser: 'Alice',
       resource: 'lorem.txt',
       linkName: 'Unnamed link',
-      newPassword: 'ownCloud-1'
+      newPassword: '12345678'
     })
     // Then "Alice" should see an error message
     //   """
