@@ -605,14 +605,14 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       filter: 'current folder',
       command: 'presses enter'
     })
-    // And "Alice" enables the option to search title only
-    await ui.userEnablesTitleOnlySearch({ world, stepUser: 'Alice' })
     // And "Alice" selects lastModified "last 30 days" from the search result filter chip
     await ui.userFiltersSearchByLastModifiedDate({
       world,
       stepUser: 'Alice',
       lastModified: 'last 30 days'
     })
+    // And "Alice" enables the option to search title only
+    await ui.userEnablesTitleOnlySearch({ world, stepUser: 'Alice' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource                 |
     //   | mainFolder/mediaTest.pdf |
