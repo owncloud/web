@@ -58,6 +58,14 @@ export default defineWebApplication({
         {
           extension: 'yaml',
           label: () => $gettext('YAML file')
+        },
+        {
+          extension: 'log',
+          label: () => $gettext('Log file')
+        },
+        {
+          extension: 'conf',
+          label: () => $gettext('Configuration file')
         }
       ]
 
