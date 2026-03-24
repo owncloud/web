@@ -218,7 +218,7 @@ const fileIcon = {
     extensions: ['psec']
   },
   pinboard: {
-    icon: { name: 'resource-type-pinboard' },
+    icon: { name: 'resource-type-pinboard-beta' },
     extensions: ['ggp']
   },
   excalidraw: {
