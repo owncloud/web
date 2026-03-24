@@ -913,18 +913,18 @@ export async function userTriesToUploadResource({
   })
 }
 
-export async function userUploadsResourceViaDragNDrop({
+export async function userUploadsResourcesViaDragNDrop({
   world,
   stepUser,
-  resource
+  resourceNames
 }: {
   world: World
   stepUser: string
-  resource: string
+  resourceNames: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  const resources = [world.filesEnvironment.getFile({ name: resource })]
+  const resources = resourceNames.map((name) => world.filesEnvironment.getFile({ name }))
   await resourceObject.dropUpload({ resources })
 }
 

@@ -148,3 +148,18 @@ export async function userEditsThePublicLinkOfSpaceChangingRole({
   const newPermission = await linkObject.changeRole({ linkName, role, space: true })
   expect(newPermission.toLowerCase()).toBe(role.toLowerCase())
 }
+
+export async function userShouldNotBeAbleToEditThePublicLink({
+  world,
+  stepUser,
+  linkName
+}: {
+  world: World
+  stepUser: string
+  linkName: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  const isVisible = await linkObject.islinkEditButtonVisibile(linkName)
+  expect(isVisible).toBe(false)
+}

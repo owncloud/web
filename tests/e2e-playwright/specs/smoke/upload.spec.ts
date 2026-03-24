@@ -95,15 +95,10 @@ test.describe('internal link share', () => {
     //   | resource       |
     //   | simple.pdf     |
     //   | testavatar.jpg |
-    await ui.userUploadsResourceViaDragNDrop({
+    await ui.userUploadsResourcesViaDragNDrop({
       world,
       stepUser: 'Alice',
-      resource: 'simple.pdf'
-    })
-    await ui.userUploadsResourceViaDragNDrop({
-      world,
-      stepUser: 'Alice',
-      resource: 'testavatar.jpg'
+      resourceNames: ['simple.pdf', 'testavatar.jpg']
     })
     // And "Alice" downloads the following resources using the sidebar panel
     //   | resource      | type   |
@@ -174,10 +169,10 @@ test.describe('internal link share', () => {
     // When "Alice" uploads the following resources via drag-n-drop
     //   | resource          |
     //   | Folder,With,Comma |
-    await ui.userUploadsResourceViaDragNDrop({
+    await ui.userUploadsResourcesViaDragNDrop({
       world,
       stepUser: 'Alice',
-      resource: 'Folder,With,Comma'
+      resourceNames: ['Folder,With,Comma']
     })
     // And "Alice" opens folder "Folder,With,Comma"
     await ui.userOpensResource({
