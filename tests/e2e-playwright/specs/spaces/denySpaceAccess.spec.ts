@@ -106,11 +106,15 @@ test.describe('deny space access', () => {
     // When "Alice" removes following sharee
     //   | resource | recipient |
     //   | f1       | Brian     |
-    await ui.userRemovesSharee({
+    await ui.userRemovesSharees({
       world,
       stepUser: 'Alice',
-      resource: 'f1',
-      recipient: 'Brian'
+      sharees: [
+        {
+          resource: 'f1',
+          recipient: 'Brian'
+        }
+      ]
     })
 
     // And "Brian" navigates to the project space "sales"

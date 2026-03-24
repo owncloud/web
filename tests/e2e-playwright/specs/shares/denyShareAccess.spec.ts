@@ -98,11 +98,15 @@ test.describe('deny share access', () => {
 
     // allow access - deleting "Cannot access" share
 
-    await ui.userRemovesSharee({
+    await ui.userRemovesSharees({
       world,
       stepUser: 'Alice',
-      resource: 'folder_to_deny',
-      recipient: 'Brian'
+      sharees: [
+        {
+          resource: 'folder_to_deny',
+          recipient: 'Brian'
+        }
+      ]
     })
     await ui.userOpensApplication({ world, stepUser: 'Brian', name: 'files' })
     await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })

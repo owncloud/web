@@ -127,11 +127,15 @@ test.describe('Notifications', () => {
     // When "Alice" removes following sharee
     //   | resource         | recipient |
     //   | folder_to_shared | Brian     |
-    await ui.userRemovesSharee({
+    await ui.userRemovesSharees({
       world,
       stepUser: 'Alice',
-      resource: 'folder_to_shared',
-      recipient: 'Brian'
+      sharees: [
+        {
+          resource: 'folder_to_shared',
+          recipient: 'Brian'
+        }
+      ]
     })
 
     // And "Alice" navigates to the project space "team.1"
@@ -323,11 +327,15 @@ test.describe('Notifications', () => {
     // When "Alice" removes following sharee
     //   | resource         | recipient |
     //   | folder_to_shared | Brian     |
-    await ui.userRemovesSharee({
+    await ui.userRemovesSharees({
       world,
       stepUser: 'Alice',
-      resource: 'folder_to_shared',
-      recipient: 'Brian'
+      sharees: [
+        {
+          resource: 'folder_to_shared',
+          recipient: 'Brian'
+        }
+      ]
     })
 
     // And "Alice" navigates to the project space "team.1"
