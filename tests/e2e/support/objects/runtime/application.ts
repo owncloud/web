@@ -103,8 +103,18 @@ export class Application {
     const isSubPanelActive = await this.#page.locator(closeSidebarSubPanelBtn).isVisible()
     if (isSubPanelActive) {
       await this.#page.locator(closeSidebarSubPanelBtn).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        this.#page,
+        ['body'],
+        'body after closing sidebar sub panel'
+      )
     } else {
       await this.#page.locator(closeSidebarRootPanelBtn).click()
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+        this.#page,
+        ['body'],
+        'body after closing sidebar root panel'
+      )
     }
   }
 

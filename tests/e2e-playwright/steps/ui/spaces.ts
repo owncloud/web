@@ -135,7 +135,7 @@ export async function userRemovesAccessToMember({
   world: World
   stepUser: string
   reciver: string
-  role: string
+  role?: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
@@ -241,6 +241,21 @@ export async function userShouldNotSeeSpace({
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const spaceLocator = await spacesObject.getSpaceLocator(space)
   await expect(spaceLocator).not.toBeVisible()
+}
+
+export async function userShouldSeeSpace({
+  world,
+  stepUser,
+  space
+}: {
+  world: World
+  stepUser: string
+  space?: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const spaceLocator = await spacesObject.getSpaceLocator(space)
+  await expect(spaceLocator).toBeVisible()
 }
 
 export async function userChangesMemberRole({

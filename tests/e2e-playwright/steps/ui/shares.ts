@@ -477,3 +477,18 @@ export async function userSetsExpirationDateOfShare({
     expirationDate
   })
 }
+
+export async function userShouldSeeMessageOnWebUI({
+  world,
+  stepUser,
+  message
+}: {
+  world: World
+  stepUser: string
+  message: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const actualMessage = await shareObject.getMessage()
+  expect(actualMessage).toBe(message)
+}

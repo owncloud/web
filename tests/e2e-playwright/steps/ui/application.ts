@@ -98,3 +98,15 @@ export async function userReloadsPage({
   const applicationObject = new objects.runtime.Application({ page })
   await applicationObject.reloadPage()
 }
+
+export async function userClosesSidebar({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const applicationObject = new objects.runtime.Application({ page })
+  await applicationObject.closeSidebar()
+}
