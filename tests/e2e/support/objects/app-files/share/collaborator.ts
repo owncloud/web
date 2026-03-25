@@ -133,6 +133,16 @@ export default class Collaborator {
       )
     }
     await Promise.all([...checkResponses, page.locator(Collaborator.sendInvitationButton).click()])
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'Shares panel after sending invitation'
+    )
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['notificationContainer'],
+      'notification popup after sending invitation'
+    )
   }
 
   static async inviteCollaborators(args: InviteCollaboratorsArgs): Promise<void> {

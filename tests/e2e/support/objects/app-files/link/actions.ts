@@ -264,7 +264,17 @@ export const fillPassword = async (args: addPasswordArgs): Promise<void> => {
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, linkName)).click()
   await page.locator(editPublicLinkAddPasswordButton).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'edit public link password modal'
+  )
   await page.locator(editPublicLinkPasswordInput).fill(newPassword)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'edit public link password modal after filling password'
+  )
   await page.locator(editPublicLinkRenameConfirm).click()
 }
 
@@ -272,6 +282,11 @@ export const addPassword = async (args: addPasswordArgs): Promise<void> => {
   const { page } = args
 
   await fillPassword(args)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['notificationContainer'],
+    'notification popup after updating password'
+  )
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
 }
