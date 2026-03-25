@@ -144,6 +144,16 @@ export default class Collaborator {
         btn?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
       })
     ])
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['appSidebar'],
+      'Shares panel after sending invitation'
+    )
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['notificationContainer'],
+      'notification popup after sending invitation'
+    )
   }
 
   static async inviteCollaborators(args: InviteCollaboratorsArgs): Promise<void> {
