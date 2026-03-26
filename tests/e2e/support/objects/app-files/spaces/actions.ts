@@ -219,7 +219,11 @@ export const changeQuota = async (args: {
   await openActionsPanel(page)
 
   await page.locator(editQuotaOptionSelector).click()
-  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['ocModal'], 'edit space quota modal')
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'edit space quota modal'
+  )
   const searchLocator = page.locator(spacesQuotaSearchField)
   await searchLocator.pressSequentially(value)
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(

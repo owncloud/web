@@ -69,7 +69,7 @@ export const selectors = {
   spaceInfoContainer: '.space-header-infos',
   saveTextEditorOrViewerButton: '#app-save-action',
   spaceDescriptionPreview: '#space-description-preview',
-  quotaValueDropDown: 'ul.vs__dropdown-menu',
+  quotaValueDropDown: 'ul.vs__dropdown-menu'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
