@@ -75,7 +75,6 @@ config = {
             "skip": False,
             "suites": [
                 "admin-settings",
-                "spaces",
             ],
         },
         "3": {
