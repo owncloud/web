@@ -1492,3 +1492,20 @@ export async function userClicksTheTagOnResource({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.clickTag({ resource: resourceName, tag: tagName.trim().toLowerCase() })
 }
+
+export async function userDownloadsPreviousVersionOfResource({
+  world,
+  stepUser,
+  resource,
+  to
+}: {
+  world: World
+  stepUser: string
+  resource: string
+  to: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const fileInfo = world.filesEnvironment.getFile({ name: resource })
+  await resourceObject.downloadVersion({ folder: to, files: [fileInfo] })
+}

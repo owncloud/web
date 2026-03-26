@@ -403,9 +403,23 @@ test.describe('spaces.personal', () => {
     // And "Brian" downloads old version of the following resource
     //   | resource     | to     |
     //   | textfile.txt | parent |
+    await ui.userDownloadsPreviousVersionOfResource({
+      world,
+      stepUser: 'Brian',
+      resource: 'textfile.txt',
+      to: 'parent'
+    })
     // And "Brian" restores following resources version
     //   | resource     | to     | version | openDetailsPanel |
     //   | textfile.txt | parent | 1       | true             |
+    await ui.userRestoresResourceVersion({
+      world,
+      stepUser: 'Brian',
+      file: 'textfile.txt',
+      to: 'parent',
+      version: 1,
+      openDetailsPanel: true
+    })
     // And "Brian" logs out
     await ui.userLogsOut({ world, stepUser: 'Brian' })
   })
