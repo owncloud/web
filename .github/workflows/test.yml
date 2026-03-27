@@ -61,3 +61,92 @@ jobs:
 
       - name: Build
         run: make dist
+
+      - name: Store build artifact
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: web-dist
+          path: dist
+          if-no-files-found: error
+
+  e2e-playwright:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        suites:
+          - admin-settings
+          - app-provider
+          - app-store
+          - file-action
+          - navigation
+          - ocm
+          - oidc
+          - runtime
+          - search
+          - shares
+          - smoke
+          - user-settings
+    services:
+      ocis:
+        image: owncloud/ocis-rolling@latest
+        env:
+          IDM_ADMIN_PASSWORD: admin
+          OCIS_INSECURE: true
+          OCIS_LOG_LEVEL: error
+          OCIS_JWT_SECRET: some-ocis-jwt-secret
+          LDAP_GROUP_SUBSCRIPTION_FILTER_TYPE: any
+          LDAP_USER_SUBSCRIPTION_FILTER_TYPE: any
+          PROXY_ENABLE_BASIC_AUTH: true
+          WEB_ASSET_CORE_PATH: ${{ github.workspace }}/dist
+          FRONTEND_SEARCH_MIN_LENGTH: 2
+          OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: ${{ github.workspace }}/tests/drone/banned-passwords.txt
+          PROXY_CSP_CONFIG_FILE_LOCATION: ${{ github.workspace }}/tests/drone/csp.yaml
+          GRAPH_AVAILABLE_ROLES: b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6,63e64e19-8d43-42ec-a738-2b6af2610efa
+          FRONTEND_CONFIGURABLE_NOTIFICATIONS: true
+          OCIS_URL: https://ocis:9200
+          WEB_UI_CONFIG_FILE: ${{ github.workspace }}/tests/drone/config-ocis.json
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Download build artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: web-dist
+          path: dist
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        with:
+          version: 10.29.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm dlx playwright install --with-deps chromium
+
+      - name: Install system deps if cache hit
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm dlx playwright install-deps chromium
+
+      - name: Wait for oCIS
+        run: timeout 300 bash -c 'while [ $(curl -sk -uadmin:admin https://ocis:9200/graph/v1.0/users/admin -w %{http_code} -o /dev/null) != 200 ]; do sleep 1; done'
+
+      - name: Run E2E tests
+        run: cd ${{ github.workspace }}/tests/e2e && run-e2e.sh --type playwright --suites ${{ matrix.suites }}
