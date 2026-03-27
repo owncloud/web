@@ -15,7 +15,7 @@ test.describe('users management', () => {
     await api.usersHaveBeenCreated({ world, stepUser: 'Admin', users: ['Alice'] })
     await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
     await ui.userNavigatesToUsersManagementPage({ world, stepUser: 'Admin' })
-    await ui.userForbidsLoginForUser({
+    await ui.userForbidsLoginForUserUsingContextMenu({
       world,
       stepUser: 'Admin',
       key: 'Alice'
@@ -26,7 +26,7 @@ test.describe('users management', () => {
     })
     await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
     await ui.userNavigatesToUsersManagementPage({ world, stepUser: 'Admin' })
-    await ui.userAllowsLoginForUser({
+    await ui.userAllowsLoginForUserUsingContextMenu({
       world,
       stepUser: 'Admin',
       key: 'Alice'
@@ -41,7 +41,7 @@ test.describe('users management', () => {
     await ui.userLogsIn({ world, stepUser: 'Brian' })
     await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
     await ui.userNavigatesToUsersManagementPage({ world, stepUser: 'Admin' })
-    await ui.userChangesUserQuota({
+    await ui.userChangesQuotaOfUserUsingContextMenu({
       world,
       stepUser: 'Admin',
       key: 'Alice',
@@ -120,34 +120,39 @@ test.describe('users management', () => {
     await api.usersHaveBeenCreated({ world, stepUser: 'Admin', users: ['Alice'] })
     await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
     await ui.userNavigatesToUsersManagementPage({ world, stepUser: 'Admin' })
-    await ui.userChangesUserNameUsingSidebarPanel({
+    await ui.userUpdatesUserAttributeUsingContextMenu({
       world,
       stepUser: 'Admin',
-      key: 'Alice',
+      user: 'Alice',
+      attribute: 'userName',
       value: 'anna'
     })
-    await ui.userChangesUserDisplayNameUsingSidebarPanel({
+    await ui.userUpdatesUserAttributeUsingContextMenu({
       world,
       stepUser: 'Admin',
-      key: 'anna',
+      user: 'anna',
+      attribute: 'displayName',
       value: 'Anna Murphy'
     })
-    await ui.userChangesUserEmailUsingSidebarPanel({
+    await ui.userUpdatesUserAttributeUsingContextMenu({
       world,
       stepUser: 'Admin',
-      key: 'anna',
+      user: 'anna',
+      attribute: 'email',
       value: 'anna@example.org'
     })
-    await ui.userChangesUserPasswordUsingSidebarPanel({
+    await ui.userUpdatesUserAttributeUsingContextMenu({
       world,
       stepUser: 'Admin',
-      key: 'anna',
+      user: 'anna',
+      attribute: 'password',
       value: 'password'
     })
-    await ui.userChangesUserRoleUsingSidebarPanel({
+    await ui.userUpdatesUserAttributeUsingContextMenu({
       world,
       stepUser: 'Admin',
-      key: 'anna',
+      user: 'anna',
+      attribute: 'role',
       value: 'Space Admin'
     })
     await ui.userLogsIn({ world, stepUser: 'anna' })
@@ -177,13 +182,13 @@ test.describe('users management', () => {
     })
     await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
     await ui.userNavigatesToUsersManagementPage({ world, stepUser: 'Admin' })
-    await ui.userAddsUserToGroupsUsingSidebarPanel({
+    await ui.userAddsUserToGroupsUsingContextMenu({
       world,
       stepUser: 'Admin',
       user: 'Alice',
       groups: ['finance', 'security']
     })
-    await ui.userRemovesUserFromGroupsUsingSidebarPanel({
+    await ui.userRemovesUserFromGroupsUsingContextMenu({
       world,
       stepUser: 'Admin',
       user: 'Alice',
@@ -206,10 +211,11 @@ test.describe('users management', () => {
     })
     await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
     await ui.userNavigatesToUsersManagementPage({ world, stepUser: 'Admin' })
-    await ui.userChangesUserRoleUsingSidebarPanel({
+    await ui.userUpdatesUserAttributeUsingContextMenu({
       world,
       stepUser: 'Admin',
-      key: 'David',
+      user: 'David',
+      attribute: 'role',
       value: 'Space Admin'
     })
     await ui.userSetsFilters({
