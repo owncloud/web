@@ -110,14 +110,14 @@ jobs:
             -e LDAP_GROUP_SUBSCRIPTION_FILTER_TYPE=any
             -e LDAP_USER_SUBSCRIPTION_FILTER_TYPE=any
             -e PROXY_ENABLE_BASIC_AUTH=true
-            -e WEB_ASSET_CORE_PATH=${{ github.workspace }}/dist
+            -e WEB_ASSET_CORE_PATH=/workspace/dist
             -e FRONTEND_SEARCH_MIN_LENGTH=2
-            -e OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST=${{ github.workspace }}/tests/drone/banned-passwords.txt
-            -e PROXY_CSP_CONFIG_FILE_LOCATION=${{ github.workspace }}/tests/drone/csp.yaml
+            -e OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST=/workspace/tests/drone/banned-passwords.txt
+            -e PROXY_CSP_CONFIG_FILE_LOCATION=/workspace/tests/drone/csp.yaml
             -e GRAPH_AVAILABLE_ROLES=b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6,63e64e19-8d43-42ec-a738-2b6af2610efa
             -e FRONTEND_CONFIGURABLE_NOTIFICATIONS=true
             -e OCIS_URL=https://localhost:9200
-            -e WEB_UI_CONFIG_FILE=${{ github.workspace }}/tests/drone/config-ocis.json
+            -e WEB_UI_CONFIG_FILE=/workspace/tests/drone/config-ocis.json
             owncloud/ocis-rolling:latest
 
       - name: Wait for oCIS service
