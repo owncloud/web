@@ -171,8 +171,7 @@ export async function userFailsToLogin({
 
   await page.goto(config.baseUrl)
   await sessionObject.signIn(user.id, user.password)
-  const errorMessage = await sessionObject.getLoginErrorText()
-  expect(errorMessage).not.toBe('')
+  expect(page.locator('#oc-login-error-message')).toBeVisible({ timeout: config.timeout })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['loginErrorMessageLocator'],

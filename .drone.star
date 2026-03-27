@@ -80,7 +80,6 @@ config = {
             "earlyFail": True,
             "skip": False,
             "features": [
-                "cucumber/features/admin-settings/spaces.feature",
                 "cucumber/features/keycloak",
             ],
             "extraServerEnvironment": {

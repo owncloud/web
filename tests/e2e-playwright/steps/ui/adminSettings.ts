@@ -42,19 +42,7 @@ export async function userResetsLogo({
   await generalObject.resetLogo()
 }
 
-export async function userNavigatesToUsersManagementPage({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
-  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const pageObject = new objects.applicationAdminSettings.page.Users({ page })
-  await pageObject.navigate()
-}
-
-export async function userAllowsLoginForUser({
+export async function userAllowsLoginForUserUsingContextMenu({
   world,
   stepUser,
   key
@@ -69,7 +57,7 @@ export async function userAllowsLoginForUser({
   await usersObject.allowLogin({ key, action: 'context-menu' })
 }
 
-export async function userForbidsLoginForUser({
+export async function userForbidsLoginForUserUsingContextMenu({
   world,
   stepUser,
   key
@@ -84,7 +72,7 @@ export async function userForbidsLoginForUser({
   await usersObject.forbidLogin({ key, action: 'context-menu' })
 }
 
-export async function userChangesUserQuota({
+export async function userChangesQuotaOfUserUsingContextMenu({
   world,
   stepUser,
   key,
@@ -99,6 +87,25 @@ export async function userChangesUserQuota({
   const usersObject = new objects.applicationAdminSettings.Users({ page })
 
   await usersObject.changeQuota({ key, value, action: 'context-menu' })
+}
+
+export async function userChangesQuotaForUsersUsingBatchAction({
+  world,
+  stepUser,
+  value,
+  users
+}: {
+  world: World
+  stepUser: string
+  value: string
+  users: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  for (const user of users) {
+    await usersObject.selectUser({ key: user })
+  }
+  await usersObject.changeQuotaUsingBatchAction({ value, users })
 }
 
 export async function userAddsUsersToGroupsUsingBatchActions({
@@ -121,7 +128,7 @@ export async function userAddsUsersToGroupsUsingBatchActions({
     await usersObject.select({ key: user })
   }
 
-  await usersObject.addToGroupsBatchAtion({ userIds, groups })
+  await usersObject.addToGroupsBatchAction({ userIds, groups })
 }
 
 export async function removeUsersFromGroupsUsingBatchActions({
@@ -202,7 +209,7 @@ export async function usersShouldNotBeVisible({
   }
 }
 
-export async function userChangesUserNameUsingSidebarPanel({
+export async function userChangesNameOfUserUsingContextMenu({
   world,
   stepUser,
   key,
@@ -218,68 +225,22 @@ export async function userChangesUserNameUsingSidebarPanel({
   await usersObject.changeUser({ key, attribute: 'userName', value, action: 'context-menu' })
 }
 
-export async function userChangesUserDisplayNameUsingSidebarPanel({
+export async function userUpdatesUserAttributeUsingContextMenu({
   world,
   stepUser,
-  key,
+  user,
+  attribute,
   value
 }: {
   world: World
   stepUser: string
-  key: string
+  user: string
+  attribute: string
   value: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.changeUser({ key, attribute: 'displayName', value, action: 'context-menu' })
-}
-
-export async function userChangesUserEmailUsingSidebarPanel({
-  world,
-  stepUser,
-  key,
-  value
-}: {
-  world: World
-  stepUser: string
-  key: string
-  value: string
-}): Promise<void> {
-  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.changeUser({ key, attribute: 'email', value, action: 'context-menu' })
-}
-
-export async function userChangesUserPasswordUsingSidebarPanel({
-  world,
-  stepUser,
-  key,
-  value
-}: {
-  world: World
-  stepUser: string
-  key: string
-  value: string
-}): Promise<void> {
-  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.changeUser({ key, attribute: 'password', value, action: 'context-menu' })
-}
-
-export async function userChangesUserRoleUsingSidebarPanel({
-  world,
-  stepUser,
-  key,
-  value
-}: {
-  world: World
-  stepUser: string
-  key: string
-  value: string
-}): Promise<void> {
-  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.changeUser({ key, attribute: 'role', value, action: 'context-menu' })
+  await usersObject.changeUser({ key: user, attribute, value, action: 'context-menu' })
 }
 
 export async function userDeletesUsersUsingBatchActions({
@@ -399,7 +360,7 @@ export async function userShouldSeeEditPanel({
   await usersObject.waitForEditPanelToBeVisible()
 }
 
-export async function userAddsUserToGroupsUsingSidebarPanel({
+export async function userAddsUserToGroupsUsingContextMenu({
   world,
   stepUser,
   user,
@@ -419,7 +380,7 @@ export async function userAddsUserToGroupsUsingSidebarPanel({
   })
 }
 
-export async function userRemovesUserFromGroupsUsingSidebarPanel({
+export async function userRemovesUserFromGroupsUsingContextMenu({
   world,
   stepUser,
   user,
@@ -449,6 +410,18 @@ export async function userNavigatesToGroupsManagementPage({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.page.Groups({ page })
   await groupsObject.navigate()
+}
+
+export async function userNavigatesToUsersManagementPage({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationAdminSettings.page.Users({ page })
+  await pageObject.navigate()
 }
 
 export async function userCreatesGroups({
