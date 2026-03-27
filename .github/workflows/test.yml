@@ -77,7 +77,7 @@ jobs:
           - user-settings
     services:
       ocis:
-        image: owncloud/ocis-rolling@latest
+        image: owncloud/ocis-rolling:latest
         env:
           IDM_ADMIN_PASSWORD: admin
           OCIS_INSECURE: true
