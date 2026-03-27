@@ -90,6 +90,8 @@ jobs:
     services:
       ocis:
         image: owncloud/ocis-rolling:latest
+        ports:
+          - 9200:9200
         env:
           IDM_ADMIN_PASSWORD: admin
           OCIS_INSECURE: true
