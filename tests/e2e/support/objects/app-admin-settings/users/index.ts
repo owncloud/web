@@ -70,7 +70,7 @@ export class Users {
     })
   }
 
-  async addToGroupsBatchAtion({
+  async addToGroupsBatchAction({
     userIds,
     groups
   }: {

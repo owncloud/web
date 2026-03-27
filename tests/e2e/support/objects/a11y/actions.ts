@@ -65,8 +65,6 @@ export const selectors = {
   scienceMesh: '.sciencemesh',
   filesTable: '.files-table',
   filesAppBarActions: '.files-app-bar-actions',
-  loginToggleWithDropdownIcon: '.vs__dropdown-toggle[aria-label="Login - Search for option"]',
-  loginInputDropdownToggle: '.vs__dropdown-toggle:has(input[id="login-input"])',
   compareSaveDialog: '.compare-save-dialog',
   batchQuotaInputDropdownToggle: '.quota-select-batch-action-form .vs__dropdown-toggle', //dropdown with icon
   quotaValueDropDown: 'ul.vs__dropdown-menu',

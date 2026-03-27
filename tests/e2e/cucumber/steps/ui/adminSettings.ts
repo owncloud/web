@@ -269,7 +269,7 @@ When(
 
     switch (action) {
       case 'adds':
-        await usersObject.addToGroupsBatchAtion({ userIds, groups: groups.split(',') })
+        await usersObject.addToGroupsBatchAction({ userIds, groups: groups.split(',') })
         break
       case 'removes':
         await usersObject.removeFromGroupsBatchAtion({ userIds, groups: groups.split(',') })
