@@ -132,7 +132,10 @@ jobs:
             echo "Retrying in 5s..."
             sleep 5
           done
-          echo "❌ oCIS failed to start" && exit 1
+          echo "❌ oCIS failed to start"
+          docker logs ocis
+          docker inspect ocis
+          exit 1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
