@@ -119,6 +119,26 @@ jobs:
             -e OCIS_URL=https://localhost:9200 \
             -e WEB_UI_CONFIG_FILE=/workspace/tests/drone/config-ocis.json \
             -e OCIS_TRANSFER_SECRET=some-ocis-transfer-secret \
+            -e OCIS_LOG_PRETTY=true \
+            -e OCIS_LOG_COLOR=true \
+            -e OCIS_ADMIN_USER_ID=some-admin-user-id-0000-000000000000 \
+            -e OCIS_SYSTEM_USER_ID=some-system-user-id-000-000000000000 \
+            -e OCIS_SYSTEM_USER_API_KEY=some-system-user-machine-auth-api-key \
+            -e OCIS_MACHINE_AUTH_API_KEY=some-ocis-machine-auth-api-key \
+            -e COLLABORATION_WOPIAPP_SECRET=some-wopi-secret \
+            -e IDM_SVC_PASSWORD=some-ldap-idm-password \
+            -e GRAPH_LDAP_BIND_PASSWORD=some-ldap-idm-password \
+            -e IDM_REVASVC_PASSWORD=some-ldap-reva-password \
+            -e GROUPS_LDAP_BIND_PASSWORD=some-ldap-reva-password \
+            -e USERS_LDAP_BIND_PASSWORD=some-ldap-reva-password \
+            -e AUTH_BASIC_LDAP_BIND_PASSWORD=some-ldap-reva-password \
+            -e IDM_IDPSVC_PASSWORD=some-ldap-idp-password \
+            -e IDP_LDAP_BIND_PASSWORD=some-ldap-idp-password \
+            -e GATEWAY_STORAGE_USERS_MOUNT_ID=storage-users-1 \
+            -e STORAGE_USERS_MOUNT_ID=storage-users-1 \
+            -e GRAPH_APPLICATION_ID=application-1 \
+            -e OCIS_SERVICE_ACCOUNT_ID=service-account-id \
+            -e OCIS_SERVICE_ACCOUNT_SECRET=service-account-secret \
             owncloud/ocis-rolling:latest
 
       - name: Wait for oCIS service
