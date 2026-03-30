@@ -103,7 +103,7 @@ test.describe('spaces.personal', () => {
       newName: 'team.1'
     })
     // And "Alice" sets the expiration date of the public link named "team.1" of resource "folderPublic" to "+5 days"
-    await ui.userSetsExperationDateOfPublicLink({
+    await ui.userSetsExpirationDateOfThePublicLinkOfResource({
       world,
       stepUser: 'Alice',
       linkName: 'team.1',
@@ -187,7 +187,7 @@ test.describe('spaces.personal', () => {
       newRole: 'Secret File Drop'
     })
     // And "Alice" sets the expiration date of the public link named "team.2" of resource "folderPublic" to "+5 days"
-    await ui.userSetsExperationDateOfPublicLink({
+    await ui.userSetsExpirationDateOfThePublicLinkOfResource({
       world,
       stepUser: 'Alice',
       linkName: 'team.2',
@@ -219,10 +219,10 @@ test.describe('spaces.personal', () => {
     // And "Anonymous" drop uploads following resources
     //   | resource     |
     //   | textfile.txt |
-    await ui.userDropsResources({
+    await ui.userDropUploadsResources({
       world,
       stepUser: 'Anonymous',
-      resources: [{ name: 'textfile.txt' }]
+      resources: ['textfile.txt']
     })
 
     // borrowed from share.feature
@@ -317,10 +317,10 @@ test.describe('spaces.personal', () => {
     // And "Anonymous" drop uploads following resources
     //   | resource     |
     //   | textfile.txt |
-    await ui.userDropsResources({
+    await ui.userDropUploadsResources({
       world,
       stepUser: 'Anonymous',
-      resources: [{ name: 'textfile.txt' }]
+      resources: ['textfile.txt']
     })
   })
 
