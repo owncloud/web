@@ -82,7 +82,6 @@ jobs:
       BROWSER: chromium
       REPORT_TRACING: false
       FAILD_ON_UNCAUGHT_CONSOLE_ERR: trye
-      PLAYWRIGHT_BROWSERS_PATH: .playwright
       SKIP_A11Y_TESTS: true
       TEST_TYPE: playwright
     steps:
@@ -178,12 +177,7 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm dlx playwright install --with-deps chromium
-
-      - name: Install system deps if cache hit
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm dlx playwright install-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Run E2E tests
         run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright --suites ${{ matrix.suites }}
