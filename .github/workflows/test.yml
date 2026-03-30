@@ -188,4 +188,4 @@ jobs:
         run: pnpm dlx playwright install-deps chromium
 
       - name: Run E2E tests
-        run: cd ${{ github.workspace }}/tests/e2e && run-e2e.sh --type playwright --suites ${{ matrix.suites }}
+        run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright --suites ${{ matrix.suites }}
