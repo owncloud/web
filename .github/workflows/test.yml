@@ -75,6 +75,16 @@ jobs:
           - shares
           - smoke
           - user-settings
+    env:
+      BASE_URL_OCIS: localhost:9200
+      HEADLESS: true
+      RETRY: 1
+      BROWSER: chromium
+      REPORT_TRACING: false
+      FAILD_ON_UNCAUGHT_CONSOLE_ERR: trye
+      PLAYWRIGHT_BROWSERS_PATH: .playwright
+      SKIP_A11Y_TESTS: true
+      TEST_TYPE: playwright
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
