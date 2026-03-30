@@ -118,6 +118,7 @@ jobs:
             -e FRONTEND_CONFIGURABLE_NOTIFICATIONS=true \
             -e OCIS_URL=https://localhost:9200 \
             -e WEB_UI_CONFIG_FILE=/workspace/tests/drone/config-ocis.json \
+            -e OCIS_TRANSFER_SECRET=some-ocis-transfer-secret \
             owncloud/ocis-rolling:latest
 
       - name: Wait for oCIS service
