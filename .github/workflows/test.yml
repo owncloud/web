@@ -66,28 +66,39 @@ jobs:
         suites:
           - name: admin-settings
             federated: false
+            tika: false
           - name: app-provider
             federated: false
+            tika: false
           - name: app-store
             federated: false
+            tika: false
           - name: file-action
             federated: false
+            tika: false
           - name: navigation
             federated: false
+            tika: false
           - name: ocm
             federated: true
           - name: oidc
             federated: false
+            tika: false
           - name: runtime
             federated: false
+            tika: false
           - name: search
             federated: false
+            tika: true
           - name: shares
             federated: false
+            tika: false
           - name: smoke
             federated: false
+            tika: false
           - name: user-settings
             federated: false
+            tika: false
     env:
       BASE_URL_OCIS: localhost:9200
       HEADLESS: true
@@ -98,6 +109,10 @@ jobs:
       SKIP_A11Y_TESTS: true
       TEST_TYPE: playwright
       FEDERATED_BASE_URL_OCIS: localhost:10200
+      # TIKA
+      SEARCH_EXTRACTOR_TYPE: 'tika'
+      SEARCH_EXTRACTOR_TIKA_TIKA_URL: 'http://localhost:9998'
+      SEARCH_EXTRACTOR_CS3SOURCE_INSECURE: 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
@@ -230,6 +245,32 @@ jobs:
           echo "❌ federated oCIS failed to start"
           docker logs ocis-federated
           docker inspect ocis-federated
+          exit 1
+
+      - name: Run tika service
+        if: matrix.suites.tika == true
+        run: |
+          docker run -d \
+            --name tika \
+            -p 9998:9998 \
+            apache/tika:3.2.3.0
+
+      - name: Wait for tika service
+        if: matrix.suites.tika == true
+        run: |
+          echo "Waiting for tika"
+          # 150s timeout
+          for i in {1..30}; do
+            if curl -kfsSL http://localhost:9998 > /dev/null; then
+              echo "tika is up ✅"
+              exit 0
+            fi
+            echo "Retrying in 5s..."
+            sleep 5
+          done
+          echo "❌ tika failed to start"
+          docker logs tika
+          docker inspect tika
           exit 1
 
       - name: Setup pnpm
