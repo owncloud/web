@@ -202,3 +202,17 @@ export async function userChangesUserQuota({
   const usersObject = new objects.applicationAdminSettings.Users({ page })
   await usersObject.changeQuota({ key, value, action: 'context-menu' })
 }
+
+export async function userAuthenticatesWithOTP({
+  world,
+  stepUser,
+  deviceName
+}: {
+  world: World
+  stepUser: string
+  deviceName: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const generalObject = new objects.applicationAdminSettings.General({ page })
+  await generalObject.userAuthenticatesWithOTP({ deviceName })
+}

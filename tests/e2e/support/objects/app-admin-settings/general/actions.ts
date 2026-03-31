@@ -1,6 +1,8 @@
 import { basename } from 'path'
 import { Page, expect } from '@playwright/test'
 import { objects } from '../../..'
+import { getOtpFromImage } from '../../../utils/mfa'
+import { Jimp } from 'jimp'
 
 export const uploadLogo = async (path: string, page: Page): Promise<void> => {
   await page.click('#logo-context-btn')
@@ -60,4 +62,15 @@ export const resetLogo = async (page: Page): Promise<void> => {
   const imgAfter = page.locator(`${selectors.logoWrapper} img`)
   const srcAfter = await imgAfter.getAttribute('src')
   expect(srcAfter).not.toEqual(srcBefore)
+}
+
+export const userAuthenticatesWithOTP = async (page: Page, deviceName: string): Promise<void> => {
+  const element = page.locator('#kc-totp-secret-qr-code')
+  await element.screenshot({ path: 'qr.png' })
+  const image = await Jimp.read('./qr.png')
+  const { data, width, height } = image.bitmap
+  const otp = await getOtpFromImage(data, width, height)
+  await page.locator('#totp').fill(String(otp))
+  await page.locator('#userLabel').fill(deviceName)
+  await page.locator('#saveTOTPBtn').click()
 }
