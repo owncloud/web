@@ -73,6 +73,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         suites:
           - name: admin-settings
@@ -105,7 +106,7 @@ jobs:
       RETRY: 1
       BROWSER: chromium
       REPORT_TRACING: false
-      FAILD_ON_UNCAUGHT_CONSOLE_ERR: trye
+      FAIL_ON_UNCAUGHT_CONSOLE_ERR: true
       SKIP_A11Y_TESTS: true
       TEST_TYPE: playwright
       FEDERATED_BASE_URL_OCIS: localhost:10200
