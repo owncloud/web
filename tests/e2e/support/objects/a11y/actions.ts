@@ -64,7 +64,12 @@ export const selectors = {
   ocModalGenerateNewToken: '.oc-modal.oc-modal-passive',
   scienceMesh: '.sciencemesh',
   filesTable: '.files-table',
-  filesAppBarActions: '.files-app-bar-actions'
+  filesAppBarActions: '.files-app-bar-actions',
+  notificationContainer: 'div.oc-notification',
+  spaceInfoContainer: '.space-header-infos',
+  saveTextEditorOrViewerButton: '#app-save-action',
+  spaceDescriptionPreview: '#space-description-preview',
+  quotaValueDropDown: 'ul.vs__dropdown-menu'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']

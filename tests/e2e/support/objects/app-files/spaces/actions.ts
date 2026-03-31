@@ -97,6 +97,11 @@ export const changeSpaceName = async (args: {
   await openActionsPanel(page)
 
   await page.locator(spacesRenameOptionSelector).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'rename space modal'
+  )
   await page.locator(spaceNameInputField).fill(value)
   await Promise.all([
     page.waitForResponse(
@@ -107,6 +112,16 @@ export const changeSpaceName = async (args: {
     ),
     page.locator(actionConfirmButton).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['notificationContainer'],
+    'notification popup after renaming space'
+  )
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['spaceInfoContainer'],
+    'space information container after renaming space'
+  )
 
   await sidebar.close({ page: page })
 }
@@ -122,6 +137,11 @@ export const changeSpaceSubtitle = async (args: {
   await openActionsPanel(page)
 
   await page.locator(editSpacesSubtitleOptionSelector).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'edit space subtitle modal'
+  )
   await page.locator(spaceNameInputField).fill(value)
   await Promise.all([
     page.waitForResponse(
@@ -132,6 +152,16 @@ export const changeSpaceSubtitle = async (args: {
     ),
     page.locator(actionConfirmButton).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['notificationContainer'],
+    'notification popup after changing space subtitle'
+  )
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['spaceInfoContainer'],
+    'space information container after changing space subtitle'
+  )
 
   await sidebar.close({ page: page })
 }
@@ -153,13 +183,29 @@ export const changeSpaceDescription = async (args: {
     )
   await Promise.all([waitForUpdate(), page.locator(editSpacesDescription).click()])
 
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['textEditor'],
+    'space description editor'
+  )
+
   await page.locator(spacesDescriptionInputArea).fill(value)
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'PUT'),
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
     page.locator(spacesDescriptionSaveTextFileInEditorButton).click()
   ])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['saveTextEditorOrViewerButton'],
+    'save button in space description editor'
+  )
   await editor.close(page)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['spaceDescriptionPreview'],
+    'space description preview after editing space description'
+  )
 }
 
 /**/
@@ -173,8 +219,18 @@ export const changeQuota = async (args: {
   await openActionsPanel(page)
 
   await page.locator(editQuotaOptionSelector).click()
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['ocModal'],
+    'edit space quota modal'
+  )
   const searchLocator = page.locator(spacesQuotaSearchField)
   await searchLocator.pressSequentially(value)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['quotaValueDropDown'],
+    'quota value dropdown after entering quota'
+  )
   await page.locator(selectedQuotaValueField).waitFor()
   await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
 
@@ -187,6 +243,12 @@ export const changeQuota = async (args: {
     ),
     page.locator(actionConfirmButton).click()
   ])
+
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['notificationContainer'],
+    'notification popup after changing space quota'
+  )
 
   await sidebar.close({ page: page })
 }
