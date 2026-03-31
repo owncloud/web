@@ -77,16 +77,10 @@ export async function userNavigatesToSharedWithOthersPage({
   await pageObject.navigate()
 }
 
-export async function userUpdatesShareeRole({
+export async function userUpdatesShareeRoles({
   world,
   stepUser,
-  resource,
-  recipient,
-  type,
-  role,
-  resourceType,
-  expirationDate,
-  shareType
+  roleUpdates
 }: {
   world: World
   stepUser: string
@@ -100,29 +94,32 @@ export async function userUpdatesShareeRole({
 }) {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
-  const shareInfo = parseShareTable(
-    world,
-    resource,
-    recipient,
-    type,
-    role,
-    resourceType,
-    expirationDate,
-    shareType
-  )
   const sharer = world.usersEnvironment.getUser({ key: stepUser })
 
-  for (const [resource, shareObj] of Object.entries(shareInfo)) {
-    const roleId = await getDynamicRoleIdByName(
-      sharer,
-      shareObj[0].role,
-      shareObj[0].resourceType as ResourceType
+  for (const update of roleUpdates) {
+    const shareInfo = parseShareTable(
+      world,
+      update.resource,
+      update.recipient,
+      update.type,
+      update.role,
+      update.resourceType,
+      update.expirationDate,
+      update.shareType
     )
-    shareObj.forEach((item) => (item.role = roleId))
-    await shareObject.changeShareeRole({
-      resource,
-      recipients: shareObj
-    })
+
+    for (const [resource, shareObj] of Object.entries(shareInfo)) {
+      const roleId = await getDynamicRoleIdByName(
+        sharer,
+        shareObj[0].role,
+        shareObj[0].resourceType as ResourceType
+      )
+      shareObj.forEach((item) => (item.role = roleId))
+      await shareObject.changeShareeRole({
+        resource,
+        recipients: shareObj
+      })
+    }
   }
 }
 
