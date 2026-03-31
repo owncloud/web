@@ -518,11 +518,11 @@ test.describe('link', () => {
       // And "Brian" unlocks the public link with password "%public%"
       await ui.userUnlocksPublicLink({
         world,
-        password: '%public%',
-        stepUser: 'Brian'
+        stepUser: 'Brian',
+        password: '%public%'
       })
       // Then "Brian" is in a text-editor
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
         fileViewerType: 'text-editor'
@@ -543,7 +543,7 @@ test.describe('link', () => {
         stepUser: 'Brian'
       })
       // Then "Brian" is in a text-editor
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
         fileViewerType: 'text-editor'
@@ -572,7 +572,7 @@ test.describe('link', () => {
         stepUser: 'Brian'
       })
       // Then "Brian" is in a pdf-viewer
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
         fileViewerType: 'pdf-viewer'
@@ -602,7 +602,7 @@ test.describe('link', () => {
       })
       // https://github.com/owncloud/ocis/issues/8602
       // Then "Brian" is in a media-viewer
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
         fileViewerType: 'media-viewer'
@@ -659,7 +659,7 @@ test.describe('link', () => {
         stepUser: 'Carol'
       })
       // Then "Carol" is in a text-editor
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
         fileViewerType: 'text-editor'
@@ -679,7 +679,7 @@ test.describe('link', () => {
         stepUser: 'Carol'
       })
       // Then "Carol" is in a text-editor
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
         fileViewerType: 'text-editor'
@@ -708,7 +708,7 @@ test.describe('link', () => {
         stepUser: 'Carol'
       })
       // Then "Carol" is in a pdf-viewer
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
         fileViewerType: 'pdf-viewer'
@@ -738,7 +738,7 @@ test.describe('link', () => {
       })
       // https://github.com/owncloud/ocis/issues/8602
       // Then "Carol" is in a media-viewer
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
         fileViewerType: 'media-viewer'
@@ -792,7 +792,7 @@ test.describe('link', () => {
         stepUser: 'Anonymous'
       })
       // Then "Anonymous" is in a text-editor
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
         fileViewerType: 'text-editor'
@@ -812,7 +812,7 @@ test.describe('link', () => {
         stepUser: 'Anonymous'
       })
       // Then "Anonymous" is in a text-editor
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
         fileViewerType: 'text-editor'
@@ -841,7 +841,7 @@ test.describe('link', () => {
         stepUser: 'Anonymous'
       })
       // Then "Anonymous" is in a pdf-viewer
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
         fileViewerType: 'pdf-viewer'
@@ -871,7 +871,7 @@ test.describe('link', () => {
       })
       // https://github.com/owncloud/ocis/issues/8602
       // Then "Anonymous" is in a media-viewer
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
         fileViewerType: 'media-viewer'
@@ -900,7 +900,7 @@ test.describe('link', () => {
         stepUser: 'Anonymous'
       })
       // Then "Anonymous" is in a media-viewer
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
         fileViewerType: 'media-viewer'

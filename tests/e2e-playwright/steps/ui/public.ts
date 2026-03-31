@@ -127,7 +127,7 @@ export async function userDeletesResourcesFromPublicLink({
   }
 }
 
-export async function userIsInFileViewer({
+export async function userShouldBeInFileViewer({
   world,
   stepUser,
   fileViewerType

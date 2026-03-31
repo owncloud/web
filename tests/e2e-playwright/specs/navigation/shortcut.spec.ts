@@ -115,7 +115,7 @@ test.describe(
         name: 'important file.url'
       })
       // Then "Alice" is in a text-editor
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Alice',
         fileViewerType: 'text-editor'
@@ -150,7 +150,7 @@ test.describe(
         name: 'logo.url'
       })
       // Then "Brian" is in a media-viewer
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
         fileViewerType: 'media-viewer'
@@ -182,7 +182,7 @@ test.describe(
         stepUser: 'Brian'
       })
       // Then "Brian" is in a text-editor
-      await ui.userIsInFileViewer({
+      await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
         fileViewerType: 'text-editor'
