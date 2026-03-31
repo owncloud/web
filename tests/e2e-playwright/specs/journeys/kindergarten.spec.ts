@@ -1,42 +1,16 @@
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-  FilesEnvironment
-} from '../../../e2e/support/environment/index.js'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 
 test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-users' }, () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-  const filesEnvironment = new FilesEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-
+  test.beforeEach(async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
     //   | Carol |
-    await api.usersHasBeenCreated({
-      usersEnvironment,
+    await api.usersHaveBeenCreated({
+      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol']
     })
@@ -46,28 +20,27 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     //   | sales    |
     //   | security |
     await api.groupsHaveBeenCreated({
+      world,
       groupIds: ['sales', 'security'],
-      admin: usersEnvironment.getUser({ key: 'Admin' })
+      stepUser: 'Admin'
     })
 
     // And "Admin" adds user to the group using API
     //   | user  | group |
     //   | Brian | sales |
-    await api.addUserToGroup({
-      usersEnvironment,
+    await api.usersHaveBeenAddedToGroup({
+      world,
       stepUser: 'Admin',
-      userToAdd: [{ user: 'Brian', group: 'sales' }]
+      usersToAdd: [{ user: 'Brian', group: 'sales' }]
     })
-
-    await setAccessAndRefreshToken(usersEnvironment)
   })
 
-  test('Alice can share this weeks meal plan with all parents', async () => {
+  test('Alice can share this weeks meal plan with all parents', async ({ world }) => {
     // When "Alice" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsIn({ world, stepUser: 'Alice' })
 
     // And "Alice" navigates to the personal space page
-    await ui.navigateToPersonalSpacePage({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ world, stepUser: 'Alice' })
 
     // And "Alice" creates the following resources
     //   | resource                             | type   |
@@ -75,7 +48,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     //   | groups/Pre-Schools Pirates/meal plan | folder |
     //   | groups/Teddy Bear Daycare/meal plan  | folder |
     await ui.userCreatesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resources: [
         { name: 'groups/Kindergarten Koalas/meal plan', type: 'folder' },
@@ -95,9 +68,8 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     //   | data.zip          | groups/Teddy Bear Daycare/meal plan  |
     //   | lorem.txt         | groups/Teddy Bear Daycare/meal plan  |
     //   | lorem-big.txt     | groups/Teddy Bear Daycare/meal plan  |
-    await ui.uploadResource({
-      actorsEnvironment,
-      filesEnvironment,
+    await ui.userUploadsResources({
+      world,
       stepUser: 'Alice',
       resources: [
         { name: 'PARENT/parent.txt', to: 'groups/Kindergarten Koalas/meal plan' },
@@ -127,8 +99,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Brian     | user  | Can edit with trashbin | file         |
     //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit with trashbin | file         |
     await ui.userSharesResources({
-      actorsEnvironment,
-      usersEnvironment,
+      world,
       actionType: 'SIDEBAR_PANEL',
       stepUser: 'Alice',
       shares: [
@@ -226,58 +197,52 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     //   | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | sales     | group | Can edit with trashbin | file         |
     //   | groups/Kindergarten Koalas/meal plan               | sales     | group | Can edit with trashbin | folder       |
     //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit with trashbin | file         |
-    await ui.updateShareeRole({
-      usersEnvironment,
-      actorsEnvironment,
+    await ui.userUpdatesShareeRoles({
+      world,
       stepUser: 'Alice',
-      resource: 'groups/Pre-Schools Pirates/meal plan',
-      recipient: 'Carol',
-      type: 'user',
-      role: 'Can view',
-      resourceType: 'folder'
-    })
-    await ui.updateShareeRole({
-      usersEnvironment,
-      actorsEnvironment,
-      stepUser: 'Alice',
-      resource: 'groups/Pre-Schools Pirates/meal plan/lorem-big.txt',
-      recipient: 'sales',
-      type: 'group',
-      role: 'Can edit with trashbin',
-      resourceType: 'file'
-    })
-    await ui.updateShareeRole({
-      usersEnvironment,
-      actorsEnvironment,
-      stepUser: 'Alice',
-      resource: 'groups/Kindergarten Koalas/meal plan',
-      recipient: 'sales',
-      type: 'group',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
-    })
-    await ui.updateShareeRole({
-      usersEnvironment,
-      actorsEnvironment,
-      stepUser: 'Alice',
-      resource: 'groups/Teddy Bear Daycare/meal plan/data.zip',
-      recipient: 'Carol',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'file'
+      roleUpdates: [
+        {
+          resource: 'groups/Pre-Schools Pirates/meal plan',
+          recipient: 'Carol',
+          type: 'user',
+          role: 'Can view',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'groups/Pre-Schools Pirates/meal plan/lorem-big.txt',
+          recipient: 'sales',
+          type: 'group',
+          role: 'Can edit with trashbin',
+          resourceType: 'file'
+        },
+        {
+          resource: 'groups/Kindergarten Koalas/meal plan',
+          recipient: 'sales',
+          type: 'group',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        },
+        {
+          resource: 'groups/Teddy Bear Daycare/meal plan/data.zip',
+          recipient: 'Carol',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'file'
+        }
+      ]
     })
     // Then what do we check for to be confident that the above things done by Alice have worked?
     // When "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsIn({ world, stepUser: 'Brian' })
 
     // And "Brian" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
 
     // And "Brian" downloads the following resources using the sidebar panel
     //   | resource | from      | type |
     //   | data.zip | meal plan | file |
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resourceToDownload: [{ resource: 'data.zip', from: 'meal plan', type: 'file' }],
       actionType: 'SIDEBAR_PANEL'
@@ -286,10 +251,10 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     // Then what do we check for to be confident that the above things done by Brian have worked?
     // Then the downloaded zip should contain... ?
     // When "Carol" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Carol' })
+    await ui.userLogsIn({ world, stepUser: 'Carol' })
 
     // And "Carol" navigates to the shared with me page
-    await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Carol' })
+    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Carol' })
     // And "Carol" downloads the following resources using the sidebar panel
     //   | resource      | from      | type   |
     //   | data.zip      | meal plan | file   |
@@ -299,7 +264,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     // Then what do we check for to be confident that the above things done by Carol have worked?
     // Then the downloaded files should have content "abc..."
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Carol',
       resourceToDownload: [
         { resource: 'data.zip', from: 'meal plan', type: 'file' },
@@ -310,7 +275,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
       actionType: 'SIDEBAR_PANEL'
     })
     // And "Carol" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Carol' })
+    await ui.userLogsOut({ world, stepUser: 'Carol' })
 
     // When "Brian" downloads the following resources using the sidebar panel
     //   | resource      | from      | type   |
@@ -320,7 +285,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     // Then what do we check for to be confident that the above things done by Brian have worked?
     // Then the downloaded files should have content "abc..."
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Brian',
       resourceToDownload: [
         { resource: 'lorem.txt', from: 'meal plan', type: 'file' },
@@ -331,7 +296,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     })
 
     // And "Brian" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
+    await ui.userLogsOut({ world, stepUser: 'Brian' })
     // And "Alice" downloads the following resources using the sidebar panel
     //   | resource            | from                                 | type   |
     //   | parent.txt          | groups/Kindergarten Koalas/meal plan | file   |
@@ -351,7 +316,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     //   | Teddy Bear Daycare  | groups                               | folder |
     //   | groups              |                                      | folder |
     await ui.userDownloadsResource({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       resourceToDownload: [
         {
@@ -452,7 +417,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     // # Then what do we check for to be confident that the above things done by Alice have worked?
     // # Then the downloaded files should have content "abc..."
     await ui.userDeletesResources({
-      actorsEnvironment,
+      world,
       stepUser: 'Alice',
       actionType: 'SIDEBAR_PANEL',
       resources: [
@@ -470,6 +435,6 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
       ]
     })
     // And "Alice" logs out
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
 })

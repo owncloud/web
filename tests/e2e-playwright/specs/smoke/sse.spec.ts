@@ -192,14 +192,18 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     // When "Alice" updates following sharee role
     //   | resource     | recipient | type | role     | resourceType |
     //   | space-folder | Carol     | user | Can view | folder       |
-    await ui.userUpdatesShareeRole({
+    await ui.userUpdatesShareeRoles({
       world,
       stepUser: 'Alice',
-      resource: 'space-folder',
-      recipient: 'Carol',
-      type: 'user',
-      role: 'Can view',
-      resourceType: 'folder'
+      roleUpdates: [
+        {
+          resource: 'space-folder',
+          recipient: 'Carol',
+          type: 'user',
+          role: 'Can view',
+          resourceType: 'folder'
+        }
+      ]
     })
     // Then "Alice" should get "share-updated" SSE event
     await ui.userShouldGetSSEEvent({
@@ -417,14 +421,18 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     // When "Alice" updates following sharee role
     //   | resource     | recipient | type | role                   | resourceType |
     //   | sharedFolder | Brian     | user | Can edit with trashbin | folder       |
-    await ui.userUpdatesShareeRole({
+    await ui.userUpdatesShareeRoles({
       world,
       stepUser: 'Alice',
-      resource: 'sharedFolder',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can edit with trashbin',
-      resourceType: 'folder'
+      roleUpdates: [
+        {
+          resource: 'sharedFolder',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can edit with trashbin',
+          resourceType: 'folder'
+        }
+      ]
     })
     // Then "Alice" should get "share-updated" SSE event
     await ui.userShouldGetSSEEvent({
