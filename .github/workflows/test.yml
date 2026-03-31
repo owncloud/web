@@ -186,7 +186,7 @@ jobs:
         run: |
           docker run -d \
             --name ocis-federated \
-            -p 10200:10200 \
+            -p 10200:9200 \
             -v ${{ github.workspace }}:/workspace \
             -e IDM_ADMIN_PASSWORD=admin \
             -e OCIS_INSECURE=true \
