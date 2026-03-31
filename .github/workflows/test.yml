@@ -199,6 +199,7 @@ jobs:
             -e OCIS_SERVICE_ACCOUNT_SECRET=service-account-secret \
             -e PROXY_CSP_CONFIG_FILE_LOCATION=/workspace/tests/drone/csp.yaml \
             -e PROXY_ENABLE_BASIC_AUTH=true \
+            -e PROXY_TLS=false \
             -e SEARCH_EXTRACTOR_TYPE=tika \
             -e SEARCH_EXTRACTOR_TIKA_TIKA_URL=http://localhost:9998 \
             -e SEARCH_EXTRACTOR_CS3SOURCE_INSECURE=true \
@@ -270,6 +271,7 @@ jobs:
             -e OCIS_SERVICE_ACCOUNT_SECRET=service-account-secret \
             -e PROXY_CSP_CONFIG_FILE_LOCATION=/workspace/tests/drone/csp.yaml \
             -e PROXY_ENABLE_BASIC_AUTH=true \
+            -e PROXY_TLS=false \
             -e SEARCH_EXTRACTOR_TYPE=tika \
             -e SEARCH_EXTRACTOR_TIKA_TIKA_URL=http://localhost:9998 \
             -e SEARCH_EXTRACTOR_CS3SOURCE_INSECURE=true \
