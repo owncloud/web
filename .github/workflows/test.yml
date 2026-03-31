@@ -113,6 +113,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
+      - name: Run tika service
+        if: matrix.suites.tika == true
+        run: |
+          docker run -d \
+            --name tika \
+            -p 9998:9998 \
+            apache/tika:3.2.3.0
+
+      - name: Wait for tika service
+        if: matrix.suites.tika == true
+        run: |
+          echo "Waiting for tika"
+          # 150s timeout
+          for i in {1..30}; do
+            if curl -kfsSL http://localhost:9998 > /dev/null; then
+              echo "tika is up ✅"
+              exit 0
+            fi
+            echo "Retrying in 5s..."
+            sleep 5
+          done
+          echo "❌ tika failed to start"
+          docker logs tika
+          docker inspect tika
+          exit 1
+
       - name: Download build artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
@@ -255,32 +281,6 @@ jobs:
           echo "❌ federated oCIS failed to start"
           docker logs ocis-federated
           docker inspect ocis-federated
-          exit 1
-
-      - name: Run tika service
-        if: matrix.suites.tika == true
-        run: |
-          docker run -d \
-            --name tika \
-            -p 9998:9998 \
-            apache/tika:3.2.3.0
-
-      - name: Wait for tika service
-        if: matrix.suites.tika == true
-        run: |
-          echo "Waiting for tika"
-          # 150s timeout
-          for i in {1..30}; do
-            if curl -kfsSL http://localhost:9998 > /dev/null; then
-              echo "tika is up ✅"
-              exit 0
-            fi
-            echo "Retrying in 5s..."
-            sleep 5
-          done
-          echo "❌ tika failed to start"
-          docker logs tika
-          docker inspect tika
           exit 1
 
       - name: Setup pnpm
