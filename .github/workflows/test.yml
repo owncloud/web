@@ -130,7 +130,7 @@ jobs:
         run: |
           docker run -d \
             --name tika \
-            -p 9998:9998 \
+            --network host \
             apache/tika:3.2.3.0
 
       - name: Wait for tika service
@@ -161,7 +161,7 @@ jobs:
         run: |
           docker run -d \
             --name ocis \
-            -p 9200:9200 \
+            --network host \
             -v ${{ github.workspace }}:/workspace \
             -e IDM_ADMIN_PASSWORD=admin \
             -e OCIS_INSECURE=true \
@@ -233,7 +233,7 @@ jobs:
         run: |
           docker run -d \
             --name ocis-federated \
-            -p 10200:9200 \
+            --network host \
             -v ${{ github.workspace }}:/workspace \
             -e IDM_ADMIN_PASSWORD=admin \
             -e OCIS_INSECURE=true \
@@ -247,6 +247,7 @@ jobs:
             -e GRAPH_AVAILABLE_ROLES=b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6,63e64e19-8d43-42ec-a738-2b6af2610efa \
             -e FRONTEND_CONFIGURABLE_NOTIFICATIONS=true \
             -e OCIS_URL=https://localhost:10200 \
+            -e OCIS_RUNTIME_PORT=10200 \
             -e WEB_UI_CONFIG_FILE=/workspace/tests/drone/config-ocis-federated.json \
             -e OCIS_TRANSFER_SECRET=some-ocis-transfer-secret \
             -e OCIS_LOG_PRETTY=true \
