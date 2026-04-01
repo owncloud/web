@@ -19,7 +19,7 @@ test.describe('groups management', () => {
       stepUser: 'Admin',
       groupIds: ['sales', 'security']
     })
-    await ui.checkGroupsPresenceById({
+    await ui.userShouldSeeGroupIds({
       world,
       stepUser: 'Admin',
       expectedGroupIds: ['sales', 'security']
