@@ -1,33 +1,9 @@
-import { expect } from '@playwright/test'
 import { test } from '../../support/test'
-import { config } from '../../../e2e/config.js'
-import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment/index.js'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 
 // For synchronization-related details, see https://owncloud.dev/services/proxy/#claim-updates
 test.describe('groups management', () => {
-  let actorsEnvironment
-  const usersEnvironment = new UsersEnvironment()
-
-  test.beforeEach(async ({ browser }) => {
-    actorsEnvironment = new ActorsEnvironment({
-      context: {
-        acceptDownloads: config.acceptDownloads,
-        reportDir: config.reportDir,
-        tracingReportDir: config.tracingReportDir,
-        reportHar: config.reportHar,
-        reportTracing: config.reportTracing,
-        reportVideo: config.reportVideo,
-        failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
-      },
-      browser: browser
-    })
-
-    await setAccessAndRefreshToken(usersEnvironment)
-  })
-
   test('keycloak group sync with oCIS', async ({ world }) => {
     // Given "Admin" creates following user using API
     //   | id    |
@@ -76,13 +52,11 @@ test.describe('groups management', () => {
     //   | security         |
     //   | keycloak sales   |
     //   | keycloak finance |
-    expect(
-      await ui.checkGroupsPresenceById({
-        world,
-        stepUser: 'Admin',
-        expectedGroupIds: ['security', 'keycloak sales', 'keycloak finance']
-      })
-    ).toBeTruthy()
+    await ui.userShouldSeeGroupIds({
+      world,
+      stepUser: 'Admin',
+      expectedGroupIds: ['security', 'keycloak sales', 'keycloak finance']
+    })
 
     // When "Admin" navigates to the users management page
     await ui.userNavigatesToUserManagementPage({ world, stepUser: 'Admin' })
@@ -113,14 +87,14 @@ test.describe('groups management', () => {
           resource: 'shareToSales.txt',
           recipient: 'keycloak sales',
           type: 'group',
-          role: 'Can edit without versions',
+          role: 'Can edit with trashbin',
           resourceType: 'file'
         },
         {
           resource: 'shareToSecurity.txt',
           recipient: 'security',
           type: 'group',
-          role: 'Can edit without versions',
+          role: 'Can edit with trashbin',
           resourceType: 'file'
         }
       ]
@@ -138,22 +112,26 @@ test.describe('groups management', () => {
     // When "Brian" opens the following file in texteditor
     //   | resource         |
     //   | shareToSales.txt |
-    await ui.userOpensFileInViewer({
+    await ui.userOpensResourceInViewer({
       world,
       stepUser: 'Brian',
       resource: 'shareToSales.txt',
-      actionType: 'texteditor'
+      application: 'texteditor'
     })
     // And "Brian" closes the file viewer
     await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
     // And "Brian" edits the following resources
     //   | resource            | content     |
     //   | shareToSecurity.txt | new content |
-    await ui.userEditsFile({
+    await ui.userEditsResources({
       world,
       stepUser: 'Brian',
-      resource: 'shareToSecurity.txt',
-      content: 'new content'
+      resources: [
+        {
+          name: 'shareToSecurity.txt',
+          content: 'new content'
+        }
+      ]
     })
     // And "Brian" logs out
     await ui.userLogsOut({ world, stepUser: 'Brian' })
@@ -170,33 +148,32 @@ test.describe('groups management', () => {
     // Renaming a Keycloak group results in the creation of a new group on the oCIS server (see https://github.com/owncloud/ocis/issues/10445).
     // After renaming a group, it may take up to 5 minutes for the changes to sync, so avoid using the renamed group in the subsequent steps.
     // And "Admin" changes displayName to "a renamed group" for group "keycloak finance" using the sidebar panel
-    await ui.userRenamesGroup({
+    await ui.userChangesGroup({
       world,
       stepUser: 'Admin',
       attribute: 'displayName',
+      key: 'keycloak finance',
       value: 'a renamed group',
-      user: 'keycloak finance'
+      action: 'context-menu'
     })
 
     // When "Admin" deletes the following group using the context menu
     //   | group |
     //   | sales |
-    await ui.userDeletesGroup({
+    await ui.userDeletesGroups({
       world,
       stepUser: 'Admin',
       actionType: 'context menu',
-      group: 'sales'
+      groupsToBeDeleted: ['sales']
     })
     // Then "Admin" should not see the following group
     //   | group |
     //   | sales |
-    expect(
-      await ui.checkGroupsPresenceById({
-        world,
-        stepUser: 'Admin',
-        expectedGroupIds: ['sales']
-      })
-    ).toBeFalsy()
+    await ui.userShouldNotSeeGroupIds({
+      world,
+      stepUser: 'Admin',
+      expectedGroupIds: ['sales']
+    })
     // And "Admin" logs out
     await ui.userLogsOut({ world, stepUser: 'Admin' })
   })
