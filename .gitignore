@@ -55,6 +55,7 @@ playwright-report
 tests/e2e/cucumber/report/*
 !tests/e2e/cucumber/report/index.mjs
 .vscode/settings.json
+test-results
 
 # third party licenses
 /third-party-licenses
