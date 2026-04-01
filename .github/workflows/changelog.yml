@@ -1,0 +1,69 @@
+name: changelog
+
+on:
+  push:
+    branches:
+      - master
+      - stable-*
+  pull_request:
+    branches:
+      - master
+      - stable-*
+
+permissions:
+  contents: write
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: clone
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: clone
+        if: github.event_name != 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: master
+          fetch-depth: 0
+
+      - name: generate
+        run: |
+          docker run --rm \
+            -v "$PWD:$PWD" \
+            -w "$PWD" \
+            toolhippie/calens:20251229 \
+            sh -lc 'calens >| CHANGELOG.md'
+
+      - name: diff
+        id: diff
+        run: |
+          git diff
+          if git diff --quiet --exit-code; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: output
+        run: |
+          docker run --rm \
+            -v "$PWD:$PWD" \
+            -w "$PWD" \
+            toolhippie/calens:20251229 \
+            sh -lc 'cat CHANGELOG.md'
+
+      - name: publish
+        if: github.event_name != 'pull_request' && steps.diff.outputs.has_changes == 'true'
+        run: |
+          git config user.email 'devops@owncloud.com'
+          git config user.name 'ownClouders'
+          git commit -am 'Automated changelog update [skip ci]'
+          git push origin HEAD:master
