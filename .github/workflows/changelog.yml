@@ -5,10 +5,12 @@ on:
     branches:
       - master
       - stable-*
+      - test/workflow-change-log
   pull_request:
     branches:
       - master
       - stable-*
+      - test/workflow-change-log
 
 permissions:
   contents: write
@@ -18,47 +20,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: clone
-        if: github.event_name == 'pull_request'
-        uses: actions/checkout@v4
+      - name: checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
-      - name: clone
-        if: github.event_name != 'pull_request'
-        uses: actions/checkout@v4
+      - name: generate changelog
+        id: changelog
+        uses: actionhippie/calens@244f3e5c328b842a740113859b87bbebf697f63b # v1.13.1
         with:
-          repository: ${{ github.repository }}
-          ref: master
-          fetch-depth: 0
+          target: CHANGELOG.md
 
-      - name: generate
-        run: |
-          docker run --rm \
-            -v "$PWD:$PWD" \
-            -w "$PWD" \
-            toolhippie/calens:20251229 \
-            sh -lc 'calens >| CHANGELOG.md'
-
-      - name: diff
+      - name: check for changes
         id: diff
         run: |
-          git diff
           if git diff --quiet --exit-code; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: output
-        run: |
-          docker run --rm \
-            -v "$PWD:$PWD" \
-            -w "$PWD" \
-            toolhippie/calens:20251229 \
-            sh -lc 'cat CHANGELOG.md'
 
       - name: publish
         if: github.event_name != 'pull_request' && steps.diff.outputs.has_changes == 'true'
