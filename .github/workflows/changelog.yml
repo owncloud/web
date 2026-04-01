@@ -5,10 +5,12 @@ on:
     branches:
       - master
       - stable-*
+      - test/workflow-change-log
   pull_request:
     branches:
       - master
       - stable-*
+      - test/workflow-change-log
 
 permissions:
   contents: write
