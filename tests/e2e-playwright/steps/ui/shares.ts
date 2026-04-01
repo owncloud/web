@@ -492,3 +492,15 @@ export async function userShouldSeeMessageOnWebUI({
   const actualMessage = await shareObject.getMessage()
   expect(actualMessage).toBe(message)
 }
+
+export async function userNavigatesToSharedViaLinkPage({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationFiles.page.shares.ViaLink({ page })
+  await pageObject.navigate()
+}

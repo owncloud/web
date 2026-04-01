@@ -181,7 +181,7 @@ test.describe('spaces public link', () => {
       password: '%public%'
     })
 
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Brian',
       fileViewerType: 'text-editor'
@@ -204,7 +204,7 @@ test.describe('spaces public link', () => {
       password: '%public%'
     })
 
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Brian',
       fileViewerType: 'text-editor'
@@ -273,7 +273,7 @@ test.describe('spaces public link', () => {
       password: '%public%'
     })
 
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Carol',
       fileViewerType: 'pdf-viewer'
@@ -327,7 +327,7 @@ test.describe('spaces public link', () => {
       password: '%public%'
     })
 
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'David',
       fileViewerType: 'media-viewer'

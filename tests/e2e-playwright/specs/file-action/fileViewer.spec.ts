@@ -96,7 +96,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     })
 
     // Then "Alice" is in a media-viewer
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
@@ -116,7 +116,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     })
 
     // Then "Alice" is in a media-viewer
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
@@ -150,7 +150,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     })
 
     // Then "Alice" is in a media-viewer
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
@@ -170,7 +170,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     })
 
     // Then "Alice" is in a media-viewer
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
@@ -190,7 +190,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     })
 
     // Then "Alice" is in a media-viewer
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
@@ -210,7 +210,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     })
 
     // Then "Alice" is in a media-viewer
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
@@ -230,7 +230,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     })
 
     // Then "Alice" is in a media-viewer
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'media-viewer'
