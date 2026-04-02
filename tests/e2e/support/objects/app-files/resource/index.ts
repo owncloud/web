@@ -256,7 +256,7 @@ export class Resource {
   }
 
   async clickTag(args: Omit<po.clickTagArgs, 'page'>): Promise<void> {
-    return await po.clickResourceTag({ ...args, page: this.#page })
+    await po.clickResourceTag({ ...args, page: this.#page })
   }
 
   createSpaceFromFolder(args: Omit<po.createSpaceFromFolderArgs, 'page'>): Promise<Space> {
