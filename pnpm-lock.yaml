@@ -936,8 +936,8 @@ importers:
         specifier: 4.1.0
         version: 4.1.0(@uppy/core@5.2.0)
       '@uppy/tus':
-        specifier: 5.1.0
-        version: 5.1.0(@uppy/core@5.2.0)
+        specifier: 5.1.1
+        version: 5.1.1(@uppy/core@5.2.0)
       '@uppy/utils':
         specifier: 7.1.5
         version: 7.1.5
@@ -1097,8 +1097,8 @@ importers:
         specifier: 4.1.0
         version: 4.1.0(@uppy/core@5.2.0)
       '@uppy/tus':
-        specifier: 5.1.0
-        version: 5.1.0(@uppy/core@5.2.0)
+        specifier: 5.1.1
+        version: 5.1.1(@uppy/core@5.2.0)
       '@uppy/utils':
         specifier: 7.1.5
         version: 7.1.5
@@ -3188,8 +3188,8 @@ packages:
   '@uppy/store-default@5.0.0':
     resolution: {integrity: sha512-hQtCSQ1yGiaval/wVYUWquYGDJ+bpQ7e4FhUUAsRQz1x1K+o7NBtjfp63O9I4Ks1WRoKunpkarZ+as09l02cPw==}
 
-  '@uppy/tus@5.1.0':
-    resolution: {integrity: sha512-B3EetcpqhiRGEA8gvZPbtu2up6sZqmeQLqx10AeG+/O16iB5aqbJR8wzqrEr2DVvS/sTgr2QMu94xT/zG9E8yA==}
+  '@uppy/tus@5.1.1':
+    resolution: {integrity: sha512-316kLQfO5H/uUJIMhBYhBrTpeN0Q+d6ykW3pomCvdTkFGCvg20rF3oH/owE3lf2UZZN7ZqBk+wHO0WlQePoklg==}
     peerDependencies:
       '@uppy/core': ^5.2.0
 
@@ -9759,7 +9759,7 @@ snapshots:
 
   '@uppy/store-default@5.0.0': {}
 
-  '@uppy/tus@5.1.0(@uppy/core@5.2.0)':
+  '@uppy/tus@5.1.1(@uppy/core@5.2.0)':
     dependencies:
       '@uppy/companion-client': 5.1.1(@uppy/core@5.2.0)
       '@uppy/core': 5.2.0
