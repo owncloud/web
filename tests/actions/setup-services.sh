@@ -117,8 +117,8 @@ if $TIKA_ENABLED; then
   setup_tika
 fi
 
-setup_ocis 9200 "ocis" "config-ocis.json"
+setup_ocis 9200 "ocis" "config-ocis"
 
 if $FEDERATION_ENABLED; then
-  setup_ocis 10200 "ocis-federated" "config-ocis-federated.json"
+  setup_ocis 10200 "ocis-federated" "config-ocis-federated"
 fi
