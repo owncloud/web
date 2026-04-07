@@ -74,19 +74,13 @@ jobs:
       fail-fast: false
       matrix:
         suites:
-          - name: admin-settings
+          - name: admin-settings,spaces
             federated: false
             tika: false
           - name: app-provider
             federated: false
             tika: false
-          - name: app-store
-            federated: false
-            tika: false
-          - name: file-action
-            federated: false
-            tika: false
-          - name: navigation
+          - name: navigation,user-settings,app-store,file-action
             federated: false
             tika: false
           - name: ocm
@@ -94,19 +88,10 @@ jobs:
           - name: oidc
             federated: false
             tika: false
-          - name: runtime
-            federated: false
-            tika: false
-          - name: search
+          - name: shares,search,runtime
             federated: false
             tika: true
-          - name: shares
-            federated: false
-            tika: false
           - name: smoke
-            federated: false
-            tika: false
-          - name: user-settings
             federated: false
             tika: false
     env:
