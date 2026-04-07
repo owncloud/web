@@ -104,7 +104,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | space-folder |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['space-folder']
     })
@@ -564,7 +564,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | simple.pdf |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['simple.pdf']
     })
@@ -608,7 +608,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | example.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['example.txt']
     })
@@ -640,7 +640,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | simple-renamed.pdf |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['simple-renamed.pdf']
     })
@@ -652,7 +652,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ name: 'example.txt' }]
     })
     // Then "Alice" should get "item-trashed" SSE event
@@ -672,7 +672,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | example.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['example.txt']
     })
@@ -710,7 +710,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | example.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['example.txt']
     })
@@ -754,7 +754,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | simple-renamed.pdf |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['simple-renamed.pdf']
     })

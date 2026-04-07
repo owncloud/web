@@ -18,6 +18,7 @@ import { environment, objects, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
+import { applications } from '../../../../../e2e-playwright/support/constants'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -517,10 +518,10 @@ const createDocumentFile = async (
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
   switch (editorToOpen) {
-    case 'Collabora':
+    case applications.collabora:
       await fillCollaboraDocumentContent(page, content)
       break
-    case 'OnlyOffice':
+    case applications.onlyOffice:
       await fillOnlyOfficeDocumentContent(page, content)
       break
     default:
@@ -544,7 +545,7 @@ export const fillDocumentContent = async ({
   editor: string
 }): Promise<void> => {
   switch (editor) {
-    case 'TextEditor':
+    case applications.textEditor:
       await page.locator(textEditorPlainTextInput).fill(text)
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -552,10 +553,10 @@ export const fillDocumentContent = async ({
         'Text editor Save button is enabled after content change'
       )
       break
-    case 'Collabora':
+    case applications.collabora:
       await fillCollaboraDocumentContent(page, text)
       break
-    case 'OnlyOffice':
+    case applications.onlyOffice:
       await fillOnlyOfficeDocumentContent(page, text)
       break
     default:
@@ -573,10 +574,10 @@ export const getDocumentContent = async ({
   await page.waitForLoadState()
   await page.waitForURL(/.*\/external-.*/)
   switch (editor) {
-    case 'Collabora':
+    case applications.collabora:
       await focusCollaboraEditor(page)
       break
-    case 'OnlyOffice':
+    case applications.onlyOffice:
       await focusOnlyOfficeEditor(page)
       break
     default:

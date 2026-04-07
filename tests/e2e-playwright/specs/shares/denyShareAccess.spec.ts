@@ -79,7 +79,7 @@ test.describe('deny share access', () => {
 
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['folder_to_deny']
     })
@@ -117,7 +117,7 @@ test.describe('deny share access', () => {
     })
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList
       stepUser: 'Brian',
       resources: ['folder_to_deny']
     })

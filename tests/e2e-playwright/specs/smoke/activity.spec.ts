@@ -140,7 +140,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
       world,
       stepUser: 'Alice',
       resources: [{ name: 'subFolder', from: 'sharedFolder' }],
-      actionType: 'SIDEBAR_PANEL'
+      actionType: actions.sideBarPanel
     })
 
     // Then "Alice" should see activity of the following resource

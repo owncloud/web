@@ -4,7 +4,6 @@ import {
   ActionViaType,
   createResourceTypes,
   displayedResourceType,
-  searchFilter,
   shortcutType
 } from '../../../e2e/support/objects/app-files/resource/actions'
 import { editor } from '../../../e2e/support/objects/app-files/utils'
@@ -15,6 +14,8 @@ import { config } from '../../../e2e/config'
 import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
 import { substitute } from '../../../e2e/support/utils'
 import { World } from '../../support/world'
+import { actions, applications, searchFilters, displayedResources } from '../../support/constants'
+import { applicationFiles } from '../../../e2e/support/objects'
 
 export async function userUploadsResources({
   world,
@@ -98,7 +99,7 @@ export async function userSearchesGloballyWithFilter({
   world: World
   stepUser: string
   keyword: string
-  filter: searchFilter
+  filter: typeof searchFilters.allfiles | typeof searchFilters.currentFolder
   command?: string
 }): Promise<void> {
   keyword = keyword ?? ''
@@ -161,7 +162,12 @@ export async function userOpensResourceInViewer({
   world: World
   stepUser: string
   resource: string
-  application: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
+  application:
+    | typeof applications.textEditor
+    | typeof applications.pdfViewer
+    | typeof applications.mediaViewer
+    | typeof applications.collabora
+    | typeof applications.onlyOffice
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -178,14 +184,18 @@ export async function userShouldSeeResources({
   resources
 }: {
   world: World
-  listType: displayedResourceType
+  listType: 
+  | typeof displayedResources.searchList 
+  | typeof displayedResources.filesList
+  | typeof displayedResources.shares 
+  | typeof displayedResources.trashbin
   stepUser: string
   resources: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   // For search results, use polling to wait for tika indexing in CI
-  if (listType === 'search list') {
+  if (listType === displayedResources.searchList) {
     for (const resource of resources) {
       await expect
         .poll(
@@ -220,7 +230,11 @@ export async function userShouldNotSeeTheResources({
   resources
 }: {
   world: World
-  listType: displayedResourceType
+  listType:
+    | typeof displayedResources.searchList 
+    | typeof displayedResources.filesList
+    | typeof displayedResources.shares 
+    | typeof displayedResources.trashbin
   stepUser: string
   resources: string[]
 }): Promise<void> {
@@ -405,20 +419,18 @@ export async function userCreatesSpaceFromResourcesUsingContexMenu({
 export async function userAddsContentInTextEditor({
   world,
   stepUser,
-  text,
-  editor
+  text
 }: {
   world: World
   stepUser: string
   text: string
-  editor: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await pageObject.fillDocumentContent({
     page,
     text,
-    editor
+    editor: applications.textEditor
   })
 }
 
@@ -447,12 +459,12 @@ export async function userClosesFileViewer({
 export async function userDeletesResources({
   world,
   stepUser,
-  actionType = 'SIDEBAR_PANEL',
+  actionType = actions.sideBarPanel,
   resources
 }: {
   world: World
   stepUser: string
-  actionType: 'BATCH_ACTION' | 'SIDEBAR_PANEL'
+  actionType: typeof actions.batchAction | typeof actions.sideBarPanel
   resources: { name: string; from?: string }[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })

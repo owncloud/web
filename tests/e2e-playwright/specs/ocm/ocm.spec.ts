@@ -1,6 +1,9 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { fileList } from '../../../../packages/web-app-files/src/helpers/ui'
+import { fileViewerLocator } from '../../../e2e/support/objects/app-files/utils/editor'
+import { applications } from '../../support/constants'
 
 test.describe('federation management', { tag: '@ocm' }, async () => {
   test('user creates a federated share', async ({ world }) => {
@@ -207,14 +210,14 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // Then "Brian" is in a media-viewer
     await ui.userIsInFileViewer({
       world,
       stepUser: 'Brian',
-      fileViewerType: 'media-viewer'
+      fileViewerType: applications.mediaViewer
     })
 
     // And "Brian" navigates to the next media resource
@@ -276,14 +279,14 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.png',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // Then "Brian" is in a media-viewer
     await ui.userIsInFileViewer({
       world,
       stepUser: 'Brian',
-      fileViewerType: 'media-viewer'
+      fileViewerType: applications.mediaViewer
     })
 
     // And "Brian" logs out

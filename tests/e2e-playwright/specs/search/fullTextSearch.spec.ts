@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { searchFilters, applications } from '../../support/constants'
 
 test.describe('Search', () => {
   test.beforeEach(async ({ world }) => {
@@ -141,7 +142,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       keyword: 'Cheers',
-      filter: 'all files',
+      filter: searchFilters.allfiles,
       command: 'presses enter'
     })
 
@@ -195,7 +196,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       keyword: 'file',
-      filter: 'all files',
+      filter: searchFilters.allfiles,
       command: 'presses enter'
     })
 
@@ -236,7 +237,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       keyword: 'Cheers',
-      filter: 'all files',
+      filter: searchFilters.allfiles,
       command: 'presses enter'
     })
     // Then following resources should be displayed in the files list for user "Brian"
@@ -267,7 +268,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       resource: 'textfile.txt',
-      application: 'texteditor'
+      application: applications.textEditor
     })
     // And "Brian" closes the file viewer
     await ui.userClosesFileViewer({ world, stepUser: 'Brian' })

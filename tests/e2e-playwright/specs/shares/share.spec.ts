@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { actions, displayedResources } from '../../support/constants'
 
 test.describe('share', () => {
   test.beforeEach(async ({ world }) => {
@@ -89,7 +90,7 @@ test.describe('share', () => {
     // user should have access to unsynced shares
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['lorem.txt']
     })
@@ -157,7 +158,7 @@ test.describe('share', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Brian',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ name: 'lorem-big.txt', from: 'folder_to_shared_2' }]
     })
 
@@ -201,7 +202,7 @@ test.describe('share', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ name: 'lorem_new.txt', from: 'folder_to_shared' }, { name: 'folder_to_shared' }]
     })
 
@@ -506,7 +507,7 @@ test.describe('share', () => {
     //   | test-folder (1)  |
     await ui.userShouldSeeResources({
       world,
-      listType: 'Shares',
+      listType: displayedResources.shares,
       stepUser: 'Brian',
       resources: ['testfile.txt', 'test-folder', 'testfile (1).txt', 'test-folder (1)']
     })
@@ -585,7 +586,7 @@ test.describe('share', () => {
     //   | test-folder/testfile.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['testfile.txt', 'test-folder/testfile.txt']
     })

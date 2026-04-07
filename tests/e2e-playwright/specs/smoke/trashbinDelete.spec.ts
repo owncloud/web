@@ -65,7 +65,7 @@ test.describe('Trashbin delete', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'BATCH_ACTION',
+      actionType: actions.batchAction,
       resources: [
         { name: 'FOLDER' },
         { name: 'PARENT' },
@@ -144,7 +144,7 @@ test.describe('Trashbin delete', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Brian',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ name: 'lorem.txt' }]
     })
     // And "Brian" navigates to the trashbin
@@ -154,7 +154,7 @@ test.describe('Trashbin delete', () => {
     //   | folderToShare/lorem.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'trashbin',
+      listType: displayedResources.trashbin,
       stepUser: 'Brian',
       resources: ['folderToShare/lorem.txt']
     })
@@ -166,7 +166,7 @@ test.describe('Trashbin delete', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ name: 'sample.txt' }, { name: 'empty-folder' }]
     })
     // And "Alice" navigates to the trashbin
@@ -176,7 +176,7 @@ test.describe('Trashbin delete', () => {
     //   | folderToShare/lorem.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'trashbin',
+      listType: displayedResources.trashbin,
       stepUser: 'Alice',
       resources: ['folderToShare/lorem.txt']
     })
@@ -207,7 +207,7 @@ test.describe('Trashbin delete', () => {
     //   | lorem.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['lorem.txt']
     })
@@ -220,7 +220,7 @@ test.describe('Trashbin delete', () => {
     //   | lorem.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['lorem.txt']
     })

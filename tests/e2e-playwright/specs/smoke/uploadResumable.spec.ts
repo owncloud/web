@@ -38,7 +38,7 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     // | largefile.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['largefile.txt']
     })
@@ -63,7 +63,7 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     // | largefile.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['largefile.txt']
     })

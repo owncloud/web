@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
+import { applications } from '../../support/constants'
 
 test.describe(
   'Users can create shortcuts for resources and sites',
@@ -118,7 +119,7 @@ test.describe(
       await ui.userIsInFileViewer({
         world,
         stepUser: 'Alice',
-        fileViewerType: 'text-editor'
+        fileViewerType: applications.textEditor
       })
       // And "Alice" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
@@ -153,7 +154,7 @@ test.describe(
       await ui.userIsInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'media-viewer'
+        fileViewerType: applications.mediaViewer
       })
       // And "Brian" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
@@ -185,7 +186,7 @@ test.describe(
       await ui.userIsInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'text-editor'
+        fileViewerType: applications.textEditor
       })
       // And "Brian" logs out
       await ui.userLogsOut({ world, stepUser: 'Brian' })

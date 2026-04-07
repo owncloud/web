@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { applications } from '../../support/constants'
 
 test.describe('Download', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -102,7 +103,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'testavatar.jpg',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // And "Alice" downloads the following resources using the preview topbar
@@ -162,7 +163,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // And "Brian" downloads the following resources using the preview topbar

@@ -76,7 +76,7 @@ test.describe('create Space shortcut', () => {
     //   | lorem.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['data.zip', 'lorem.txt']
     })
@@ -128,7 +128,7 @@ test.describe('create Space shortcut', () => {
     //   | lorem.txt       |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['resourceFolder', 'lorem.txt']
     })
