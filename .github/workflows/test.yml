@@ -130,7 +130,16 @@ jobs:
           path: dist
 
       - name: Setup services
-        run: cd ${{ github.workspace }}/tests/actions && bash setup-services.sh
+        run: |
+          flags=""
+          if [[ "${{ matrix.suites.tika }}" == "true" ]]; then
+            flags="$flags --tika"
+          fi
+          if [[ "${{ matrix.suites.federated }}" == "true" ]]; then
+            flags="$flags --federation"
+          fi
+          cd "${{ github.workspace }}/tests/actions"
+          bash setup-services.sh $flags
 
       - name: Setup pnpm
         uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 #v5.0.0
