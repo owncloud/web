@@ -29,7 +29,7 @@ wait_for_service() {
   for i in {1..30}; do
     if curl -kfsSL "$1" > /dev/null; then
       echo "$2 is up ✅"
-      exit 0
+      return 0
     fi
     echo "Retrying in 5s..."
     sleep 5
@@ -52,12 +52,12 @@ setup_tika() {
 }
 
 setup_ocis() {
-  echo "Setting up oCIS"
+  echo "Setting up $1"
 
   docker_args=(
-    --name $2 \
+    --name $1 \
     --network ocis-net \
-    -p 9200:$1 \
+    -p 9200:$2 \
     -v $SCRIPT_DIR/../..:/workspace \
     -e IDM_ADMIN_PASSWORD=admin \
     -e OCIS_INSECURE=true \
@@ -70,7 +70,7 @@ setup_ocis() {
     -e OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST=/workspace/tests/drone/banned-passwords.txt \
     -e GRAPH_AVAILABLE_ROLES=b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6,63e64e19-8d43-42ec-a738-2b6af2610efa \
     -e FRONTEND_CONFIGURABLE_NOTIFICATIONS=true \
-    -e OCIS_URL=https://localhost:$1 \
+    -e OCIS_URL=https://localhost:$2 \
     -e WEB_UI_CONFIG_FILE=/workspace/tests/drone/$3.json \
     -e OCIS_TRANSFER_SECRET=some-ocis-transfer-secret \
     -e OCIS_LOG_PRETTY=true \
@@ -108,7 +108,7 @@ setup_ocis() {
   fi
 
   docker run -d "${docker_args[@]}" owncloud/ocis-rolling:latest
-  wait_for_service "https://localhost:$1" "$2"
+  wait_for_service "https://localhost:$2" "$1"
 }
 
 create_network
@@ -117,8 +117,8 @@ if $TIKA_ENABLED; then
   setup_tika
 fi
 
-setup_ocis 9200 "ocis" "config-ocis"
+setup_ocis "ocis" 9200 "config-ocis"
 
 if $FEDERATION_ENABLED; then
-  setup_ocis 10200 "ocis-federated" "config-ocis-federated"
+  setup_ocis "ocis-federated" 10200 "config-ocis-federated"
 fi
