@@ -171,7 +171,7 @@ test.describe('Search', () => {
     })
 
     // When "Brian" clears tags filter
-    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: 'tags' })
+    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: searchFilters.tags })
 
     // And "Brian" selects tag "tag 1" from the search result filter chip
     await ui.userFiltersSearchResultWithTag({
@@ -211,7 +211,7 @@ test.describe('Search', () => {
     })
 
     // When "Brian" clears tags filter
-    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: 'tags' })
+    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: searchFilters.tags })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource                      |
     //   | textfile.txt                  |

@@ -3,7 +3,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { searchFilters, applications } from '../../support/constants'
+import { searchFilters, applications, actions } from '../../support/constants'
 
 test.describe('Secure view', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -70,7 +70,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'secureDocument.odt',
@@ -232,7 +232,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'secureDocument.odt',

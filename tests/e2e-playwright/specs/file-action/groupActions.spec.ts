@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import { actions } from '../../support/constants'
 
 test.describe('Group actions', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -142,7 +143,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     // | sharedFolder | security  | group | Can edit with trashbin | folder       |
     await ui.userSharesResources({
       world,
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       stepUser: 'Alice',
       shares: [
         {

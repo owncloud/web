@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { applications } from '../../support/constants'
+import { applications, actions } from '../../support/constants'
 
 test.describe('spaces public link', () => {
   test.beforeEach(async ({ world }) => {
@@ -401,7 +401,7 @@ test.describe('spaces public link', () => {
     await ui.userDownloadsThePublicLinkResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ resource: 'example.txt', type: 'file' }]
     })
 

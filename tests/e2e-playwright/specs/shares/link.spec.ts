@@ -189,7 +189,7 @@ test.describe('link', () => {
     await ui.userDownloadsThePublicLinkResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [
         { resource: 'lorem.txt', type: 'file' },
         { resource: 'textfile.txt', type: 'file' }
@@ -243,7 +243,7 @@ test.describe('link', () => {
     await ui.userCopiesResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'sidebar-panel',
+      actionType: actions.sideBarPanel,
       resources: [{ resource: 'lorem.txt', to: 'myfolder' }]
     })
     // And "Anonymous" renames the following public link resources

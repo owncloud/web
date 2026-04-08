@@ -118,7 +118,7 @@ test.describe('internal link share', () => {
         { resource: 'test#file.txt', type: 'file' },
         { resource: 'test#folder', type: 'folder' }
       ],
-      actionType: 'SIDEBAR_PANEL'
+      actionType: actions.sideBarPanel
     })
     // And "Alice" logs out
     await ui.userLogsOut({ world, stepUser: 'Alice' })

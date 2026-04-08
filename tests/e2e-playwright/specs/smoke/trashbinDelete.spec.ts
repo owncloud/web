@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { displayedResources, actions } from '../../support/constants'
 
 test.describe('Trashbin delete', () => {
   test.beforeEach(async ({ world }) => {
@@ -195,8 +196,7 @@ test.describe('Trashbin delete', () => {
     await ui.userRestoresResourcesFromTrashbin({
       world,
       stepUser: 'Alice',
-      resources: ['sample.txt', 'empty-folder'],
-      actionType: 'BATCH_ACTION'
+      resources: ['sample.txt', 'empty-folder']
     })
     // And "Alice" opens the "files" app
     await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })

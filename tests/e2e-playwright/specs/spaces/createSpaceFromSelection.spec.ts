@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import { displayedResources } from '../../support/constants'
 
 test.describe('create Space shortcut', () => {
   test.beforeEach(async ({ world }) => {

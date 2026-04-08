@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { actions, displayedResources } from '../../support/constants'
+import { actions, displayedResources, buttonLabels } from '../../support/constants'
 
 test.describe('share', () => {
   test.beforeEach(async ({ world }) => {
@@ -38,7 +38,7 @@ test.describe('share', () => {
     //   | folder_to_shared_2 | Brian     | user | Can edit with trashbin | folder       |
     await ui.userSharesResources({
       world,
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       stepUser: 'Alice',
       shares: [
         {
@@ -278,7 +278,7 @@ test.describe('share', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'new.txt',
@@ -424,7 +424,7 @@ test.describe('share', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'testfile.txt',
@@ -474,7 +474,7 @@ test.describe('share', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Carol',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'testfile.txt',
@@ -625,7 +625,7 @@ test.describe('share', () => {
     await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Alice',
-      buttonLabel: 'user-direct',
+      buttonLabel: buttonLabels.userDirect,
       resource: 'shareFolder'
     })
     // When "Alice" opens folder "shareFolder"
@@ -638,7 +638,7 @@ test.describe('share', () => {
     await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Alice',
-      buttonLabel: 'user-indirect',
+      buttonLabel: buttonLabels.userIndirect,
       resource: 'subFolder'
     })
     // And "Alice" logs out

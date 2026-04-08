@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
-import { applications } from '../../support/constants'
+import { applications, actions } from '../../support/constants'
 
 test.describe(
   'Users can create shortcuts for resources and sites',
@@ -106,7 +106,7 @@ test.describe(
         world,
         stepUser: 'Alice',
         resourceToDownload: resourceToDownload,
-        actionType: 'SIDEBAR_PANEL'
+        actionType: actions.sideBarPanel
       })
 
       // When "Alice" opens a shortcut "important file.url"

@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { actions, buttonLabels, displayedResources } from '../../support/constants'
 
 test.describe('server sent events', { tag: '@sse' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -153,7 +154,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'space-folder',
@@ -184,7 +185,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Brian',
-      buttonLabel: 'user-direct',
+      buttonLabel: buttonLabels.userDirect,
       resource: 'space-folder'
     })
 
@@ -240,7 +241,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Brian',
-      buttonLabel: 'link-direct',
+      buttonLabel: buttonLabels.linkDirect,
       resource: 'space-folder'
     })
 
@@ -290,7 +291,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userShouldNotSeeShareIndicatorOnResource({
       world,
       stepUser: 'Brian',
-      buttonLabel: 'user-direct',
+      buttonLabel: buttonLabels.userDirect,
       resource: 'space-folder'
     })
 
@@ -318,7 +319,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userShouldNotSeeShareIndicatorOnResource({
       world,
       stepUser: 'Brian',
-      buttonLabel: 'link-direct',
+      buttonLabel: buttonLabels.linkDirect,
       resource: 'space-folder'
     })
 
@@ -383,7 +384,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'sharedFolder',

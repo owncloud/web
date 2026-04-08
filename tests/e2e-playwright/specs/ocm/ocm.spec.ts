@@ -1,9 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileList } from '../../../../packages/web-app-files/src/helpers/ui'
-import { fileViewerLocator } from '../../../e2e/support/objects/app-files/utils/editor'
-import { applications } from '../../support/constants'
+import { applications, actions } from '../../support/constants'
 
 test.describe('federation management', { tag: '@ocm' }, async () => {
   test('user creates a federated share', async ({ world }) => {
@@ -124,7 +122,7 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'folderPublic',
@@ -246,7 +244,7 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
         { resource: 'sampleGif.gif', type: 'file' },
         { resource: 'testavatar.jpg', type: 'file' }
       ],
-      actionType: 'SIDEBAR_PANEL'
+      actionType: actions.sideBarPanel
     })
 
     // When "Brian" uploads the following resources

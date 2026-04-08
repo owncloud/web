@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
-import { applications } from '../../support/constants'
+import { applications, actions } from '../../support/constants'
 
 test.describe('Navigate web directly through urls', () => {
   test('pagination', async ({ world }) => {
@@ -116,7 +116,7 @@ test.describe('Navigate web directly through urls', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'URL_NAVIGATION',
+      actionType: actions.urlNavigation,
       shares: [
         {
           resource: 'lorem.txt',

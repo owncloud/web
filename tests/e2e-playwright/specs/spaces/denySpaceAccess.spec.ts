@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import { displayedResources, actions } from '../../support/constants'
 
 test.describe('deny space access', () => {
   test('deny and grant access', async ({ world }) => {
@@ -65,7 +66,7 @@ test.describe('deny space access', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'f1',

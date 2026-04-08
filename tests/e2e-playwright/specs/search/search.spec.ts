@@ -46,7 +46,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Brian',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'new_share_from_brian',
@@ -467,7 +467,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       resources: ['mediaTest.txt']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'mediaType' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.mediaType })
     // When "Alice" selects mediaType "PDF" from the search result filter chip
     await ui.userFiltersSearchByMediaType({
       world,
@@ -484,7 +484,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       resources: ['mediaTest.pdf']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'mediaType' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.mediaType })
     // When "Alice" selects mediaType "Audio" from the search result filter chip
     await ui.userFiltersSearchByMediaType({
       world,
@@ -501,7 +501,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       resources: ['mediaTest.mp3']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'mediaType' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.mediaType })
     // When "Alice" selects mediaType "Archive" from the search result filter chip
     await ui.userFiltersSearchByMediaType({
       world,
@@ -518,7 +518,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       resources: ['mediaTest.zip']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'mediaType' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.mediaType })
 
     // # multiple choose
     // When "Alice" selects mediaType "Folder" from the search result filter chip
@@ -676,7 +676,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       resources: ['mainFolder/mediaTest.pdf', 'mainFolder/mediaTest.txt']
     })
     // And "Alice" clears lastModified filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'lastModified' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.lastModified })
     // And "Alice" logs out
     await ui.userLogsOut({ world, stepUser: 'Alice' })
   })
