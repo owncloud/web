@@ -104,20 +104,45 @@ const getToken = async (authorizationCode: string) => {
 }
 
 export const setAccessTokenForKeycloakOcisUser = async (user: User) => {
-  const [auhorizationUrl, cookies] = await getAuthorizationEndPoint()
-  const authorizationCode = await getCode({ user, auhorizationUrl, cookies })
-  const tokenResponse = await getToken(authorizationCode)
-  const token = (await tokenResponse.json()) as ocisTokenForKeycloak
-
   const tokenEnvironment = TokenEnvironmentFactory()
-  tokenEnvironment.setToken({
-    user: { ...user },
-    token: {
-      userId: user.id,
-      accessToken: token.access_token,
-      refreshToken: token.refresh_token
+
+  // admin's Keycloak username is 'admin', not the world-transformed user.id
+  const loginId =
+    (user.originalId || user.id).toLowerCase() === config.keycloakAdminUser.toLowerCase()
+      ? user.originalId
+      : user.id
+
+  // Retry OIDC auth code flow: admin user is shared across all workers, so
+  // multiple workers may authenticate it concurrently. Keycloak can return the
+  // login form (200) instead of a redirect (302) under concurrent load. Each
+  // retry starts a fresh OIDC session, naturally staggering the requests.
+  const MAX_RETRIES = 3
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    try {
+      const [auhorizationUrl, cookies] = await getAuthorizationEndPoint()
+      const authorizationCode = await getCode({
+        user: { ...user, id: loginId },
+        auhorizationUrl,
+        cookies
+      })
+      const tokenResponse = await getToken(authorizationCode)
+      const token = (await tokenResponse.json()) as ocisTokenForKeycloak
+      tokenEnvironment.setToken({
+        user: { ...user },
+        token: {
+          userId: user.id,
+          accessToken: token.access_token,
+          refreshToken: token.refresh_token
+        }
+      })
+      return
+    } catch (e) {
+      if (attempt === MAX_RETRIES - 1) {
+        throw e
+      }
+      await new Promise((r) => setTimeout(r, config.minTimeout * 1000))
     }
-  })
+  }
 }
 
 export const refreshAccessTokenForKeycloakOcisUser = async (user: User) => {

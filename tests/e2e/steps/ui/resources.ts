@@ -8,7 +8,7 @@ import { Resource } from '../../support/objects/app-files/resource'
 import { config } from '../../config'
 import * as runtimeFs from '../../support/utils/runtimeFs'
 import { substitute } from '../../support/utils'
-import { World } from '../../environment/world'
+import { getWorld } from '../../environment/world'
 import {
   fileAction,
   application,
@@ -18,14 +18,13 @@ import {
 } from '../../environment/constants'
 
 export async function userUploadsResources({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { name: string; to?: string; type?: string; option?: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -39,14 +38,13 @@ export async function userUploadsResources({
 }
 
 export async function userShouldBeAbleToEditResource({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const userCanEdit = await resourceObject.canManageResource({ resource })
@@ -54,14 +52,13 @@ export async function userShouldBeAbleToEditResource({
 }
 
 export async function userShouldNotBeAbleToEditResource({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const userCanEdit = await resourceObject.canManageResource({ resource })
@@ -69,14 +66,13 @@ export async function userShouldNotBeAbleToEditResource({
 }
 
 export async function userCreatesResources({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { name: string; type: createResourceTypes; content?: string; password?: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -90,18 +86,17 @@ export async function userCreatesResources({
 }
 
 export async function userSearchesGloballyWithFilter({
-  world,
   stepUser,
   keyword,
   filter,
   command
 }: {
-  world: World
   stepUser: string
   keyword: string
   filter: typeof searchScope.allFiles | typeof searchScope.currentFolder
   command?: string
 }): Promise<void> {
+  const world = getWorld()
   keyword = keyword ?? ''
   const pressEnter = !!command && command.endsWith('presses enter')
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
@@ -116,50 +111,45 @@ export async function userSearchesGloballyWithFilter({
 }
 
 export async function userSwitchesToTilesViewMode({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.switchToTilesViewMode()
 }
 
 export async function userShouldSeeResourcesAsTiles({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.expectThatResourcesAreTiles()
 }
 
 export async function userOpensResource({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFolder(resource)
 }
 
 export async function userOpensResourceInViewer({
-  world,
   stepUser,
   resource,
   viewer
 }: {
-  world: World
   stepUser: string
   resource: string
   viewer:
@@ -169,6 +159,7 @@ export async function userOpensResourceInViewer({
     | typeof application.collabora
     | typeof application.onlyOffice
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFileInViewer({
@@ -178,12 +169,10 @@ export async function userOpensResourceInViewer({
 }
 
 export async function userShouldSeeResources({
-  world,
   listType,
   stepUser,
   resources
 }: {
-  world: World
   listType:
     | typeof resourcePage.searchList
     | typeof resourcePage.filesList
@@ -192,6 +181,7 @@ export async function userShouldSeeResources({
   stepUser: string
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
@@ -218,12 +208,10 @@ export async function userShouldSeeResources({
 }
 
 export async function userShouldNotSeeTheResources({
-  world,
   listType,
   stepUser,
   resources
 }: {
-  world: World
   listType:
     | typeof resourcePage.searchList
     | typeof resourcePage.filesList
@@ -232,6 +220,7 @@ export async function userShouldNotSeeTheResources({
   stepUser: string
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualList = await resourceObject.getDisplayedResources({
@@ -243,28 +232,26 @@ export async function userShouldNotSeeTheResources({
 }
 
 export async function userNavigatesToPageNumber({
-  world,
   stepUser,
   pageNumber
 }: {
-  world: World
   pageNumber: string
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.changePage({ pageNumber })
 }
 
 export async function userShouldSeeFooterText({
-  world,
   stepUser,
   expectedText
 }: {
-  world: World
   stepUser: string
   expectedText: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualText = await resourceObject.getFileListFooterText()
@@ -272,14 +259,13 @@ export async function userShouldSeeFooterText({
 }
 
 export async function userShouldSeeNumberOfResources({
-  world,
   stepUser,
   expectedNumberOfResources
 }: {
-  world: World
   stepUser: string
   expectedNumberOfResources: number
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualNumberOfResources = await resourceObject.countNumberOfResourcesInThePage()
@@ -287,26 +273,24 @@ export async function userShouldSeeNumberOfResources({
 }
 
 export async function userEnablesShowHiddenFilesOption({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.showHiddenFiles()
 }
 
 export async function userShouldBeOnPage({
-  world,
   stepUser,
   pageNumber
 }: {
-  world: World
   stepUser: string
   pageNumber: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const currentPage = await resourceObject.getCurrentPageNumber({ pageNumber })
@@ -314,50 +298,42 @@ export async function userShouldBeOnPage({
 }
 
 export async function userChangesItemsPerPage({
-  world,
   stepUser,
   itemsPerPage
 }: {
-  world: World
   stepUser: string
   itemsPerPage: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.changeItemsPerPage({ itemsPerPage })
 }
 
 export async function userShouldNotSeePagination({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.expectPageNumberNotToBeVisible()
 }
 
-export async function userEnablesFlatList({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userEnablesFlatList({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.toggleFlatList()
 }
 
 export async function userShouldSeeFilesSortedAlphabetically({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const allFiles = await resourceObject.getAllFiles()
@@ -368,16 +344,15 @@ export async function userShouldSeeFilesSortedAlphabetically({
 }
 
 export async function userCreatesSpaceFromFolderUsingContexMenu({
-  world,
   stepUser,
   spaceName,
   folderName
 }: {
-  world: World
   stepUser: string
   spaceName: string
   folderName: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const space = await resourceObject.createSpaceFromFolder({
@@ -391,16 +366,15 @@ export async function userCreatesSpaceFromFolderUsingContexMenu({
 }
 
 export async function userCreatesSpaceFromResourcesUsingContexMenu({
-  world,
   stepUser,
   spaceName,
   resources
 }: {
-  world: World
   stepUser: string
   spaceName: string
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const space = await resourceObject.createSpaceFromSelection({ resources, spaceName })
@@ -411,14 +385,13 @@ export async function userCreatesSpaceFromResourcesUsingContexMenu({
 }
 
 export async function userAddsContentInTextEditor({
-  world,
   stepUser,
   text
 }: {
-  world: World
   stepUser: string
   text: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await pageObject.fillDocumentContent({
@@ -428,39 +401,28 @@ export async function userAddsContentInTextEditor({
   })
 }
 
-export async function userSavesTextEditor({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userSavesTextEditor({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   await editor.save(page)
 }
 
-export async function userClosesFileViewer({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userClosesFileViewer({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   await editor.close(page)
 }
 
 export async function userDeletesResources({
-  world,
   stepUser,
   actionType = fileAction.sideBarPanel,
   resources
 }: {
-  world: World
   stepUser: string
   actionType: typeof fileAction.batchAction | typeof fileAction.sideBarPanel
   resources: { name: string; from?: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -473,14 +435,13 @@ export async function userDeletesResources({
 }
 
 export async function userShouldBeAbleToDeleteResourceFromTrashbin({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -491,14 +452,13 @@ export async function userShouldBeAbleToDeleteResourceFromTrashbin({
 }
 
 export async function userShouldNotBeAbleToDeleteResourceFromTrashbin({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -507,14 +467,13 @@ export async function userShouldNotBeAbleToDeleteResourceFromTrashbin({
 }
 
 export async function userShouldBeAbleToRestoreResourceFromTrashbin({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -527,14 +486,13 @@ export async function userShouldBeAbleToRestoreResourceFromTrashbin({
 }
 
 export async function userShouldNotBeAbleToRestoreResourceFromTrashbin({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -545,14 +503,13 @@ export async function userShouldNotBeAbleToRestoreResourceFromTrashbin({
 }
 
 export async function userCreatesShortcutForResources({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { resource: string; name: string; type: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
@@ -572,12 +529,10 @@ type resourceToDownload = {
 }
 
 export async function userDownloadsResource({
-  world,
   stepUser,
   resourceToDownload,
   actionType
 }: {
-  world: World
   stepUser: string
   resourceToDownload: resourceToDownload[]
   actionType:
@@ -586,6 +541,7 @@ export async function userDownloadsResource({
     | typeof fileAction.singleShareView
     | typeof fileAction.previewTopBar
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await processDownload(resourceObject, actionType, resourceToDownload)
@@ -657,45 +613,42 @@ export const processDownload = async (
 }
 
 export async function userOpensShortcut({
-  world,
   stepUser,
   name
 }: {
-  world: World
   stepUser: string
   name: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openShotcut({ name })
 }
 export async function userCanOpenShortcutWithExternalUrl({
-  world,
   stepUser,
   name,
   url
 }: {
-  world: World
   stepUser: string
   name: string
   url: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openShotcut({ name, url })
 }
 
 export async function userShouldSeeContentInEditor({
-  world,
   stepUser,
   expectedContent,
   editor
 }: {
-  world: World
   stepUser: string
   expectedContent: string
   editor: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   const actualFileContent = await pageObject.getDocumentContent({
@@ -706,14 +659,13 @@ export async function userShouldSeeContentInEditor({
 }
 
 export async function resourceShouldBeLockedForUser({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const lockLocator = await resourceObject.getLockLocator({ resource })
@@ -721,14 +673,13 @@ export async function resourceShouldBeLockedForUser({
 }
 
 export async function resourceShouldNotBeLockedForUser({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const lockLocator = await resourceObject.getLockLocator({ resource })
@@ -738,28 +689,26 @@ export async function resourceShouldNotBeLockedForUser({
 }
 
 export async function userNavigatesToFolderViaBreadcrumb({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFolderViaBreadcrumb(resource)
 }
 
 export async function userEditsResources({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { name: string; content: string; type?: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -772,14 +721,13 @@ export async function userEditsResources({
 }
 
 export async function userShouldSeeThumbnailAndPreviewForFile({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await expect(resourceObject.getFileThumbnailLocator(resource)).toBeVisible()
@@ -787,28 +735,26 @@ export async function userShouldSeeThumbnailAndPreviewForFile({
 }
 
 export async function userShouldNotSeePreviewForFile({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.shouldNotSeeFilePreview({ resource })
 }
 
 export async function userShouldNotSeeThumbnailAndPreviewForFile({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await expect(resourceObject.getFileThumbnailLocator(resource)).not.toBeVisible()
@@ -816,60 +762,56 @@ export async function userShouldNotSeeThumbnailAndPreviewForFile({
 }
 
 export async function userOpensMediaUsingSidebarPanel({
-  world,
   stepUser,
   resource
 }: {
-  world: World
   stepUser: string
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.previewMediaFromSidebarPanel(resource)
 }
 
 export async function userNavigatesToMediaResource({
-  world,
   stepUser,
   navigationType
 }: {
-  world: World
   stepUser: string
   navigationType: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.navigateMediaFile(navigationType)
 }
 
 export async function userRenamesResource({
-  world,
   stepUser,
   resource,
   newResourceName
 }: {
-  world: World
   stepUser: string
   resource: string
   newResourceName: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.rename({ resource, newName: newResourceName })
 }
 
 export async function userShouldNotSeeVersionPanelForFiles({
-  world,
   stepUser,
   file,
   to
 }: {
-  world: World
   stepUser: string
   file: string
   to: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const fileInfo = world.filesEnvironment.getFile({ name: file })
@@ -880,14 +822,13 @@ export async function userShouldNotSeeVersionPanelForFiles({
 }
 
 export async function userUploadsMultipleFilesInPersonalSpace({
-  world,
   stepUser,
   numberOfFiles
 }: {
-  world: World
   stepUser: string
   numberOfFiles: number
 }): Promise<void> {
+  const world = getWorld()
   const files = []
   for (let i = 0; i < numberOfFiles; i++) {
     const file = `file${i}.txt`
@@ -906,18 +847,17 @@ export async function userUploadsMultipleFilesInPersonalSpace({
 }
 
 export async function userTriesToUploadResource({
-  world,
   stepUser,
   resource,
   error,
   to
 }: {
-  world: World
   stepUser: string
   resource: string
   error: string
   to: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.tryToUpload({
@@ -928,14 +868,13 @@ export async function userTriesToUploadResource({
 }
 
 export async function userUploadsResourcesViaDragNDrop({
-  world,
   stepUser,
   resourceNames
 }: {
-  world: World
   stepUser: string
   resourceNames: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const resources = resourceNames.map((name) => world.filesEnvironment.getFile({ name }))
@@ -943,20 +882,19 @@ export async function userUploadsResourcesViaDragNDrop({
 }
 
 export async function userRestoresResourceVersion({
-  world,
   stepUser,
   file,
   to,
   version,
   openDetailsPanel
 }: {
-  world: World
   stepUser: string
   file: string
   to: string
   version: number
   openDetailsPanel: boolean
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
@@ -982,18 +920,17 @@ export async function userRestoresResourceVersion({
 }
 
 export async function userStartsUploadingFileFromTheTempUploadDir({
-  world,
   stepUser,
   file,
   to,
   option
 }: {
-  world: World
   stepUser: string
   file: string
   to?: string
   option?: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.startUpload({
@@ -1007,51 +944,35 @@ export async function userStartsUploadingFileFromTheTempUploadDir({
   })
 }
 
-export async function userPausesUpload({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userPausesUpload({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.pauseUpload()
 }
 
-export async function userCancelsUpload({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userCancelsUpload({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.cancelUpload()
 }
 
-export async function userResumesUpload({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userResumesUpload({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.resumeUpload()
 }
 
 export async function userShouldNotSeeAnyActivityOfResources({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
@@ -1061,14 +982,13 @@ export async function userShouldNotSeeAnyActivityOfResources({
 }
 
 export async function userShouldSeeActivityOfResources({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { resource: string; activity: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
@@ -1081,12 +1001,10 @@ export async function userShouldSeeActivityOfResources({
 }
 
 export async function userCopiesResources({
-  world,
   stepUser,
   actionType,
   resources
 }: {
-  world: World
   stepUser: string
   actionType:
     | typeof fileAction.keyboard
@@ -1095,6 +1013,7 @@ export async function userCopiesResources({
     | typeof fileAction.batchAction
   resources: { resource: string; to: string; option?: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
@@ -1109,12 +1028,10 @@ export async function userCopiesResources({
 }
 
 export async function userMovesResources({
-  world,
   stepUser,
   actionType,
   resources
 }: {
-  world: World
   stepUser: string
   actionType:
     | typeof fileAction.keyboard
@@ -1125,6 +1042,7 @@ export async function userMovesResources({
     | typeof fileAction.dragDropBreadcrumb
   resources: { resource: string; to: string; option?: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
@@ -1139,12 +1057,10 @@ export async function userMovesResources({
 }
 
 export async function userDownloadsThePublicLinkResources({
-  world,
   stepUser,
   actionType,
   resources
 }: {
-  world: World
   stepUser: string
   actionType:
     | typeof fileAction.sideBarPanel
@@ -1152,22 +1068,22 @@ export async function userDownloadsThePublicLinkResources({
     | typeof fileAction.singleShareView
   resources: resourceToDownload[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await processDownload(pageObject, actionType, resources)
 }
 
 export async function userShouldSeeActionsForResource({
-  world,
   stepUser,
   resource,
   actions
 }: {
-  world: World
   stepUser: string
   resource: string
   actions: string[]
 }) {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const action of actions) {
@@ -1177,16 +1093,15 @@ export async function userShouldSeeActionsForResource({
 }
 
 export async function userShouldNotSeeActionsForResource({
-  world,
   stepUser,
   resource,
   actions
 }: {
-  world: World
   stepUser: string
   resource: string
   actions: string[]
 }) {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const action of actions) {
@@ -1196,42 +1111,35 @@ export async function userShouldNotSeeActionsForResource({
 }
 
 export async function userDeletesResourcesFromTrashbinUsingBatchAction({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.deleteTrashbinMultipleResources({ resources })
 }
 
-export async function userEmptiesTrashbin({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userEmptiesTrashbin({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.emptyTrashbin({ page })
 }
 
 export async function userRestoresResourcesFromTrashbin({
-  world,
   stepUser,
   resources,
   actionType
 }: {
-  world: World
   stepUser: string
   resources: string[]
   actionType?: typeof fileAction.batchAction
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   if (actionType === fileAction.batchAction) {
@@ -1247,14 +1155,13 @@ export async function userRestoresResourcesFromTrashbin({
 }
 
 export async function userShouldNotBeAbleToEditContentOfResources({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { name: string; type: string; content: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -1264,46 +1171,42 @@ export async function userShouldNotBeAbleToEditContentOfResources({
 }
 
 export async function userCreatesFileFromTemplateFile({
-  world,
   stepUser,
   file,
   webOffice,
   actionType
 }: {
-  world: World
   stepUser: string
   file: string
   webOffice: string
   actionType: typeof fileAction.sideBarPanel | typeof fileAction.contextMenu
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.createFileFromTemplate(file, webOffice, actionType)
 }
 
 export async function userOpensTemplateFileUsingContextMenu({
-  world,
   stepUser,
   file,
   webOffice
 }: {
-  world: World
   stepUser: string
   file: string
   webOffice: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openTemplateFile(file, webOffice)
 }
 
 export async function userDuplicatesResources({
-  world,
   stepUser,
   method,
   resources
 }: {
-  world: World
   stepUser: string
   method:
     | typeof fileAction.sideBarPanel
@@ -1311,6 +1214,7 @@ export async function userDuplicatesResources({
     | typeof fileAction.batchAction
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -1319,14 +1223,12 @@ export async function userDuplicatesResources({
 }
 
 async function performCopyOrMoveMultipleResources({
-  world,
   stepUser,
   actionType,
   newLocation,
   method,
   resources
 }: {
-  world: World
   stepUser: string
   actionType: 'copy' | 'move'
   newLocation: string
@@ -1338,6 +1240,7 @@ async function performCopyOrMoveMultipleResources({
     | typeof fileAction.keyboard
   resources: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
@@ -1361,12 +1264,10 @@ export const userMovesResourcesAtOnce = (args) =>
   performCopyOrMoveMultipleResources({ ...args, actionType: 'move' })
 
 export async function userShouldSeeShareIndicatorOnResource({
-  world,
   stepUser,
   buttonLabel,
   resource
 }: {
-  world: World
   stepUser: string
   buttonLabel:
     | typeof shareIndicator.linkDirect
@@ -1375,6 +1276,7 @@ export async function userShouldSeeShareIndicatorOnResource({
     | typeof shareIndicator.userIndirect
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const showShareIndicator = resourceObject.showShareIndicatorSelector({
@@ -1386,12 +1288,10 @@ export async function userShouldSeeShareIndicatorOnResource({
 }
 
 export async function userShouldNotSeeShareIndicatorOnResource({
-  world,
   stepUser,
   buttonLabel,
   resource
 }: {
-  world: World
   stepUser: string
   buttonLabel:
     | typeof shareIndicator.linkDirect
@@ -1400,6 +1300,7 @@ export async function userShouldNotSeeShareIndicatorOnResource({
     | typeof shareIndicator.userIndirect
   resource: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const shareIndicator = resourceObject.showShareIndicatorSelector({
@@ -1410,14 +1311,13 @@ export async function userShouldNotSeeShareIndicatorOnResource({
 }
 
 export async function userAddsFollowingTagsForResourcesUsingSidebarPanel({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { name: string; tags: string[] }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -1429,14 +1329,13 @@ export async function userAddsFollowingTagsForResourcesUsingSidebarPanel({
 }
 
 export async function resourceShouldContainTagsInFileList({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { name: string; tags: string[] }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -1449,14 +1348,13 @@ export async function resourceShouldContainTagsInFileList({
 }
 
 export async function resourceShouldContainTagsInDetailPanel({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { name: string; tags: string[] }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -1468,14 +1366,13 @@ export async function resourceShouldContainTagsInDetailPanel({
 }
 
 export async function userRemovesTagsFromResourcesUsingSideBar({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { name: string; tags: string[] }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -1487,14 +1384,13 @@ export async function userRemovesTagsFromResourcesUsingSideBar({
 }
 
 export async function userTriesToAddTagForResourceUsingSidebarPanel({
-  world,
   stepUser,
   resources
 }: {
-  world: World
   stepUser: string
   resources: { name: string; tags: string[] }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   for (const resource of resources) {
@@ -1506,14 +1402,13 @@ export async function userTriesToAddTagForResourceUsingSidebarPanel({
 }
 
 export async function userShouldSeeFollowingTagValidationMessages({
-  world,
   stepUser,
   message
 }: {
-  world: World
   stepUser: string
   message: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const actualMessage = await resourceObject.getTagValidationMessage()
@@ -1521,32 +1416,30 @@ export async function userShouldSeeFollowingTagValidationMessages({
 }
 
 export async function userClicksTheTagOnResource({
-  world,
   stepUser,
   resourceName,
   tagName
 }: {
-  world: World
   stepUser: string
   resourceName: string
   tagName: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.clickTag({ resource: resourceName, tag: tagName.trim().toLowerCase() })
 }
 
 export async function userDownloadsPreviousVersionOfResource({
-  world,
   stepUser,
   resource,
   to
 }: {
-  world: World
   stepUser: string
   resource: string
   to: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   const fileInfo = world.filesEnvironment.getFile({ name: resource })

@@ -65,7 +65,8 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   })
 
   // store oCIS user information
-  usersEnvironment.storeCreatedUser(user.id, {
+  const ocisUserKey = user.originalId || user.id
+  usersEnvironment.storeCreatedUser(ocisUserKey, {
     ...user,
     uuid: await getUserId({ user, admin }),
     role: defaultNewUserRole

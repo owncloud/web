@@ -4,26 +4,21 @@ import * as ui from '../../steps/ui/index'
 import { application, fileAction } from '../../environment/constants'
 
 test.describe('Download', { tag: '@predefined-users' }, () => {
-  test.beforeEach(async ({ world }) => {
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice', 'Brian']
-    })
+  test.beforeEach(async () => {
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian'] })
   })
 
-  test('download resources', async ({ world }) => {
+  test('download resources', async () => {
     // Given "Alice" logs in
     // Given "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
 
     // And "Alice" creates the following folders in personal space using API
     //   | name         |
     //   | folderPublic |
     //   | emptyFolder  |
     await api.userHasCreatedFolders({
-      world,
       stepUser: 'Alice',
       folderNames: ['folderPublic', 'emptyFolder']
     })
@@ -32,7 +27,6 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | pathToFile                | content     |
     //   | folderPublic/new file.txt | lorem ipsum |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [{ pathToFile: 'folderPublic/new file.txt', content: 'lorem ipsum' }]
     })
@@ -41,7 +35,6 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | localFile                     | to             |
     //   | filesForUpload/testavatar.jpg | testavatar.jpg |
     await api.userHasUploadedFilesInPersonalSpace({
-      world,
       stepUser: 'Alice',
       filesToUpload: [{ localFile: 'filesForUpload/testavatar.jpg', to: 'testavatar.jpg' }]
     })
@@ -52,7 +45,6 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | emptyFolder    | Brian     | user | Can edit with versions and trashbin | folder       |
     //   | testavatar.jpg | Brian     | user | Can edit with versions and trashbin | file         |
     await api.userHasSharedResources({
-      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -90,7 +82,6 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       { resource: 'testavatar.jpg', type: 'file' }
     ]
     await ui.userDownloadsResource({
-      world,
       stepUser: 'Alice',
       resourceToDownload: resourceToDownloadInBatch,
       actionType: fileAction.batchAction
@@ -100,7 +91,6 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | resource       |
     //   | testavatar.jpg |
     await ui.userOpensResourceInViewer({
-      world,
       stepUser: 'Alice',
       resource: 'testavatar.jpg',
       viewer: application.mediaViewer
@@ -111,27 +101,25 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | testavatar.jpg | file |
     const downloadImage = [{ resource: 'testavatar.jpg', type: 'file' }]
     await ui.userDownloadsResource({
-      world,
       stepUser: 'Alice',
       resourceToDownload: downloadImage,
       actionType: fileAction.previewTopBar
     })
 
     // And "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ stepUser: 'Alice' })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
 
     // When "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
     // And "Brian" downloads the following resources using the batch action
     //   | resource       | type   |
     //   | folderPublic   | folder |
     //   | emptyFolder    | folder |
     //   | testavatar.jpg | file   |
     await ui.userDownloadsResource({
-      world,
       stepUser: 'Brian',
       resourceToDownload: resourceToDownloadInBatch,
       actionType: fileAction.batchAction
@@ -150,7 +138,6 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       { resource: 'emptyFolder', type: 'folder' }
     ]
     await ui.userDownloadsResource({
-      world,
       stepUser: 'Brian',
       resourceToDownload: resourceToDownloadSidebar,
       actionType: fileAction.sideBarPanel
@@ -160,7 +147,6 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | resource       |
     //   | testavatar.jpg |
     await ui.userOpensResourceInViewer({
-      world,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
       viewer: application.mediaViewer
@@ -170,13 +156,12 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
     //   | resource       | type |
     //   | testavatar.jpg | file |
     await ui.userDownloadsResource({
-      world,
       stepUser: 'Brian',
       resourceToDownload: downloadImage,
       actionType: fileAction.previewTopBar
     })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
   })
 })

@@ -4,27 +4,22 @@ import * as ui from '../../steps/ui/index'
 import { fileAction } from '../../environment/constants'
 
 test.describe('Users can use web to organize tags', () => {
-  test.beforeEach(async ({ world }) => {
+  test.beforeEach(async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice', 'Brian']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian'] })
 
     // Given "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
   })
 
-  test('Tag management', { tag: '@predefined-users' }, async ({ world }) => {
+  test('Tag management', { tag: '@predefined-users' }, async () => {
     // When "Alice" creates the following files into personal space using API
     //   | pathToFile | content     |
     //   | lorem.txt  | lorem ipsum |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [{ pathToFile: 'lorem.txt', content: 'lorem ipsum' }]
     })
@@ -32,7 +27,6 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource  | tags         |
     //   | lorem.txt | tag 1, tag 2 |
     await ui.userAddsFollowingTagsForResourcesUsingSidebarPanel({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', tags: ['tag 1', 'tag 2'] }]
     })
@@ -40,7 +34,6 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource  | tags         |
     //   | lorem.txt | tag 1, tag 2 |
     await ui.resourceShouldContainTagsInFileList({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', tags: ['tag 1', 'tag 2'] }]
     })
@@ -48,7 +41,6 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource  | tags         |
     //   | lorem.txt | tag 1, tag 2 |
     await ui.resourceShouldContainTagsInDetailPanel({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', tags: ['tag 1', 'tag 2'] }]
     })
@@ -56,7 +48,6 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource  | tags  |
     //   | lorem.txt | tag 1 |
     await ui.userRemovesTagsFromResourcesUsingSideBar({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', tags: ['tag 1'] }]
     })
@@ -64,7 +55,6 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource  | tags  |
     //   | lorem.txt | tag 2 |
     await ui.resourceShouldContainTagsInFileList({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', tags: ['tag 2'] }]
     })
@@ -72,20 +62,18 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource  | tags  |
     //   | lorem.txt | tag 2 |
     await ui.resourceShouldContainTagsInDetailPanel({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', tags: ['tag 2'] }]
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('Long tag name', async ({ world }) => {
+  test('Long tag name', async () => {
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile | content     |
     //   | lorem.txt  | lorem ipsum |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [{ pathToFile: 'lorem.txt', content: 'lorem ipsum' }]
     })
@@ -93,7 +81,6 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource  | tags                                                                                                       |
     //   | lorem.txt | Loremipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore |
     await ui.userTriesToAddTagForResourceUsingSidebarPanel({
-      world,
       stepUser: 'Alice',
       resources: [
         {
@@ -109,21 +96,19 @@ test.describe('Users can use web to organize tags', () => {
     //   Tags must not be longer than 100 characters
     //   """
     await ui.userShouldSeeFollowingTagValidationMessages({
-      world,
       stepUser: 'Alice',
       message: 'Tags must not be longer than 100 characters'
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('Tag search', { tag: '@predefined-users' }, async ({ world }) => {
+  test('Tag search', { tag: '@predefined-users' }, async () => {
     // When "Alice" creates the following files into personal space using API
     //   | pathToFile   | content     |
     //   | lorem.txt    | lorem ipsum |
     //   | textfile.txt | test file   |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [
         { pathToFile: 'lorem.txt', content: 'lorem ipsum' },
@@ -134,13 +119,11 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource  | tags       |
     //   | lorem.txt | tag1, tag2 |
     await ui.userAddsFollowingTagsForResourcesUsingSidebarPanel({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', tags: ['tag1', 'tag2'] }]
     })
     // And "Alice" clicks the tag "tag1" on the resource "lorem.txt"
     await ui.userClicksTheTagOnResource({
-      world,
       stepUser: 'Alice',
       resourceName: 'lorem.txt',
       tagName: 'tag1'
@@ -149,7 +132,6 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource  | tags |
     //   | lorem.txt | tag1 |
     await ui.resourceShouldContainTagsInFileList({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'lorem.txt', tags: ['tag1'] }]
     })
@@ -157,31 +139,25 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource     |
     //   | textfile.txt |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: 'files list',
       stepUser: 'Alice',
       resources: ['textfile.txt']
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('Tags in shared resources', { tag: '@predefined-users' }, async ({ world }) => {
+  test('Tags in shared resources', { tag: '@predefined-users' }, async () => {
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
     // And "Alice" creates the following folders in personal space using API
     //   | name             |
     //   | folder_to_shared |
-    await api.userHasCreatedFolders({
-      world,
-      stepUser: 'Alice',
-      folderNames: ['folder_to_shared']
-    })
+    await api.userHasCreatedFolders({ stepUser: 'Alice', folderNames: ['folder_to_shared'] })
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile                 | content     |
     //   | folder_to_shared/lorem.txt | lorem ipsum |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [{ pathToFile: 'folder_to_shared/lorem.txt', content: 'lorem ipsum' }]
     })
@@ -189,7 +165,6 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource                   | tags         |
     //   | folder_to_shared/lorem.txt | tag 1, tag 2 |
     await ui.userAddsFollowingTagsForResourcesUsingSidebarPanel({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'folder_to_shared/lorem.txt', tags: ['tag 1', 'tag 2'] }]
     })
@@ -197,7 +172,6 @@ test.describe('Users can use web to organize tags', () => {
     //   | resource         | recipient | type | role                   | resourceType |
     //   | folder_to_shared | Brian     | user | Can edit with trashbin | folder       |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -211,21 +185,17 @@ test.describe('Users can use web to organize tags', () => {
       ]
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({
-      world,
-      stepUser: 'Brian'
-    })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
     // Then the following resources should contain the following tags in the files list for user "Brian"
     //   | resource                   | tags         |
     //   | folder_to_shared/lorem.txt | tag 1, tag 2 |
     await ui.resourceShouldContainTagsInFileList({
-      world,
       stepUser: 'Brian',
       resources: [{ name: 'folder_to_shared/lorem.txt', tags: ['tag 1', 'tag 2'] }]
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
   })
 })

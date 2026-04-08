@@ -48,7 +48,9 @@ export class Session {
   }
 
   async login(user: User): Promise<void> {
-    const { id, password } = user
+    if (config.keycloak) {
+      return this.keycloakLogin(user)
+    }
 
     const [response] = await Promise.all([
       this.#page.waitForResponse(
@@ -57,7 +59,7 @@ export class Session {
           resp.status() === 200 &&
           resp.request().method() === 'POST'
       ),
-      this.signIn(id, password)
+      this.signIn(user.id, user.password)
     ])
 
     if (config.predefinedUsers) {
@@ -71,6 +73,47 @@ export class Session {
           refreshToken: tokenRes.refresh_token
         }
       })
+    }
+  }
+
+  private async keycloakLogin(user: User): Promise<void> {
+    // Retry OIDC login: admin user is shared across all workers, so multiple
+    // workers may authenticate it concurrently. Keycloak can return the login
+    // form (200) instead of a redirect (302). Each retry starts a fresh OIDC
+    // session, naturally staggering the requests.
+    const MAX_RETRIES = 3
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      try {
+        if (attempt > 0) {
+          await this.#page.goto(config.baseUrl)
+        }
+        const [response] = await Promise.all([
+          this.#page.waitForResponse(
+            (resp) =>
+              resp.url().endsWith('/token') &&
+              resp.status() === 200 &&
+              resp.request().method() === 'POST',
+            { timeout: config.tokenTimeout * 1000 }
+          ),
+          this.signIn(user.id, user.password)
+        ])
+        if (config.predefinedUsers) {
+          const tokenRes = await response.json()
+          const tokenEnvironment = TokenEnvironmentFactory()
+          tokenEnvironment.setToken({
+            user: { ...user },
+            token: {
+              userId: user.id,
+              accessToken: tokenRes.access_token,
+              refreshToken: tokenRes.refresh_token
+            }
+          })
+        }
+        return
+      } catch (e) {
+        if (attempt === MAX_RETRIES - 1) throw e
+        await new Promise((r) => setTimeout(r, config.minTimeout * 1000))
+      }
     }
   }
 

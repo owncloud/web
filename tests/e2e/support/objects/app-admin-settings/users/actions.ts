@@ -1,6 +1,8 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { UsersEnvironment } from '../../../environment'
+import { getWorld } from '../../../../environment/world'
+import { createdGroupStore } from '../../../store/group'
 import { objects } from '../../../index'
 import { fileAction } from '../../../../environment/constants'
 
@@ -262,6 +264,7 @@ export const addSelectedUsersToGroups = async (args: {
   groups: string[]
 }): Promise<void> => {
   const { page, userIds, groups } = args
+  const usersEnvironment = new UsersEnvironment()
   const groupIds = []
 
   await page.locator(addToGroupsBatchAction).click()
@@ -273,14 +276,15 @@ export const addSelectedUsersToGroups = async (args: {
   )
 
   for (const group of groups) {
-    groupIds.push(getGroupId(group))
+    const groupObj = usersEnvironment.getCreatedGroup({ key: group })
+    groupIds.push(groupObj.uuid)
     await page.locator(groupsModalInput).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['groupsDropdownMenu'],
       'groups dropdown in add users to groups modal'
     )
-    await page.locator(groupsModalInput).pressSequentially(group)
+    await page.locator(groupsModalInput).pressSequentially(groupObj.displayName)
     await page.keyboard.press('Enter')
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
@@ -323,6 +327,7 @@ export const removeSelectedUsersFromGroups = async (args: {
   groups: string[]
 }): Promise<void> => {
   const { page, userIds, groups } = args
+  const usersEnvironment = new UsersEnvironment()
   const groupIds = []
 
   await page.locator(removeFromGroupsBatchAction).click()
@@ -334,14 +339,15 @@ export const removeSelectedUsersFromGroups = async (args: {
   )
 
   for (const group of groups) {
-    groupIds.push(getGroupId(group))
+    const groupObj = usersEnvironment.getCreatedGroup({ key: group })
+    groupIds.push(groupObj.uuid)
     await page.locator(groupsModalInput).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['groupsDropdownMenu'],
       'groups dropdown in remove users from groups modal'
     )
-    await page.locator(groupsModalInput).fill(group)
+    await page.locator(groupsModalInput).fill(groupObj.displayName)
     await page.keyboard.press('Enter')
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
@@ -382,13 +388,27 @@ export const filterUsers = async (args: {
   values: string[]
 }): Promise<void> => {
   const { page, filter, values } = args
+  const world = getWorld()
+
   await page.locator(util.format(userFilter, filter)).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tippyBoxVisible'],
     `user filter dropdown for filter ${filter}`
   )
+
   for (const value of values) {
+    // For group filters, convert test value to actual displayName
+    let filterValue = value
+    if (filter === 'groups' && world) {
+      // Get all created groups and find matching one by displayName prefix
+      const allGroups = Array.from(createdGroupStore.values())
+      const matchingGroup = allGroups.find((g) => g.displayName?.startsWith(value))
+      if (matchingGroup) {
+        filterValue = matchingGroup.displayName
+      }
+    }
+
     await Promise.all([
       page.waitForResponse(
         (resp) =>
@@ -396,12 +416,12 @@ export const filterUsers = async (args: {
           resp.status() === 200 &&
           resp.request().method() === 'GET'
       ),
-      page.locator(util.format(userFilterOption, value)).click()
+      page.locator(util.format(userFilterOption, filterValue)).click()
     ])
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['usersList'],
-      `users list after applying user filter ${filter} with value ${value}`
+      `users list after applying user filter ${filter} with value ${filterValue}`
     )
   }
 }
@@ -466,10 +486,12 @@ export const addUserToGroups = async (args: {
   groups: string[]
 }): Promise<void> => {
   const { page, userId, groups } = args
+  const usersEnvironment = new UsersEnvironment()
   const groupIds = []
   for (const group of groups) {
-    groupIds.push(getGroupId(group))
-    await page.locator(groupsInput).pressSequentially(group)
+    const groupObj = usersEnvironment.getCreatedGroup({ key: group })
+    groupIds.push(groupObj.uuid)
+    await page.locator(groupsInput).pressSequentially(groupObj.displayName)
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['addUserToGroupForm', 'groupsDropdownMenu'],
@@ -521,10 +543,12 @@ export const removeUserFromGroups = async (args: {
   groups: string[]
 }): Promise<void> => {
   const { page, userId, groups } = args
+  const usersEnvironment = new UsersEnvironment()
   const groupIds = []
   for (const group of groups) {
-    groupIds.push(getGroupId(group))
-    await page.getByTitle(group).click()
+    const groupObj = usersEnvironment.getCreatedGroup({ key: group })
+    groupIds.push(groupObj.uuid)
+    await page.getByTitle(groupObj.displayName).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['addUserToGroupForm'],
@@ -695,9 +719,4 @@ export const deleteUserUsingBatchAction = async (args: {
 export const waitForEditPanelToBeVisible = async (args: { page: Page }): Promise<void> => {
   const { page } = args
   await page.locator(editPanel).waitFor()
-}
-
-const getGroupId = (group: string): string => {
-  const usersEnvironment = new UsersEnvironment()
-  return usersEnvironment.getCreatedGroup({ key: group }).uuid
 }

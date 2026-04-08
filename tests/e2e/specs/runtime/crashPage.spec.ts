@@ -4,13 +4,9 @@ import * as ui from '../../steps/ui/index'
 import { CRASH_CODES } from '../../../../packages/web-pkg/src/errors/codes'
 
 test.describe('crash page', () => {
-  test.beforeEach(async ({ world }) => {
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice']
-    })
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+  test.beforeEach(async () => {
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice'] })
+    await ui.userLogsIn({ stepUser: 'Alice' })
   })
 
   test('when spaces loading fails, the crash page is displayed', async ({ world }) => {
@@ -22,7 +18,7 @@ test.describe('crash page', () => {
     await page.reload()
 
     await ui.expectCrashPageToBeVisible({ page })
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
   test('the crash page does not have any accessibility violations', async ({ world }) => {

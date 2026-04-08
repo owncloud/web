@@ -29,7 +29,10 @@ export class Spaces {
     space: Omit<po.createSpaceArgs, 'page'>
   }): Promise<void> {
     const id = await po.createSpace({ ...space, page: this.#page })
-    this.#spacesEnvironment.createSpace({ key, space: { name: space.name, id } })
+    this.#spacesEnvironment.createSpace({
+      key,
+      space: { name: space.name, id }
+    })
   }
 
   async open({ key }: { key: string }): Promise<void> {

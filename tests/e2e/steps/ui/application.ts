@@ -1,32 +1,30 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../support'
 import { config } from '../../config'
-import { World } from '../../environment/world'
+import { getWorld } from '../../environment/world'
 import { substitute } from '../../support/utils'
 
 export async function userOpensApplication({
-  world,
   stepUser,
   name
 }: {
-  world: World
   stepUser: string
   name: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const applicationObject = new objects.runtime.Application({ page })
   await applicationObject.open({ name })
 }
 
 export async function userShouldSeeNotifications({
-  world,
   stepUser,
   expectedMessages
 }: {
-  world: World
   stepUser: string
   expectedMessages: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const application = new objects.runtime.Application({ page })
   const messages = await application.getNotificationMessages()
@@ -36,12 +34,11 @@ export async function userShouldSeeNotifications({
 }
 
 export async function userShouldSeeNoNotifications({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const application = new objects.runtime.Application({ page })
   const messages = await application.getNotificationMessages()
@@ -49,14 +46,13 @@ export async function userShouldSeeNoNotifications({
 }
 
 export async function userWaitsForTokenRenewal({
-  world,
   stepUser,
   renewalType
 }: {
-  world: World
   stepUser: string
   renewalType: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const application = new objects.runtime.Application({ page })
 
@@ -67,14 +63,13 @@ export async function userWaitsForTokenRenewal({
 }
 
 export async function userOpensClipboardUrl({
-  world,
   stepUser,
   url
 }: {
-  world: World
   stepUser: string
   url: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = await world.actorsEnvironment.createActor({
     key: stepUser,
     namespace: world.actorsEnvironment.generateNamespace(stepUser, stepUser)
@@ -87,25 +82,15 @@ export async function userOpensClipboardUrl({
   await applicationObject.openUrl(url)
 }
 
-export async function userReloadsPage({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userReloadsPage({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const applicationObject = new objects.runtime.Application({ page })
   await applicationObject.reloadPage()
 }
 
-export async function userClosesSidebar({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userClosesSidebar({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const applicationObject = new objects.runtime.Application({ page })
   await applicationObject.closeSidebar()

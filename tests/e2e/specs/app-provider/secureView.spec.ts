@@ -6,36 +6,28 @@ import * as ui from '../../steps/ui/index'
 import { searchScope, application, fileAction } from '../../environment/constants'
 
 test.describe('Secure view', { tag: '@predefined-users' }, () => {
-  test.beforeEach(async ({ world }) => {
+  test.beforeEach(async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice', 'Brian']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian'] })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
 
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
 
     // And "Alice" opens the "files" app
-    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ stepUser: 'Alice', name: 'files' })
   })
 
-  test('open a secure view file with Collabora', async ({ world }) => {
+  test('open a secure view file with Collabora', async () => {
     // Given "Alice" creates the following folder in personal space using API
     //   | name          |
     //   | shared folder |
-    await api.userHasCreatedFolder({
-      world,
-      stepUser: 'Alice',
-      folderName: 'shared folder'
-    })
+    await api.userHasCreatedFolder({ stepUser: 'Alice', folderName: 'shared folder' })
 
     // And "Alice" uploads the following local file into personal space using API
     //   | localFile                      | to                            |
@@ -43,7 +35,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | filesForUpload/testavatar.jpeg | shared folder/testavatar.jpeg |
     //   | filesForUpload/lorem.txt       | shared folder/lorem.txt       |
     await api.userHasUploadedFilesInPersonalSpace({
-      world,
       stepUser: 'Alice',
       filesToUpload: [
         { localFile: 'filesForUpload/simple.pdf', to: 'shared folder/simple.pdf' },
@@ -56,7 +47,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | resource           | type         | content                 |
     //   | secureDocument.odt | OpenDocument | very important document |
     await ui.userCreatesResources({
-      world,
       stepUser: 'Alice',
       resources: [
         { name: 'secureDocument.odt', type: 'OpenDocument', content: 'very important document' }
@@ -68,7 +58,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | secureDocument.odt | Brian     | user | Can view (secure) | file         |
     //   | shared folder      | Brian     | user | Can view (secure) | folder       |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -90,16 +79,15 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
 
     // When "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
 
     // And "Brian" opens the following file in Collabora
     //   | resource           |
     //   | secureDocument.odt |
     await ui.userOpensResourceInViewer({
-      world,
       stepUser: 'Brian',
       resource: 'secureDocument.odt',
       viewer: application.collabora
@@ -109,27 +97,21 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     // In case the user does not have download permissions and tries to copy file content, the clipboard should be set to “Copying from document disabled”.
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
-      world,
       stepUser: 'Brian',
       expectedContent: 'Copying from the document disabled',
       editor: 'Collabora'
     })
 
     // And "Brian" closes the file viewer
-    await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
+    await ui.userClosesFileViewer({ stepUser: 'Brian' })
 
     // When "Brian" opens folder "shared folder"
-    await ui.userOpensResource({
-      world,
-      stepUser: 'Brian',
-      resource: 'shared folder'
-    })
+    await ui.userOpensResource({ stepUser: 'Brian', resource: 'shared folder' })
 
     // And "Brian" opens the following file in Collabora
     //   | resource   |
     //   | simple.pdf |
     await ui.userOpensResourceInViewer({
-      world,
       stepUser: 'Brian',
       resource: 'simple.pdf',
       viewer: application.collabora
@@ -137,20 +119,18 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
 
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
-      world,
       stepUser: 'Brian',
       expectedContent: 'Copying from the document disabled',
       editor: 'Collabora'
     })
 
     // And "Brian" closes the file viewer
-    await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
+    await ui.userClosesFileViewer({ stepUser: 'Brian' })
 
     // And "Brian" opens the following file in Collabora
     //   | resource        |
     //   | testavatar.jpeg |
     await ui.userOpensResourceInViewer({
-      world,
       stepUser: 'Brian',
       resource: 'testavatar.jpeg',
       viewer: application.collabora
@@ -158,20 +138,18 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
 
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
-      world,
       stepUser: 'Brian',
       expectedContent: 'Copying from the document disabled',
       editor: 'Collabora'
     })
 
     // And "Brian" closes the file viewer
-    await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
+    await ui.userClosesFileViewer({ stepUser: 'Brian' })
 
     // And "Brian" opens the following file in Collabora
     //   | resource  |
     //   | lorem.txt |
     await ui.userOpensResourceInViewer({
-      world,
       stepUser: 'Brian',
       resource: 'lorem.txt',
       viewer: application.collabora
@@ -179,25 +157,20 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
 
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
-      world,
       stepUser: 'Brian',
       expectedContent: 'Copying from the document disabled',
       editor: 'Collabora'
     })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
   })
 
-  test('check available actions for secure view file', async ({ world }) => {
+  test('check available actions for secure view file', async () => {
     // Given "Alice" creates the following folder in personal space using API
     //   | name          |
     //   | shared folder |
-    await api.userHasCreatedFolder({
-      world,
-      stepUser: 'Alice',
-      folderName: 'shared folder'
-    })
+    await api.userHasCreatedFolder({ stepUser: 'Alice', folderName: 'shared folder' })
 
     // And "Alice" uploads the following local file into personal space using API
     //   | localFile                      | to                             |
@@ -205,7 +178,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | filesForUpload/testavatar.jpeg | shared folder/securePhoto.jpeg |
     //   | filesForUpload/lorem.txt       | shared folder/secureFile.txt   |
     await api.userHasUploadedFilesInPersonalSpace({
-      world,
       stepUser: 'Alice',
       filesToUpload: [
         { localFile: 'filesForUpload/simple.pdf', to: 'shared folder/secure.pdf' },
@@ -218,7 +190,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | resource           | type         | content                 |
     //   | secureDocument.odt | OpenDocument | very important document |
     await ui.userCreatesResources({
-      world,
       stepUser: 'Alice',
       resources: [
         { name: 'secureDocument.odt', type: 'OpenDocument', content: 'very important document' }
@@ -230,7 +201,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | secureDocument.odt | Brian     | user | Can view (secure) | file         |
     //   | shared folder      | Brian     | user | Can view (secure) | folder       |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -252,17 +222,16 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
 
     // When "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
 
     // .odt file
     // Then "Brian" should see following actions for file "secureDocument.odt"
     //   | action            |
     //   | Open in Collabora |
     await ui.userShouldSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Open in Collabora'],
       resource: 'secureDocument.odt'
@@ -274,18 +243,13 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | Copy               |
     //   | Open in OnlyOffice |
     await ui.userShouldNotSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Download', 'Copy', 'Open in OnlyOffice'],
       resource: 'secureDocument.odt'
     })
 
     // And "Brian" should not see preview for file "secureDocument.odt"
-    await ui.userShouldNotSeePreviewForFile({
-      world,
-      stepUser: 'Brian',
-      resource: 'secureDocument.odt'
-    })
+    await ui.userShouldNotSeePreviewForFile({ stepUser: 'Brian', resource: 'secureDocument.odt' })
 
     // folder
     // Then "Brian" should not see following actions for folder "shared folder"
@@ -293,25 +257,19 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | Download |
     //   | Copy     |
     await ui.userShouldNotSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Download', 'Copy'],
       resource: 'shared folder'
     })
 
     // When "Brian" opens folder "shared folder"
-    await ui.userOpensResource({
-      world,
-      stepUser: 'Brian',
-      resource: 'shared folder'
-    })
+    await ui.userOpensResource({ stepUser: 'Brian', resource: 'shared folder' })
 
     // .pdf file
     // Then "Brian" should see following actions for file "secure.pdf"
     //   | action            |
     //   | Open in Collabora |
     await ui.userShouldSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Open in Collabora'],
       resource: 'secure.pdf'
@@ -323,7 +281,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | Copy               |
     //   | Open in PDF Viewer |
     await ui.userShouldNotSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Download', 'Copy', 'Open in PDF Viewer'],
       resource: 'secure.pdf'
@@ -331,7 +288,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
 
     // And "Brian" should not see thumbnail and preview for file "secure.pdf"
     await ui.userShouldNotSeeThumbnailAndPreviewForFile({
-      world,
       stepUser: 'Brian',
       resource: 'secure.pdf'
     })
@@ -341,7 +297,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | action            |
     //   | Open in Collabora |
     await ui.userShouldSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Open in Collabora'],
       resource: 'securePhoto.jpeg'
@@ -353,7 +308,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | Copy     |
     //   | Preview  |
     await ui.userShouldNotSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Download', 'Copy', 'Preview'],
       resource: 'securePhoto.jpeg'
@@ -361,7 +315,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
 
     // And "Brian" should not see thumbnail and preview for file "securePhoto.jpeg"
     await ui.userShouldNotSeeThumbnailAndPreviewForFile({
-      world,
       stepUser: 'Brian',
       resource: 'securePhoto.jpeg'
     })
@@ -371,7 +324,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | action            |
     //   | Open in Collabora |
     await ui.userShouldSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Open in Collabora'],
       resource: 'secureFile.txt'
@@ -384,7 +336,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | Open in Text Editor |
     //   | Open in OnlyOffice  |
     await ui.userShouldNotSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Download', 'Copy', 'Open in Text Editor', 'Open in OnlyOffice'],
       resource: 'secureFile.txt'
@@ -392,14 +343,12 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
 
     // And "Brian" should not see thumbnail and preview for file "secureFile.txt"
     await ui.userShouldNotSeeThumbnailAndPreviewForFile({
-      world,
       stepUser: 'Brian',
       resource: 'secureFile.txt'
     })
 
     // When "Brian" searches "secure" using the global search and the "all files" filter and presses enter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Brian',
       keyword: 'secure',
       filter: searchScope.allFiles,
@@ -413,7 +362,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | secure.pdf         |
     //   | secureDocument.odt |
     await ui.userShouldSeeResources({
-      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['secureFile.txt', 'securePhoto.jpeg', 'secure.pdf', 'secureDocument.odt']
@@ -424,7 +372,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | action            |
     //   | Open in Collabora |
     await ui.userShouldSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Open in Collabora'],
       resource: 'secureFile.txt'
@@ -437,7 +384,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | Open in Text Editor |
     //   | Open in OnlyOffice  |
     await ui.userShouldNotSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Download', 'Copy', 'Open in Text Editor', 'Open in OnlyOffice'],
       resource: 'secureFile.txt'
@@ -445,7 +391,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
 
     // And "Brian" should not see thumbnail and preview for file "secureFile.txt"
     await ui.userShouldNotSeeThumbnailAndPreviewForFile({
-      world,
       stepUser: 'Brian',
       resource: 'secureFile.txt'
     })
@@ -455,7 +400,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | action            |
     //   | Open in Collabora |
     await ui.userShouldSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Open in Collabora'],
       resource: 'securePhoto.jpeg'
@@ -467,7 +411,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | Copy     |
     //   | Preview  |
     await ui.userShouldNotSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Download', 'Copy', 'Preview'],
       resource: 'securePhoto.jpeg'
@@ -475,7 +418,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
 
     // And "Brian" should not see thumbnail and preview for file "securePhoto.jpeg"
     await ui.userShouldNotSeeThumbnailAndPreviewForFile({
-      world,
       stepUser: 'Brian',
       resource: 'securePhoto.jpeg'
     })
@@ -485,7 +427,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | action            |
     //   | Open in Collabora |
     await ui.userShouldSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Open in Collabora'],
       resource: 'secure.pdf'
@@ -497,25 +438,19 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | Copy               |
     //   | Open in PDF Viewer |
     await ui.userShouldNotSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Download', 'Copy', 'Open in PDF Viewer'],
       resource: 'secure.pdf'
     })
 
     // And "Brian" should not see preview for file "secure.pdf"
-    await ui.userShouldNotSeePreviewForFile({
-      world,
-      stepUser: 'Brian',
-      resource: 'secure.pdf'
-    })
+    await ui.userShouldNotSeePreviewForFile({ stepUser: 'Brian', resource: 'secure.pdf' })
 
     // .odt file
     // Then "Brian" should see following actions for file "secureDocument.odt"
     //   | action            |
     //   | Open in Collabora |
     await ui.userShouldSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Open in Collabora'],
       resource: 'secureDocument.odt'
@@ -527,7 +462,6 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     //   | Copy               |
     //   | Open in OnlyOffice |
     await ui.userShouldNotSeeActionsForResource({
-      world,
       stepUser: 'Brian',
       actions: ['Download', 'Copy', 'Open in OnlyOffice'],
       resource: 'secureDocument.odt'
@@ -535,12 +469,11 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
 
     // And "Brian" should not see preview for file "secureDocument.odt"
     await ui.userShouldNotSeeThumbnailAndPreviewForFile({
-      world,
       stepUser: 'Brian',
       resource: 'secureDocument.odt'
     })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
   })
 })

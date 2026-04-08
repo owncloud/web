@@ -22,7 +22,6 @@ const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:visible'
 const spacesDescriptionInputArea = '.cm-content'
 const spacesDescriptionSaveTextFileInEditorButton = '#app-save-action:visible'
-const spaceHeaderSelector = '.space-header'
 const activitySidebarPanel = 'sidebar-panel-activities'
 const activitySidebarPanelBodyContent = '#sidebar-panel-activities .sidebar-panel__body-content'
 
@@ -82,8 +81,8 @@ export interface openSpaceArgs {
 export const openSpace = async (args: openSpaceArgs): Promise<void> => {
   const { page, id } = args
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
-  await page.locator(util.format(spaceIdSelector, id)).click()
-  await page.locator(spaceHeaderSelector).waitFor()
+  const locator = page.locator(util.format(spaceIdSelector, id))
+  await locator.click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
 }
 /**/

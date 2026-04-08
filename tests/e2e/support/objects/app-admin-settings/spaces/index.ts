@@ -82,11 +82,7 @@ export class Spaces {
     key: string
     value: string
   }): Promise<void> {
-    await po.changeSpaceSubtitleUsingContextMenu({
-      page: this.#page,
-      id: this.getUUID({ key }),
-      value
-    })
+    await po.changeSpaceSubtitleUsingContextMenu({ page: this.#page, id: this.getUUID({ key }), value })
   }
 
   async openPanel({ key }: { key: string }): Promise<void> {
@@ -97,7 +93,7 @@ export class Spaces {
     await po.openSpaceAdminActionSidebarPanel({ page: this.#page, action })
   }
 
-  listMembers({ filter }: { filter: string }): Promise<Array<string>> {
+  listMembers({ filter }: { filter: string }): Promise<string[]> {
     return po.listSpaceMembers({ page: this.#page, filter })
   }
 }

@@ -87,7 +87,11 @@ export class Users {
     userIds: string[]
     groups: string[]
   }): Promise<void> {
-    await po.removeSelectedUsersFromGroups({ page: this.#page, userIds, groups })
+    await po.removeSelectedUsersFromGroups({
+      page: this.#page,
+      userIds,
+      groups
+    })
   }
 
   async filter({ filter, values }: { filter: string; values: string[] }): Promise<void> {

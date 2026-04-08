@@ -1,10 +1,12 @@
 import { Page } from '@playwright/test'
 import { UsersEnvironment } from '../../../environment'
+import { getWorld } from '../../../../environment/world'
 import * as po from './actions'
 
 export class Groups {
   #page: Page
   #usersEnvironment: UsersEnvironment
+
   constructor({ page }: { page: Page }) {
     this.#usersEnvironment = new UsersEnvironment()
     this.#page = page
@@ -15,11 +17,13 @@ export class Groups {
   }
 
   async createGroup({ key }: { key: string }): Promise<void> {
+    const world = getWorld()
     const group = this.#usersEnvironment.getGroup({ key })
     const response = await po.createGroup({ page: this.#page, key: group.displayName })
+    const actualId = world.getGroupId(key)
     this.#usersEnvironment.storeCreatedGroup({
       group: {
-        id: key,
+        id: actualId,
         uuid: response['id'],
         displayName: response['displayName']
       }
@@ -30,7 +34,7 @@ export class Groups {
     return po.getDisplayedGroupsIds({ page: this.#page })
   }
 
-  async getGroupsDisplayName(): Promise<string> {
+  getGroupsDisplayName(): Promise<string> {
     return po.getGroupsDisplayName({ page: this.#page })
   }
 
@@ -57,8 +61,13 @@ export class Groups {
     value: string
     action: string
   }): Promise<void> {
+    const displayName =
+      attribute === 'displayName'
+        ? this.#usersEnvironment.getGroupDisplayName({ displayName: value })
+        : value
+
     const uuid = this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
-    await po.changeGroup({ uuid, attribute: attribute, value: value, page: this.#page })
+    await po.changeGroup({ uuid, attribute: attribute, value: displayName, page: this.#page })
   }
 }

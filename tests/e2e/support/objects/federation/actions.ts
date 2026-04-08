@@ -53,7 +53,7 @@ export const generateInvitation = async (args: { page: Page; user: string }): Pr
 
 export const acceptInvitation = async (args: { page: Page; sharer: string }): Promise<void> => {
   const { page, sharer } = args
-  const invitation = federatedInvitationCode.get(sharer.toLowerCase())
+  const invitation = federatedInvitationCode.get(sharer)
   await page.locator(invitationInput).fill(invitation.code)
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,

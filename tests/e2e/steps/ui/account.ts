@@ -1,16 +1,15 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../support'
-import { World } from '../../environment/world'
+import { getWorld } from '../../environment/world'
 
 export async function userChangesLanguage({
-  world,
   stepUser,
   language
 }: {
-  world: World
   stepUser: string
   language: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   const isAnonymousUser = stepUser === 'Anonymous'
@@ -18,77 +17,59 @@ export async function userChangesLanguage({
 }
 
 export async function userShouldSeeAccountPageTitle({
-  world,
   stepUser,
   expectedTitle
 }: {
-  world: World
   stepUser: string
   expectedTitle: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   const actualTitle = await accountObject.getTitle()
   expect(actualTitle).toEqual(expectedTitle)
 }
 
-export async function userRequestsGdprExport({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userRequestsGdprExport({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   await accountObject.requestGdprExport()
 }
 
-export async function userDownloadsGdprExport({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userDownloadsGdprExport({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   await accountObject.downloadGdprExport()
 }
 
 export async function userMarksAllNotificationsAsRead({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const application = new objects.runtime.Application({ page })
   await application.markNotificationsAsRead()
 }
 
-export async function userOpensAccountPage({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userOpensAccountPage({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   await accountObject.openAccountPage()
 }
 
 export async function userDisablesNotificationEvents({
-  world,
   stepUser,
   events
 }: {
-  world: World
   stepUser: string
   events: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   for (const event of events) {
@@ -97,14 +78,13 @@ export async function userDisablesNotificationEvents({
 }
 
 export async function userShouldHaveQuota({
-  world,
   stepUser,
   quota
 }: {
-  world: World
   stepUser: string
   quota: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
   const actualQuota = await accountObject.getQuotaValue()

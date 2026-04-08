@@ -4,11 +4,12 @@ import { User } from '../../support/types'
 import { listenSSE } from '../../support/environment/sse.js'
 import { test, expect } from '@playwright/test'
 import { waitForSSEEvent } from '../../support/utils/locator.js'
-import { World } from '../../environment/world'
+import { getWorld } from '../../environment/world'
 import { Jimp } from 'jimp'
 import { getOtpFromImage } from '../../support/utils/mfa.js'
 
-async function createNewSession(world: World, stepUser: string) {
+async function createNewSession(stepUser: string) {
+  const world = getWorld()
   const { page } = await world.actorsEnvironment.createActor({
     key: stepUser,
     namespace: world.actorsEnvironment.generateNamespace(stepUser, stepUser)
@@ -16,7 +17,8 @@ async function createNewSession(world: World, stepUser: string) {
   return new objects.runtime.Session({ page })
 }
 
-async function initUserStates(userKey: string, user: User, world: World) {
+async function initUserStates(userKey: string, user: User) {
+  const world = getWorld()
   const userInfo = await api.graph.getMeInfo(user)
   world.usersEnvironment.storeCreatedUser(userKey, {
     ...user,
@@ -29,19 +31,17 @@ async function initUserStates(userKey: string, user: User, world: World) {
   })
 }
 
-export async function userLogsIn({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
-  const sessionObject = await createNewSession(world, stepUser)
+export async function userLogsIn({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
+  const sessionObject = await createNewSession(stepUser)
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
 
   let user = null
   if (stepUser === 'Admin' || config.predefinedUsers) {
     user = world.usersEnvironment.getUser({ key: stepUser })
+    // Predefined users exist in OCIS with their real (non-namespaced) username.
+    // Override the worker-namespaced id so login uses the real OCIS username.
+    user = { ...user, id: user.originalId || user.id }
   } else {
     user = world.usersEnvironment.getCreatedUser({ key: stepUser })
   }
@@ -60,21 +60,16 @@ export async function userLogsIn({
 
   // initialize user states: uuid, language, auto-sync
   if (config.predefinedUsers) {
-    await initUserStates(stepUser, user, world)
+    await initUserStates(stepUser, user)
     // test should run with English language
     await api.settings.changeLanguage({ user, language: 'en' })
     await page.reload({ waitUntil: 'load' })
   }
 }
 
-export async function logInWithOTP({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
-  const sessionObject = await createNewSession(world, stepUser)
+export async function logInWithOTP({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
+  const sessionObject = await createNewSession(stepUser)
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
 
   const image = await Jimp.read('./qr.png')
@@ -92,63 +87,55 @@ export async function logInWithOTP({
   }
 }
 
-export async function userLogsOut({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
-  const actor = world.actorsEnvironment.getActor({ key: stepUser })
-  const canLogout = !!(await actor.page.locator('#_userMenuButton').count())
+export async function userLogsOut({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
+  // Check if actor exists (user might not have been logged in)
+  let actor
+  try {
+    actor = world.actorsEnvironment.getActor({ key: stepUser })
+  } catch {
+    // Actor doesn't exist - user was never logged in, nothing to do
+    return
+  }
 
-  const sessionObject = new objects.runtime.Session({ page: actor.page })
-  canLogout && (await sessionObject.logout())
+  // When using Keycloak, skip the browser-based logout (OIDC end-session).
+  // Keycloak can send a backchannel logout to OCIS which may affect other
+  // workers sharing the same user session. Close the browser context directly
+  // instead — the server-side session expires naturally via SSO session timeout.
+  if (!config.keycloak) {
+    const canLogout = !!(await actor.page.locator('#_userMenuButton').count())
+    const sessionObject = new objects.runtime.Session({ page: actor.page })
+    canLogout && (await sessionObject.logout())
+  }
   await actor.close()
 }
 
 export async function userShouldGetSSEEvent({
-  world,
   stepUser,
   event
 }: {
-  world: World
   stepUser: string
   event: string
 }): Promise<void> {
+  const world = getWorld()
   const user = world.usersEnvironment.getCreatedUser({ key: stepUser })
   await waitForSSEEvent(user, event)
 }
 
-export async function userClosesTheCurrentTab({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userClosesTheCurrentTab({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const actor = world.actorsEnvironment.getActor({ key: stepUser })
   await actor.closeCurrentTab()
 }
 
-export async function userNavigatesToNewTab({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userNavigatesToNewTab({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const actor = world.actorsEnvironment.getActor({ key: stepUser })
   await actor.newTab()
 }
 
-export async function userWaitsForTokenToExpire({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userWaitsForTokenToExpire({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   // wait for the token to expire
   await page.waitForTimeout(config.tokenTimeout * 1000)
@@ -158,14 +145,9 @@ export async function useServer({ server }: { server: 'LOCAL' | 'FEDERATED' }): 
   config.federatedServer = server === 'FEDERATED'
 }
 
-export async function userFailsToLogin({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
-  const sessionObject = await createNewSession(world, stepUser)
+export async function userFailsToLogin({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
+  const sessionObject = await createNewSession(stepUser)
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const user = world.usersEnvironment.getUser({ key: stepUser })
 

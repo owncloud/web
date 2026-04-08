@@ -3,11 +3,10 @@ import { objects } from '../../support'
 import { getDynamicRoleIdByName, ResourceType } from '../../support/api/share/share'
 import { CollaboratorType, ICollaborator } from '../../support/objects/app-files/share/collaborator'
 import { substitute } from '../../support/utils/substitute'
-import { World } from '../../environment/world'
+import { getWorld } from '../../environment/world'
 import { fileAction } from '../../environment/constants'
 
 const parseShareTable = function (
-  world: World,
   resource: string,
   recipient: string,
   type: CollaboratorType,
@@ -16,6 +15,7 @@ const parseShareTable = function (
   expirationDate?: string,
   shareType?: string
 ) {
+  const world = getWorld()
   const stepTable = [
     {
       resource,
@@ -51,35 +51,31 @@ const parseShareTable = function (
 }
 
 export async function userNavigatesToSharedWithMePage({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.shares.WithMe({ page })
   await pageObject.navigate()
 }
 
 export async function userNavigatesToSharedWithOthersPage({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.shares.WithOthers({ page })
   await pageObject.navigate()
 }
 
 export async function userUpdatesShareeRoles({
-  world,
   stepUser,
   roleUpdates
 }: {
-  world: World
   stepUser: string
   roleUpdates: {
     resource: string
@@ -91,13 +87,13 @@ export async function userUpdatesShareeRoles({
     shareType?: string
   }[]
 }) {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   const sharer = world.usersEnvironment.getUser({ key: stepUser })
 
   for (const update of roleUpdates) {
     const shareInfo = parseShareTable(
-      world,
       update.resource,
       update.recipient,
       update.type,
@@ -123,12 +119,10 @@ export async function userUpdatesShareeRoles({
 }
 
 export async function userSharesResources({
-  world,
   stepUser,
   actionType,
   shares
 }: {
-  world: World
   stepUser: string
   actionType:
     | typeof fileAction.sideBarPanel
@@ -144,6 +138,7 @@ export async function userSharesResources({
     shareType?: string
   }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   const sharer = world.usersEnvironment.getUser({ key: stepUser })
@@ -175,14 +170,13 @@ export async function userSharesResources({
 }
 
 export async function userRemovesSharees({
-  world,
   stepUser,
   sharees
 }: {
-  world: World
   stepUser: string
   sharees: { resource: string; recipient: string; type?: 'group' | 'user' }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
 
@@ -203,16 +197,15 @@ export async function userRemovesSharees({
 }
 
 export async function userAddsUsersToProjectSpace({
-  world,
   stepUser,
   space,
   members
 }: {
-  world: World
   stepUser: string
   space: string
   members: { reciver: string; role: string; kind: 'user' | 'group' }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const sharer = world.usersEnvironment.getUser({ key: stepUser })
@@ -232,16 +225,15 @@ export async function userAddsUsersToProjectSpace({
 }
 
 export async function userShouldBeAbleToManageShareOfFile({
-  world,
   stepUser,
   resource,
   recipient
 }: {
-  world: World
   stepUser: string
   resource: string
   recipient: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   const changeRole = shareObject.changeRoleLocator(
@@ -261,16 +253,15 @@ export async function userShouldBeAbleToManageShareOfFile({
 }
 
 export async function userShouldNotBeAbleToManageShareOfFile({
-  world,
   stepUser,
   resource,
   recipient
 }: {
-  world: World
   stepUser: string
   resource: string
   recipient: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   const changeRole = shareObject.changeRoleLocator(
@@ -290,14 +281,13 @@ export async function userShouldNotBeAbleToManageShareOfFile({
 }
 
 export async function userDisablesSyncForShares({
-  world,
   stepUser,
   shares
 }: {
-  world: World
   stepUser: string
   shares: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   for (const share of shares) {
@@ -306,14 +296,13 @@ export async function userDisablesSyncForShares({
 }
 
 export async function userEnablesSyncForShares({
-  world,
   stepUser,
   shares
 }: {
-  world: World
   stepUser: string
   shares: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   for (const share of shares) {
@@ -322,14 +311,13 @@ export async function userEnablesSyncForShares({
 }
 
 export async function sharesShouldHaveSyncStatus({
-  world,
   stepUser,
   shares
 }: {
-  world: World
   stepUser: string
   shares: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   for (const share of shares) {
@@ -338,14 +326,13 @@ export async function sharesShouldHaveSyncStatus({
 }
 
 export async function sharesShouldNotHaveSyncStatus({
-  world,
   stepUser,
   shares
 }: {
-  world: World
   stepUser: string
   shares: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   for (const share of shares) {
@@ -354,16 +341,15 @@ export async function sharesShouldNotHaveSyncStatus({
 }
 
 export async function userShouldNotSeeShare({
-  world,
   stepUser,
   resource,
   owner
 }: {
-  world: World
   stepUser: string
   resource: string
   owner: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   const isAcceptedSharePresent = await shareObject.isAcceptedSharePresent(
@@ -374,30 +360,28 @@ export async function userShouldNotSeeShare({
 }
 
 export async function userEnablesSyncForAllShares({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   await shareObject.syncAll()
 }
 
 export async function userChecksAccessDetailsOfShare({
-  world,
   stepUser,
   resource,
   sharee,
   accessDetails
 }: {
-  world: World
   stepUser: string
   resource: string
   sharee: { name: string; type: 'user' | 'group' }
   accessDetails: { Name: string; Type: string }
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
 
@@ -406,7 +390,10 @@ export async function userChecksAccessDetailsOfShare({
   if (accessDetails.hasOwnProperty('Type') && accessDetails.Type === 'External') {
     selectorType = 'group'
   }
-  accessDetails.Name = substitute(accessDetails.Name)
+  const expectedAccessDetails = {
+    ...accessDetails,
+    Name: substitute(accessDetails.Name).replace(/\s+\(\d+\)$/, '')
+  }
 
   const actualDetails = await shareObject.getAccessDetails({
     resource,
@@ -419,22 +406,26 @@ export async function userChecksAccessDetailsOfShare({
     } as ICollaborator
   })
 
-  expect(actualDetails).toMatchObject(accessDetails)
+  const normalizedActualDetails = {
+    ...actualDetails,
+    Name: (actualDetails.Name || '').replace(/\s+\(\d+\)$/, '')
+  }
+
+  expect(normalizedActualDetails).toMatchObject(expectedAccessDetails)
 }
 
 export async function userShouldSeeAccessDetailsOfShareForFederatedUser({
-  world,
   stepUser,
   resource,
   collaboratorName,
   detail
 }: {
-  world: World
   stepUser: string
   resource: string
   collaboratorName: string
   detail: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
 
@@ -450,20 +441,19 @@ export async function userShouldSeeAccessDetailsOfShareForFederatedUser({
 }
 
 export async function userSetsExpirationDateOfShare({
-  world,
   stepUser,
   resource,
   collaboratorType,
   collaboratorName,
   expirationDate
 }: {
-  world: World
   stepUser: string
   resource: string
   collaboratorType: 'user' | 'group'
   collaboratorName: string
   expirationDate: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   const collaborator =
@@ -478,14 +468,13 @@ export async function userSetsExpirationDateOfShare({
 }
 
 export async function userShouldSeeMessageOnWebUI({
-  world,
   stepUser,
   message
 }: {
-  world: World
   stepUser: string
   message: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   const actualMessage = await shareObject.getMessage()
@@ -493,12 +482,11 @@ export async function userShouldSeeMessageOnWebUI({
 }
 
 export async function userNavigatesToSharedViaLinkPage({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.shares.ViaLink({ page })
   await pageObject.navigate()

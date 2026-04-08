@@ -3,24 +3,20 @@ import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 
 test.describe('Page not found', { tag: '@predefined-users' }, () => {
-  test('not found page', async ({ world }) => {
+  test('not found page', async () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice'] })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
 
     // When "Alice" navigates to a non-existing page
-    await ui.userNavigatesToNonExistingPage({ world, stepUser: 'Alice' })
+    await ui.userNavigatesToNonExistingPage({ stepUser: 'Alice' })
     // Then "Alice" should see the not found page
-    await ui.userShouldSeeNotFoundPage({ world, stepUser: 'Alice' })
+    await ui.userShouldSeeNotFoundPage({ stepUser: 'Alice' })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 })

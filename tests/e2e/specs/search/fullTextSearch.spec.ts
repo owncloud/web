@@ -4,22 +4,17 @@ import * as ui from '../../steps/ui/index'
 import { searchFilter, searchScope, application } from '../../environment/constants'
 
 test.describe('Search', () => {
-  test.beforeEach(async ({ world }) => {
+  test.beforeEach(async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice', 'Brian']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian'] })
 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Brian | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      world,
       stepUser: 'Admin',
       users: [{ id: 'Brian', role: 'Space Admin' }]
     })
@@ -28,7 +23,6 @@ test.describe('Search', () => {
     //   | localFile                   | to              |
     //   | filesForUpload/textfile.txt | fileToShare.txt |
     await api.userHasUploadedFilesInPersonalSpace({
-      world,
       stepUser: 'Alice',
       filesToUpload: [{ localFile: 'filesForUpload/textfile.txt', to: 'fileToShare.txt' }]
     })
@@ -37,7 +31,6 @@ test.describe('Search', () => {
     //   | resource        | tags      |
     //   | fileToShare.txt | alice tag |
     await api.userHasAddedTagsToResources({
-      world,
       stepUser: 'Alice',
       tags: [{ resource: 'fileToShare.txt', tags: 'alice tag' }]
     })
@@ -46,7 +39,6 @@ test.describe('Search', () => {
     //   | resource        | recipient | type | role     | resourceType |
     //   | fileToShare.txt | Brian     | user | Can edit | file         |
     await api.userHasSharedResources({
-      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -62,11 +54,7 @@ test.describe('Search', () => {
     // And "Brian" creates the following folder in personal space using API
     //   | name       |
     //   | testFolder |
-    await api.userHasCreatedFolder({
-      world,
-      stepUser: 'Brian',
-      folderName: 'testFolder'
-    })
+    await api.userHasCreatedFolder({ stepUser: 'Brian', folderName: 'testFolder' })
 
     // And "Brian" uploads the following local file into personal space using API
     //   | localFile                   | to                           |
@@ -75,7 +63,6 @@ test.describe('Search', () => {
     //   | filesForUpload/textfile.txt | withTag.txt                  |
     //   | filesForUpload/textfile.txt | testFolder/innerTextfile.txt |
     await api.userHasUploadedFilesInPersonalSpace({
-      world,
       stepUser: 'Brian',
       filesToUpload: [
         { localFile: 'filesForUpload/textfile.txt', to: 'textfile.txt' },
@@ -89,7 +76,6 @@ test.describe('Search', () => {
     //   | name           | id               |
     //   | FullTextSearch | fulltextsearch.1 |
     await api.userHasCreatedProjectSpaces({
-      world,
       stepUser: 'Brian',
       spaces: [{ name: 'FullTextSearch', id: 'fulltextsearch.1' }]
     })
@@ -98,7 +84,6 @@ test.describe('Search', () => {
     //   | name        |
     //   | spaceFolder |
     await api.userHasCreatedFoldersInSpace({
-      world,
       stepUser: 'Brian',
       spaceName: 'FullTextSearch',
       folders: ['spaceFolder']
@@ -108,7 +93,6 @@ test.describe('Search', () => {
     //   | name                          | content                   |
     //   | spaceFolder/spaceTextfile.txt | This is test file. Cheers |
     await api.userHasCreatedFilesInsideSpace({
-      world,
       stepUser: 'Brian',
       files: [
         {
@@ -124,7 +108,6 @@ test.describe('Search', () => {
     //   | fileWithTag.txt | tag 1 |
     //   | withTag.txt     | tag 1 |
     await api.userHasAddedTagsToResources({
-      world,
       stepUser: 'Brian',
       tags: [
         { resource: 'fileWithTag.txt', tags: 'tag 1' },
@@ -133,13 +116,12 @@ test.describe('Search', () => {
     })
 
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
   })
 
-  test('Search for content of file', async ({ world }) => {
+  test('Search for content of file', async () => {
     // When "Brian" searches "" using the global search and the "all files" filter and presses enter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Brian',
       keyword: 'Cheers',
       filter: searchScope.allFiles,
@@ -147,45 +129,31 @@ test.describe('Search', () => {
     })
 
     // When "Brian" selects tag "alice tag" from the search result filter chip
-    await ui.userFiltersSearchResultWithTag({
-      world,
-      stepUser: 'Brian',
-      tag: 'alice tag'
-    })
+    await ui.userFiltersSearchResultWithTag({ stepUser: 'Brian', tag: 'alice tag' })
 
     // Then "Brian" should see the message "Search for files" on the search result
-    await ui.userShouldSeeMessageOnSearchResult({
-      world,
-      stepUser: 'Brian',
-      message: 'Search for files'
-    })
+    await ui.userShouldSeeMessageOnSearchResult({ stepUser: 'Brian', message: 'Search for files' })
 
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource        |
     //   | fileToShare.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['fileToShare.txt']
     })
 
     // When "Brian" clears tags filter
-    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: searchFilter.tags })
+    await ui.userClearsFilter({ stepUser: 'Brian', filter: searchFilter.tags })
 
     // And "Brian" selects tag "tag 1" from the search result filter chip
-    await ui.userFiltersSearchResultWithTag({
-      world,
-      stepUser: 'Brian',
-      tag: 'tag 1'
-    })
+    await ui.userFiltersSearchResultWithTag({ stepUser: 'Brian', tag: 'tag 1' })
 
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource        |
     //   | fileWithTag.txt |
     //   | withTag.txt     |
     await ui.userShouldSeeResources({
-      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['fileWithTag.txt', 'withTag.txt']
@@ -193,7 +161,6 @@ test.describe('Search', () => {
 
     // When "Brian" searches "file" using the global search and the "all files" filter and presses enter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Brian',
       keyword: 'file',
       filter: searchScope.allFiles,
@@ -204,14 +171,13 @@ test.describe('Search', () => {
     //   | resource        |
     //   | fileWithTag.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: ['fileWithTag.txt']
     })
 
     // When "Brian" clears tags filter
-    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: searchFilter.tags })
+    await ui.userClearsFilter({ stepUser: 'Brian', filter: searchFilter.tags })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource                      |
     //   | textfile.txt                  |
@@ -220,7 +186,6 @@ test.describe('Search', () => {
     //   | fileToShare.txt               |
     //   | spaceFolder/spaceTextfile.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: [
@@ -234,7 +199,6 @@ test.describe('Search', () => {
 
     // When "Brian" searches "Cheers" using the global search and the "all files" filter and presses enter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Brian',
       keyword: 'Cheers',
       filter: searchScope.allFiles,
@@ -249,7 +213,6 @@ test.describe('Search', () => {
     //   | withTag.txt                   |
     //   | spaceFolder/spaceTextfile.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: [
@@ -265,13 +228,12 @@ test.describe('Search', () => {
     //   | resource     |
     //   | textfile.txt |
     await ui.userOpensResourceInViewer({
-      world,
       stepUser: 'Brian',
       resource: 'textfile.txt',
       viewer: application.textEditor
     })
     // And "Brian" closes the file viewer
-    await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
+    await ui.userClosesFileViewer({ stepUser: 'Brian' })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource                      |
     //   | textfile.txt                  |
@@ -281,7 +243,6 @@ test.describe('Search', () => {
     //   | withTag.txt                   |
     //   | spaceFolder/spaceTextfile.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: 'files list',
       stepUser: 'Brian',
       resources: [
@@ -294,6 +255,6 @@ test.describe('Search', () => {
       ]
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
   })
 })
