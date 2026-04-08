@@ -1,0 +1,47 @@
+name: changelog
+
+on:
+  push:
+    branches:
+      - master
+      - stable-*
+  pull_request:
+    branches:
+      - master
+      - stable-*
+
+permissions:
+  contents: write
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: generate changelog
+        id: changelog
+        uses: actionhippie/calens@244f3e5c328b842a740113859b87bbebf697f63b # v1.13.1
+        with:
+          target: CHANGELOG.md
+
+      - name: check for changes
+        id: diff
+        run: |
+          if git diff --quiet --exit-code; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: publish
+        if: github.event_name != 'pull_request' && steps.diff.outputs.has_changes == 'true'
+        run: |
+          git config user.email 'devops@owncloud.com'
+          git config user.name 'ownClouders'
+          git commit -am 'Automated changelog update [skip ci]'
+          git push origin HEAD:${{ github.ref_name }}
