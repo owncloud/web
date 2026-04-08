@@ -16,7 +16,7 @@ export default defineConfig({
   testDir: 'specs',
 
   // Run all tests in parallel.
-  fullyParallel: false,
+  fullyParallel: true,
 
   // Fail the build on CI if you accidentally left test.only in the source code.
   forbidOnly: !!process.env.CI,
@@ -24,8 +24,8 @@ export default defineConfig({
   // Retry on CI only.
   retries: config.retry,
 
-  // Opt out of parallel tests on CI.
-  workers: 1,
+  // Run tests in parallel - use CI-determined workers or auto-detect locally
+  workers: process.env.CI ? 2 : undefined,
 
   // Reporter to use
   reporter: [

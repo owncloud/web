@@ -12,8 +12,8 @@ export const test = base.extend<{
   globalCleanup: void
   globalBeforeHook: void
 }>({
-  world: async ({}, use) => {
-    const world = new World()
+  world: async ({}, use, testInfo) => {
+    const world = new World(testInfo.workerIndex, testInfo.testId)
     await use(world)
   },
   globalCleanup: [

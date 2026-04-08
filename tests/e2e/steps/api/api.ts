@@ -14,9 +14,9 @@ export async function usersHaveBeenCreated({
   stepUser: string
   users: Array<string>
 }): Promise<void> {
-  const admin = world.usersEnvironment.getUser({ key: stepUser })
+  const admin = world.usersEnvironment.getUser({ key: stepUser, world })
   for (const userToBeCreated of users) {
-    const user = world.usersEnvironment.getUser({ key: userToBeCreated })
+    const user = world.usersEnvironment.getUser({ key: userToBeCreated, world })
     // do not try to create users when using predefined users
     if (!config.predefinedUsers) {
       await api.provision.createUser({ user, admin })
@@ -330,9 +330,9 @@ export async function groupsHaveBeenCreated({
   groupIds: string[]
   stepUser: string
 }): Promise<void> {
-  const admin = world.usersEnvironment.getUser({ key: stepUser })
+  const admin = world.usersEnvironment.getUser({ key: stepUser, world })
   for (const groupId of groupIds) {
-    const group = world.usersEnvironment.getGroup({ key: groupId })
+    const group = world.usersEnvironment.getGroup({ key: groupId, world })
     await api.graph.createGroup({ group, admin })
   }
 }
