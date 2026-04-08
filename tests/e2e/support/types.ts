@@ -33,6 +33,10 @@ export interface User {
   mail?: string
   role?: string
   preferredLanguage?: string
+  /**
+   * original id preserved for token lookups (used in parallel test scenarios)
+   */
+  originalId?: string
 }
 
 export interface File {

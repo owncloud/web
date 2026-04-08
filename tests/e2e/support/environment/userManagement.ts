@@ -1,4 +1,5 @@
 import { Group, User, UserState } from '../types'
+import { World } from '../../../e2e-playwright/support/world'
 import {
   userStore,
   dummyGroupStore,
@@ -12,14 +13,29 @@ import {
 import { config } from '../../config'
 
 export class UsersEnvironment {
-  getUser({ key }: { key: string }): User {
+  getUser({ key, world }: { key: string; world?: World }): User {
     const userKey = key.toLowerCase()
 
     if (!userStore.has(userKey)) {
       throw new Error(`user with key '${userKey}' not found`)
     }
 
-    return userStore.get(userKey)
+    const base = userStore.get(userKey)!
+
+    if (world) {
+      const id = world.getUserId(key)
+      const displayName = `${base.displayName} (${world.workerIndex})`
+
+      return {
+        ...base,
+        id,
+        displayName,
+        // Keep original id for token lookup
+        originalId: base.id
+      }
+    }
+
+    return base
   }
 
   createUser({ key, user }: { key: string; user: User }): User {
@@ -80,7 +96,7 @@ export class UsersEnvironment {
     return store.delete(userKey)
   }
 
-  getGroup({ key }: { key: string }): Group {
+  getGroup({ key, world }: { key: string; world?: World }): Group {
     const groupKey = key.toLowerCase()
     const store = groupKey.startsWith('keycloak') ? dummyKeycloakGroupStore : dummyGroupStore
 
@@ -88,7 +104,20 @@ export class UsersEnvironment {
       throw new Error(`group with key '${groupKey}' not found`)
     }
 
-    return store.get(groupKey)
+    const base = store.get(groupKey)!
+
+    if (world) {
+      const id = world.getGroupId(key)
+      const displayName = `${base.displayName} (${world.workerIndex})`
+
+      return {
+        ...base,
+        id,
+        displayName
+      }
+    }
+
+    return base
   }
 
   getCreatedGroup({ key }: { key: string }): Group {

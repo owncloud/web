@@ -1,25 +1,31 @@
 import { Page } from '@playwright/test'
 import { UsersEnvironment } from '../../../environment'
+import { World } from '../../../../../e2e-playwright/support/world'
 import * as po from './actions'
 
 export class Groups {
   #page: Page
   #usersEnvironment: UsersEnvironment
-  constructor({ page }: { page: Page }) {
+  #world?: World
+
+  constructor({ page, world }: { page: Page; world?: World }) {
     this.#usersEnvironment = new UsersEnvironment()
     this.#page = page
+    this.#world = world
   }
 
   getUUID({ key }: { key: string }): string {
-    return this.#usersEnvironment.getCreatedGroup({ key }).uuid
+    const actualKey = this.#world ? this.#world.getGroupId(key) : key
+    return this.#usersEnvironment.getCreatedGroup({ key: actualKey }).uuid
   }
 
   async createGroup({ key }: { key: string }): Promise<void> {
-    const group = this.#usersEnvironment.getGroup({ key })
+    const group = this.#usersEnvironment.getGroup({ key, world: this.#world })
     const response = await po.createGroup({ page: this.#page, key: group.displayName })
+    const actualId = this.#world ? this.#world.getGroupId(key) : key
     this.#usersEnvironment.storeCreatedGroup({
       group: {
-        id: key,
+        id: actualId,
         uuid: response['id'],
         displayName: response['displayName']
       }
