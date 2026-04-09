@@ -76,7 +76,7 @@ setup_ocis() {
     export FRONTEND_FULL_TEXT_SEARCH_ENABLED=true
   fi
 
-  (source .env.$1 && $OCIS_BIN init --insecure true && $OCIS_BIN server) &
+  (set -a && source .env.$1 && set +a && $OCIS_BIN init --insecure true && $OCIS_BIN server) &
   wait_for_service "https://localhost:$2" "$1"
 }
 
