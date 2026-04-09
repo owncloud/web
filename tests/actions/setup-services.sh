@@ -54,7 +54,7 @@ setup_ocis() {
     --network host \
     -p $2:$2 \
     -v $SCRIPT_DIR/../..:/workspace \
-    --env-file /workspace/tests/actions/.env.$1 \
+    --env-file $SCRIPT_DIR/.env.$1 \
   )
 
   if $TIKA_ENABLED; then
