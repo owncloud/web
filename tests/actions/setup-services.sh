@@ -49,7 +49,7 @@ setup_tika() {
 
 clone_ocis() {
   echo "Cloning oCIS"
-  git clone git@github.com:owncloud/ocis.git
+  git clone https://github.com/owncloud/ocis.git ocis
   cd ocis
 
   if [ "$OCIS_COMMIT" != "latest" ]; then
