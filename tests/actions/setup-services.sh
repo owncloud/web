@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+OCIS_DIR="${RUNNER_TEMP:-/tmp}/ocis"
 OCIS_REPOSITORY=https://github.com/owncloud/ocis.git
 OCIS_COMMIT=latest # `latest` or a specific commit SHA, e.g. `9ac0452d61f062572f7e4663679ffb8ac06845e6`
 
@@ -50,8 +51,8 @@ setup_tika() {
 
 clone_ocis() {
   echo "Cloning oCIS"
-  git clone $OCIS_REPOSITORY ocis
-  cd ocis
+  git clone $OCIS_REPOSITORY "$OCIS_DIR"
+  cd "$OCIS_DIR"
 
   if [ "$OCIS_COMMIT" != "latest" ]; then
     echo "Checking out commit $OCIS_COMMIT"
@@ -59,9 +60,9 @@ clone_ocis() {
   fi
 
   make generate && make -C ocis build
-  OCIS_BIN="$(pwd)/ocis/ocis"
-  
-  cd ..
+  OCIS_BIN="$(pwd)/ocis/bin/ocis"
+
+  cd -
   echo "oCIS cloned"
 }
 
