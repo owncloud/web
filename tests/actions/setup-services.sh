@@ -5,6 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 TIKA_ENABLED=false
 FEDERATION_ENABLED=false
+OCIS_COMMIT=latest # `latest` or a specific commit SHA, e.g. `9ac0452d61f062572f7e4663679ffb8ac06845e6`
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -46,22 +47,31 @@ setup_tika() {
   wait_for_service "http://localhost:9998" "tika"
 }
 
+clone_ocis() {
+  echo "Cloning oCIS"
+  git clone git@github.com:owncloud/ocis.git
+  cd ocis
+
+  if [ "$OCIS_COMMIT" != "latest" ]; then
+    echo "Checking out commit $OCIS_COMMIT"
+    git checkout $OCIS_COMMIT
+  fi
+
+  make generate && make -C ocis build
+  OCIS_BIN=./ocis/ocis
+}
+
 setup_ocis() {
   echo "Setting up $1"
 
-  docker_args=(
-    --name $1 \
-    --network host \
-    -p $2:$2 \
-    -v $SCRIPT_DIR/../..:/workspace \
-    --env-file $SCRIPT_DIR/.env.$1 \
-  )
-
   if $TIKA_ENABLED; then
-    docker_args+=(-e SEARCH_EXTRACTOR_TYPE=tika -e SEARCH_EXTRACTOR_TIKA_TIKA_URL=http://localhost:9998 -e SEARCH_EXTRACTOR_CS3SOURCE_INSECURE=true -e FRONTEND_FULL_TEXT_SEARCH_ENABLED=true)
+    export SEARCH_EXTRACTOR_TYPE=tika
+    export SEARCH_EXTRACTOR_TIKA_TIKA_URL=http://localhost:9998
+    export SEARCH_EXTRACTOR_CS3SOURCE_INSECURE=true
+    export FRONTEND_FULL_TEXT_SEARCH_ENABLED=true
   fi
 
-  docker run -d "${docker_args[@]}" owncloud/ocis-rolling:latest
+  (source .env.$1 && $OCIS_BIN init --insecure true && $OCIS_BIN server) &
   wait_for_service "https://localhost:$2" "$1"
 }
 
@@ -69,6 +79,7 @@ if $TIKA_ENABLED; then
   setup_tika
 fi
 
+clone_ocis
 setup_ocis "ocis" 9200
 
 if $FEDERATION_ENABLED; then
