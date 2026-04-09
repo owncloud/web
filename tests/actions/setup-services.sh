@@ -54,48 +54,7 @@ setup_ocis() {
     --network host \
     -p $2:$2 \
     -v $SCRIPT_DIR/../..:/workspace \
-    -e IDM_ADMIN_PASSWORD=admin \
-    -e OCIS_INSECURE=true \
-    -e OCIS_LOG_LEVEL=error \
-    -e OCIS_JWT_SECRET=some-ocis-jwt-secret \
-    -e LDAP_GROUP_SUBSCRIPTION_FILTER_TYPE=any \
-    -e LDAP_USER_SUBSCRIPTION_FILTER_TYPE=any \
-    -e WEB_ASSET_CORE_PATH=/workspace/dist \
-    -e FRONTEND_SEARCH_MIN_LENGTH=2 \
-    -e OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST=/workspace/tests/drone/banned-passwords.txt \
-    -e GRAPH_AVAILABLE_ROLES=b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6,63e64e19-8d43-42ec-a738-2b6af2610efa \
-    -e FRONTEND_CONFIGURABLE_NOTIFICATIONS=true \
-    -e OCIS_URL=https://localhost:$2 \
-    -e PROXY_HTTP_ADDR=0.0.0.0:$2 \
-    -e WEB_UI_CONFIG_FILE=/workspace/tests/drone/$3.json \
-    -e OCIS_TRANSFER_SECRET=some-ocis-transfer-secret \
-    -e OCIS_LOG_PRETTY=true \
-    -e OCIS_LOG_COLOR=true \
-    -e OCIS_ADMIN_USER_ID=some-admin-user-id-0000-000000000000 \
-    -e OCIS_SYSTEM_USER_ID=some-system-user-id-000-000000000000 \
-    -e OCIS_SYSTEM_USER_API_KEY=some-system-user-machine-auth-api-key \
-    -e OCIS_MACHINE_AUTH_API_KEY=some-ocis-machine-auth-api-key \
-    -e COLLABORATION_WOPIAPP_SECRET=some-wopi-secret \
-    -e IDM_SVC_PASSWORD=some-ldap-idm-password \
-    -e GRAPH_LDAP_BIND_PASSWORD=some-ldap-idm-password \
-    -e IDM_REVASVC_PASSWORD=some-ldap-reva-password \
-    -e GROUPS_LDAP_BIND_PASSWORD=some-ldap-reva-password \
-    -e USERS_LDAP_BIND_PASSWORD=some-ldap-reva-password \
-    -e AUTH_BASIC_LDAP_BIND_PASSWORD=some-ldap-reva-password \
-    -e IDM_IDPSVC_PASSWORD=some-ldap-idp-password \
-    -e IDP_LDAP_BIND_PASSWORD=some-ldap-idp-password \
-    -e GATEWAY_STORAGE_USERS_MOUNT_ID=storage-users-1 \
-    -e STORAGE_USERS_MOUNT_ID=storage-users-1 \
-    -e GRAPH_APPLICATION_ID=application-1 \
-    -e OCIS_SERVICE_ACCOUNT_ID=service-account-id \
-    -e OCIS_SERVICE_ACCOUNT_SECRET=service-account-secret \
-    -e PROXY_CSP_CONFIG_FILE_LOCATION=/workspace/tests/drone/csp.yaml \
-    -e PROXY_ENABLE_BASIC_AUTH=true \
-    -e OCM_OCM_PROVIDER_AUTHORIZER_PROVIDERS_FILE=/workspace/dev/docker/ocis.storage.ocmproviders.json \
-    -e OCM_OCM_INVITE_MANAGER_INSECURE=true \
-    -e OCM_OCM_SHARE_PROVIDER_INSECURE=true \
-    -e OCM_OCM_STORAGE_PROVIDER_INSECURE=true \
-    -e FRONTEND_SEARCH_MIN_LENGTH=2 \
+    --env-file /workspace/tests/actions/.env.$1 \
   )
 
   if $TIKA_ENABLED; then
@@ -110,8 +69,8 @@ if $TIKA_ENABLED; then
   setup_tika
 fi
 
-setup_ocis "ocis" 9200 "config-ocis"
+setup_ocis "ocis" 9200
 
 if $FEDERATION_ENABLED; then
-  setup_ocis "ocis-federated" 10200 "config-ocis-federated"
+  setup_ocis "ocis-federated" 10200
 fi
