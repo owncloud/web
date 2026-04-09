@@ -58,7 +58,10 @@ clone_ocis() {
   fi
 
   make generate && make -C ocis build
-  OCIS_BIN=./ocis/ocis
+  OCIS_BIN="$(pwd)/ocis/ocis"
+  
+  cd ..
+  echo "oCIS cloned"
 }
 
 setup_ocis() {
