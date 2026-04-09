@@ -70,7 +70,7 @@ jobs:
   e2e-playwright:
     needs: build
     runs-on: ubuntu-latest
-    name: E2E Playwright tests - ${{ matrix.suites.name }}
+    name: e2e-tests-${{ matrix.suites.name }}
     strategy:
       fail-fast: false
       matrix:
