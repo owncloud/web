@@ -40,14 +40,9 @@ wait_for_service() {
   exit 1
 }
 
-create_network() {
-  echo "Creating docker network"
-  docker network create ocis-net
-}
-
 setup_tika() {
   echo "Setting up tika"
-  docker run -d --name tika --network ocis-net -p 9998:9998 apache/tika:3.2.3.0
+  docker run -d --name tika --network host -p 9998:9998 apache/tika:3.2.3.0
   wait_for_service "http://localhost:9998" "tika"
 }
 
@@ -56,7 +51,7 @@ setup_ocis() {
 
   docker_args=(
     --name $1 \
-    --network ocis-net \
+    --network host \
     -p $2:$2 \
     -v $SCRIPT_DIR/../..:/workspace \
     -e IDM_ADMIN_PASSWORD=admin \
@@ -101,18 +96,15 @@ setup_ocis() {
     -e OCM_OCM_SHARE_PROVIDER_INSECURE=true \
     -e OCM_OCM_STORAGE_PROVIDER_INSECURE=true \
     -e FRONTEND_SEARCH_MIN_LENGTH=2 \
-    -e FRONTEND_FULL_TEXT_SEARCH_ENABLED=true \
   )
 
   if $TIKA_ENABLED; then
-    docker_args+=(-e SEARCH_EXTRACTOR_TYPE=tika -e SEARCH_EXTRACTOR_TIKA_TIKA_URL=http://tika:9998 -e SEARCH_EXTRACTOR_CS3SOURCE_INSECURE=true)
+    docker_args+=(-e SEARCH_EXTRACTOR_TYPE=tika -e SEARCH_EXTRACTOR_TIKA_TIKA_URL=http://localhost:9998 -e SEARCH_EXTRACTOR_CS3SOURCE_INSECURE=true -e FRONTEND_FULL_TEXT_SEARCH_ENABLED=true)
   fi
 
   docker run -d "${docker_args[@]}" owncloud/ocis-rolling:latest
   wait_for_service "https://localhost:$2" "$1"
 }
-
-create_network
 
 if $TIKA_ENABLED; then
   setup_tika
