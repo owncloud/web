@@ -2,10 +2,11 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+OCIS_REPOSITORY=https://github.com/owncloud/ocis.git
+OCIS_COMMIT=latest # `latest` or a specific commit SHA, e.g. `9ac0452d61f062572f7e4663679ffb8ac06845e6`
+
 TIKA_ENABLED=false
 FEDERATION_ENABLED=false
-OCIS_COMMIT=latest # `latest` or a specific commit SHA, e.g. `9ac0452d61f062572f7e4663679ffb8ac06845e6`
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -49,7 +50,7 @@ setup_tika() {
 
 clone_ocis() {
   echo "Cloning oCIS"
-  git clone https://github.com/owncloud/ocis.git ocis
+  git clone $OCIS_REPOSITORY ocis
   cd ocis
 
   if [ "$OCIS_COMMIT" != "latest" ]; then
