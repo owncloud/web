@@ -126,6 +126,9 @@ jobs:
           go-version: 1.25.7
           cache: true
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Download build artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -143,9 +146,6 @@ jobs:
           fi
           cd "${{ github.workspace }}/tests/actions"
           bash setup-services.sh $flags
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Cache Playwright browsers
         uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
