@@ -12,6 +12,7 @@ ONLYOFFICE_DOCUMENT_SERVER_IMAGE=onlyoffice/documentserver:9.2.1
 TIKA_ENABLED=false
 FEDERATION_ENABLED=false
 COLLABORATION_ENABLED=false
+OIDC_ENABLED=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -25,6 +26,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --collaboration)
       COLLABORATION_ENABLED=true
+      shift
+      ;;
+    --oidc)
+      OIDC_ENABLED=true
       shift
       ;;
     *)
@@ -93,6 +98,11 @@ setup_ocis() {
       export COLLABORATION_APP_HANDLER_SECURE_VIEW_APP_ADDR=com.owncloud.api.collaboration.Collabora
       export COLLABORA_DOMAIN=localhost:9980
       export ONLYOFFICE_DOMAIN=localhost:443
+    fi
+
+    if $OIDC_ENABLED; then
+      export IDP_ACCESS_TOKEN_EXPIRATION=30
+      export WEB_OIDC_SCOPE="openid profile email offline_access"
     fi
 
     $OCIS_BIN init --insecure true && cp $GITHUB_WORKSPACE/tests/drone/app-registry.yaml $OCIS_CONFIG_DIR/app-registry.yaml && $OCIS_BIN server

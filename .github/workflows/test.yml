@@ -82,6 +82,7 @@ jobs:
           - name: ocm
             federated: true
           - name: oidc
+            oidc: true
           - name: shares,search,runtime
             tika: true
           - name: smoke
@@ -136,6 +137,9 @@ jobs:
           fi
           if [[ "${{ matrix.suites.collaboration }}" == "true" ]]; then
             flags="$flags --collaboration"
+          fi
+          if [[ "${{ matrix.suites.oidc }}" == "true" ]]; then
+            flags="$flags --oidc"
           fi
           cd "${{ github.workspace }}/tests/actions"
           bash setup-services.sh $flags
