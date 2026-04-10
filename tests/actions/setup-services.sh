@@ -6,8 +6,12 @@ OCIS_DIR="${RUNNER_TEMP:-/tmp}/ocis"
 OCIS_REPOSITORY=https://github.com/owncloud/ocis.git
 OCIS_COMMIT=latest # `latest` or a specific commit SHA, e.g. `9ac0452d61f062572f7e4663679ffb8ac06845e6`
 
+COLLABORA_CODE_IMAGE=collabora/code:25.04.7.3.1
+ONLYOFFICE_DOCUMENT_SERVER_IMAGE=onlyoffice/documentserver:9.2.1
+
 TIKA_ENABLED=false
 FEDERATION_ENABLED=false
+COLLABORATION_ENABLED=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -17,6 +21,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --federation)
       FEDERATION_ENABLED=true
+      shift
+      ;;
+    --collaboration)
+      COLLABORATION_ENABLED=true
       shift
       ;;
     *)
@@ -69,15 +77,113 @@ clone_ocis() {
 setup_ocis() {
   echo "Setting up $1"
 
-  if $TIKA_ENABLED; then
-    export SEARCH_EXTRACTOR_TYPE=tika
-    export SEARCH_EXTRACTOR_TIKA_TIKA_URL=http://localhost:9998
-    export SEARCH_EXTRACTOR_CS3SOURCE_INSECURE=true
-    export FRONTEND_FULL_TEXT_SEARCH_ENABLED=true
-  fi
+  (
+    set -a && source .env.$1 && set +a
 
-  (set -a && source .env.$1 && set +a && $OCIS_BIN init --insecure true && $OCIS_BIN server) &
+    if $TIKA_ENABLED; then
+      export SEARCH_EXTRACTOR_TYPE=tika
+      export SEARCH_EXTRACTOR_TIKA_TIKA_URL=http://localhost:9998
+      export SEARCH_EXTRACTOR_CS3SOURCE_INSECURE=true
+      export FRONTEND_FULL_TEXT_SEARCH_ENABLED=true
+    fi
+
+    if $COLLABORATION_ENABLED; then
+      export MICRO_REGISTRY=nats-js-kv
+      export MICRO_REGISTRY_ADDRESS=localhost:9233
+      export COLLABORATION_APP_HANDLER_SECURE_VIEW_APP_ADDR=com.owncloud.api.collaboration.Collabora
+      export COLLABORA_DOMAIN=localhost:9980
+      export ONLYOFFICE_DOMAIN=localhost:443
+    fi
+
+    $OCIS_BIN init --insecure true && cp $GITHUB_WORKSPACE/tests/drone/app-registry.yaml $OCIS_CONFIG_DIR/app-registry.yaml && $OCIS_BIN server
+  ) &
   wait_for_service "https://localhost:$2" "$1"
+}
+
+setup_onlyoffice() {
+  echo "Setting up onlyoffice"
+  local repo_root
+  repo_root="$(git -C "$(dirname "$0")" rev-parse --show-toplevel)"
+  local cert_dir
+  cert_dir="$(mktemp -d)"
+
+  openssl req -x509 -newkey rsa:4096 \
+    -keyout "$cert_dir/onlyoffice.key" \
+    -out "$cert_dir/onlyoffice.crt" \
+    -sha256 -days 365 -batch -nodes
+
+  docker run -d \
+    --name onlyoffice \
+    --network host \
+    -e WOPI_ENABLED=true \
+    -e USE_UNAUTHORIZED_STORAGE=true \
+    -v "$repo_root/tests/drone/onlyoffice/local.json:/etc/onlyoffice/documentserver/local.json" \
+    -v "$cert_dir/onlyoffice.key:/var/www/onlyoffice/Data/certs/onlyoffice.key:ro" \
+    -v "$cert_dir/onlyoffice.crt:/var/www/onlyoffice/Data/certs/onlyoffice.crt:ro" \
+    $ONLYOFFICE_DOCUMENT_SERVER_IMAGE \
+    bash -c "chmod 400 /var/www/onlyoffice/Data/certs/onlyoffice.key && /app/ds/run-document-server.sh"
+  wait_for_service "https://localhost:443" "onlyoffice"
+}
+
+setup_collabora() {
+  echo "Setting up collabora"
+  docker run -d \
+    --name collabora \
+    --network host \
+    -e DONT_GEN_SSL_CERT=set \
+    -e "extra_params=--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://localhost:9200" \
+    $COLLABORA_CODE_IMAGE \
+    bash -c "coolconfig generate-proof-key && bash /start-collabora-online.sh"
+  wait_for_service "https://localhost:9980" "collabora"
+}
+
+setup_wopi_collabora() {
+  echo "Setting up wopi-collabora"
+  (
+    export MICRO_REGISTRY=nats-js-kv
+    export MICRO_REGISTRY_ADDRESS=localhost:9233
+    export COLLABORATION_GRPC_ADDR=0.0.0.0:9301
+    export COLLABORATION_HTTP_ADDR=0.0.0.0:9300
+    export COLLABORATION_APP_INSECURE=true
+    export COLLABORATION_CS3API_DATAGATEWAY_INSECURE=true
+    export OCIS_JWT_SECRET=some-ocis-jwt-secret
+    export COLLABORATION_WOPI_SECRET=some-wopi-secret
+    export COLLABORATION_APP_NAME=Collabora
+    export COLLABORATION_APP_ADDR=https://localhost:9980
+    export COLLABORATION_APP_ICON=https://localhost:9980/favicon.ico
+    export COLLABORATION_WOPI_SRC=http://localhost:9300
+    $OCIS_BIN collaboration server
+  ) &
+  wait_for_service "http://localhost:9300" "wopi-collabora"
+}
+
+setup_wopi_onlyoffice() {
+  echo "Setting up wopi-onlyoffice"
+  (
+    export MICRO_REGISTRY=nats-js-kv
+    export MICRO_REGISTRY_ADDRESS=localhost:9233
+    export COLLABORATION_GRPC_ADDR=0.0.0.0:9303
+    export COLLABORATION_HTTP_ADDR=0.0.0.0:9302
+    export COLLABORATION_APP_INSECURE=true
+    export COLLABORATION_CS3API_DATAGATEWAY_INSECURE=true
+    export OCIS_JWT_SECRET=some-ocis-jwt-secret
+    export COLLABORATION_WOPI_SECRET=some-wopi-secret
+    export COLLABORATION_APP_NAME=OnlyOffice
+    export COLLABORATION_APP_PRODUCT=OnlyOffice
+    export COLLABORATION_APP_ADDR=https://localhost:443
+    export COLLABORATION_APP_ICON=https://localhost/web-apps/apps/documenteditor/main/resources/img/favicon.ico
+    export COLLABORATION_WOPI_SRC=http://localhost:9302
+    $OCIS_BIN collaboration server
+  ) &
+  wait_for_service "http://localhost:9302" "wopi-onlyoffice"
+}
+
+setup_collaboration() {
+  echo "Setting up collaboration services"
+  setup_collabora
+  setup_onlyoffice
+  setup_wopi_collabora
+  setup_wopi_onlyoffice
 }
 
 if $TIKA_ENABLED; then
@@ -85,6 +191,11 @@ if $TIKA_ENABLED; then
 fi
 
 clone_ocis
+
+if $COLLABORATION_ENABLED; then
+  setup_collaboration
+fi
+
 setup_ocis "ocis" 9200
 
 if $FEDERATION_ENABLED; then

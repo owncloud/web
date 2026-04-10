@@ -76,25 +76,15 @@ jobs:
       matrix:
         suites:
           - name: admin-settings,spaces
-            federated: false
-            tika: false
           - name: app-provider
-            federated: false
-            tika: false
+            collaboration: true
           - name: navigation,user-settings,app-store,file-action
-            federated: false
-            tika: false
           - name: ocm
             federated: true
           - name: oidc
-            federated: false
-            tika: false
           - name: shares,search,runtime
-            federated: false
             tika: true
           - name: smoke
-            federated: false
-            tika: false
     env:
       BASE_URL_OCIS: localhost:9200
       HEADLESS: true
@@ -143,6 +133,9 @@ jobs:
           fi
           if [[ "${{ matrix.suites.federated }}" == "true" ]]; then
             flags="$flags --federation"
+          fi
+          if [[ "${{ matrix.suites.collaboration }}" == "true" ]]; then
+            flags="$flags --collaboration"
           fi
           cd "${{ github.workspace }}/tests/actions"
           bash setup-services.sh $flags
