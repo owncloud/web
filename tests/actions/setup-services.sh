@@ -112,6 +112,8 @@ setup_onlyoffice() {
     -out "$cert_dir/onlyoffice.crt" \
     -sha256 -days 365 -batch -nodes
 
+  chmod 400 "$cert_dir/onlyoffice.key"
+
   docker run -d \
     --name onlyoffice \
     --network host \
@@ -122,7 +124,7 @@ setup_onlyoffice() {
     -v "$cert_dir/onlyoffice.key:/var/www/onlyoffice/Data/certs/onlyoffice.key:ro" \
     -v "$cert_dir/onlyoffice.crt:/var/www/onlyoffice/Data/certs/onlyoffice.crt:ro" \
     $ONLYOFFICE_DOCUMENT_SERVER_IMAGE \
-    -c "chmod 400 /var/www/onlyoffice/Data/certs/onlyoffice.key && /app/ds/run-document-server.sh"
+    -c "/app/ds/run-document-server.sh"
   wait_for_service "https://localhost:443" "onlyoffice"
 }
 
