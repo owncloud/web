@@ -24,13 +24,11 @@ export class UsersEnvironment {
 
     if (world) {
       const id = world.getUserId(key)
-      const displayName = `${base.displayName} (${world.workerIndex})`
 
       return {
         ...base,
         id,
-        displayName,
-        // Keep original id for token lookup
+        // Keep original id for token lookup and original displayName for UI readability
         originalId: base.id
       }
     }

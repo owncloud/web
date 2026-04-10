@@ -169,7 +169,7 @@ export async function userHasAssignedRolesToUsers({
 }) {
   const admin = world.usersEnvironment.getUser({ key: stepUser })
   for (const { id, role } of users) {
-    const user = world.usersEnvironment.getUser({ key: id })
+    const user = world.usersEnvironment.getUser({ key: id, world })
     /**
      The oCIS API request for assigning roles allows only one role per user,
       whereas the Keycloak API request can assign multiple roles to a user.

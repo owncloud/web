@@ -40,7 +40,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 
   const usersEnvironment = new UsersEnvironment()
   const resBody = (await response.json()) as User
-  usersEnvironment.storeCreatedUser(user.id, { ...user, uuid: resBody.id })
+  usersEnvironment.storeCreatedUser(user.originalId || user.id, { ...user, uuid: resBody.id })
   await setAccessAndRefreshToken(user)
   return user
 }
@@ -68,7 +68,7 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
     throw Error(`Failed to delete user: ${user.id}, Status: ${response.status}`)
   }
   const usersEnvironment = new UsersEnvironment()
-  usersEnvironment.removeCreatedUser({ key: user.id })
+  usersEnvironment.removeCreatedUser({ key: user.originalId || user.id })
   return user
 }
 
@@ -140,7 +140,7 @@ export const addUserToGroup = async ({
   admin: User
 }): Promise<void> => {
   const usersEnvironment = new UsersEnvironment()
-  const userId = usersEnvironment.getCreatedUser({ key: user.id }).uuid
+  const userId = usersEnvironment.getCreatedUser({ key: user.originalId || user.id }).uuid
   const groupId = usersEnvironment.getCreatedGroup({ key: group.id }).uuid
   const body = JSON.stringify({
     '@odata.id': join(config.baseUrl, 'graph', 'v1.0', 'users', userId)

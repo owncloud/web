@@ -24,7 +24,7 @@ class IdpTokenEnvironment {
 
   setToken({ user, token }: { user: User; token: Token }): Token {
     const store = config.federatedServer ? federatedTokenStore : createdTokenStore
-    store.set(user.id, token)
+    store.set(user.originalId || user.id, token)
     return token
   }
 
