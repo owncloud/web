@@ -156,3 +156,11 @@ jobs:
 
       - name: Run E2E tests
         run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright --suites ${{ matrix.suites.name }}
+
+      - name: Upload tracing result
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        if: failure()
+        with:
+          name: playwright-traces-${{ github.job }}-${{ github.run_attempt }}
+          path: ${{ github.workspace }}/reports/e2e
+          retention-days: 14
