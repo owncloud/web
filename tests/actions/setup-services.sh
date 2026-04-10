@@ -115,13 +115,14 @@ setup_onlyoffice() {
   docker run -d \
     --name onlyoffice \
     --network host \
+    --entrypoint bash \
     -e WOPI_ENABLED=true \
     -e USE_UNAUTHORIZED_STORAGE=true \
     -v "$repo_root/tests/drone/onlyoffice/local.json:/etc/onlyoffice/documentserver/local.json" \
     -v "$cert_dir/onlyoffice.key:/var/www/onlyoffice/Data/certs/onlyoffice.key:ro" \
     -v "$cert_dir/onlyoffice.crt:/var/www/onlyoffice/Data/certs/onlyoffice.crt:ro" \
     $ONLYOFFICE_DOCUMENT_SERVER_IMAGE \
-    bash -c "chmod 400 /var/www/onlyoffice/Data/certs/onlyoffice.key && /app/ds/run-document-server.sh"
+    -c "chmod 400 /var/www/onlyoffice/Data/certs/onlyoffice.key && /app/ds/run-document-server.sh"
   wait_for_service "https://localhost:443" "onlyoffice"
 }
 
@@ -130,10 +131,11 @@ setup_collabora() {
   docker run -d \
     --name collabora \
     --network host \
+    --entrypoint bash \
     -e DONT_GEN_SSL_CERT=set \
     -e "extra_params=--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://localhost:9200" \
     $COLLABORA_CODE_IMAGE \
-    bash -c "coolconfig generate-proof-key && bash /start-collabora-online.sh"
+    -c "coolconfig generate-proof-key && bash /start-collabora-online.sh"
   wait_for_service "https://localhost:9980" "collabora"
 }
 
