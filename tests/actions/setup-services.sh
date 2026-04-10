@@ -192,14 +192,6 @@ setup_wopi_onlyoffice() {
   wait_for_service "http://localhost:9302" "wopi-onlyoffice"
 }
 
-setup_collaboration() {
-  echo "Setting up collaboration services"
-  setup_collabora
-  setup_onlyoffice
-  setup_wopi_collabora
-  setup_wopi_onlyoffice
-}
-
 if $TIKA_ENABLED; then
   setup_tika
 fi
@@ -207,10 +199,17 @@ fi
 clone_ocis
 
 if $COLLABORATION_ENABLED; then
-  setup_collaboration
+  setup_collabora
+  setup_onlyoffice
 fi
 
 setup_ocis "ocis" 9200
+
+# This needs to happen after oCIS is set up to ensure that the collaboration services can connect to it
+if $COLLABORATION_ENABLED; then
+  setup_wopi_collabora
+  setup_wopi_onlyoffice
+fi
 
 if $FEDERATION_ENABLED; then
   setup_ocis "ocis-federated" 10200
