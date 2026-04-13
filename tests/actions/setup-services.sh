@@ -51,8 +51,6 @@ wait_for_service() {
     sleep 5
   done
   echo "❌ $2 failed to start"
-  docker logs "$2"
-  docker inspect "$2"
   exit 1
 }
 
@@ -168,7 +166,7 @@ setup_wopi_collabora() {
     export COLLABORATION_WOPI_SRC=http://localhost:9300
     $OCIS_BIN collaboration server
   ) &
-  wait_for_service "http://localhost:9300" "wopi-collabora"
+  wait_for_service "http://localhost:9300/hosting/discovery" "wopi-collabora"
 }
 
 setup_wopi_onlyoffice() {
@@ -189,7 +187,7 @@ setup_wopi_onlyoffice() {
     export COLLABORATION_WOPI_SRC=http://localhost:9302
     $OCIS_BIN collaboration server
   ) &
-  wait_for_service "http://localhost:9302" "wopi-onlyoffice"
+  wait_for_service "http://localhost:9302/hosting/discovery" "wopi-onlyoffice"
 }
 
 if $TIKA_ENABLED; then
