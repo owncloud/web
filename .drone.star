@@ -326,7 +326,7 @@ def stagePipelines(ctx):
     return unit_test_pipelines + pipelinesDependsOn(e2e_playwright_pipeline + e2e_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
-    return build(ctx) + pipelinesDependsOn(notify(ctx), build(ctx))
+    return build(ctx)
 
 def pnpmCache(ctx):
     return [{
@@ -892,49 +892,6 @@ def e2eTests(ctx):
             "volumes": e2e_volumes,
             "services": services,
         })
-    return pipelines
-
-def notify(ctx):
-    status = ["failure"]
-    if ctx.build.event in ["cron", "tag"]:
-        status.append("success")
-    pipelines = []
-
-    result = {
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "chat-notifications",
-        "clone": {
-            "disable": True,
-        },
-        "steps": [
-            {
-                "name": "notify-matrix",
-                "image": OC_CI_ALPINE_IMAGE,
-                "environment": {
-                    "MATRIX_TOKEN": {
-                        "from_secret": "matrix_token",
-                    },
-                },
-                "commands": [
-                    "wget https://raw.githubusercontent.com/%s/%s/tests/drone/notification.sh" % (ctx.repo.slug, ctx.build.commit),
-                    "bash notification.sh",
-                ],
-            },
-        ],
-        "trigger": {
-            "ref": [
-                "refs/tags/**",
-            ],
-            "status": status,
-        },
-    }
-
-    for branch in config["branches"]:
-        result["trigger"]["ref"].append("refs/heads/%s" % branch)
-
-    pipelines.append(result)
-
     return pipelines
 
 def installPnpm():
