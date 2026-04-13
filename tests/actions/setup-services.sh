@@ -54,6 +54,20 @@ wait_for_service() {
   exit 1
 }
 
+wait_for_port() {
+  echo "Waiting for $2"
+  for i in {1..30}; do
+    if nc -z localhost "$1" 2>/dev/null; then
+      echo "$2 is up ✅"
+      return 0
+    fi
+    echo "Retrying in 5s..."
+    sleep 5
+  done
+  echo "❌ $2 failed to start"
+  exit 1
+}
+
 setup_tika() {
   echo "Setting up tika"
   docker run -d --name tika --network host -p 9998:9998 apache/tika:3.2.3.0
@@ -166,7 +180,7 @@ setup_wopi_collabora() {
     export COLLABORATION_WOPI_SRC=http://localhost:9300
     $OCIS_BIN collaboration server
   ) &
-  wait_for_service "http://localhost:9300/hosting/discovery" "wopi-collabora"
+  wait_for_port 9300 "wopi-collabora"
 }
 
 setup_wopi_onlyoffice() {
@@ -187,7 +201,7 @@ setup_wopi_onlyoffice() {
     export COLLABORATION_WOPI_SRC=http://localhost:9302
     $OCIS_BIN collaboration server
   ) &
-  wait_for_service "http://localhost:9302/hosting/discovery" "wopi-onlyoffice"
+  wait_for_port 9302 "wopi-onlyoffice"
 }
 
 if $TIKA_ENABLED; then
