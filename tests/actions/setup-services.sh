@@ -147,7 +147,7 @@ setup_onlyoffice() {
     -v "$cert_dir/onlyoffice.crt:/var/www/onlyoffice/Data/certs/onlyoffice.crt:ro" \
     $ONLYOFFICE_DOCUMENT_SERVER_IMAGE \
     -c "/app/ds/run-document-server.sh"
-  wait_for_service "https://localhost:443" "onlyoffice"
+  wait_for_service "https://localhost:443/hosting/discovery" "onlyoffice"
 }
 
 setup_collabora() {
