@@ -5,7 +5,7 @@ exports[`Collaborator ListItem component > share inheritance indicators > show w
   <div data-v-2a3edf6c="" class="oc-width-1-1 oc-flex oc-flex-middle files-collaborators-collaborator-details">
     <div data-v-2a3edf6c="" class="oc-width-2-3 oc-flex oc-flex-middle">
       <div data-v-2a3edf6c="">
-        <avatar-image-stub data-v-2a3edf6c="" userid="ZWluc3RlaW5AaHR0cHM6Ly93d3cubG9yZW0uY29t" user-name="einstein" width="36" class="files-collaborators-collaborator-indicator"></avatar-image-stub>
+        <avatar-image-stub data-v-2a3edf6c="" userid="ZWluc3RlaW5AaHR0cHM6Ly93d3cubG9yZW0uY29t@www.lorem.com" user-name="einstein" width="36" class="files-collaborators-collaborator-indicator"></avatar-image-stub>
       </div>
       <div data-v-2a3edf6c="" class="files-collaborators-collaborator-name-wrapper oc-pl-s">
         <div data-v-2a3edf6c="" class="oc-text-truncate"><span data-v-2a3edf6c="" aria-hidden="true" class="files-collaborators-collaborator-name">einstein</span> <span data-v-2a3edf6c="" class="oc-invisible-sr">Share receiver name: einstein</span>

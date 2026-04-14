@@ -282,18 +282,9 @@ const shareOwnerDisplayName = computed(() => share.sharedBy.displayName)
 
 const externalShareDomainName = computed(() => {
   if (unref(isExternalShare)) {
-    let decodedId = ''
+    const [, serverUrl] = share.sharedWith.id.split('@')
 
-    try {
-      decodedId = atob(share.sharedWith.id)
-    } catch (_) {
-      decodedId = share.sharedWith.id
-    }
-
-    const [, serverUrl] = decodedId.split('@')
-    const domain = new URL(serverUrl).hostname
-
-    return domain
+    return serverUrl
   }
 
   return null
