@@ -33,7 +33,7 @@ Feature: Users can create shortcuts for resources and sites
       | resource                   | name           | type    |
       | notice.txt                 | important file | file    |
       | docs                       |                | folder  |
-      | https://owncloud.com/news/ | companyNews    | website |
+      | https://owncloud.com/blogs/ | companyNews    | website |
 
     And "Alice" downloads the following resources using the sidebar panel
       | resource           | type |
@@ -43,7 +43,7 @@ Feature: Users can create shortcuts for resources and sites
     Then "Alice" is in a text-editor
     And "Alice" closes the file viewer
     And "Alice" opens the "files" app
-    Then "Alice" can open a shortcut "companyNews.url" with external url "https://owncloud.com/news/"
+    Then "Alice" can open a shortcut "companyNews.url" with external url "https://owncloud.com/blogs/"
     And "Alice" logs out
 
     # create a shortcut to the shared file
