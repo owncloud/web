@@ -70,24 +70,32 @@ jobs:
   e2e-playwright:
     needs: build
     runs-on: ubuntu-latest
-    name: e2e-tests-${{ strategy.job-index }}
+    name: e2e-tests-${{ matrix.suites.suite }}
     strategy:
       fail-fast: false
       matrix:
         suites:
-          - test_suites: admin-settings,spaces
-          - test_suites: app-provider
-            collaboration: true
-          - test_suites: navigation,user-settings,app-store,file-action
-          - test_suites: ocm
-            federated: true
-          - feature_files: specs/oidc/refreshToken.spec.ts
-            oidc: true
-          - feature_files: specs/oidc/iframeTokenRenewal.spec.ts
-            oidc_iframe: true
-          - test_suites: shares,search,runtime
+          - suite: part-1
+            test_suites: admin-settings,spaces
+          - suite: part-2
+            test_suites: navigation,user-settings,app-store,file-action
+          - suite: part-3
+            test_suites: shares,search,runtime
             tika: true
-          - test_suites: smoke
+          - suite: app-provider
+            test_suites: app-provider
+            collaboration: true
+          - suite: ocm
+            test_suites: ocm
+            federated: true
+          - suite: oidc
+            feature_files: specs/oidc/refreshToken.spec.ts
+            oidc: true
+          - suite: oidc-iframe
+            feature_files: specs/oidc/iframeTokenRenewal.spec.ts
+            oidc_iframe: true
+          - suite: smoke
+            test_suites: smoke
     env:
       BASE_URL_OCIS: localhost:9200
       HEADLESS: true
