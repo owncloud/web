@@ -161,6 +161,6 @@ jobs:
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: failure()
         with:
-          name: playwright-traces-${{ github.sha }}-${{ github.job }}-${{ github.run_attempt }}
+          name: playwright-traces-${{ strategy.job-index }}-${{ github.run_attempt }}
           path: ${{ github.workspace }}/reports/e2e
           retention-days: 7
