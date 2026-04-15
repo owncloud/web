@@ -172,6 +172,7 @@ setup_wopi_collabora() {
     export MICRO_REGISTRY_ADDRESS=localhost:9233
     export COLLABORATION_GRPC_ADDR=0.0.0.0:9301
     export COLLABORATION_HTTP_ADDR=0.0.0.0:9300
+    export COLLABORATION_DEBUG_ADDR=0.0.0.0:9304
     export COLLABORATION_APP_INSECURE=true
     export COLLABORATION_CS3API_DATAGATEWAY_INSECURE=true
     export OCIS_JWT_SECRET=some-ocis-jwt-secret
@@ -192,6 +193,7 @@ setup_wopi_onlyoffice() {
     export MICRO_REGISTRY_ADDRESS=localhost:9233
     export COLLABORATION_GRPC_ADDR=0.0.0.0:9303
     export COLLABORATION_HTTP_ADDR=0.0.0.0:9302
+    export COLLABORATION_DEBUG_ADDR=0.0.0.0:9305
     export COLLABORATION_APP_INSECURE=true
     export COLLABORATION_CS3API_DATAGATEWAY_INSECURE=true
     export OCIS_JWT_SECRET=some-ocis-jwt-secret
