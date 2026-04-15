@@ -70,22 +70,24 @@ jobs:
   e2e-playwright:
     needs: build
     runs-on: ubuntu-latest
-    name: e2e-tests-${{ matrix.suites.name }}
+    name: e2e-tests-${{ strategy.job-index }}
     strategy:
       fail-fast: false
       matrix:
         suites:
-          - name: admin-settings,spaces
-          - name: app-provider
+          - test_suites: admin-settings,spaces
+          - test_suites: app-provider
             collaboration: true
-          - name: navigation,user-settings,app-store,file-action
-          - name: ocm
+          - test_suites: navigation,user-settings,app-store,file-action
+          - test_suites: ocm
             federated: true
-          - name: oidc
+          - feature_files: specs/oidc/refreshToken.spec.ts
             oidc: true
-          - name: shares,search,runtime
+          - feature_files: specs/oidc/iframeTokenRenewal.spec.ts
+            oidc_iframe: true
+          - test_suites: shares,search,runtime
             tika: true
-          - name: smoke
+          - test_suites: smoke
     env:
       BASE_URL_OCIS: localhost:9200
       HEADLESS: true
@@ -141,6 +143,9 @@ jobs:
           if [[ "${{ matrix.suites.oidc }}" == "true" ]]; then
             flags="$flags --oidc"
           fi
+          if [[ "${{ matrix.suites.oidc_iframe }}" == "true" ]]; then
+            flags="$flags --oidc-iframe"
+          fi
           cd "${{ github.workspace }}/tests/actions"
           bash setup-services.sh $flags
 
@@ -155,7 +160,10 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Run E2E tests
-        run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright --suites ${{ matrix.suites.name }}
+        env:
+          FEATURE_FILES: ${{ matrix.suites.feature_files || '' }}
+          TEST_SUITES: ${{ matrix.suites.test_suites || '' }}
+        run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright
 
       - name: Upload tracing result
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0

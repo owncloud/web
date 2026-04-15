@@ -13,6 +13,7 @@ TIKA_ENABLED=false
 FEDERATION_ENABLED=false
 COLLABORATION_ENABLED=false
 OIDC_ENABLED=false
+OIDC_IFRAME_ENABLED=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -30,6 +31,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --oidc)
       OIDC_ENABLED=true
+      shift
+      ;;
+    --oidc-iframe)
+      OIDC_IFRAME_ENABLED=true
       shift
       ;;
     *)
@@ -115,6 +120,10 @@ setup_ocis() {
     if $OIDC_ENABLED; then
       export IDP_ACCESS_TOKEN_EXPIRATION=30
       export WEB_OIDC_SCOPE="openid profile email offline_access"
+    fi
+
+    if $OIDC_IFRAME_ENABLED; then
+      export IDP_ACCESS_TOKEN_EXPIRATION=30
     fi
 
     $OCIS_BIN init --insecure true && cp $GITHUB_WORKSPACE/tests/drone/app-registry.yaml $OCIS_CONFIG_DIR/app-registry.yaml && $OCIS_BIN server
