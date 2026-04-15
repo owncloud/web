@@ -162,7 +162,7 @@ setup_collabora() {
     -e "extra_params=--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://localhost:9200" \
     $COLLABORA_CODE_IMAGE \
     -c "coolconfig generate-proof-key && bash /start-collabora-online.sh"
-  wait_for_service "https://localhost:9980" "collabora"
+  wait_for_service "https://localhost:9980/hosting/discovery" "collabora"
 }
 
 setup_wopi_collabora() {
@@ -183,7 +183,7 @@ setup_wopi_collabora() {
     export COLLABORATION_WOPI_SRC=http://localhost:9300
     $OCIS_BIN collaboration server
   ) &
-  wait_for_port 9300 "wopi-collabora"
+  wait_for_service "http://localhost:9304/healthz" "wopi-collabora"
 }
 
 setup_wopi_onlyoffice() {
@@ -205,7 +205,23 @@ setup_wopi_onlyoffice() {
     export COLLABORATION_WOPI_SRC=http://localhost:9302
     $OCIS_BIN collaboration server
   ) &
-  wait_for_port 9302 "wopi-onlyoffice"
+  wait_for_service "http://localhost:9305/healthz" "wopi-onlyoffice"
+}
+
+wait_for_app_providers() {
+  echo "Waiting for Collabora and OnlyOffice to register in the oCIS app registry"
+  for i in {1..30}; do
+    local apps
+    apps=$(curl -kfsSL "https://localhost:9200/app/list" 2>/dev/null || echo "")
+    if echo "$apps" | grep -q "Collabora" && echo "$apps" | grep -q "OnlyOffice"; then
+      echo "App providers registered ✅"
+      return 0
+    fi
+    echo "Retrying in 5s..."
+    sleep 5
+  done
+  echo "❌ App providers failed to register"
+  exit 1
 }
 
 if $TIKA_ENABLED; then
@@ -213,18 +229,15 @@ if $TIKA_ENABLED; then
 fi
 
 clone_ocis
-
-if $COLLABORATION_ENABLED; then
-  setup_collabora
-  setup_onlyoffice
-fi
-
 setup_ocis "ocis" 9200
 
 # This needs to happen after oCIS is set up to ensure that the collaboration services can connect to it
 if $COLLABORATION_ENABLED; then
+  setup_collabora
+  setup_onlyoffice
   setup_wopi_collabora
   setup_wopi_onlyoffice
+  wait_for_app_providers
 fi
 
 if $FEDERATION_ENABLED; then
