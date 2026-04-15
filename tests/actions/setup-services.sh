@@ -211,13 +211,17 @@ setup_wopi_onlyoffice() {
 wait_for_app_providers() {
   echo "Waiting for Collabora and OnlyOffice to register in the oCIS app registry"
   for i in {1..30}; do
-    local apps
+    local apps has_collabora has_onlyoffice
     apps=$(curl -kfsSL "https://localhost:9200/app/list" 2>/dev/null || echo "")
-    if echo "$apps" | grep -q "Collabora" && echo "$apps" | grep -q "OnlyOffice"; then
+    # Check specifically within app_providers[].name, not just anywhere in the response
+    # (default_application also contains "Collabora"/"OnlyOffice" even without a live provider)
+    has_collabora=$(echo "$apps" | jq -r '[.["mime-types"][].app_providers[].name] | map(select(. == "Collabora")) | length' 2>/dev/null || echo "0")
+    has_onlyoffice=$(echo "$apps" | jq -r '[.["mime-types"][].app_providers[].name] | map(select(. == "OnlyOffice")) | length' 2>/dev/null || echo "0")
+    if [[ "$has_collabora" -gt 0 ]] && [[ "$has_onlyoffice" -gt 0 ]]; then
       echo "App providers registered ✅"
       return 0
     fi
-    echo "Retrying in 5s..."
+    echo "Retrying in 5s... (Collabora: ${has_collabora}, OnlyOffice: ${has_onlyoffice})"
     sleep 5
   done
   echo "❌ App providers failed to register"
