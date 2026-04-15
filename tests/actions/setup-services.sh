@@ -112,7 +112,7 @@ setup_ocis() {
     if $COLLABORATION_ENABLED; then
       export MICRO_REGISTRY=nats-js-kv
       export MICRO_REGISTRY_ADDRESS=localhost:9233
-      export COLLABORATION_APP_HANDLER_SECURE_VIEW_APP_ADDR=com.owncloud.api.collaboration.Collabora
+      export FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR=com.owncloud.api.collaboration.Collabora
       export COLLABORA_DOMAIN=localhost:9980
       export ONLYOFFICE_DOMAIN=localhost:443
     fi
