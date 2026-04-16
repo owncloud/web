@@ -8,12 +8,15 @@ OCIS_COMMIT=latest # `latest` or a specific commit SHA, e.g. `9ac0452d61f062572f
 
 COLLABORA_CODE_IMAGE=collabora/code:25.04.7.3.1
 ONLYOFFICE_DOCUMENT_SERVER_IMAGE=onlyoffice/documentserver:9.2.1
+POSTGRES_ALPINE_IMAGE=postgres:alpine3.18
+KEYCLOAK_IMAGE=quay.io/keycloak/keycloak:26.5.6
 
 TIKA_ENABLED=false
 FEDERATION_ENABLED=false
 COLLABORATION_ENABLED=false
 OIDC_ENABLED=false
 OIDC_IFRAME_ENABLED=false
+KEYCLOAK_ENABLED=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -35,6 +38,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --oidc-iframe)
       OIDC_IFRAME_ENABLED=true
+      shift
+      ;;
+    --keycloak)
+      KEYCLOAK_ENABLED=true
       shift
       ;;
     *)
@@ -237,8 +244,67 @@ wait_for_app_providers() {
   exit 1
 }
 
+generate_keycloak_certs() {
+  echo "Generating keycloak certs"
+
+  mkdir -p "$GITHUB_WORKSPACE/keycloak-certs"
+  openssl req -x509 -newkey rsa:2048 \
+    -keyout "$GITHUB_WORKSPACE/keycloak-certs/keycloakkey.pem" \
+    -out "$GITHUB_WORKSPACE/keycloak-certs/keycloakcrt.pem" \
+    -nodes -days 365 -subj '/CN=keycloak'
+  chmod -R 777 "$GITHUB_WORKSPACE/keycloak-certs"
+}
+
+setup_postgres() {
+  echo "Setting up postgres"
+
+  # GitHub runners ship PostgreSQL pre-started on 5432, but we need to stop it to avoid conflicts.
+  sudo systemctl stop postgresql || true
+
+  docker run -d --name postgres --network host \
+    -e POSTGRES_DB=keycloak \
+    -e POSTGRES_USER=keycloak \
+    -e POSTGRES_PASSWORD=keycloak \
+    $POSTGRES_ALPINE_IMAGE
+  timeout 30 bash -c 'until docker exec postgres pg_isready -U keycloak; do sleep 1; done'
+}
+
+setup_keycloak() {
+  # Patch realm: replace Drone Docker hostname with localhost IP
+  sed 's|https://ocis-server:9200|https://127.0.0.1:9200|g' \
+    $GITHUB_WORKSPACE/tests/drone/ocis_keycloak/ocis-ci-realm.dist.json > /tmp/ocis-realm.json
+  docker run -d --name keycloak --network host \
+    -e OCIS_DOMAIN=https://127.0.0.1:9200 \
+    -e KC_HOSTNAME=localhost \
+    -e KC_PORT=8443 \
+    -e KC_DB=postgres \
+    -e "KC_DB_URL=jdbc:postgresql://localhost:5432/keycloak" \
+    -e KC_DB_USERNAME=keycloak \
+    -e KC_DB_PASSWORD=keycloak \
+    -e KC_FEATURES=impersonation \
+    -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+    -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
+    -e KC_HTTPS_CERTIFICATE_FILE=$GITHUB_WORKSPACE/keycloak-certs/keycloakcrt.pem \
+    -e KC_HTTPS_CERTIFICATE_KEY_FILE=$GITHUB_WORKSPACE/keycloak-certs/keycloakkey.pem \
+    -v "$GITHUB_WORKSPACE/keycloak-certs:/keycloak-certs:ro" \
+    -v "/tmp/ocis-realm.json:/opt/keycloak/data/import/oCIS-realm.json:ro" \
+    $KEYCLOAK_IMAGE \
+    start-dev --proxy-headers xforwarded \
+      --spi-connections-http-client-default-disable-trust-manager=true \
+      --import-realm --health-enabled=true
+  timeout 300 bash -c 'until curl -skf https://localhost:9000/health/ready; do sleep 3; done' \
+    || (echo "=== keycloak logs ===" && docker logs keycloak --tail 80 && exit 1)
+  echo "keycloak ready."
+}
+
 if $TIKA_ENABLED; then
   setup_tika
+fi
+
+if $KEYCLOAK_ENABLED; then
+  generate_keycloak_certs
+  setup_postgres
+  setup_keycloak
 fi
 
 clone_ocis

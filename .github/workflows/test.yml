@@ -96,6 +96,9 @@ jobs:
             oidc_iframe: true
           - suite: smoke
             test_suites: smoke
+          - suite: keycloak
+            test_suites: journeys,keycloak
+            keycloak: true
     env:
       BASE_URL_OCIS: localhost:9200
       HEADLESS: true
@@ -153,6 +156,9 @@ jobs:
           fi
           if [[ "${{ matrix.suites.oidc_iframe }}" == "true" ]]; then
             flags="$flags --oidc-iframe"
+          fi
+          if [[ "${{ matrix.suites.keycloak }}" == "true" ]]; then
+            flags="$flags --keycloak"
           fi
           cd "${{ github.workspace }}/tests/actions"
           bash setup-services.sh $flags
