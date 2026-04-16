@@ -287,7 +287,7 @@ setup_postgres() {
 
 setup_keycloak() {
   # Patch realm: replace Drone Docker hostname with localhost IP
-  sed 's|https://ocis-server:9200|https://127.0.0.1:9200|g' \
+  sed 's|https://ocis:9200|https://127.0.0.1:9200|g' \
     $GITHUB_WORKSPACE/tests/drone/ocis_keycloak/ocis-ci-realm.dist.json > /tmp/ocis-realm.json
   docker run -d --name keycloak --network host \
     -e OCIS_DOMAIN=https://127.0.0.1:9200 \
