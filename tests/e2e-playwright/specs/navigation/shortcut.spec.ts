@@ -93,7 +93,7 @@ test.describe(
         resources: [
           { resource: 'notice.txt', name: 'important file', type: 'file' },
           { resource: 'docs', name: '', type: 'folder' },
-          { resource: 'https://owncloud.com/news/', name: 'companyNews', type: 'website' }
+          { resource: 'https://owncloud.com/blogs/', name: 'companyNews', type: 'website' }
         ]
       })
 
@@ -129,7 +129,7 @@ test.describe(
         world,
         stepUser: 'Alice',
         name: 'companyNews.url',
-        url: 'https://owncloud.com/news/'
+        url: 'https://owncloud.com/blogs/'
       })
       // And "Alice" logs out
       await ui.userLogsOut({ world, stepUser: 'Alice' })
