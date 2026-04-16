@@ -177,6 +177,8 @@ jobs:
         env:
           FEATURE_FILES: ${{ matrix.suites.feature_files || '' }}
           TEST_SUITES: ${{ matrix.suites.test_suites || '' }}
+          KEYCLOAK: ${{ matrix.suites.keycloak || '' }}
+          KEYCLOAK_HOST: ${{ matrix.suites.keycloak && 'localhost:8443' || '' }}
         run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright
 
       - name: Upload tracing result
