@@ -182,9 +182,17 @@ jobs:
         run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright
 
       - name: Upload tracing result
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: failure()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: playwright-traces-${{ strategy.job-index }}-${{ github.run_attempt }}
           path: ${{ github.workspace }}/reports/e2e
+          retention-days: 7
+
+      - name: Upload a11y result
+        if: !cancelled()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: playwright-a11y-result-${{ strategy.job-index }}-${{ github.run_attempt }}
+          path: ${{ github.workspace }}/reports/e2e/a11y-report.json
           retention-days: 7
