@@ -284,8 +284,8 @@ setup_keycloak() {
     -e KC_FEATURES=impersonation \
     -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
     -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
-    -e KC_HTTPS_CERTIFICATE_FILE=$GITHUB_WORKSPACE/keycloak-certs/keycloakcrt.pem \
-    -e KC_HTTPS_CERTIFICATE_KEY_FILE=$GITHUB_WORKSPACE/keycloak-certs/keycloakkey.pem \
+    -e KC_HTTPS_CERTIFICATE_FILE=/keycloak-certs/keycloakcrt.pem \
+    -e KC_HTTPS_CERTIFICATE_KEY_FILE=/keycloak-certs/keycloakkey.pem \
     -v "$GITHUB_WORKSPACE/keycloak-certs:/keycloak-certs:ro" \
     -v "/tmp/ocis-realm.json:/opt/keycloak/data/import/oCIS-realm.json:ro" \
     $KEYCLOAK_IMAGE \
