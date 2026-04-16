@@ -133,6 +133,22 @@ setup_ocis() {
       export IDP_ACCESS_TOKEN_EXPIRATION=30
     fi
 
+    if $KEYCLOAK_ENABLED; then
+      export OCIS_EXCLUDE_RUN_SERVICES=idp
+      export PROXY_AUTOPROVISION_ACCOUNTS=true
+      export PROXY_ROLE_ASSIGNMENT_DRIVER=oidc
+      export OCIS_OIDC_ISSUER=https://localhost:8443/realms/oCIS
+      export PROXY_OIDC_REWRITE_WELLKNOWN=true
+      export WEB_OIDC_CLIENT_ID=web
+      export PROXY_USER_OIDC_CLAIM=preferred_username
+      export PROXY_USER_CS3_CLAIM=username
+      export OCIS_ADMIN_USER_ID=""
+      export GRAPH_ASSIGN_DEFAULT_USER_ROLE=false
+      export GRAPH_USERNAME_MATCH=none
+      export KEYCLOAK_DOMAIN=localhost:8443
+      export IDM_CREATE_DEMO_USERS=false
+    fi
+
     $OCIS_BIN init --insecure true && cp $GITHUB_WORKSPACE/tests/drone/app-registry.yaml $OCIS_CONFIG_DIR/app-registry.yaml && $OCIS_BIN server
   ) &
   wait_for_service "https://localhost:$2" "$1"
