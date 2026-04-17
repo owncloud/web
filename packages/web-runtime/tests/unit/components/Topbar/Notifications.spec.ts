@@ -129,6 +129,63 @@ describe('Notification component', () => {
         'Albert Einstein shared someFile.txt with you'
       )
     })
+    describe('escape server response', () => {
+      it('strips script tags from plain message', async () => {
+        const notification = mock<Notification>({
+          messageRich: undefined,
+          message: '<script>alert("lorem")</script>hello',
+          computedMessage: undefined,
+          computedLink: undefined
+        })
+        const { wrapper } = getWrapper({ notifications: [notification] })
+        await wrapper.vm.fetchNotificationsTask.last
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('script').exists()).toBe(false)
+      })
+      it('strips img onerror payload from plain message (OCM share name vector)', async () => {
+        const notification = mock<Notification>({
+          messageRich: undefined,
+          message: '<img src=x onerror="alert(1)">',
+          computedMessage: undefined,
+          computedLink: undefined
+        })
+        const { wrapper } = getWrapper({ notifications: [notification] })
+        await wrapper.vm.fetchNotificationsTask.last
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('img').exists()).toBe(false)
+      })
+      it('strips XSS from messageRich template itself', async () => {
+        const notification = mock<Notification>({
+          messageRich: '<img src=x onerror="alert(1)"> {user} shared with you',
+          messageRichParameters: {
+            user: { displayname: 'lorem' }
+          },
+          computedMessage: undefined,
+          computedLink: undefined
+        })
+        const { wrapper } = getWrapper({ notifications: [notification] })
+        await wrapper.vm.fetchNotificationsTask.last
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('img').exists()).toBe(false)
+        expect(wrapper.find(selectors.notificationMessage).text()).toContain('lorem')
+      })
+      it('escapes messageRichParameters display name', async () => {
+        const notification = mock<Notification>({
+          messageRich: '{user} shared {resource} with you',
+          messageRichParameters: {
+            user: { displayname: '<img src=x onerror="alert(1)">' },
+            resource: { name: 'file.txt' }
+          },
+          computedMessage: undefined,
+          computedLink: undefined
+        })
+        const { wrapper } = getWrapper({ notifications: [notification] })
+        await wrapper.vm.fetchNotificationsTask.last
+        await wrapper.vm.$nextTick()
+        expect(wrapper.find('img').exists()).toBe(false)
+        expect(wrapper.find(selectors.notificationMessage).text()).toContain('file.txt')
+      })
+    })
   })
   describe('link', () => {
     it('displays if given directly', async () => {
