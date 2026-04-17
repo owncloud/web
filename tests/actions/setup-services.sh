@@ -149,7 +149,8 @@ setup_ocis() {
       export IDM_CREATE_DEMO_USERS=false
     fi
 
-    $OCIS_BIN init --insecure true && cp $GITHUB_WORKSPACE/tests/drone/app-registry.yaml $OCIS_CONFIG_DIR/app-registry.yaml && $OCIS_BIN server
+    export OCM_LOG_LEVEL=debug
+    $OCIS_BIN init --insecure true && cp $GITHUB_WORKSPACE/tests/drone/app-registry.yaml $OCIS_CONFIG_DIR/app-registry.yaml && $OCIS_BIN server 2>&1 | tee /tmp/ocis-$1.log
   ) &
   wait_for_service "https://localhost:$2" "$1"
 }
@@ -338,4 +339,13 @@ fi
 if $FEDERATION_ENABLED; then
   setup_ocis "ocis-federated" 10200
   wait_for_service "https://localhost:10200/.well-known/openid-configuration" "ocis-federated"
+
+  echo "=== Diagnostic: OCM providers loaded in LOCAL (:9200) ==="
+  curl -kfsSL "https://localhost:9200/ocm/providers" | python3 -m json.tool || echo "WARNING: OCM providers endpoint failed on LOCAL"
+
+  echo "=== Diagnostic: OCM providers loaded in FEDERATED (:10200) ==="
+  curl -kfsSL "https://localhost:10200/ocm/providers" | python3 -m json.tool || echo "WARNING: OCM providers endpoint failed on FEDERATED"
+
+  echo "=== Diagnostic: Graph role definitions on LOCAL (:9200) ==="
+  curl -kfsSL -u admin:admin "https://localhost:9200/graph/v1beta1/roleManagement/permissions/roleDefinitions" | python3 -c "import sys,json; roles=json.load(sys.stdin); [print(r['id'], r['displayName']) for r in roles]" || echo "WARNING: Graph role definitions failed on LOCAL"
 fi

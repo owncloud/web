@@ -181,6 +181,14 @@ jobs:
           KEYCLOAK_HOST: ${{ matrix.suites.keycloak && 'localhost:8443' || '' }}
         run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright
 
+      - name: Dump oCIS logs on failure
+        if: failure()
+        run: |
+          echo "=== oCIS LOCAL: OCM-related log lines ==="
+          grep -i "ocm\|provider\|invite\|federation\|error\|ERR" /tmp/ocis-ocis.log 2>/dev/null | tail -300 || echo "(no log file)"
+          echo "=== oCIS FEDERATED: OCM-related log lines ==="
+          grep -i "ocm\|provider\|invite\|federation\|error\|ERR" /tmp/ocis-ocis-federated.log 2>/dev/null | tail -300 || echo "(no log file)"
+
       - name: Upload tracing result
         if: failure()
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
