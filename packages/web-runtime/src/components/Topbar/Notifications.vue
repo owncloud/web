@@ -75,6 +75,7 @@
 </template>
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, unref } from 'vue'
+import DOMPurify from 'dompurify'
 import isEmpty from 'lodash-es/isEmpty'
 import escape from 'lodash-es/escape'
 import {
@@ -125,28 +126,30 @@ export default {
       { name: 'space', labelAttribute: 'name' },
       { name: 'virus', labelAttribute: 'name' }
     ]
+    const sanitizeAllowList = { ALLOWED_TAGS: ['strong', 'em', 'b', 'i'], ALLOWED_ATTR: [] }
     const getMessage = ({ message, messageRich, messageRichParameters }: Notification): string => {
       if (messageRich && !isEmpty(messageRichParameters)) {
-        let interpolatedMessage = messageRich
+        let interpolatedMessage = escape(messageRich)
         for (const param of messageParameters) {
-          if (interpolatedMessage.includes(`{${param.name}}`)) {
+          const placeholder = escape(`{${param.name}}`)
+          if (interpolatedMessage.includes(placeholder)) {
             const richParam = messageRichParameters[param.name] ?? undefined
             if (!richParam) {
-              return message
+              return DOMPurify.sanitize(escape(message), sanitizeAllowList)
             }
             const label = richParam[param.labelAttribute] ?? undefined
             if (!label) {
-              return message
+              return DOMPurify.sanitize(escape(message), sanitizeAllowList)
             }
             interpolatedMessage = interpolatedMessage.replace(
-              `{${param.name}}`,
+              placeholder,
               `<strong>${escape(label)}</strong>`
             )
           }
         }
-        return interpolatedMessage
+        return DOMPurify.sanitize(interpolatedMessage, sanitizeAllowList)
       }
-      return message
+      return DOMPurify.sanitize(escape(message), sanitizeAllowList)
     }
     const getLink = ({ messageRichParameters, object_type }: Notification) => {
       if (!messageRichParameters) {
