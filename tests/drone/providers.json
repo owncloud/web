@@ -20,27 +20,5 @@
         "host": ".*:9200"
       }
     ]
-  },
-  {
-    "name": "ocis-federated",
-    "full_name": "ocis federated server",
-    "organization": "ownCloud",
-    "domain": ".*:10200",
-    "homepage": "https://owncloud.com",
-    "services": [
-      {
-        "endpoint": {
-          "type": {
-            "name": "OCM",
-            "description": "ownCloud Open Cloud Mesh API"
-          },
-          "name": "ownCloud - OCM API",
-          "path": "https://.*:10200/ocm/",
-          "is_monitored": true
-        },
-        "api_version": "0.0.1",
-        "host": ".*:10200"
-      }
-    ]
   }
 ]

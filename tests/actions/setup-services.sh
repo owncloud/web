@@ -337,4 +337,5 @@ fi
 
 if $FEDERATION_ENABLED; then
   setup_ocis "ocis-federated" 10200
+  wait_for_service "https://localhost:10200/graph/v1.0/users/admin" "ocis-federated graph API"
 fi
