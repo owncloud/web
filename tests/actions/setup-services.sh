@@ -340,12 +340,18 @@ if $FEDERATION_ENABLED; then
   setup_ocis "ocis-federated" 10200
   wait_for_service "https://localhost:10200/.well-known/openid-configuration" "ocis-federated"
 
-  echo "=== Diagnostic: OCM providers loaded in LOCAL (:9200) ==="
-  curl -kfsSL "https://localhost:9200/ocm/providers" | python3 -m json.tool || echo "WARNING: OCM providers endpoint failed on LOCAL"
-
-  echo "=== Diagnostic: OCM providers loaded in FEDERATED (:10200) ==="
-  curl -kfsSL "https://localhost:10200/ocm/providers" | python3 -m json.tool || echo "WARNING: OCM providers endpoint failed on FEDERATED"
-
   echo "=== Diagnostic: Graph role definitions on LOCAL (:9200) ==="
   curl -kfsSL -u admin:admin "https://localhost:9200/graph/v1beta1/roleManagement/permissions/roleDefinitions" | python3 -c "import sys,json; roles=json.load(sys.stdin); [print(r['id'], r['displayName']) for r in roles]" || echo "WARNING: Graph role definitions failed on LOCAL"
+
+  echo "=== Diagnostic: listPermissions with Federated filter (admin home) ==="
+  ADMIN_HOME_ID=$(curl -kfsSL -u admin:admin "https://localhost:9200/graph/v1.0/me/drives" | python3 -c "import sys,json; d=json.load(sys.stdin); print([x for x in d['value'] if x['driveType']=='personal'][0]['id'])" 2>/dev/null || echo "")
+  if [ -n "$ADMIN_HOME_ID" ]; then
+    ADMIN_ROOT_ID=$(echo "$ADMIN_HOME_ID" | cut -d'!' -f1)
+    echo "  Drive ID: $ADMIN_HOME_ID"
+    curl -ksSL -u admin:admin "https://localhost:9200/graph/v1beta1/drives/$ADMIN_HOME_ID/items/$ADMIN_ROOT_ID/permissions?\$filter=@libre.graph.permissions.roles.allowedValues/rolePermissions/any(p:contains(p/condition,+'@Subject.UserType==%22Federated%22'))&\$select=@libre.graph.permissions.roles.allowedValues" \
+      | python3 -c "import sys,json; d=json.load(sys.stdin); roles=d.get('@libre.graph.permissions.roles.allowedValues',[]); [print(r['id'], r.get('displayName','?')) for r in roles] or print('  (empty roles list)')" \
+      2>/dev/null || echo "WARNING: listPermissions with Federated filter failed"
+  else
+    echo "WARNING: Could not get admin home drive ID"
+  fi
 fi
