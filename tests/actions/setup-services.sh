@@ -337,4 +337,31 @@ fi
 
 if $FEDERATION_ENABLED; then
   setup_ocis "ocis-federated" 10200
+  wait_for_service "https://localhost:10200/.well-known/openid-configuration" "ocis-federated"
+
+  echo "=== Diagnostic: Graph role definitions on LOCAL (:9200) ==="
+  curl -kfsSL -u admin:admin "https://localhost:9200/graph/v1beta1/roleManagement/permissions/roleDefinitions" | python3 -c "import sys,json; roles=json.load(sys.stdin); [print(r['id'], r['displayName']) for r in roles]" || echo "WARNING: Graph role definitions failed on LOCAL"
+
+  echo "=== Diagnostic: listPermissions with Federated filter (admin folder) ==="
+  ADMIN_HOME_ID=$(curl -kfsSL -u admin:admin "https://localhost:9200/graph/v1.0/me/drives" | python3 -c "import sys,json; d=json.load(sys.stdin); print([x for x in d['value'] if x['driveType']=='personal'][0]['id'])" 2>/dev/null || echo "")
+  if [ -n "$ADMIN_HOME_ID" ]; then
+    echo "  Drive ID: $ADMIN_HOME_ID"
+    # Create a test folder to get a valid non-root item ID (space root has no federated roles by design)
+    curl -kfsSL -u admin:admin -X MKCOL \
+      "https://localhost:9200/remote.php/dav/spaces/$ADMIN_HOME_ID/federated-role-test/" > /dev/null 2>&1 || true
+    FOLDER_ITEM_ID=$(curl -kfsSL -u admin:admin \
+      "https://localhost:9200/graph/v1.0/drives/$ADMIN_HOME_ID/items/root:/federated-role-test:/" \
+      | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('id',''))" 2>/dev/null || echo "")
+    if [ -n "$FOLDER_ITEM_ID" ]; then
+      echo "  Folder item ID: $FOLDER_ITEM_ID"
+      curl -ksSL -u admin:admin \
+        "https://localhost:9200/graph/v1beta1/drives/$ADMIN_HOME_ID/items/$FOLDER_ITEM_ID/permissions?\$filter=@libre.graph.permissions.roles.allowedValues/rolePermissions/any(p:contains(p/condition,%20'@Subject.UserType%3D%3D%22Federated%22'))&\$select=@libre.graph.permissions.roles.allowedValues" \
+        | python3 -c "import sys,json; d=json.load(sys.stdin); roles=d.get('@libre.graph.permissions.roles.allowedValues',[]); [print(r['id'], r.get('displayName','?')) for r in roles] or print('  (empty roles list)')" \
+        2>/dev/null || echo "WARNING: listPermissions with Federated filter failed"
+    else
+      echo "WARNING: Could not get folder item ID"
+    fi
+  else
+    echo "WARNING: Could not get admin home drive ID"
+  fi
 fi
