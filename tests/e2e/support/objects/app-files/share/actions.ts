@@ -101,14 +101,60 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   }
   const federatedShare = recipients[0].shareType
   if (federatedShare) {
-    await Promise.all([
-      locatorUtils.waitForEvent(page.locator(invitePanel), 'transitionend'),
-      page.locator(userTypeFilter).click()
-    ])
+    // Tippy click is blocked inside vue-select's vs__actions — trigger via Tippy API directly
+    await page.evaluate(() => {
+      const btn = document.querySelector(
+        '.invite-form-share-role-type .oc-filter-chip-button'
+      ) as any
+      console.log(
+        '[OCM DEBUG] filter chip btn:',
+        btn?.tagName,
+        'tippyState:',
+        JSON.stringify({
+          isEnabled: btn?._tippy?.state?.isEnabled,
+          isVisible: btn?._tippy?.state?.isVisible,
+          isMounted: btn?._tippy?.state?.isMounted
+        })
+      )
+      btn?._tippy?.show()
+    })
+    await page.locator(userTypeSelector).filter({ hasText: federatedShare }).waitFor()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'app sidebar')
-    await page.locator(userTypeSelector).filter({ hasText: federatedShare }).click()
+    // Use JS dispatchEvent — Playwright .click() on teleported Tippy content may not reach Vue handlers
+    await page.evaluate((shareType) => {
+      const items = Array.from(document.querySelectorAll('.invite-form-share-role-type-item'))
+      const target = items.find((el) =>
+        el.textContent?.toLowerCase().includes(shareType.toLowerCase())
+      ) as HTMLElement
+      console.log('[OCM DEBUG] dispatching click on:', target?.textContent?.trim())
+      target?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+    }, federatedShare)
+    // Log state after click to verify isExternalShareRoleType changed
+    await page.evaluate(() => {
+      const chip = document.querySelector(
+        '.invite-form-share-role-type .oc-filter-chip-button'
+      ) as HTMLElement
+      console.log('[OCM DEBUG] after chip click — chip text:', chip?.textContent?.trim())
+    })
+    // Small wait for Vue reactivity to update
+    await page.waitForTimeout(200)
   }
+  // Diagnostic: intercept next users API call to log what Brian search returns
+  const federatedSearchPromise = page
+    .waitForResponse(
+      (resp) => resp.url().includes('/graph/v1.0/users') && resp.url().includes('Federated'),
+      { timeout: 8000 }
+    )
+    .then(async (resp) => {
+      const body = await resp.json().catch(() => ({}))
+      console.log(
+        `[OCM DIAG] GET /users?Federated → HTTP ${resp.status()} count: ${body?.value?.length ?? 'n/a'} users: ${JSON.stringify(body?.value?.map((u: any) => u.displayName) ?? [])}`
+      )
+    })
+    .catch((e) => console.log('[OCM DIAG] No Federated users search intercepted:', e?.message))
+
   await Collaborator.inviteCollaborators({ page, collaborators: recipients })
+  await federatedSearchPromise
 
   await sidebar.close({ page })
 }

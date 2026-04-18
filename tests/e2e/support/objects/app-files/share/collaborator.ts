@@ -132,7 +132,25 @@ export default class Collaborator {
         })
       )
     }
-    await Promise.all([...checkResponses, page.locator(Collaborator.sendInvitationButton).click()])
+    // Diagnostic: also capture any non-200 invite responses
+    const diagnosticResponse = page
+      .waitForResponse(
+        (resp) => resp.url().includes('/invite') && resp.request().method() === 'POST',
+        { timeout: 10000 }
+      )
+      .then(async (resp) => {
+        const body = await resp.json().catch(() => null)
+        console.log(`[OCM DIAG] POST /invite → HTTP ${resp.status()} body: ${JSON.stringify(body)}`)
+      })
+      .catch(() => {})
+    await Promise.all([
+      ...checkResponses,
+      page.evaluate(() => {
+        const btn = document.querySelector('#new-collaborators-form-create-button') as HTMLElement
+        btn?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+      })
+    ])
+    await diagnosticResponse
   }
 
   static async inviteCollaborators(args: InviteCollaboratorsArgs): Promise<void> {
@@ -147,6 +165,23 @@ export default class Collaborator {
       collaboratorNames.push(collaborator.collaborator.displayName)
     }
     await Collaborator.setCollaboratorRole(page, role, resourceType)
+    // Diagnostic: check if send button is enabled
+    const sendBtn = page.locator(Collaborator.sendInvitationButton)
+    const isDisabled = await sendBtn.isDisabled()
+    console.log('[OCM DEBUG] send button disabled:', isDisabled)
+    if (isDisabled) {
+      const state = await page.evaluate(() => {
+        const btn = document.querySelector(
+          '#new-collaborators-form-create-button'
+        ) as HTMLButtonElement
+        return {
+          disabled: btn?.disabled,
+          ariaDisabled: btn?.getAttribute('aria-disabled'),
+          text: btn?.textContent?.trim()
+        }
+      })
+      console.log('[OCM DEBUG] send button state:', JSON.stringify(state))
+    }
     await Collaborator.sendInvitation(page, collaboratorNames)
   }
 
@@ -161,9 +196,28 @@ export default class Collaborator {
       dropdownSelector = Collaborator.newCollaboratorRoleDropdown
       itemSelector = Collaborator.collaboratorRoleButton
     }
-    await page.locator(dropdownSelector).click()
+    // Use Tippy JS API to open — direct .click() on toggle inside vue-select can be swallowed
+    const toggleId = await page.locator(dropdownSelector).getAttribute('id')
+    await page.evaluate((id) => {
+      const btn = id
+        ? document.getElementById(id)
+        : (document.querySelector('[id^="files-collaborators-role-button"]') as any)
+      btn?._tippy?.show()
+    }, toggleId)
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'tippy box')
-    await page.locator(util.format(itemSelector, role)).click()
+    // Use dispatchEvent since Tippy close-on-click intercepts .click() before Vue handler fires
+    const roleSelector = util.format(itemSelector, role)
+    await page.locator(roleSelector).waitFor()
+    await page.evaluate((xpathSelector) => {
+      const btn = document.evaluate(
+        xpathSelector,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      ).singleNodeValue as HTMLElement
+      btn?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+    }, roleSelector)
   }
 
   static async changeCollaboratorRole(args: CollaboratorArgs): Promise<void> {

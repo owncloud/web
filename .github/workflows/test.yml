@@ -184,10 +184,10 @@ jobs:
       - name: Dump oCIS logs on failure
         if: failure()
         run: |
-          echo "=== oCIS LOCAL: OCM-related log lines ==="
-          grep -i "ocm\|provider\|invite\|federation\|error\|ERR" /tmp/ocis-ocis.log 2>/dev/null | tail -300 || echo "(no log file)"
-          echo "=== oCIS FEDERATED: OCM-related log lines ==="
-          grep -i "ocm\|provider\|invite\|federation\|error\|ERR" /tmp/ocis-ocis-federated.log 2>/dev/null | tail -300 || echo "(no log file)"
+          echo "=== oCIS LOCAL: relevant log lines ==="
+          grep -i "ocm\|provider\|invite\|federation\|error\|ERR\|permissions\|drives.*items\|Federated" /tmp/ocis-ocis.log 2>/dev/null | tail -300 || echo "(no log file)"
+          echo "=== oCIS FEDERATED: relevant log lines ==="
+          grep -i "ocm\|provider\|invite\|federation\|error\|ERR\|permissions\|drives.*items\|Federated" /tmp/ocis-ocis-federated.log 2>/dev/null | tail -300 || echo "(no log file)"
 
       - name: Upload tracing result
         if: failure()

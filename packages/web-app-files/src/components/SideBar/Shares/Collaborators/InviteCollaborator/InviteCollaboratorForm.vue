@@ -174,7 +174,18 @@ import {
   useUserStore
 } from '@ownclouders/web-pkg'
 
-import { computed, inject, ref, unref, watch, onMounted, nextTick, Ref, useTemplateRef } from 'vue'
+import {
+  computed,
+  inject,
+  ref,
+  unref,
+  watch,
+  watchEffect,
+  onMounted,
+  nextTick,
+  Ref,
+  useTemplateRef
+} from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { DateTime } from 'luxon'
 import { OcDrop } from '@ownclouders/design-system/components'
@@ -476,6 +487,18 @@ const noOptionsLabel = computed(() => {
 const showShareTypeFilter = computed(
   () => unref(shareRoleTypes).length > 1 && !isProjectSpaceResource(unref(resource))
 )
+watchEffect(() => {
+  console.log(
+    '[OCM DEBUG] shareRoleTypes:',
+    unref(shareRoleTypes).length,
+    'showShareTypeFilter:',
+    unref(showShareTypeFilter),
+    'externalEnabled:',
+    !!unref(externalShareRolesEnabled),
+    'extRoles:',
+    unref(availableExternalRoles)?.length
+  )
+})
 
 const isValid = computed(() => {
   return unref(selectedCollaborators).length > 0

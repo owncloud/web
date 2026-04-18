@@ -129,7 +129,15 @@ export const toggleSearchTitleOnly = async ({
 }): Promise<void> => {
   const selector =
     enableOrDisable === 'enable' ? enableSearchTitleOnlySelector : disableSearchTitleOnlySelector
-  await page.locator(selector).click()
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().includes('/dav/spaces') &&
+        resp.status() === 207 &&
+        resp.request().method() === 'REPORT'
+    ),
+    page.locator(selector).click()
+  ])
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['files'],

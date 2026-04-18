@@ -178,6 +178,12 @@ const loadVersionsTask = useTask(function* (signal, resource: Resource) {
 })
 
 const loadSharesTask = useTask(function* (signal, resource: Resource) {
+  console.log(
+    '[OCM DEBUG] loadSharesTask start, resource.fileId:',
+    resource?.fileId,
+    'space.id:',
+    space?.id
+  )
   try {
     sharesStore.setLoading(true)
     sharesStore.removeOrphanedShares()
@@ -197,10 +203,17 @@ const loadSharesTask = useTask(function* (signal, resource: Resource) {
         driveId = matchingMountPoint.root.remoteItem.rootId
       }
     }
+    console.log('[OCM DEBUG] driveId:', driveId, 'isShareSpace:', isShareSpaceResource(space))
 
     // load direct shares
     const { shares, allowedRoles } = yield* call(
       client.listPermissions(driveId, resource.fileId, sharesStore.graphRoles, {}, { signal })
+    )
+    console.log(
+      '[OCM DEBUG] direct shares loaded, count:',
+      shares?.length,
+      'allowedRoles:',
+      allowedRoles?.length
     )
 
     const loadedCollaboratorShares = shares.filter(isCollaboratorShare)
@@ -216,6 +229,10 @@ const loadSharesTask = useTask(function* (signal, resource: Resource) {
       }) || []
 
     // load external share roles
+    console.log(
+      '[OCM DEBUG] isAppEnabled open-cloud-mesh:',
+      appsStore.isAppEnabled('open-cloud-mesh')
+    )
     if (appsStore.isAppEnabled('open-cloud-mesh')) {
       const { allowedRoles } = yield* call(
         client.listPermissions(
@@ -229,6 +246,7 @@ const loadSharesTask = useTask(function* (signal, resource: Resource) {
           { signal }
         )
       )
+      console.log('[OCM DEBUG] federated allowedRoles:', JSON.stringify(allowedRoles))
 
       availableExternalShareRoles.value =
         allowedRoles?.map((r) => {
@@ -237,6 +255,11 @@ const loadSharesTask = useTask(function* (signal, resource: Resource) {
             icon: rolesArray.find((role) => role.id === r.id)?.icon
           }
         }) || []
+      console.log(
+        '[OCM DEBUG] availableExternalShareRoles set to:',
+        availableExternalShareRoles.value.length,
+        'roles'
+      )
     }
 
     // use cache for indirect shares
@@ -318,7 +341,7 @@ const loadSharesTask = useTask(function* (signal, resource: Resource) {
     sharesStore.setCollaboratorShares(loadedCollaboratorShares)
     sharesStore.setLinkShares(loadedLinkShares)
   } catch (error) {
-    console.error(error)
+    console.error('[OCM DEBUG] loadSharesTask CAUGHT ERROR:', error)
     sharesStore.setHasLoadingFailed(true)
   } finally {
     sharesStore.setLoading(false)

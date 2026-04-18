@@ -39,6 +39,9 @@ export class ActorEnvironment extends EventEmitter implements Actor {
         expect(exception).not.toBeDefined()
       }
     })
+    this.page.on('console', (msg) => {
+      console.log(`[BROWSER ${msg.type().toUpperCase()}] ${msg.text()}`)
+    })
     // set local storage
     await this.context.addInitScript((storage) => {
       for (const [key, value] of Object.entries(storage)) {
