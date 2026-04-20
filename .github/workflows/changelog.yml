@@ -25,7 +25,7 @@ jobs:
 
       - name: generate changelog
         id: changelog
-        uses: actionhippie/calens@244f3e5c328b842a740113859b87bbebf697f63b # v1.13.1
+        uses: actionhippie/calens@47874e094545538f669a17646e7963ceebdeed11 # v1.13.3
         with:
           target: CHANGELOG.md
 
