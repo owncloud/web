@@ -1,0 +1,138 @@
+OCM e2e test fix — request/response evidence
+=============================================
+Captured from local passing run: 2026-04-18
+Branch: ci/e2e-tests-2
+Test: tests/e2e-playwright/specs/ocm/ocm.spec.ts
+Both oCIS instances: LOCAL :9200, FEDERATED :10200
+
+This file documents the full backend and UI-layer evidence confirming
+the fix is correct. See comments in actions.ts and collaborator.ts for
+the root cause analysis.
+
+
+--- LAYER 1: OCM CONNECTION (oCIS server logs) ---
+
+Step 1a — Alice (LOCAL :9200) generates OCM invite token
+  Source: /tmp/ocis-ocis-ocis.log
+  POST /sciencemesh/generate-invite → HTTP 200  (73 bytes, traceid=95350f97316f389b9b73952d07031200)
+
+Step 1b — Brian (FEDERATED :10200) accepts the invite
+  Source: /tmp/ocis-ocis-ocis-federated.log
+  POST /sciencemesh/accept-invite → HTTP 200  (traceid=3b008bd93a83ed4cd6f056aceb1d2635)
+
+Step 1c — FEDERATED notifies LOCAL that invite was accepted
+  Source: /tmp/ocis-ocis-ocis.log
+  POST /ocm/invite-accepted → AcceptInvite gRPC code=OK → HTTP 200  (115 bytes)
+    gRPC: uri=/cs3.ocm.invite.v1beta1.InviteAPI/AcceptInvite  code=OK  traceid=1e18531b3eaec695fe4e530409312830
+
+  ✓ Brian Murphy is now a known Federated identity on LOCAL oCIS
+
+
+--- LAYER 2: FEDERATED USER SEARCH (browser [OCM DIAG] log in actions.ts) ---
+
+After selectShareRoleType("External") fired (confirmed by filter chip fix),
+InviteCollaboratorForm.vue called the Graph API with userType=Federated filter:
+
+  GET /graph/v1.0/users?$filter=(userType eq 'Federated')&$search="Brian Murphy"
+  → HTTP 200
+  Response: { "value": [{ "displayName": "Brian Murphy", ... }] }
+  count: 1   users: ["Brian Murphy"]
+
+  ✓ oCIS returns Brian as Federated userType — identity registration is correct
+
+
+--- LAYER 3: FEDERATED ROLES (browser [OCM DEBUG] log in InviteCollaboratorForm.vue) ---
+
+After loadSharesTask fetched listPermissions with Federated filter,
+availableExternalRoles was populated:
+
+  federated allowedRoles: [
+    { "displayName": "Can view",             "id": "b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5",
+      "@libre.graph.weight": 1, "description": "View and download." },
+    { "displayName": "Can edit with trashbin","id": "fb6c3e19-e378-47e5-b277-9732f9de6e21",
+      "@libre.graph.weight": 2, "description": "View, download, upload, edit, add and delete." }
+  ]
+  availableExternalShareRoles set to: 2 roles
+
+  ✓ oCIS returns federated-specific roles — role dropdown renders with correct options
+  ✓ The role button the test was waiting for (fb6c3e19-...) is present and clickable
+
+
+--- LAYER 4: SHARE CREATION (browser [OCM DIAG] log in collaborator.ts sendInvitation) ---
+
+After Share button fix (dispatchEvent), Vue's @click="share" handler fired and called
+POST /graph/v1beta1/drives/{driveId}/items/{itemId}/invite:
+
+  POST /graph/v1beta1/drives/storage-users-1$0283045e-.../items/.../invite
+  → HTTP 200
+  Response body:
+  {
+    "value": [{
+      "createdDateTime": "2026-04-18T19:41:05.551092+02:00",
+      "id": "3f2907d7-8176-41aa-89fa-3b33122ad352",
+      "roles": ["fb6c3e19-e378-47e5-b277-9732f9de6e21"],
+      "grantedToV2": {
+        "user": {
+          "@libre.graph.userType": "Federated",
+          "displayName": "Brian Murphy",
+          "id": "d4e594df-e2d5-4c3c-82d3-9c217907a7e7@localhost:10200"
+        }
+      },
+      "invitation": {
+        "invitedBy": {
+          "user": {
+            "@libre.graph.userType": "Member",
+            "displayName": "Alice Hansen",
+            "id": "0283045e-944b-4587-b6e6-3648d2577bb2"
+          }
+        }
+      }
+    }]
+  }
+
+  ✓ Share created with correct Federated recipient, correct role, correct inviter
+
+
+--- LAYER 5: OCM SHARE FORWARDING (oCIS server logs) ---
+
+LOCAL oCIS forwarded each share to FEDERATED via OCM /shares protocol.
+Source: /tmp/ocis-ocis-ocis.log + /tmp/ocis-ocis-ocis-federated.log
+
+Share 1 — folderPublic (folder, read+write):
+  LOCAL sends:
+    POST https://localhost:10200/ocm/shares
+    {"shareWith":"df375aa2-2484-45d6-bda1-94db1f01f59f@localhost:10200@localhost:10200",
+     "name":"folderPublic","resourceType":"folder","shareType":"user",
+     "protocol":{"webdav":{"permissions":["read","write"],
+       "uri":"https://localhost:9200/dav/ocm/5ab7bb19-0c30-4964-a9e6-fd5dd8419d08"}}}
+  FEDERATED receives: HTTP 201
+
+Share 2 — sampleGif.gif (file, read+write):
+  LOCAL sends:
+    POST https://localhost:10200/ocm/shares
+    {"name":"sampleGif.gif","resourceType":"file","shareType":"user",
+     "protocol":{"webdav":{"permissions":["read","write"],
+       "uri":"https://localhost:9200/dav/ocm/230d1d8a-10ff-4c52-b16c-3f79d2413294"}}}
+  FEDERATED receives: HTTP 201
+
+Share 3 — testavatar.jpg (file, read-only):
+  LOCAL sends:
+    POST https://localhost:10200/ocm/shares
+    {"name":"testavatar.jpg","resourceType":"file","shareType":"user",
+     "protocol":{"webdav":{"permissions":["read"],
+       "uri":"https://localhost:9200/dav/ocm/b3243f85-fe57-4636-a65c-6707cba5d9e1"}}}
+  FEDERATED receives: HTTP 201
+
+  ✓ All 3 shares forwarded end-to-end and accepted by FEDERATED oCIS
+
+
+--- SUMMARY ---
+
+Backend state:  VALID  (OCM connection established, Brian registered as Federated user)
+Share creation: VALID  (POST /invite HTTP 200, correct recipient and role)
+Share delivery: VALID  (3x POST /ocm/shares HTTP 201 on FEDERATED)
+
+The test failure was entirely in the Playwright test helper layer:
+  - Tippy.js click interception silently swallowed 3 separate .click() calls
+  - None of them threw an error; they just failed to reach Vue's event handlers
+  - See comments in actions.ts and collaborator.ts for the full root cause

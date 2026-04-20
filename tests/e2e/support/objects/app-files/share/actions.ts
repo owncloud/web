@@ -101,7 +101,24 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   }
   const federatedShare = recipients[0].shareType
   if (federatedShare) {
-    // Tippy click is blocked inside vue-select's vs__actions — trigger via Tippy API directly
+    // --- WHY THIS WORKAROUND EXISTS ---
+    // The "External users" filter chip (OcFilterChip → OcDrop → Tippy.js) teleports its
+    // dropdown content to document.body, outside the Vue component tree. Tippy's own
+    // `close-on-click` handler fires on the toggle BEFORE the bubbled event reaches Vue's
+    // @click="selectShareRoleType(option)" in InviteCollaboratorForm.vue.
+    // With the original page.locator(userTypeFilter).click(), isExternalShareRoleType stayed
+    // false: the invite input searched all users (not Federated), Brian Murphy was not found.
+    //
+    // Fix: open the dropdown via Tippy's JS API (btn._tippy.show()) — bypasses Playwright's
+    // synthetic event path. Then fire the item click via dispatchEvent({bubbles:true})
+    // directly on the DOM node so it reaches Vue's handler before Tippy can intercept.
+    //
+    // Verified by [OCM DEBUG] logs below:
+    //   filter chip btn: BUTTON  tippyState: {isEnabled:true, isVisible:false, isMounted:false}
+    //   dispatching click on: "External users"
+    //   after chip click — chip text: "External"   ← confirms selectShareRoleType fired
+    // And by [OCM DIAG] after inviteCollaborators:
+    //   GET /users?Federated → HTTP 200  count: 1  users: ["Brian Murphy"]
     await page.evaluate(() => {
       const btn = document.querySelector(
         '.invite-form-share-role-type .oc-filter-chip-button'
