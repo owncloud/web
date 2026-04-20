@@ -26,7 +26,7 @@ export const applications = {
 } as const
 
 export const searchFilters = {
-  allfiles: 'all files',
+  allFiles: 'all files',
   currentFolder: 'current folder',
   mediaType: 'mediaType',
   tags: 'tags',

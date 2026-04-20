@@ -48,7 +48,7 @@ test.describe('Search in the project space', () => {
       world,
       stepUser: 'Alice',
       keyword: "-'s",
-      filter: searchFilters.allfiles
+      filter: searchFilters.allFiles
     })
 
     await ui.userShouldSeeResources({
@@ -69,7 +69,7 @@ test.describe('Search in the project space', () => {
       world,
       stepUser: 'Alice',
       keyword: '!;_+-&)',
-      filter: searchFilters.allfiles
+      filter: searchFilters.allFiles
     })
 
     await ui.userShouldSeeResources({

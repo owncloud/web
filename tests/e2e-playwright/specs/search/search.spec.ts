@@ -100,7 +100,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'foldeR',
-      filter: searchFilters.allfiles
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource |
@@ -131,7 +131,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'hidden',
-      filter: searchFilters.allfiles
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource         |
@@ -161,7 +161,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'child',
-      filter: searchFilters.allfiles
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource  |
@@ -193,7 +193,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'NEW',
-      filter: searchFilters.allfiles
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource             |
@@ -241,7 +241,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'rena',
-      filter: searchFilters.allfiles
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource      |
@@ -270,7 +270,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'strängéनेपालीName',
-      filter: searchFilters.allfiles,
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
     // And "Alice" enables the option to search title only
@@ -300,7 +300,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'forDeleting',
-      filter: searchFilters.allfiles
+      filter: searchFilters.allFiles
     })
     // Then following resources should not be displayed in the search list for user "Alice"
     //   | resource          |
@@ -358,7 +358,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'example',
-      filter: searchFilters.allfiles
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource                          |
@@ -446,7 +446,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'mediaTest',
-      filter: searchFilters.allfiles,
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
     // And "Alice" selects mediaType "Document" from the search result filter chip

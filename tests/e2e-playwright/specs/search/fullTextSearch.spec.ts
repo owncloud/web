@@ -142,7 +142,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       keyword: 'Cheers',
-      filter: searchFilters.allfiles,
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
 
@@ -196,7 +196,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       keyword: 'file',
-      filter: searchFilters.allfiles,
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
 
@@ -237,7 +237,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       keyword: 'Cheers',
-      filter: searchFilters.allfiles,
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
     // Then following resources should be displayed in the files list for user "Brian"

@@ -102,7 +102,7 @@ export async function userSearchesGloballyWithFilter({
   world: World
   stepUser: string
   keyword: string
-  filter: typeof searchFilters.allfiles | typeof searchFilters.currentFolder
+  filter: typeof searchFilters.allFiles | typeof searchFilters.currentFolder
   command?: string
 }): Promise<void> {
   keyword = keyword ?? ''

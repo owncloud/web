@@ -402,7 +402,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       keyword: 'secure',
-      filter: searchFilters.allfiles,
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
 
