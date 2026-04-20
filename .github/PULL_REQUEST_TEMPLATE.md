@@ -39,16 +39,6 @@ Please set the following labels:
 
 ## Screenshots (if appropriate):
 
-## Types of changes
-<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to change)
-- [ ] Technical debt
-- [ ] Tests
-- [ ] Documentation
-- [ ] Maintenance (e.g. dependency updates or tooling)
-
 ## Open tasks:
 <!-- In case of incomplete PR, please list the open tasks here -->
 <!-- Please make sure to keep your PR in draft mode until it's ready for review -->
