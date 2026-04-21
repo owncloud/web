@@ -21,13 +21,4 @@ export class WithMe {
       'files page'
     )
   }
-
-  async openShareWithMeFromInternalLink(actor: Actor): Promise<void> {
-    const [newTab] = await Promise.all([
-      this.#page.waitForEvent('popup'),
-      this.#page.locator(openShareWithMeButton).click()
-    ])
-    await newTab.locator(shareWithMeNavSelector).waitFor()
-    actor.savePage(newTab)
-  }
 }

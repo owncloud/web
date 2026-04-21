@@ -114,16 +114,6 @@ export class Public {
     await this.#page.locator('body').click()
   }
 
-  async uploadInternal(
-    args: Omit<po.uploadResourceArgs, 'page'> & { link: string }
-  ): Promise<void> {
-    // link is the public link url
-    const { link } = args
-    delete args.link
-    await po.uploadResource({ ...args, page: this.#page })
-    await this.#page.goto(link)
-  }
-
   async delete(args: Omit<po.deleteResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await po.deleteResource({ ...args, page: this.#page, isPublicLink: true })
