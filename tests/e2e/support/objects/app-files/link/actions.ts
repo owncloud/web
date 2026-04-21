@@ -142,11 +142,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     )
   }
 
-  role === 'Invited people'
-    ? await expect(page.locator(passwordInputDescription).first()).toHaveText(
-        'Password cannot be set for internal links'
-      )
-    : await page.locator(editPublicLinkPasswordInput).fill(password)
+  await page.locator(editPublicLinkPasswordInput).fill(password)
 
   await Promise.all([
     page.waitForResponse(
