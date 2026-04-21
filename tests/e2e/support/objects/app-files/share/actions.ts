@@ -100,15 +100,39 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
   }
   const federatedShare = recipients[0].shareType
   if (federatedShare) {
-    await Promise.all([
-      locatorUtils.waitForEvent(page.locator(invitePanel), 'transitionend'),
-      page.locator(userTypeFilter).click()
-    ])
+    // --- WHY THIS WORKAROUND EXISTS ---
+    // The "External users" filter chip (OcFilterChip → OcDrop → Tippy.js) teleports its
+    // dropdown content to document.body, outside the Vue component tree. Tippy's own
+    // `close-on-click` handler fires on the toggle BEFORE the bubbled event reaches Vue's
+    // @click="selectShareRoleType(option)" in InviteCollaboratorForm.vue.
+    // With the original page.locator(userTypeFilter).click(), isExternalShareRoleType stayed
+    // false: the invite input searched all users (not Federated), Brian Murphy was not found.
+    //
+    // Fix: open the dropdown via Tippy's JS API (btn._tippy.show()) — bypasses Playwright's
+    // synthetic event path. Then fire the item click via dispatchEvent({bubbles:true})
+    // directly on the DOM node so it reaches Vue's handler before Tippy can intercept.
+    //
+    await page.evaluate(() => {
+      const btn = document.querySelector(
+        '.invite-form-share-role-type .oc-filter-chip-button'
+      ) as any
+      btn?._tippy?.show()
+    })
+    await page.locator(userTypeSelector).filter({ hasText: federatedShare }).waitFor()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'app sidebar')
-    await page.locator(userTypeSelector).filter({ hasText: federatedShare }).click()
+    // Use JS dispatchEvent — Playwright .click() on teleported Tippy content may not reach Vue handlers
+    await page.evaluate((shareType) => {
+      const items = Array.from(document.querySelectorAll('.invite-form-share-role-type-item'))
+      const target = items.find((el) =>
+        el.textContent?.toLowerCase().includes(shareType.toLowerCase())
+      ) as HTMLElement
+      target?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+    }, federatedShare)
+    // Small wait for Vue reactivity to update
+    await page.waitForTimeout(200)
   }
-  await Collaborator.inviteCollaborators({ page, collaborators: recipients })
 
+  await Collaborator.inviteCollaborators({ page, collaborators: recipients })
   await sidebar.close({ page })
 }
 
