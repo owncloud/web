@@ -49,14 +49,18 @@ test.describe('internal link share', () => {
       stepUser: 'Brian',
       resources: [{ name: 'simple.pdf', to: 'myfolder' }]
     })
-    await ui.userUpdatesShareeRole({
+    await ui.userUpdatesShareeRoles({
       world,
       stepUser: 'Alice',
-      resource: 'myfolder',
-      recipient: 'Brian',
-      type: 'user',
-      role: 'Can view',
-      resourceType: 'folder'
+      roleUpdates: [
+        {
+          resource: 'myfolder',
+          recipient: 'Brian',
+          type: 'user',
+          role: 'Can view',
+          resourceType: 'folder'
+        }
+      ]
     })
     await ui.userLogsOut({ world, stepUser: 'Alice' })
 
