@@ -234,7 +234,7 @@ test.describe('password-protected folder operation', () => {
     // And "Alice" creates the following project spaces
     //   | name | id     |
     //   | team | team.1 |
-    await ui.userCreatesProjectSpace({
+    await ui.userCreatesProjectSpaces({
       world,
       stepUser: 'Alice',
       spaces: [{ name: 'team', id: 'team.1' }]

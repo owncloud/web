@@ -1371,3 +1371,20 @@ export async function userShouldNotSeeShareIndicatorOnResource({
   })
   await expect(shareIndicator).not.toBeVisible()
 }
+
+export async function userDownloadsPreviousVersionOfResource({
+  world,
+  stepUser,
+  resource,
+  to
+}: {
+  world: World
+  stepUser: string
+  resource: string
+  to: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  const fileInfo = world.filesEnvironment.getFile({ name: resource })
+  await resourceObject.downloadVersion({ folder: to, files: [fileInfo] })
+}
