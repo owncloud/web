@@ -2,7 +2,7 @@
   
   
 [![Matrix](https://img.shields.io/matrix/ocis%3Amatrix.org?logo=matrix)](https://app.element.io/#/room/#ocis:matrix.org)
-[![Build Status](https://drone.owncloud.com/api/badges/owncloud/web/status.svg)](https://drone.owncloud.com/owncloud/web)
+[![Test and build](https://github.com/owncloud/web/actions/workflows/test.yml/badge.svg)](https://github.com/owncloud/web/actions/workflows/test.yml)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=owncloud_web&metric=security_rating)](https://sonarcloud.io/dashboard?id=owncloud_web)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_web&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_web)
 [![web docker image](https://img.shields.io/docker/v/owncloud/web?label=web%20docker%20image&logo=docker&sort=semver)](https://hub.docker.com/r/owncloud/web)
