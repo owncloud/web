@@ -4,7 +4,7 @@ set -euo pipefail
 
 OCIS_DIR="${RUNNER_TEMP:-/tmp}/ocis"
 OCIS_REPOSITORY=https://github.com/owncloud/ocis.git
-OCIS_COMMIT=latest # `latest` or a specific commit SHA, e.g. `9ac0452d61f062572f7e4663679ffb8ac06845e6`
+OCIS_COMMIT=5e96cbc17ea9d96a71fdf8ff3baebfcb67e77417 # `latest` or a specific commit SHA, e.g. `9ac0452d61f062572f7e4663679ffb8ac06845e6`
 
 COLLABORA_CODE_IMAGE=collabora/code:25.04.7.3.1
 ONLYOFFICE_DOCUMENT_SERVER_IMAGE=onlyoffice/documentserver:9.2.1
