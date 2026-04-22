@@ -95,17 +95,6 @@ Then('{string} fails to log in', async function (this: World, stepUser: string):
 })
 
 When(
-  '{string} logs in from the internal link',
-  async function (this: World, stepUser: string): Promise<void> {
-    const sessionObject = await createNewSession(this, stepUser)
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const user = this.usersEnvironment.getUser({ key: stepUser })
-    await sessionObject.login(user)
-    await page.locator('#web').waitFor()
-  }
-)
-
-When(
   /^"([^"]*)" waits for token renewal via (iframe|refresh token)$/,
   async function (this: World, stepUser: string, renewalType: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
