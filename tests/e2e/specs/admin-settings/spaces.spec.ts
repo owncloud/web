@@ -1,6 +1,7 @@
 import { test } from '../../environment/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import os from 'os'
 
 test.describe('spaces management', () => {
   test.beforeEach(async ({ world }) => {
@@ -163,6 +164,8 @@ test.describe('spaces management', () => {
   })
 
   test('list members via sidebar', async ({ world }) => {
+    console.log('CPUs:', os.cpus().length)
+    console.log('Workers will be:', Math.ceil(os.cpus().length / 2))
     await api.usersHaveBeenCreated({
       world,
       stepUser: 'Admin',
