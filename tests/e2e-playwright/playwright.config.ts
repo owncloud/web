@@ -25,7 +25,8 @@ export default defineConfig({
   retries: config.retry,
 
   // Run tests in parallel - use CI-determined workers or auto-detect locally
-  workers: process.env.CI ? 2 : undefined,
+  //   workers: process.env.CI ? 2 : undefined,
+  workers: undefined,
 
   // Reporter to use
   reporter: [
