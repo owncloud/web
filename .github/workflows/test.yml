@@ -67,7 +67,7 @@ jobs:
           path: dist
           if-no-files-found: error
 
-  e2e-playwright:
+  e2e:
     needs: build
     runs-on: ubuntu-latest
     name: e2e-tests-${{ matrix.suites.suite }}
@@ -77,28 +77,40 @@ jobs:
         suites:
           - suite: part-1
             test_suites: admin-settings,spaces
+            test_type: playwright
           - suite: part-2
-            test_suites: navigation,user-settings,app-store,file-action
+            test_suites: navigation,user-settings,app-store
+            test_type: playwright
           - suite: part-3
             test_suites: shares,search,runtime
             tika: true
+            test_type: playwright
+          - suite: part-4
+            test_suites: file-action
+            test_type: cucumber
           - suite: app-provider
             test_suites: app-provider
             collaboration: true
+            test_type: cucumber
           - suite: ocm
             test_suites: ocm
             federated: true
+            test_type: cucumber
           - suite: oidc
             feature_files: specs/oidc/refreshToken.spec.ts
             oidc: true
+            test_type: playwright
           - suite: oidc-iframe
             feature_files: specs/oidc/iframeTokenRenewal.spec.ts
             oidc_iframe: true
+            test_type: playwright
           - suite: smoke
             test_suites: smoke
+            test_type: cucumber
           - suite: keycloak
-            feature_files: specs/admin-settings/spaces.spec.ts
+            test_suites: journeys,keycloak
             keycloak: true
+            test_type: cucumber
     env:
       BASE_URL_OCIS: localhost:9200
       HEADLESS: true
@@ -107,7 +119,6 @@ jobs:
       REPORT_TRACING: false
       FAIL_ON_UNCAUGHT_CONSOLE_ERR: true
       SKIP_A11Y_TESTS: true
-      TEST_TYPE: playwright
       FEDERATED_BASE_URL_OCIS: localhost:10200
     steps:
       - name: Checkout code
@@ -179,7 +190,8 @@ jobs:
           TEST_SUITES: ${{ matrix.suites.test_suites || '' }}
           KEYCLOAK: ${{ matrix.suites.keycloak || '' }}
           KEYCLOAK_HOST: ${{ matrix.suites.keycloak && 'localhost:8443' || '' }}
-        run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright
+          TEST_TYPE: ${{ matrix.suites.test_type }}
+        run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh
 
       - name: Dump oCIS logs on failure
         if: failure()
@@ -206,7 +218,7 @@ jobs:
           retention-days: 7
 
   check-tests-passed:
-    needs: [e2e-playwright]
+    needs: [e2e]
     runs-on: ubuntu-latest
     if: always()
     steps:
