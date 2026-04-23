@@ -116,6 +116,7 @@ export default class Collaborator {
     await page.locator('.vs--open').waitFor()
     await page
       .locator(util.format(Collaborator.collaboratorDropdownItem, collaborator.displayName))
+      .first() // in CI, resolves to two elements
       .click()
   }
 
