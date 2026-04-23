@@ -289,7 +289,6 @@ test.describe('Notifications', () => {
     //   | %user_alice_displayName% deleted Space team |
     messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
     expect(messages).toContain(substitute('%user_alice_displayName% deleted Space team'))
-
   })
 
   test('user should not get any notification when notification is disabled', async () => {
