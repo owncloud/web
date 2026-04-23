@@ -1,10 +1,7 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import {
-  ActionViaType,
   createResourceTypes,
-  displayedResourceType,
-  searchFilter,
   shortcutType
 } from '../../../e2e/support/objects/app-files/resource/actions'
 import { editor } from '../../../e2e/support/objects/app-files/utils'
@@ -15,6 +12,13 @@ import { config } from '../../../e2e/config'
 import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
 import { substitute } from '../../../e2e/support/utils'
 import { World } from '../../support/world'
+import {
+  actions,
+  applications,
+  searchFilters,
+  displayedResources,
+  buttonLabels
+} from '../../support/constants'
 
 export async function userUploadsResources({
   world,
@@ -98,7 +102,7 @@ export async function userSearchesGloballyWithFilter({
   world: World
   stepUser: string
   keyword: string
-  filter: searchFilter
+  filter: typeof searchFilters.allFiles | typeof searchFilters.currentFolder
   command?: string
 }): Promise<void> {
   keyword = keyword ?? ''
@@ -161,7 +165,12 @@ export async function userOpensResourceInViewer({
   world: World
   stepUser: string
   resource: string
-  application: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
+  application:
+    | typeof applications.textEditor
+    | typeof applications.pdfViewer
+    | typeof applications.mediaViewer
+    | typeof applications.collabora
+    | typeof applications.onlyOffice
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -178,14 +187,18 @@ export async function userShouldSeeResources({
   resources
 }: {
   world: World
-  listType: displayedResourceType
+  listType:
+    | typeof displayedResources.searchList
+    | typeof displayedResources.filesList
+    | typeof displayedResources.shares
+    | typeof displayedResources.trashbin
   stepUser: string
   resources: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
   // For search results, use polling to wait for tika indexing in CI
-  if (listType === 'search list') {
+  if (listType === displayedResources.searchList) {
     for (const resource of resources) {
       await expect
         .poll(
@@ -220,7 +233,11 @@ export async function userShouldNotSeeTheResources({
   resources
 }: {
   world: World
-  listType: displayedResourceType
+  listType:
+    | typeof displayedResources.searchList
+    | typeof displayedResources.filesList
+    | typeof displayedResources.shares
+    | typeof displayedResources.trashbin
   stepUser: string
   resources: string[]
 }): Promise<void> {
@@ -405,20 +422,18 @@ export async function userCreatesSpaceFromResourcesUsingContexMenu({
 export async function userAddsContentInTextEditor({
   world,
   stepUser,
-  text,
-  editor
+  text
 }: {
   world: World
   stepUser: string
   text: string
-  editor: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   await pageObject.fillDocumentContent({
     page,
     text,
-    editor
+    editor: applications.textEditor
   })
 }
 
@@ -447,12 +462,12 @@ export async function userClosesFileViewer({
 export async function userDeletesResources({
   world,
   stepUser,
-  actionType = 'SIDEBAR_PANEL',
+  actionType = actions.sideBarPanel,
   resources
 }: {
   world: World
   stepUser: string
-  actionType: 'BATCH_ACTION' | 'SIDEBAR_PANEL'
+  actionType: typeof actions.batchAction | typeof actions.sideBarPanel
   resources: { name: string; from?: string }[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
@@ -574,7 +589,11 @@ export async function userDownloadsResource({
   world: World
   stepUser: string
   resourceToDownload: resourceToDownload[]
-  actionType: ActionViaType
+  actionType:
+    | typeof actions.sideBarPanel
+    | typeof actions.batchAction
+    | typeof actions.singleShareView
+    | typeof actions.previewTopBar
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -583,7 +602,11 @@ export async function userDownloadsResource({
 
 export const processDownload = async (
   pageObject: Public | Resource,
-  actionType: ActionViaType,
+  actionType:
+    | typeof actions.sideBarPanel
+    | typeof actions.batchAction
+    | typeof actions.singleShareView
+    | typeof actions.previewTopBar,
   resourceToDownload: resourceToDownload[]
 ) => {
   let downloads, files, parentFolder
@@ -1074,7 +1097,11 @@ export async function userCopiesResources({
 }: {
   world: World
   stepUser: string
-  actionType: 'keyboard' | 'sidebar-panel' | 'dropdown-menu' | 'batch-action'
+  actionType:
+    | typeof actions.keyboard
+    | typeof actions.sideBarPanel
+    | typeof actions.dropDownMenu
+    | typeof actions.batchAction
   resources: { resource: string; to: string; option?: string }[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
@@ -1128,7 +1155,7 @@ export async function userDownloadsThePublicLinkResources({
 }: {
   world: World
   stepUser: string
-  actionType: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  actionType: typeof actions.sideBarPanel | typeof actions.batchAction
   resources: resourceToDownload[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
@@ -1204,16 +1231,16 @@ export async function userRestoresResourcesFromTrashbin({
   world,
   stepUser,
   resources,
-  actionType
+  actionType = actions.batchAction
 }: {
   world: World
   stepUser: string
   resources: string[]
-  actionType?: 'BATCH_ACTION'
+  actionType?: typeof actions.batchAction | typeof actions.sideBarPanel
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  if (actionType === 'BATCH_ACTION') {
+  if (actionType === actions.batchAction) {
     const message = await resourceObject.batchRestoreTrashBin({ resources })
     expect(message).toBe(`${resources.length} files restored successfully`)
   } else {
@@ -1253,7 +1280,7 @@ export async function userCreatesFileFromTemplateFile({
   stepUser: string
   file: string
   webOffice: string
-  actionType: 'sidebar panel' | 'context menu'
+  actionType: typeof actions.sideBarPanel | typeof actions.contextMenu
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -1284,7 +1311,7 @@ export async function userDuplicatesResources({
 }: {
   world: World
   stepUser: string
-  method: 'sidebar-panel' | 'dropdown-menu' | 'batch-action'
+  method: typeof actions.sideBarPanel | typeof actions.dropDownMenu | typeof actions.batchAction
   resources: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
@@ -1306,14 +1333,19 @@ async function performCopyOrMoveMultipleResources({
   stepUser: string
   actionType: 'copy' | 'move'
   newLocation: string
-  method: 'dropdown-menu' | 'batch-action' | 'drag-drop' | 'drag-drop-breadcrumb' | 'keyboard'
+  method:
+    | typeof actions.dropDownMenu
+    | typeof actions.batchAction
+    | typeof actions.dragDrop
+    | typeof actions.dragDropBreadcrumb
+    | typeof actions.keyboard
   resources: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
   // drag-n-drop always does MOVE
-  if (method.includes('drag-drop')) {
+  if (method.includes(actions.dragDrop)) {
     expect(actionType).toBe('move')
   }
 
@@ -1339,7 +1371,11 @@ export async function userShouldSeeShareIndicatorOnResource({
 }: {
   world: World
   stepUser: string
-  buttonLabel: 'link-direct' | 'link-indirect' | 'user-direct' | 'user-indirect'
+  buttonLabel:
+    | typeof buttonLabels.linkDirect
+    | typeof buttonLabels.linkIndirect
+    | typeof buttonLabels.userDirect
+    | typeof buttonLabels.userIndirect
   resource: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
@@ -1360,7 +1396,11 @@ export async function userShouldNotSeeShareIndicatorOnResource({
 }: {
   world: World
   stepUser: string
-  buttonLabel: 'link-direct' | 'link-indirect' | 'user-direct' | 'user-indirect'
+  buttonLabel:
+    | typeof buttonLabels.linkDirect
+    | typeof buttonLabels.linkIndirect
+    | typeof buttonLabels.userDirect
+    | typeof buttonLabels.userIndirect
   resource: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })

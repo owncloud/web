@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import { displayedResources, actions } from '../../support/constants'
 
 test.describe('deny space access', () => {
   test('deny and grant access', async ({ world }) => {
@@ -65,7 +66,7 @@ test.describe('deny space access', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'f1',
@@ -88,7 +89,7 @@ test.describe('deny space access', () => {
     //   | f1       |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['f1']
     })
@@ -98,7 +99,7 @@ test.describe('deny space access', () => {
     //   | f2       |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['f2']
     })
@@ -126,7 +127,7 @@ test.describe('deny space access', () => {
     //   | f2       |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['f1', 'f2']
     })

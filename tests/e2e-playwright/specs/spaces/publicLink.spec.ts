@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { applications, actions } from '../../support/constants'
 
 test.describe('spaces public link', () => {
   test.beforeEach(async ({ world }) => {
@@ -184,7 +185,7 @@ test.describe('spaces public link', () => {
     await ui.userIsInFileViewer({
       world,
       stepUser: 'Brian',
-      fileViewerType: 'text-editor'
+      fileViewerType: applications.textEditor
     })
 
     await ui.userClosesFileViewer({
@@ -207,7 +208,7 @@ test.describe('spaces public link', () => {
     await ui.userIsInFileViewer({
       world,
       stepUser: 'Brian',
-      fileViewerType: 'text-editor'
+      fileViewerType: applications.textEditor
     })
 
     await ui.userClosesFileViewer({
@@ -276,7 +277,7 @@ test.describe('spaces public link', () => {
     await ui.userIsInFileViewer({
       world,
       stepUser: 'Carol',
-      fileViewerType: 'pdf-viewer'
+      fileViewerType: applications.pdfViewer
     })
 
     await ui.userClosesFileViewer({
@@ -330,7 +331,7 @@ test.describe('spaces public link', () => {
     await ui.userIsInFileViewer({
       world,
       stepUser: 'David',
-      fileViewerType: 'media-viewer'
+      fileViewerType: applications.mediaViewer
     })
 
     await ui.userClosesFileViewer({
@@ -400,7 +401,7 @@ test.describe('spaces public link', () => {
     await ui.userDownloadsThePublicLinkResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ resource: 'example.txt', type: 'file' }]
     })
 
@@ -425,7 +426,7 @@ test.describe('spaces public link', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ name: 'renamed.txt' }, { name: 'new-lorem.txt' }]
     })
   })

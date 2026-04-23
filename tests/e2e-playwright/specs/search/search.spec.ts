@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { actions, displayedResources, searchFilters } from '../../support/constants'
 
 test.describe('Search', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -45,7 +46,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Brian',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'new_share_from_brian',
@@ -99,7 +100,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'foldeR',
-      filter: 'all files'
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource |
@@ -107,7 +108,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | FolDer   |
     await ui.userShouldSeeResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer']
     })
@@ -119,7 +120,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | .hidden-file.txt     |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['new_share_from_brian', 'new-lorem-big.txt', '.hidden-file.txt']
     })
@@ -130,14 +131,14 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'hidden',
-      filter: 'all files'
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource         |
     //   | .hidden-file.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['.hidden-file.txt']
     })
@@ -149,7 +150,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | new-lorem-big.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer', 'PARENT', 'new-lorem-big.txt']
     })
@@ -160,7 +161,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'child',
-      filter: 'all files'
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource  |
@@ -168,7 +169,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | child-two |
     await ui.userShouldSeeResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['child-one', 'child-two']
     })
@@ -181,7 +182,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | new-lorem-big.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer', 'folder_from_brian', '.hidden-file.txt', 'new-lorem-big.txt']
     })
@@ -192,7 +193,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'NEW',
-      filter: 'all files'
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource             |
@@ -200,7 +201,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | new-lorem-big.txt    |
     await ui.userShouldSeeResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['new_share_from_brian', 'new-lorem-big.txt']
     })
@@ -211,7 +212,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | .hidden-file.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer', '.hidden-file.txt']
     })
@@ -240,7 +241,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'rena',
-      filter: 'all files'
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource      |
@@ -248,7 +249,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | renamedFolDer |
     await ui.userShouldSeeResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['renamedFolder', 'renamedFolDer']
     })
@@ -258,7 +259,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | FolDer   |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer']
     })
@@ -269,7 +270,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'strängéनेपालीName',
-      filter: 'all files',
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
     // And "Alice" enables the option to search title only
@@ -278,7 +279,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | strängéनेपालीName |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['strängéनेपालीName']
     })
@@ -290,7 +291,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ name: 'strängéनेपालीName' }]
     })
 
@@ -299,7 +300,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'forDeleting',
-      filter: 'all files'
+      filter: searchFilters.allFiles
     })
     // Then following resources should not be displayed in the search list for user "Alice"
     //   | resource          |
@@ -357,7 +358,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'example',
-      filter: 'all files'
+      filter: searchFilters.allFiles
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource                          |
@@ -366,7 +367,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | exampleInsideTheSubFolder.txt     |
     await ui.userShouldSeeResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: [
         'exampleInsideThePersonalSpace.txt',
@@ -380,7 +381,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'example',
-      filter: 'current folder'
+      filter: searchFilters.currentFolder
     })
     // Then following resources should be displayed in the search list for user "Alice"
     //   | resource                       |
@@ -388,7 +389,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | exampleInsideTheSubFolder.txt  |
     await ui.userShouldSeeResources({
       world,
-      listType: 'search list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['exampleInsideTheMainFolder.txt', 'exampleInsideTheSubFolder.txt']
     })
@@ -445,7 +446,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'mediaTest',
-      filter: 'all files',
+      filter: searchFilters.allFiles,
       command: 'presses enter'
     })
     // And "Alice" selects mediaType "Document" from the search result filter chip
@@ -461,12 +462,12 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mediaTest.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest.txt']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'mediaType' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.mediaType })
     // When "Alice" selects mediaType "PDF" from the search result filter chip
     await ui.userFiltersSearchByMediaType({
       world,
@@ -478,12 +479,12 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mediaTest.pdf |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest.pdf']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'mediaType' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.mediaType })
     // When "Alice" selects mediaType "Audio" from the search result filter chip
     await ui.userFiltersSearchByMediaType({
       world,
@@ -495,12 +496,12 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mediaTest.mp3 |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest.mp3']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'mediaType' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.mediaType })
     // When "Alice" selects mediaType "Archive" from the search result filter chip
     await ui.userFiltersSearchByMediaType({
       world,
@@ -512,12 +513,12 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mediaTest.zip |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest.zip']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'mediaType' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.mediaType })
 
     // # multiple choose
     // When "Alice" selects mediaType "Folder" from the search result filter chip
@@ -538,7 +539,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mediaTest.jpg |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest', 'mediaTest.jpg']
     })
@@ -602,7 +603,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       keyword: 'mediaTest',
-      filter: 'current folder',
+      filter: searchFilters.currentFolder,
       command: 'presses enter'
     })
     // And "Alice" selects lastModified "last 30 days" from the search result filter chip
@@ -620,7 +621,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mainFolder/mediaTest.md  |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.pdf', 'mainFolder/mediaTest.txt', 'mainFolder/mediaTest.md']
     })
@@ -636,7 +637,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mainFolder/mediaTest.md  |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.txt', 'mainFolder/mediaTest.md']
     })
@@ -645,7 +646,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mainFolder/mediaTest.pdf |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.pdf']
     })
@@ -660,7 +661,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mainFolder/mediaTest.md |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.md']
     })
@@ -670,12 +671,12 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mainFolder/mediaTest.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.searchList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.pdf', 'mainFolder/mediaTest.txt']
     })
     // And "Alice" clears lastModified filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: 'lastModified' })
+    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilters.lastModified })
     // And "Alice" logs out
     await ui.userLogsOut({ world, stepUser: 'Alice' })
   })

@@ -3,6 +3,7 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 import { shareRoles } from '../../../support/api/share/share'
+import { actions } from '../../../../e2e-playwright/support/constants'
 
 Then(
   /^"([^"]*)" (should|should not) see the following space(?:s)?$/,
@@ -31,13 +32,13 @@ When(
     const spaceId = spacesObject.getUUID({ key })
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ spaceIds: [spaceId], via: 'context-menu' })
+        await spacesObject.disable({ spaceIds: [spaceId], via: actions.contextMenu })
         break
       case 'deletes':
-        await spacesObject.delete({ spaceIds: [spaceId], via: 'context-menu' })
+        await spacesObject.delete({ spaceIds: [spaceId], via: actions.contextMenu })
         break
       case 'enables':
-        await spacesObject.enable({ spaceIds: [spaceId], via: 'context-menu' })
+        await spacesObject.enable({ spaceIds: [spaceId], via: actions.contextMenu })
         break
       default:
         throw new Error(`${action} not implemented`)
@@ -65,7 +66,7 @@ When(
         await spacesObject.changeSubtitleUsingContextMenu({ key, value })
         break
       case 'quota':
-        await spacesObject.changeQuota({ spaceIds: [spaceId], value, via: 'context-menu' })
+        await spacesObject.changeQuota({ spaceIds: [spaceId], value, via: actions.contextMenu })
         break
       default:
         throw new Error(`'${attribute}' not implemented`)
@@ -91,7 +92,7 @@ When(
     await spacesObject.changeQuota({
       spaceIds,
       value,
-      via: 'batch-actions'
+      via: actions.batchAction
     })
   }
 )
@@ -113,13 +114,13 @@ When(
     }
     switch (action) {
       case 'disables':
-        await spacesObject.disable({ spaceIds, via: 'batch-actions' })
+        await spacesObject.disable({ spaceIds, via: actions.batchAction })
         break
       case 'deletes':
-        await spacesObject.delete({ spaceIds, via: 'batch-actions' })
+        await spacesObject.delete({ spaceIds, via: actions.batchAction })
         break
       case 'enables':
-        await spacesObject.enable({ spaceIds, via: 'batch-actions' })
+        await spacesObject.enable({ spaceIds, via: actions.batchAction })
         break
       default:
         throw new Error(`'${action}' not implemented`)

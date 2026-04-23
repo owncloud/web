@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import { displayedResources } from '../../support/constants'
 
 test.describe('create Space shortcut', () => {
   test.beforeEach(async ({ world }) => {
@@ -76,7 +77,7 @@ test.describe('create Space shortcut', () => {
     //   | lorem.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['data.zip', 'lorem.txt']
     })
@@ -128,7 +129,7 @@ test.describe('create Space shortcut', () => {
     //   | lorem.txt       |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['resourceFolder', 'lorem.txt']
     })
