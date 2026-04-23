@@ -184,32 +184,26 @@ export async function userShouldSeeResources({
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  // For search results, use polling to wait for tika indexing in CI
-  if (listType === 'search list') {
-    for (const resource of resources) {
-      await expect
-        .poll(
-          async () => {
-            const actualList = await resourceObject.getDisplayedResources({
-              keyword: listType
-            })
-            return actualList.includes(resource)
-          },
-          {
-            message: `Waiting for resource "${resource}" to appear in search results`,
-            timeout: 30000, // 30 seconds for tika indexing
-            intervals: [500, 1000, 2000] // Retry with increasing delays
-          }
-        )
-        .toBe(true)
-    }
-  } else {
-    const actualList = await resourceObject.getDisplayedResources({
-      keyword: listType
-    })
-    for (const resource of resources) {
-      expect(actualList).toContain(resource)
-    }
+
+  // search list waits longer for tika full-text indexing; other lists only need UI render time
+  const timeout = listType === 'search list' ? 30000 : 10000
+
+  for (const resource of resources) {
+    await expect
+      .poll(
+        async () => {
+          const actualList = await resourceObject.getDisplayedResources({
+            keyword: listType
+          })
+          return actualList.includes(resource)
+        },
+        {
+          message: `Waiting for resource "${resource}" to appear in ${listType}`,
+          timeout,
+          intervals: [500, 1000, 2000]
+        }
+      )
+      .toBe(true)
   }
 }
 
