@@ -504,8 +504,8 @@ importers:
         specifier: 3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3))
       uuid:
-        specifier: 13.0.0
-        version: 13.0.0
+        specifier: 14.0.0
+        version: 14.0.0
       vue-concurrency:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.29(typescript@5.9.3))
@@ -597,8 +597,8 @@ importers:
         specifier: ^6.14.2
         version: 6.14.2
       uuid:
-        specifier: 13.0.0
-        version: 13.0.0
+        specifier: 14.0.0
+        version: 14.0.0
       vue-concurrency:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.29(typescript@5.9.3))
@@ -664,8 +664,8 @@ importers:
         specifier: 6.14.2
         version: 6.14.2
       uuid:
-        specifier: 13.0.0
-        version: 13.0.0
+        specifier: 14.0.0
+        version: 14.0.0
       vue-concurrency:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.29(typescript@5.9.3))
@@ -707,8 +707,8 @@ importers:
         specifier: 4.17.23
         version: 4.17.23
       uuid:
-        specifier: 13.0.0
-        version: 13.0.0
+        specifier: 14.0.0
+        version: 14.0.0
       vue-concurrency:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.29(typescript@5.9.3))
@@ -734,8 +734,8 @@ importers:
         specifier: ^2.4.6
         version: 2.4.6
       uuid:
-        specifier: ^13.0.0
-        version: 13.0.0
+        specifier: ^14.0.0
+        version: 14.0.0
       vitest-mock-extended:
         specifier: 3.1.0
         version: 3.1.0(typescript@5.9.3)(vitest@4.0.18(@types/node@25.3.2)(happy-dom@20.8.9)(jsdom@27.2.0)(sass@1.94.1)(terser@5.46.0)(yaml@2.8.2))
@@ -874,8 +874,8 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2
       uuid:
-        specifier: ^13.0.0
-        version: 13.0.0
+        specifier: ^14.0.0
+        version: 14.0.0
       webdav:
         specifier: ^5.9.0
         version: 5.9.0
@@ -1032,8 +1032,8 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2
       uuid:
-        specifier: ^13.0.0
-        version: 13.0.0
+        specifier: ^14.0.0
+        version: 14.0.0
       vue-concurrency:
         specifier: ^5.0.3
         version: 5.0.3(vue@3.5.29(typescript@5.9.3))
@@ -1169,8 +1169,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       uuid:
-        specifier: 13.0.0
-        version: 13.0.0
+        specifier: 14.0.0
+        version: 14.0.0
       vue:
         specifier: 3.5.29
         version: 3.5.29(typescript@5.9.3)
@@ -7033,8 +7033,8 @@ packages:
     resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
     hasBin: true
 
-  uuid@13.0.0:
-    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
+  uuid@14.0.0:
+    resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
     hasBin: true
 
   uuid@8.3.2:
@@ -9592,7 +9592,7 @@ snapshots:
 
   '@types/uuid@11.0.0':
     dependencies:
-      uuid: 13.0.0
+      uuid: 14.0.0
 
   '@types/web-bluetooth@0.0.21': {}
 
@@ -13914,7 +13914,7 @@ snapshots:
 
   uuid@11.1.0: {}
 
-  uuid@13.0.0: {}
+  uuid@14.0.0: {}
 
   uuid@8.3.2: {}
 
