@@ -34,6 +34,8 @@ test.describe('details', () => {
   })
 
   test('access token renewal via iframe', async () => {
+    test.setTimeout(config.tokenTimeout * 1000 + config.timeout * 1000)
+
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
