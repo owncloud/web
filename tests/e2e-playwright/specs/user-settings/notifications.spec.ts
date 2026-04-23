@@ -31,6 +31,13 @@ test.describe('Notifications', () => {
 
     await setAccessAndRefreshToken(usersEnvironment)
 
+    // Clean up leftover group state from previous failed runs
+    try {
+      await api.userHasDeletedGroup({ usersEnvironment, stepUser: 'Admin', name: 'sales' })
+    } catch {
+      // group may not exist; that is fine
+    }
+
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
@@ -52,9 +59,13 @@ test.describe('Notifications', () => {
   })
 
   test.afterEach(async () => {
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Carol' })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
+    for (const stepUser of ['Carol', 'Brian', 'Alice']) {
+      try {
+        await ui.logOutUser({ actorsEnvironment, stepUser })
+      } catch {
+        // actor may not have been initialized if the test failed early
+      }
+    }
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Carol' })
@@ -64,6 +75,12 @@ test.describe('Notifications', () => {
       name: 'team',
       id: 'team.1'
     })
+    spacesEnvironment.deleteSpace({ key: 'team.1' })
+    try {
+      await api.userHasDeletedGroup({ usersEnvironment, stepUser: 'Admin', name: 'sales' })
+    } catch {
+      // group only exists in the first test; ignore if absent
+    }
   })
 
   test('user should be able to read and dismiss notifications', async () => {
@@ -271,9 +288,7 @@ test.describe('Notifications', () => {
     //   | message                         |
     //   | %user_alice_displayName% deleted Space team |
     messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Brian' })
-    expect(messages).toContain(substitute('%user_alice_displayName% delete Space team'))
-
-    await api.userHasDeletedGroup({ usersEnvironment, stepUser: 'Admin', name: 'sales' })
+    expect(messages).toContain(substitute('%user_alice_displayName% deleted Space team'))
   })
 
   test('user should not get any notification when notification is disabled', async () => {
@@ -298,7 +313,7 @@ test.describe('Notifications', () => {
     })
 
     // And "Brian" logs in
-    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
+    await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
     // And "Brian" opens the user menu
     await ui.userOpensAccountPage({ actorsEnvironment, stepUser: 'Brian' })
@@ -444,7 +459,7 @@ test.describe('Notifications', () => {
     })
 
     // Then "Carol" should see no notifications
-    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Coral' })
+    messages = await ui.getNotificationMessages({ actorsEnvironment, stepUser: 'Carol' })
     expect(messages).toHaveLength(0)
   })
 })

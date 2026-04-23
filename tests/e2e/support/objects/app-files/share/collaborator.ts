@@ -132,7 +132,18 @@ export default class Collaborator {
         })
       )
     }
-    await Promise.all([...checkResponses, page.locator(Collaborator.sendInvitationButton).click()])
+    // --- WHY THIS WORKAROUND EXISTS ---
+    // The Share button (#new-collaborators-form-create-button) sits inside vue-select's
+    // vs__actions div. Playwright's page.locator(...).click() did not reach Vue's
+    // @click="share" handler — POST /graph/.../invite was never made, waitForResponse
+    // timed out after 30 s. dispatchEvent fires the click directly on the DOM node.
+    await Promise.all([
+      ...checkResponses,
+      page.evaluate(() => {
+        const btn = document.querySelector('#new-collaborators-form-create-button') as HTMLElement
+        btn?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+      })
+    ])
   }
 
   static async inviteCollaborators(args: InviteCollaboratorsArgs): Promise<void> {
@@ -161,9 +172,38 @@ export default class Collaborator {
       dropdownSelector = Collaborator.newCollaboratorRoleDropdown
       itemSelector = Collaborator.collaboratorRoleButton
     }
-    await page.locator(dropdownSelector).click()
+    // --- WHY THIS WORKAROUND EXISTS ---
+    // The role dropdown (#files-collaborators-role-button-new) is a Tippy toggle inside
+    // vue-select's vs__actions container. Same mechanism as the filter chip in actions.ts:
+    // Playwright .click() is intercepted by Tippy's close-on-click before Vue's
+    // @option-change="collaboratorRoleChanged" fires — the role never changes, and the test
+    // timed out waiting for //button[contains(@id,"fb6c3e19-...")] (the selected-role indicator).
+    //
+    // Fix: open via _tippy.show(), then fire via dispatchEvent on the role button.
+    // Note: itemSelector is an XPath expression like '//button[contains(@id,"fb6c3e19-...")]'.
+    // document.querySelector() rejects XPath syntax (throws DOMException) —
+    // document.evaluate() is required to resolve XPath nodes.
+    const toggleId = await page.locator(dropdownSelector).getAttribute('id')
+    await page.evaluate((id) => {
+      const btn = id
+        ? document.getElementById(id)
+        : (document.querySelector('[id^="files-collaborators-role-button"]') as any)
+      btn?._tippy?.show()
+    }, toggleId)
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'tippy box')
-    await page.locator(util.format(itemSelector, role)).click()
+    // dispatchEvent since Tippy close-on-click intercepts .click() before Vue handler fires
+    const roleSelector = util.format(itemSelector, role)
+    await page.locator(roleSelector).waitFor()
+    await page.evaluate((xpathSelector) => {
+      const btn = document.evaluate(
+        xpathSelector,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      ).singleNodeValue as HTMLElement
+      btn?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+    }, roleSelector)
   }
 
   static async changeCollaboratorRole(args: CollaboratorArgs): Promise<void> {

@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import { config } from './../../../e2e/config.js'
 import {
   ActorsEnvironment,
@@ -75,8 +75,14 @@ test.describe('deny space access', () => {
     await api.userHasCreatedFolderInSpace({
       usersEnvironment,
       stepUser: 'Alice',
-      spaceName: 'team',
-      folder: 'spaceFolder'
+      spaceName: 'sales',
+      folder: 'f1'
+    })
+    await api.userHasCreatedFolderInSpace({
+      usersEnvironment,
+      stepUser: 'Alice',
+      spaceName: 'sales',
+      folder: 'f2'
     })
 
     // And "Alice" adds the following members to the space "sales" using API
@@ -85,7 +91,7 @@ test.describe('deny space access', () => {
     await api.userHasAddedMembersToSpace({
       usersEnvironment,
       stepUser: 'Alice',
-      space: 'team',
+      space: 'sales',
       shareType: 'user',
       sharee: 'Brian',
       role: 'Can edit'

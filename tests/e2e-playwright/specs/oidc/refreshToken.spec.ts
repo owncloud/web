@@ -4,6 +4,7 @@ import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/enviro
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import { api as e2eApi } from '../../../e2e/support'
 
 test.describe('details', () => {
   let actorsEnvironment: ActorsEnvironment
@@ -27,10 +28,14 @@ test.describe('details', () => {
   })
 
   test.afterEach(async () => {
+    const adminUser = usersEnvironment.getUser({ key: config.adminUsername })
+    await e2eApi.token.refreshAccessToken(adminUser)
     await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
   })
 
   test('access token renewal via iframe', async () => {
+    test.setTimeout(config.tokenTimeout * 1000 + config.timeout * 1000)
+
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |

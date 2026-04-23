@@ -19,4 +19,8 @@ export class SpacesEnvironment {
 
     return space
   }
+
+  deleteSpace({ key }: { key: string }): void {
+    createdSpaceStore.delete(key)
+  }
 }
