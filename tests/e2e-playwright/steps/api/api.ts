@@ -276,10 +276,10 @@ export async function usersHaveBeenAddedToGroup({
   stepUser: string
   usersToAdd: { user: string; group: string }[]
 }) {
-  const admin = world.usersEnvironment.getUser({ key: stepUser })
+  const admin = world.usersEnvironment.getUser({ key: stepUser, world })
   for (const info of usersToAdd) {
-    const group = world.usersEnvironment.getGroup({ key: info.group })
-    const user = world.usersEnvironment.getUser({ key: info.user })
+    const group = world.usersEnvironment.getGroup({ key: info.group, world })
+    const user = world.usersEnvironment.getUser({ key: info.user, world })
     await api.graph.addUserToGroup({ user, group, admin })
   }
 }

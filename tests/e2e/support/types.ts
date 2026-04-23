@@ -4,6 +4,7 @@ export interface Link {
   name: string
   url: string
   password?: string
+  originalId?: string
 }
 
 export interface Space {
@@ -53,6 +54,7 @@ export interface Group {
   id: string
   displayName: string
   groupTypes?: string[]
+  originalId?: string
 }
 
 export interface Token {

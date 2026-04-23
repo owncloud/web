@@ -108,8 +108,11 @@ export const createGroup = async ({
 
   const usersEnvironment = new UsersEnvironment()
   const resBody = (await response.json()) as Group
-  usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: resBody.id } })
-  return group
+  // Store with originalId for parallel safety
+  usersEnvironment.storeCreatedGroup({
+    group: { ...group, uuid: resBody.id, originalId: group.id }
+  })
+  return { ...group, uuid: resBody.id, originalId: group.id }
 }
 
 export const deleteGroup = async ({
@@ -141,7 +144,8 @@ export const addUserToGroup = async ({
 }): Promise<void> => {
   const usersEnvironment = new UsersEnvironment()
   const userId = usersEnvironment.getCreatedUser({ key: user.originalId || user.id }).uuid
-  const groupId = usersEnvironment.getCreatedGroup({ key: group.id }).uuid
+  // Use originalId for group lookup for parallel safety
+  const groupId = usersEnvironment.getCreatedGroup({ key: group.originalId || group.id }).uuid
   const body = JSON.stringify({
     '@odata.id': join(config.baseUrl, 'graph', 'v1.0', 'users', userId)
   })
@@ -149,10 +153,11 @@ export const addUserToGroup = async ({
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1.0', 'groups', groupId, 'members', '$ref'),
-    body: body,
+    body,
     user: admin
   })
-  checkResponseStatus(response, 'Failed while adding an user to the group')
+
+  checkResponseStatus(response, `Failed to add user ${user.id} to group ${group.id}`)
 }
 
 export const assignRole = async (admin: User, id: string, role: string): Promise<void> => {

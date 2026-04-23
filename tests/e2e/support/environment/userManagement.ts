@@ -120,14 +120,18 @@ export class UsersEnvironment {
 
   getCreatedGroup({ key }: { key: string }): Group {
     const groupKey = key.toLowerCase()
+    if (!createdGroupStore.has(groupKey)) {
+      throw new Error(`group with key '${groupKey}' not found`)
+    }
     return createdGroupStore.get(groupKey)
   }
 
   storeCreatedGroup({ group }: { group: Group }): Group {
-    if (createdGroupStore.has(group.id)) {
-      throw new Error(`group with key '${group.id}' already exists`)
+    const groupKey = (group.originalId || group.id).toLowerCase()
+    if (createdGroupStore.has(groupKey)) {
+      throw new Error(`group with key '${groupKey}' already exists`)
     }
-    createdGroupStore.set(group.id, group)
+    createdGroupStore.set(groupKey, group)
 
     return group
   }
