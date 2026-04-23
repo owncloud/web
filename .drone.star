@@ -101,7 +101,6 @@ config = {
                 "cucumber/features/admin-settings/users.feature:106",
                 "cucumber/features/admin-settings/users.feature:131",
                 "cucumber/features/admin-settings/users.feature:185",
-                "cucumber/features/keycloak",
             ],
             "extraServerEnvironment": {
                 "PROXY_AUTOPROVISION_ACCOUNTS": "true",
@@ -219,8 +218,8 @@ config = {
         "keycloak": {
             "earlyFail": True,
             "skip": False,
-            "features": [
-                "specs/admin-settings/spaces.spec.ts",
+            "suites": [
+                "keycloak",
             ],
             "extraServerEnvironment": {
                 "PROXY_AUTOPROVISION_ACCOUNTS": "true",

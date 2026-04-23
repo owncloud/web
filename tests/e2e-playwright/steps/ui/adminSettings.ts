@@ -1,6 +1,6 @@
-import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { World } from '../../support/world'
+import { expect } from '@playwright/test'
 
 export async function userNavigatesToGeneralManagementPage({
   world,
@@ -201,4 +201,39 @@ export async function userChangesUserQuota({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
   await usersObject.changeQuota({ key, value, action: 'context-menu' })
+}
+
+export async function userAddsUserToGroup({
+  world,
+  stepUser,
+  action,
+  groups,
+  user
+}: {
+  world: World
+  stepUser: string
+  action: string
+  groups: string[]
+  user: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  switch (action) {
+    case 'adds':
+      await usersObject.addToGroups({
+        key: user,
+        groups,
+        action: 'context-menu'
+      })
+      break
+    case 'removes':
+      await usersObject.removeFromGroups({
+        key: user,
+        groups,
+        action: 'context-menu'
+      })
+      break
+    default:
+      throw new Error(`'${action}' not implemented`)
+  }
 }

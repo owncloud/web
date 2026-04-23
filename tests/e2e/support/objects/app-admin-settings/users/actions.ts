@@ -310,6 +310,11 @@ export const addUserToGroups = async (args: {
   for (const group of groups) {
     groupIds.push(getGroupId(group))
     await page.locator(groupsInput).pressSequentially(group)
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['.vs__dropdown-menu'],
+      'login page'
+    )
     await page.keyboard.press('Enter')
   }
 
@@ -332,6 +337,7 @@ export const addUserToGroups = async (args: {
   }
 
   await Promise.all([...checkResponses, page.locator(compareDialogConfirm).click()])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['appSidebar'], 'login page')
 }
 
 export const removeUserFromGroups = async (args: {
@@ -363,6 +369,7 @@ export const removeUserFromGroups = async (args: {
   }
 
   await Promise.all([...checkResponses, page.locator(compareDialogConfirm).click()])
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['appSidebar'], 'login page')
 }
 
 export const openEditPanel = async (args: {

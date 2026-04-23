@@ -51,6 +51,8 @@ export const selectors = {
   logoWrapper: '.logo-wrapper',
   fileAppBar: '#files-app-bar',
   pageNotFound: '.page-not-found',
+  adminSettingsWrapper: '#admin-settings-wrapper',
+  adminSettingAppBar: '#admin-settings-app-bar',
   createGroupInput: '#create-group-input-display-name',
   actionConfirmButton: '.oc-modal-body-actions-confirm',
   contextMenuContainer: '#oc-files-context-menu',
