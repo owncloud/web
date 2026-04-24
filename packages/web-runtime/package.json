@@ -27,7 +27,7 @@
     "email-validator": "2.0.4",
     "dompurify": "^3.3.1",
     "focus-trap-vue": "^4.1.0",
-    "focus-trap": "8.0.0",
+    "focus-trap": "8.0.1",
     "fuse.js": "7.1.0",
     "lodash-es": "4.17.23",
     "luxon": "3.7.2",
