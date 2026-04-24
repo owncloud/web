@@ -993,8 +993,8 @@ importers:
         specifier: ^8.11.1
         version: 8.11.1
       marked:
-        specifier: ^17.0.4
-        version: 17.0.4
+        specifier: ^17.0.6
+        version: 17.0.6
       md-editor-v3:
         specifier: ^6.3.1
         version: 6.3.1(vue@3.5.29(typescript@5.9.3))
@@ -5516,8 +5516,8 @@ packages:
     engines: {node: '>= 20'}
     hasBin: true
 
-  marked@17.0.4:
-    resolution: {integrity: sha512-NOmVMM+KAokHMvjWmC5N/ZOvgmSWuqJB8FoYI019j4ogb/PeRMKoKIjReZ2w3376kkA8dSJIP8uD993Kxc0iRQ==}
+  marked@17.0.6:
+    resolution: {integrity: sha512-gB0gkNafnonOw0obSTEGZTT86IuhILt2Wfx0mWH/1Au83kybTayroZ/V6nS25mN7u8ASy+5fMhgB3XPNrOZdmA==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -12320,7 +12320,7 @@ snapshots:
 
   marked@16.4.2: {}
 
-  marked@17.0.4: {}
+  marked@17.0.6: {}
 
   marks-pane@1.0.9: {}
 
