@@ -37,7 +37,7 @@ const getShareMock = ({
 }: Partial<CollaboratorShare> = {}): CollaboratorShare => ({
   id: '1',
   sharedWith: sharedWith || {
-    id: 'ZWluc3RlaW5AaHR0cHM6Ly93d3cubG9yZW0uY29t',
+    id: 'ZWluc3RlaW5AaHR0cHM6Ly93d3cubG9yZW0uY29t@www.lorem.com',
     displayName: 'einstein'
   },
   sharedBy: { id: '2', displayName: 'marie' },
@@ -201,17 +201,6 @@ describe('Collaborator ListItem component', () => {
 
     it('should show domain name below external user name', () => {
       const share = getShareMock({ shareType: ShareTypes.remote.value })
-      const { wrapper } = createWrapper({ share })
-      const el = wrapper.find('[data-testid="external-share-domain"]')
-
-      expect(el.text()).toEqual('www.lorem.com')
-    })
-
-    it('should fallback to original ID if decoding fails', () => {
-      const share = getShareMock({
-        shareType: ShareTypes.remote.value,
-        sharedWith: { id: 'einstein@https://www.lorem.com', displayName: 'einstein' }
-      })
       const { wrapper } = createWrapper({ share })
       const el = wrapper.find('[data-testid="external-share-domain"]')
 

@@ -33,6 +33,7 @@ import { call, Resource } from '@ownclouders/web-client'
 import { DateTime } from 'luxon'
 import { Activity } from '@ownclouders/web-client/graph/generated'
 import escape from 'lodash-es/escape'
+import DOMPurify from 'dompurify'
 
 const visibilityObserver = new VisibilityObserver()
 const rootElement = ref<HTMLElement>()
@@ -67,13 +68,13 @@ const isLoading = computed(() => {
 })
 
 const getHtmlFromActivity = (activity: Activity) => {
-  let message = activity.template.message
+  let message = escape(activity.template.message)
   for (const [key, value] of Object.entries(activity.template.variables)) {
     const escapedValue = escape(value.displayName || value.name)
 
-    message = message.replace(`{${key}}`, `<strong>${escapedValue}</strong>`)
+    message = message.replace(escape(`{${key}}`), `<strong>${escapedValue}</strong>`)
   }
-  return message
+  return DOMPurify.sanitize(message, { ALLOWED_TAGS: ['strong', 'em', 'b', 'i'], ALLOWED_ATTR: [] })
 }
 
 const getTimeFromActivity = (activity: Activity) => {
