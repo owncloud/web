@@ -82,22 +82,56 @@ export interface openSpaceArgs {
 export const openSpace = async (args: openSpaceArgs): Promise<void> => {
   const { page, id } = args
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
-  const locator = page.locator(util.format(spaceIdSelector, id))
-  // Debug: log expected id and all visible space ids with names before waiting for the target space
-  // eslint-disable-next-line no-console
-  console.log('DEBUG: Looking for space id:', id)
-  const allSpaceDetails = await page.$$eval('[data-item-id]', (els) =>
-    els.map((e) => ({
-      id: e.getAttribute('data-item-id'),
-      name: e.querySelector('.oc-resource-basename')?.textContent?.trim()
-    }))
-  )
-  // eslint-disable-next-line no-console
-  console.log('DEBUG: Visible spaces with names:', allSpaceDetails)
-  await locator.waitFor({ state: 'visible', timeout: 30000 }) // Wait up to 30s for the space to appear
-  await locator.click()
-  await page.locator(spaceHeaderSelector).waitFor({ state: 'visible', timeout: 15000 })
-  await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
+  
+  // Retry logic: handle spaces disappearing temporarily in parallel tests
+  const maxRetries = 3
+  const retryDelay = 2000 // 2 seconds between retries
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const locator = page.locator(util.format(spaceIdSelector, id))
+      // Debug: log expected id and all visible space ids with names
+      // eslint-disable-next-line no-console
+      console.log(`DEBUG: Attempt ${attempt}/${maxRetries} - Looking for space id:`, id)
+      const allSpaceDetails = await page.$$eval('[data-item-id]', (els) =>
+        els.map((e) => ({
+          id: e.getAttribute('data-item-id'),
+          name: e.querySelector('.oc-resource-basename')?.textContent?.trim()
+        }))
+      )
+      // eslint-disable-next-line no-console
+      console.log(`DEBUG: Attempt ${attempt} - Visible spaces with names:`, allSpaceDetails)
+      
+      await locator.waitFor({ state: 'visible', timeout: 30000 })
+      await locator.click()
+      await page.locator(spaceHeaderSelector).waitFor({ state: 'visible', timeout: 15000 })
+      await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
+      return // Success - exit function
+    } catch (error) {
+      // Check if page is still valid before retrying
+      if (!page || page.isClosed()) {
+        throw new Error('Page closed during retry, cannot continue')
+      }
+      
+      if (attempt === maxRetries) {
+        // eslint-disable-next-line no-console
+        console.log(`DEBUG: All ${maxRetries} attempts failed for space id:`, id)
+        throw error // Re-throw on final attempt
+      }
+      // eslint-disable-next-line no-console
+      console.log(`DEBUG: Retry ${attempt} failed, waiting ${retryDelay}ms before retry...`)
+      try {
+        await page.waitForTimeout(retryDelay)
+        // Refresh the page to get latest space list (only if page is still valid)
+        if (!page.isClosed()) {
+          await page.reload({ waitUntil: 'load' })
+        }
+      } catch {
+        // Page closed during wait - re-throw original error
+        throw new Error('Page closed during retry, cannot continue')
+      }
+    }
+  }
 }
 /**/
 
