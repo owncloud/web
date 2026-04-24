@@ -1,6 +1,7 @@
 <template>
   <iframe
     v-if="appUrl && method === 'GET'"
+    ref="appIframeRef"
     :src="appUrl"
     class="oc-width-1-1 oc-height-1-1"
     :title="iFrameTitle"
@@ -15,6 +16,7 @@
       </div>
     </form>
     <iframe
+      ref="appIframeRef"
       name="app-iframe"
       :src="appUrl"
       class="oc-width-1-1 oc-height-1-1"
@@ -27,7 +29,18 @@
 
 <script lang="ts" setup>
 import { stringify } from 'qs'
-import { computed, inject, unref, nextTick, ref, watch, VNodeRef, onMounted, type Ref } from 'vue'
+import {
+  computed,
+  inject,
+  unref,
+  nextTick,
+  ref,
+  watch,
+  VNodeRef,
+  onMounted,
+  onBeforeUnmount,
+  type Ref
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
@@ -38,12 +51,15 @@ import {
   useCapabilityStore,
   useConfigStore,
   useMessages,
+  useModals,
   useRequest,
   useAppProviderService,
   useRoute,
+  useFolderLink,
   queryItemAsString,
   useRouteQuery
 } from '@ownclouders/web-pkg'
+import InsertRemoteFileModal from './components/InsertRemoteFileModal.vue'
 import {
   isProjectSpaceResource,
   isPublicSpaceResource,
@@ -72,6 +88,8 @@ const configStore = useConfigStore()
 const route = useRoute()
 const appProviderService = useAppProviderService()
 const { makeRequest } = useRequest()
+const { dispatchModal } = useModals()
+const { getParentFolderLink } = useFolderLink()
 
 const viewModeQuery = useRouteQuery('view_mode')
 const isMobileWidth =
@@ -97,6 +115,7 @@ const appUrl = ref()
 const formParameters = ref({})
 const method = ref()
 const subm: VNodeRef = ref()
+const appIframeRef = ref<HTMLIFrameElement>()
 
 const iFrameTitle = computed(() => {
   return $gettext('"%{appName}" app content area', {
@@ -179,20 +198,101 @@ const determineOpenAsPreview = (appName: string) => {
   return openAsPreview === true || (Array.isArray(openAsPreview) && openAsPreview.includes(appName))
 }
 
-// switch to write mode when edit is clicked
-const catchClickMicrosoftEdit = (event: MessageEvent) => {
+const IMAGE_MIME_TYPES = [
+  'image/png',
+  'image/jpeg',
+  'image/gif',
+  'image/svg+xml',
+  'image/bmp',
+  'image/webp'
+]
+
+const postMessageToApp = (messageId: string, values?: Record<string, unknown>) => {
+  const iframe = unref(appIframeRef)
+  if (!iframe?.contentWindow) {
+    return
+  }
+  iframe.contentWindow.postMessage(JSON.stringify({ MessageId: messageId, Values: values }), '*')
+}
+
+const openInsertFileModal = ({
+  title,
+  fileTypes,
+  responseMessageId
+}: {
+  title: string
+  fileTypes?: string[]
+  responseMessageId: string
+}) => {
+  const parentFolderLink = getParentFolderLink(props.resource)
+  dispatchModal({
+    elementClass: 'insert-remote-file-modal',
+    title,
+    customComponent: InsertRemoteFileModal,
+    hideActions: true,
+    customComponentAttrs: () => ({
+      parentFolderLink,
+      fileTypes,
+      onSelect: ({ filename, url }: { filename: string; url: string }) => {
+        postMessageToApp(responseMessageId, { filename, url })
+      }
+    }),
+    focusTrapInitial: false
+  })
+}
+
+const handleAppMessage = (event: MessageEvent) => {
   try {
-    if (JSON.parse(event.data)?.MessageId === 'UI_Edit') {
-      loadAppUrl.perform('write')
+    const msg = JSON.parse(event.data)
+    if (!msg?.MessageId) {
+      return
+    }
+
+    switch (msg.MessageId) {
+      // Collabora requires this handshake before it accepts any Action_* messages.
+      // Without it, all postMessages are rejected with "PostMessage ignored: not ready."
+      case 'App_LoadingStatus':
+        if (msg.Values?.Status === 'Document_Loaded') {
+          postMessageToApp('Host_PostmessageReady')
+        }
+        break
+
+      case 'UI_Edit':
+        if (determineOpenAsPreview(unref(appName))) {
+          loadAppUrl.perform('write')
+        }
+        break
+
+      case 'UI_InsertGraphic':
+        openInsertFileModal({
+          title: $gettext('Insert image'),
+          fileTypes: IMAGE_MIME_TYPES,
+          responseMessageId: 'Action_InsertGraphic'
+        })
+        break
+
+      case 'UI_InsertFile': {
+        const callback = msg.Values?.callback
+        const mimeTypeFilter = msg.Values?.mimeTypeFilter
+        openInsertFileModal({
+          title:
+            callback === 'Action_CompareDocuments'
+              ? $gettext('Compare document')
+              : $gettext('Insert multimedia'),
+          fileTypes: mimeTypeFilter,
+          responseMessageId: callback
+        })
+        break
+      }
     }
   } catch {}
 }
+
 onMounted(() => {
-  if (determineOpenAsPreview(unref(appName))) {
-    window.addEventListener('message', catchClickMicrosoftEdit)
-  } else {
-    window.removeEventListener('message', catchClickMicrosoftEdit)
-  }
+  window.addEventListener('message', handleAppMessage)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('message', handleAppMessage)
 })
 
 watch(
