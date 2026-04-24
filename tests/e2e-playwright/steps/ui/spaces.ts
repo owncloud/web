@@ -81,10 +81,17 @@ export async function userAddsMembersToSpace({
   const sharer = world.usersEnvironment.getUser({ key: stepUser })
 
   for (const sharee of members) {
-    const collaborator =
-      sharee.kind === 'user'
-        ? world.usersEnvironment.getUser({ key: sharee.user })
-        : world.usersEnvironment.getGroup({ key: sharee.user })
+    let collaborator
+    if (sharee.kind === 'user') {
+      collaborator = world.usersEnvironment.getUser({ key: sharee.user, world })
+    } else {
+      // For group, use world-aware displayName for dropdown matching
+      const group = world.usersEnvironment.getGroup({ key: sharee.user, world })
+      collaborator = {
+        ...group,
+        displayName: `${group.displayName}`
+      }
+    }
     const roleId = await getDynamicRoleIdByName(sharer, sharee.role, 'space' as ResourceType)
     const collaboratorWithRole = {
       collaborator,

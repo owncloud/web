@@ -63,7 +63,7 @@ export async function userCreatesGroups({
   groupIds: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page, world })
   for (const groupId of groupIds) {
     await groupsObject.createGroup({ key: groupId })
   }
@@ -79,7 +79,7 @@ export async function userShouldSeeGroupIds({
   expectedGroupIds: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page, world })
   const actualGroupsIds = await groupsObject.getDisplayedGroupsIds()
   for (const group of expectedGroupIds) {
     expect(actualGroupsIds).toContain(groupsObject.getUUID({ key: group }))
@@ -96,7 +96,7 @@ export async function userShouldNotSeeGroupIds({
   expectedGroupIds: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page, world })
   const actualGroupsIds = await groupsObject.getDisplayedGroupsIds()
   for (const group of expectedGroupIds) {
     expect(actualGroupsIds).not.toContain(groupsObject.getUUID({ key: group }))
@@ -113,7 +113,7 @@ export async function userShouldSeeGroupDisplayName({
   groupDisplayName: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page, world })
   const groups = await groupsObject.getGroupsDisplayName()
   expect(groups).toContain(groupDisplayName)
 }
@@ -130,7 +130,7 @@ export async function userDeletesGroups({
   groupsToBeDeleted: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page, world })
   const groupIds = []
   switch (actionType) {
     case 'batch actions':
@@ -166,7 +166,7 @@ export async function userChangesGroup({
   action: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const groupsObject = new objects.applicationAdminSettings.Groups({ page })
+  const groupsObject = new objects.applicationAdminSettings.Groups({ page, world })
   await groupsObject.changeGroup({
     key,
     attribute: attribute,
