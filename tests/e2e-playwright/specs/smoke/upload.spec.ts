@@ -215,9 +215,9 @@ test.describe('internal link share', () => {
     // And "Admin" opens the "admin-settings" app
     await ui.userOpensApplication({ world, stepUser: 'Admin', name: 'admin-settings' })
     // And "Admin" navigates to the users management page
-    await ui.userNavigatesToUserManagementPage({ world, stepUser: 'Admin' })
+    await ui.userNavigatesToUsersManagementPage({ world, stepUser: 'Admin' })
     // And "Admin" changes the quota of the user "Alice" to "0.00001" using the sidebar panel
-    await ui.userChangesUserQuota({
+    await ui.userChangesQuotaOfUserUsingContextMenu({
       world,
       stepUser: 'Admin',
       key: 'Alice',
