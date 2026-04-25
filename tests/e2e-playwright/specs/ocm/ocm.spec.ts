@@ -211,7 +211,7 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
     })
 
     // Then "Brian" is in a media-viewer
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Brian',
       fileViewerType: 'media-viewer'
@@ -280,7 +280,7 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
     })
 
     // Then "Brian" is in a media-viewer
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Brian',
       fileViewerType: 'media-viewer'
