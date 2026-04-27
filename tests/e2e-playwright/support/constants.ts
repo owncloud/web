@@ -1,7 +1,7 @@
 export const fileAction = {
-  contextMenu: 'CONTEXT_MENU',
+  contextMenu: 'context-menu',
   batchAction: 'BATCH_ACTION',
-  sideBarPanel: 'SIDEBAR_PANEL',
+  sideBarPanel: 'sidebar panel',
   quickAction: 'QUICK_ACTION',
   urlNavigation: 'URL_NAVIGATION',
   singleShareView: 'SINGLE_SHARE_VIEW',

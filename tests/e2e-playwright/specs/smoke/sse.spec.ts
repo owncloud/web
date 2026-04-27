@@ -735,7 +735,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'drag-drop',
+      actionType: fileAction.dragDrop,
       resources: [{ resource: 'simple-renamed.pdf', to: 'space-folder' }]
     })
     // Then "Alice" should get "item-moved" SSE event

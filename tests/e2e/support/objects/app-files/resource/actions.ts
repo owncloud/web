@@ -18,7 +18,7 @@ import { environment, objects, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
-import { fileAction, application } from '../../../../../e2e-playwright/support/constants'
+import { fileAction, application, searchScope } from '../../../../../e2e-playwright/support/constants'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -822,7 +822,7 @@ export const navigateMediaFile = async ({
     'preview controls action bar'
   )
   await page.locator(util.format(mediaNavigationButton, navigationType)).click()
-  const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType: 'media-viewer' })
+  const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType: application.mediaViewer })
   await expect(fileViewerLocator).toBeVisible()
 
   const currentFileInMediaViewer = await page
@@ -867,7 +867,7 @@ interface resourceArgs {
 }
 
 export type ActionViaType =
-  | 'SIDEBAR_PANEL'
+  | 'sidebar panel'
   | 'BATCH_ACTION'
   | 'SINGLE_SHARE_VIEW'
   | 'PREVIEW_TOPBAR'
@@ -896,7 +896,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
   })
 
   switch (via) {
-    case 'SIDEBAR_PANEL': {
+    case fileAction.sideBarPanel: {
       if (folder) {
         await clickResource({ page, path: folder })
       }
@@ -922,7 +922,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
       break
     }
 
-    case 'BATCH_ACTION': {
+    case fileAction.batchAction: {
       await selectOrDeselectResources({ page, resources, folder, select: true })
       if (resources.length === 1) {
         throw new Error('Single resource cannot be downloaded with batch action')
@@ -940,7 +940,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
       break
     }
 
-    case 'SINGLE_SHARE_VIEW': {
+    case fileAction.singleShareView: {
       if (folder) {
         await clickResource({ page, path: folder })
       }
@@ -964,7 +964,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
       break
     }
 
-    case 'PREVIEW_TOPBAR':
+    case fileAction.previewTopBar:
       await Promise.all([
         page.locator(appBarDownloadFileButton).waitFor(),
         page.locator(appBarContextMenu).click()
@@ -1035,7 +1035,7 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
     }
   }
 
-  if (method === 'dropdown-menu') {
+  if (method === fileAction.dropDownMenu) {
     await page.locator(filesView).click({ button: 'right' })
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
@@ -1091,7 +1091,7 @@ export const moveOrCopyMultipleResources = async (
   }
 
   const waitForMoveResponses = []
-  if (['drag-drop-breadcrumb', 'drag-drop'].includes(method)) {
+  if (method === fileAction.dragDropBreadcrumb || method === fileAction.dragDrop) {
     for (const resource of resources) {
       waitForMoveResponses.push(
         page.waitForResponse(
@@ -1105,7 +1105,7 @@ export const moveOrCopyMultipleResources = async (
   }
 
   switch (method) {
-    case 'dropdown-menu': {
+    case fileAction.dropDownMenu: {
       // after selecting multiple resources, resources can be copied or moved by clicking on any of the selected resources
       await page.locator(highlightedFileRowSelector).first().click({ button: 'right' })
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
@@ -1136,7 +1136,7 @@ export const moveOrCopyMultipleResources = async (
       await page.locator(util.format(filesContextMenuAction, 'copy')).click()
       break
     }
-    case 'batch-action': {
+    case fileAction.batchAction: {
       await selectBatchAction(page, action)
 
       await page.locator(breadcrumbRoot).click()
@@ -1149,7 +1149,7 @@ export const moveOrCopyMultipleResources = async (
       await page.locator(pasteButton).click()
       break
     }
-    case 'keyboard': {
+    case fileAction.keyboard: {
       const keyValue = action === 'copy' ? 'c' : 'x'
       await page.keyboard.press(`ControlOrMeta+${keyValue}`)
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
@@ -1167,7 +1167,7 @@ export const moveOrCopyMultipleResources = async (
       await page.keyboard.press('ControlOrMeta+v')
       break
     }
-    case 'drag-drop': {
+    case fileAction.dragDrop: {
       const source = page.locator(highlightedFileRowSelector).first()
       const target = page.locator(util.format(resourceNameSelector, newLocation))
 
@@ -1176,7 +1176,7 @@ export const moveOrCopyMultipleResources = async (
       await target.click()
       break
     }
-    case 'drag-drop-breadcrumb': {
+    case fileAction.dragDropBreadcrumb: {
       const source = page.locator(highlightedFileRowSelector).first()
       const target = page.locator(
         util.format(
@@ -1206,7 +1206,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
   }
 
   switch (method) {
-    case fileAction.keyboard: {
+    case fileAction.dropDownMenu: {
       await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -1427,7 +1427,7 @@ export interface deleteResourceArgs {
 export const deleteResource = async (args: deleteResourceArgs): Promise<void> => {
   const { page, resourcesWithInfo, folder, via, isPublicLink } = args
   switch (via) {
-    case 'SIDEBAR_PANEL': {
+    case fileAction.sideBarPanel: {
       if (folder) {
         await clickResource({ page, path: folder })
       }
@@ -1458,7 +1458,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
       break
     }
 
-    case 'BATCH_ACTION': {
+    case fileAction.batchAction: {
       await selectOrDeselectResources({ page, resources: resourcesWithInfo, folder, select: true })
 
       const waitResponses = []
@@ -1845,7 +1845,7 @@ export const searchResourceGlobalSearch = async (
     )
     await page
       .locator(
-        filter === 'all files' ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
+        filter === searchScope.allFiles ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
       )
       .click()
   }
@@ -2562,7 +2562,7 @@ export const duplicateResource = async ({
   method: string
 }): Promise<void> => {
   switch (method) {
-    case 'dropdown-menu': {
+    case fileAction.dropDownMenu: {
       await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -2575,7 +2575,7 @@ export const duplicateResource = async ({
       ])
       break
     }
-    case 'batch-action': {
+    case fileAction.batchAction: {
       await page.locator(util.format(checkBox, resource)).click()
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -2588,7 +2588,7 @@ export const duplicateResource = async ({
       ])
       break
     }
-    case 'sidebar-panel': {
+    case fileAction.sideBarPanel: {
       await sidebar.open({ page: page, resource: resource })
       await sidebar.openPanel({ page: page, name: 'actions' })
 
@@ -2627,7 +2627,7 @@ export const duplicateMultipleResources = async ({
   }
 
   switch (method) {
-    case 'dropdown-menu': {
+    case fileAction.dropDownMenu: {
       await page.locator(highlightedFileRowSelector).first().click({ button: 'right' })
       await Promise.all([
         ...resources.map((resource) => waitForResourceDuplicationResponse(page, resource)),
@@ -2635,7 +2635,7 @@ export const duplicateMultipleResources = async ({
       ])
       break
     }
-    case 'batch-action': {
+    case fileAction.batchAction: {
       await Promise.all([
         ...resources.map((resource) => waitForResourceDuplicationResponse(page, resource)),
         selectBatchAction(page, 'duplicate')

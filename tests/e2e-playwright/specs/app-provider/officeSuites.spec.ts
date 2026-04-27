@@ -970,7 +970,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       world,
       stepUser: 'Alice',
       file: 'Template.dotx',
-      webOffice: 'OnlyOffice',
+      webOffice: application.onlyOffice,
       actionType: fileAction.sideBarPanel
     })
 
@@ -979,7 +979,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       world,
       stepUser: 'Alice',
       expectedContent: 'As a user I want to create a document by clicking on a template file',
-      editor: 'OnlyOffice'
+      editor: application.onlyOffice
     })
 
     // And "Alice" closes the file viewer
@@ -990,7 +990,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       world,
       stepUser: 'Alice',
       file: 'Template.ott',
-      webOffice: 'Collabora',
+      webOffice: application.collabora,
       actionType: fileAction.contextMenu
     })
 
@@ -999,7 +999,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       world,
       stepUser: 'Alice',
       expectedContent: 'As a user I want to create a document by clicking on a template file',
-      editor: 'Collabora'
+      editor: application.collabora
     })
 
     // When "Alice" closes the file viewer
@@ -1028,7 +1028,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       world,
       stepUser: 'Alice',
       expectedContent: 'As a user I want to create a document by clicking on a template file',
-      editor: 'OnlyOffice'
+      editor: application.onlyOffice
     })
 
     // When "Alice" closes the file viewer

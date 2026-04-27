@@ -234,7 +234,7 @@ test.describe('link', () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'drag-drop',
+      actionType: fileAction.dragDrop,
       resources: [{ resource: 'new-lorem.txt', to: 'SubFolder' }]
     })
     // And "Anonymous" copies the following resource using sidebar-panel

@@ -1120,12 +1120,12 @@ export async function userMovesResources({
   world: World
   stepUser: string
   actionType:
-    | 'keyboard'
-    | 'sidebar-panel'
-    | 'dropdown-menu'
-    | 'batch-action'
-    | 'drag-drop'
-    | 'drag-drop-breadcrumb'
+    | typeof fileAction.keyboard
+    | typeof fileAction.sideBarPanel
+    | typeof fileAction.dropDownMenu
+    | typeof fileAction.batchAction
+    | typeof fileAction.dragDrop
+    | typeof fileAction.dragDropBreadcrumb
   resources: { resource: string; to: string; option?: string }[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })

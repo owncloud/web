@@ -167,7 +167,7 @@ export async function userManagesSpaceUsingContexMenu({
 }: {
   world: World
   stepUser: string
-  action: string
+  action: 'disables' | 'deletes' | 'enables'
   space: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })

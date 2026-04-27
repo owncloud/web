@@ -164,7 +164,7 @@ export async function userChangesGroup({
   key: string
   attribute: string
   value: string
-  action: typeof fileAction.contextMenu
+  action: typeof fileAction.contextMenu | typeof fileAction.quickAction
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
