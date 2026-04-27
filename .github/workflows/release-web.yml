@@ -1,0 +1,51 @@
+name: Release Web
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  release-web:
+    name: Publish GitHub release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+        with:
+          version: 10.29.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 24.15.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build release
+        run: make dist
+        env:
+          NO_INSTALL: 'true'
+
+      - name: Get release version
+        id: version
+        run: echo "version=$(echo '${{ github.ref_name }}' | sed 's/^v//' | cut -d- -f1)" >> "$GITHUB_OUTPUT"
+
+      - name: Generate release changelog
+        uses: actionhippie/calens@244f3e5c328b842a740113859b87bbebf697f63b # v1.13.1
+        with:
+          version: ${{ steps.version.outputs.version }}
+          target: dist/CHANGELOG.md
+          template: changelog/CHANGELOG-Release.tmpl

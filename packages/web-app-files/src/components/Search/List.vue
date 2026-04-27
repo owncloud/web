@@ -118,7 +118,7 @@
             <span
               v-if="resource.highlights"
               class="files-search-resource-highlights oc-text-truncate"
-              v-html="resource.highlights"
+              v-html="sanitizeHighlights(resource.highlights)"
             />
             <!--eslint-enable-->
           </template>
@@ -181,6 +181,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useTask } from 'vue-concurrency'
+import DOMPurify from 'dompurify'
 import { eventBus } from '@ownclouders/web-pkg'
 import { ItemFilter } from '@ownclouders/web-pkg'
 import { isLocationCommonActive } from '@ownclouders/web-pkg'
@@ -193,6 +194,9 @@ import {
 } from '../../composables/keyboardActions'
 import { extractDomSelector } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
+
+const sanitizeHighlights = (html: string) =>
+  DOMPurify.sanitize(html, { ALLOWED_TAGS: ['mark', 'em', 'strong'], ALLOWED_ATTR: [] })
 
 type Tag = {
   id: string
