@@ -137,7 +137,7 @@ test.describe('Navigate web directly through urls', () => {
     })
 
     // Then "Alice" is in a text-editor
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'text-editor'
@@ -182,7 +182,7 @@ test.describe('Navigate web directly through urls', () => {
       application: 'texteditor'
     })
     // Then "Alice" is in a text-editor
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'text-editor'
@@ -205,7 +205,7 @@ test.describe('Navigate web directly through urls', () => {
       application: 'texteditor'
     })
     // Then "Alice" is in a text-editor
-    await ui.userIsInFileViewer({
+    await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
       fileViewerType: 'text-editor'
