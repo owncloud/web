@@ -106,7 +106,7 @@ jobs:
       BROWSER: chromium
       REPORT_TRACING: false
       FAIL_ON_UNCAUGHT_CONSOLE_ERR: true
-      SKIP_A11Y_TESTS: true
+      SKIP_A11Y_TESTS: false
       TEST_TYPE: playwright
       FEDERATED_BASE_URL_OCIS: localhost:10200
     steps:
