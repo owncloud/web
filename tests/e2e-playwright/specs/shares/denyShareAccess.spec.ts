@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { actions, displayedResources } from '../../support/constants'
+import { fileAction, resourcePage } from '../../support/constants'
 
 test.describe('deny share access', () => {
   test.beforeEach(async ({ world }) => {
@@ -29,7 +29,7 @@ test.describe('deny share access', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'folder_to_shared',
@@ -50,7 +50,7 @@ test.describe('deny share access', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'folder_to_deny',
@@ -80,7 +80,7 @@ test.describe('deny share access', () => {
 
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['folder_to_deny']
     })
@@ -118,7 +118,7 @@ test.describe('deny share access', () => {
     })
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['folder_to_deny']
     })

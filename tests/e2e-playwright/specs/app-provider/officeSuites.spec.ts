@@ -6,7 +6,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { actions, applications, displayedResources } from '../../support/constants'
+import { fileAction, application, resourcePage } from '../../support/constants'
 
 test.describe('Integrate with online office suites like Collabora and OnlyOffice', () => {
   test.beforeEach(async ({ world }) => {
@@ -54,7 +54,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
         world,
         stepUser: 'Alice',
         resource: 'OpenDocument.odt',
-        application: applications.collabora
+        application: application.collabora
       })
 
       // And "Anonymous" opens the public link "Unnamed link"
@@ -164,7 +164,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       await ui.userSharesResources({
         world,
         stepUser: 'Alice',
-        actionType: actions.sideBarPanel,
+        actionType: fileAction.sideBarPanel,
         shares: [
           {
             resource: 'OpenDocument.odt',
@@ -189,7 +189,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
         world,
         stepUser: 'Brian',
         resource: 'OpenDocument.odt',
-        application: applications.collabora
+        application: application.collabora
       })
 
       // Then "Brian" should not be able to edit content of following resource
@@ -226,7 +226,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
         world,
         stepUser: 'Alice',
         resource: 'OpenDocument.odt',
-        application: applications.collabora
+        application: application.collabora
       })
 
       // And "Brian" opens the following file in Collabora
@@ -236,7 +236,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
         world,
         stepUser: 'Brian',
         resource: 'OpenDocument.odt',
-        application: applications.collabora
+        application: application.collabora
       })
 
       // And "Alice" edits the following resource
@@ -336,7 +336,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
         world,
         stepUser: 'Alice',
         resource: 'MicrosoftWord.docx',
-        application: applications.onlyOffice
+        application: application.onlyOffice
       })
 
       // And "Anonymous" opens the public link "Unnamed link"
@@ -461,7 +461,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       await ui.userSharesResources({
         world,
         stepUser: 'Alice',
-        actionType: actions.sideBarPanel,
+        actionType: fileAction.sideBarPanel,
         shares: [
           {
             resource: 'MicrosoftWord.docx',
@@ -486,7 +486,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
         world,
         stepUser: 'Brian',
         resource: 'MicrosoftWord.docx',
-        application: applications.onlyOffice
+        application: application.onlyOffice
       })
 
       // Then "Brian" should not be able to edit content of following resource
@@ -527,7 +527,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
         world,
         stepUser: 'Alice',
         resource: 'MicrosoftWord.docx',
-        application: applications.onlyOffice
+        application: application.onlyOffice
       })
 
       // And "Brian" opens the following file in OnlyOffice
@@ -537,7 +537,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
         world,
         stepUser: 'Brian',
         resource: 'MicrosoftWord.docx',
-        application: applications.onlyOffice
+        application: application.onlyOffice
       })
 
       // And "Alice" edits the following resource
@@ -732,7 +732,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       world,
       stepUser: 'Alice',
       resource: 'usingSpaceLink.docx',
-      application: applications.onlyOffice
+      application: application.onlyOffice
     })
 
     // Then "Alice" should see the content "public can create files in the project space using spaceLink" in editor "OnlyOffice"
@@ -763,7 +763,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       world,
       stepUser: 'Alice',
       resource: 'usingFolderLink.docx',
-      application: applications.onlyOffice
+      application: application.onlyOffice
     })
 
     // Then "Alice" should see the content "Microsoft Word Content" in editor "OnlyOffice"
@@ -909,7 +909,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       world,
       stepUser: 'Alice',
       resource: 'usingSpaceLink.odt',
-      application: applications.collabora
+      application: application.collabora
     })
 
     // Then "Alice" should see the content "public can create files in the project space using spaceLink" in editor "Collabora"
@@ -933,7 +933,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       world,
       stepUser: 'Alice',
       resource: 'usingFolderLink.odt',
-      application: applications.collabora
+      application: application.collabora
     })
 
     // Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
@@ -971,7 +971,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       stepUser: 'Alice',
       file: 'Template.dotx',
       webOffice: 'OnlyOffice',
-      actionType: actions.sideBarPanel
+      actionType: fileAction.sideBarPanel
     })
 
     // Then "Alice" should see the content "As a user I want to create a document by clicking on a template file" in editor "OnlyOffice"
@@ -991,7 +991,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       stepUser: 'Alice',
       file: 'Template.ott',
       webOffice: 'Collabora',
-      actionType: actions.contextMenu
+      actionType: fileAction.contextMenu
     })
 
     // Then "Alice" should see the content "As a user I want to create a document by clicking on a template file" in editor "Collabora"
@@ -1068,7 +1068,7 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
     //   | Template (2).docx |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['Template (2).docx']
     })

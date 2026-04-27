@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { displayedResources, searchFilters } from '../../support/constants'
+import { resourcePage,searchScope } from '../../support/constants'
 
 test.describe('Search in the project space', () => {
   test.beforeEach(async ({ world }) => {
@@ -48,19 +48,19 @@ test.describe('Search in the project space', () => {
       world,
       stepUser: 'Alice',
       keyword: "-'s",
-      filter: searchFilters.allFiles
+      filter: searchScope.allFiles
     })
 
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.searchList,
+      listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ["new-'single'quotes.txt"]
     })
 
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: displayedResources.searchList,
+      listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['folder(WithSymbols:!;_+-&)']
     })
@@ -69,19 +69,19 @@ test.describe('Search in the project space', () => {
       world,
       stepUser: 'Alice',
       keyword: '!;_+-&)',
-      filter: searchFilters.allFiles
+      filter: searchScope.allFiles
     })
 
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.searchList,
+      listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['folder(WithSymbols:!;_+-&)']
     })
 
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: displayedResources.searchList,
+      listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ["new-'single'quotes.txt"]
     })

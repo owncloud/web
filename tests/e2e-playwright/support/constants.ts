@@ -1,4 +1,4 @@
-export const actions = {
+export const fileAction = {
   contextMenu: 'CONTEXT_MENU',
   batchAction: 'BATCH_ACTION',
   sideBarPanel: 'SIDEBAR_PANEL',
@@ -12,12 +12,12 @@ export const actions = {
   dragDropBreadcrumb: 'DRAG_DROP_BREADCRUMB'
 } as const
 
-export const clients = {
+export const client = {
   mobile: 'mobile',
   desktop: 'desktop'
 } as const
 
-export const applications = {
+export const application = {
   textEditor: 'texteditor',
   pdfViewer: 'pdfviewer',
   mediaViewer: 'mediaviewer',
@@ -25,23 +25,26 @@ export const applications = {
   onlyOffice: 'OnlyOffice'
 } as const
 
-export const searchFilters = {
+export const searchScope = {
   allFiles: 'all files',
-  currentFolder: 'current folder',
+  currentFolder: 'current folder'
+} as const
+
+export const searchFilter = {
   mediaType: 'mediaType',
   tags: 'tags',
   lastModified: 'lastModified',
   fullText: 'fullText'
 } as const
 
-export const displayedResources = {
+export const resourcePage = {
   searchList: 'search list',
   filesList: 'files list',
   shares: 'Shares',
   trashbin: 'trashbin'
 } as const
 
-export const buttonLabels = {
+export const shareIndicator = {
   linkDirect: 'link-direct',
   linkIndirect: 'link-indirect',
   userDirect: 'user-direct',

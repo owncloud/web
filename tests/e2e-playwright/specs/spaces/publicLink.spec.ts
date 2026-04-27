@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { applications, actions } from '../../support/constants'
+import { application, fileAction } from '../../support/constants'
 
 test.describe('spaces public link', () => {
   test.beforeEach(async ({ world }) => {
@@ -185,7 +185,7 @@ test.describe('spaces public link', () => {
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Brian',
-      fileViewerType: applications.textEditor
+      fileViewerType: application.textEditor
     })
 
     await ui.userClosesFileViewer({
@@ -208,7 +208,7 @@ test.describe('spaces public link', () => {
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Brian',
-      fileViewerType: applications.textEditor
+      fileViewerType: application.textEditor
     })
 
     await ui.userClosesFileViewer({
@@ -277,7 +277,7 @@ test.describe('spaces public link', () => {
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Carol',
-      fileViewerType: applications.pdfViewer
+      fileViewerType: application.pdfViewer
     })
 
     await ui.userClosesFileViewer({
@@ -331,7 +331,7 @@ test.describe('spaces public link', () => {
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'David',
-      fileViewerType: applications.mediaViewer
+      fileViewerType: application.mediaViewer
     })
 
     await ui.userClosesFileViewer({
@@ -401,7 +401,7 @@ test.describe('spaces public link', () => {
     await ui.userDownloadsThePublicLinkResources({
       world,
       stepUser: 'Anonymous',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ resource: 'example.txt', type: 'file' }]
     })
 
@@ -426,7 +426,7 @@ test.describe('spaces public link', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Anonymous',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ name: 'renamed.txt' }, { name: 'new-lorem.txt' }]
     })
   })

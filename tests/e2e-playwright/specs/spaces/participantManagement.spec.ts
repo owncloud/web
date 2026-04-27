@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
-import { actions } from '../../support/constants'
+import { fileAction } from '../../support/constants'
 
 test.describe('check files pagination in project space', () => {
   test('pagination', async ({ world }) => {
@@ -202,7 +202,7 @@ test.describe('check files pagination in project space', () => {
     await ui.userDeletesResourcesFromPublicLink({
       world,
       stepUser: 'Anonymous',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ resource: 'lorem.txt' }]
     })
 
@@ -212,7 +212,7 @@ test.describe('check files pagination in project space', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Brian',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ name: 'textfile.txt', from: 'parent' }]
     })
 

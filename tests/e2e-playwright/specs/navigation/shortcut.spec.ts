@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
-import { applications, actions } from '../../support/constants'
+import { application, fileAction } from '../../support/constants'
 
 test.describe(
   'Users can create shortcuts for resources and sites',
@@ -106,7 +106,7 @@ test.describe(
         world,
         stepUser: 'Alice',
         resourceToDownload: resourceToDownload,
-        actionType: actions.sideBarPanel
+        actionType: fileAction.sideBarPanel
       })
 
       // When "Alice" opens a shortcut "important file.url"
@@ -119,7 +119,7 @@ test.describe(
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Alice',
-        fileViewerType: applications.textEditor
+        fileViewerType: application.textEditor
       })
       // And "Alice" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
@@ -154,7 +154,7 @@ test.describe(
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: applications.mediaViewer
+        fileViewerType: application.mediaViewer
       })
       // And "Brian" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
@@ -186,7 +186,7 @@ test.describe(
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: applications.textEditor
+        fileViewerType: application.textEditor
       })
       // And "Brian" logs out
       await ui.userLogsOut({ world, stepUser: 'Brian' })

@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
-import { actions } from '../../support/constants'
+import { fileAction } from '../../support/constants'
 
 test.describe('groups management', () => {
   test.beforeEach(async ({ world }) => {
@@ -38,7 +38,7 @@ test.describe('groups management', () => {
     await ui.userDeletesGroups({
       world,
       stepUser: 'Admin',
-      actionType: actions.contextMenu,
+      actionType: fileAction.contextMenu,
       groupsToBeDeleted: ['sales']
     })
 
@@ -51,7 +51,7 @@ test.describe('groups management', () => {
     await ui.userDeletesGroups({
       world,
       stepUser: 'Admin',
-      actionType: actions.batchAction,
+      actionType: fileAction.batchAction,
       groupsToBeDeleted: ['security', 'finance']
     })
 
@@ -76,7 +76,7 @@ test.describe('groups management', () => {
       key: 'sales',
       attribute: 'displayName',
       value: 'a renamed group',
-      action: actions.contextMenu
+      action: fileAction.contextMenu
     })
     await ui.userShouldSeeGroupDisplayName({
       world,

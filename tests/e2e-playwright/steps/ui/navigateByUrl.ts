@@ -1,6 +1,6 @@
 import { objects } from '../../../e2e/support'
 import { World } from '../../support/world'
-import { applications, clients } from '../../support/constants'
+import { application, client } from '../../support/constants'
 
 export async function userNavigatesToNonExistingPage({
   world,
@@ -38,8 +38,8 @@ export async function userOpensResourceViaUrl({
   stepUser: string
   resource: string
   space: string
-  editorName: typeof applications.collabora | typeof applications.onlyOffice
-  client: (typeof clients)[keyof typeof clients]
+  editorName: typeof application.collabora | typeof application.onlyOffice
+  client: (typeof client)[keyof typeof client]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const user = world.usersEnvironment.getUser({ key: stepUser })

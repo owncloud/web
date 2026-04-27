@@ -8,7 +8,7 @@ import {
 import { expect } from '@playwright/test'
 import { substitute } from '../../../e2e/support/utils'
 import { World } from '../../support/world'
-import { actions } from '../../support/constants'
+import { fileAction } from '../../support/constants'
 
 export async function userNavigatesToPersonalSpacePage({
   world,
@@ -175,13 +175,13 @@ export async function userManagesSpaceUsingContexMenu({
   const spaceId = spacesObject.getUUID({ key: space })
   switch (action) {
     case 'disables':
-      await spacesObject.disable({ spaceIds: [spaceId], via: actions.contextMenu })
+      await spacesObject.disable({ spaceIds: [spaceId], via: fileAction.contextMenu })
       break
     case 'deletes':
-      await spacesObject.delete({ spaceIds: [spaceId], via: actions.contextMenu })
+      await spacesObject.delete({ spaceIds: [spaceId], via: fileAction.contextMenu })
       break
     case 'enables':
-      await spacesObject.enable({ spaceIds: [spaceId], via: actions.contextMenu })
+      await spacesObject.enable({ spaceIds: [spaceId], via: fileAction.contextMenu })
       break
     default:
       throw new Error(`${action} not implemented`)
@@ -347,7 +347,7 @@ export async function userDisablesSpaceUsingContextMenu({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const spaceUUID = spacesObject.getUUID({ key: spaceId })
-  await spacesObject.disable({ spaceIds: [spaceUUID], via: actions.contextMenu })
+  await spacesObject.disable({ spaceIds: [spaceUUID], via: fileAction.contextMenu })
 }
 
 export async function userEnablesSpaceUsingContextMenu({
@@ -362,7 +362,7 @@ export async function userEnablesSpaceUsingContextMenu({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const spaceUUID = spacesObject.getUUID({ key: spaceId })
-  await spacesObject.enable({ spaceIds: [spaceUUID], via: actions.contextMenu })
+  await spacesObject.enable({ spaceIds: [spaceUUID], via: fileAction.contextMenu })
 }
 
 export async function userDeletesSpaceUsingContextMenu({
@@ -377,7 +377,7 @@ export async function userDeletesSpaceUsingContextMenu({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const spaceUUID = spacesObject.getUUID({ key: spaceId })
-  await spacesObject.delete({ spaceIds: [spaceUUID], via: actions.contextMenu })
+  await spacesObject.delete({ spaceIds: [spaceUUID], via: fileAction.contextMenu })
 }
 
 export async function userDisablesSpacesUsingBatchActions({
@@ -395,7 +395,7 @@ export async function userDisablesSpacesUsingBatchActions({
   for (const id of spaceIds) {
     await spacesObject.select({ key: id })
   }
-  await spacesObject.disable({ spaceIds: uuids, via: actions.batchAction })
+  await spacesObject.disable({ spaceIds: uuids, via: fileAction.batchAction })
 }
 
 export async function userEnablesSpacesUsingBatchActions({
@@ -413,7 +413,7 @@ export async function userEnablesSpacesUsingBatchActions({
   for (const id of spaceIds) {
     await spacesObject.select({ key: id })
   }
-  await spacesObject.enable({ spaceIds: uuids, via: actions.batchAction })
+  await spacesObject.enable({ spaceIds: uuids, via: fileAction.batchAction })
 }
 
 export async function userDeletesSpacesUsingBatchActions({
@@ -431,7 +431,7 @@ export async function userDeletesSpacesUsingBatchActions({
   for (const id of spaceIds) {
     await spacesObject.select({ key: id })
   }
-  await spacesObject.delete({ spaceIds: uuids, via: actions.batchAction })
+  await spacesObject.delete({ spaceIds: uuids, via: fileAction.batchAction })
 }
 
 export async function userUpdatesSpaceUsingContextMenu({
@@ -461,7 +461,7 @@ export async function userUpdatesSpaceUsingContextMenu({
         await spacesObject.changeQuota({
           spaceIds: [spaceUUID],
           value: update.value,
-          via: actions.contextMenu
+          via: fileAction.contextMenu
         })
         break
       default:
@@ -491,7 +491,7 @@ export async function userChangesSpaceQuotaUsingBatchActions({
   await spacesObject.changeQuota({
     spaceIds: uuids,
     value,
-    via: actions.batchAction
+    via: fileAction.batchAction
   })
 }
 

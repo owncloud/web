@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { actions, displayedResources, buttonLabels } from '../../support/constants'
+import { fileAction, resourcePage, shareIndicator } from '../../support/constants'
 
 test.describe('share', () => {
   test.beforeEach(async ({ world }) => {
@@ -38,7 +38,7 @@ test.describe('share', () => {
     //   | folder_to_shared_2 | Brian     | user | Can edit with trashbin | folder       |
     await ui.userSharesResources({
       world,
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       stepUser: 'Alice',
       shares: [
         {
@@ -90,7 +90,7 @@ test.describe('share', () => {
     // user should have access to unsynced shares
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['lorem.txt']
     })
@@ -158,7 +158,7 @@ test.describe('share', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Brian',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ name: 'lorem-big.txt', from: 'folder_to_shared_2' }]
     })
 
@@ -202,7 +202,7 @@ test.describe('share', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ name: 'lorem_new.txt', from: 'folder_to_shared' }, { name: 'folder_to_shared' }]
     })
 
@@ -278,7 +278,7 @@ test.describe('share', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'new.txt',
@@ -424,7 +424,7 @@ test.describe('share', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'testfile.txt',
@@ -474,7 +474,7 @@ test.describe('share', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Carol',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'testfile.txt',
@@ -507,7 +507,7 @@ test.describe('share', () => {
     //   | test-folder (1)  |
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.shares,
+      listType: resourcePage.shares,
       stepUser: 'Brian',
       resources: ['testfile.txt', 'test-folder', 'testfile (1).txt', 'test-folder (1)']
     })
@@ -586,7 +586,7 @@ test.describe('share', () => {
     //   | test-folder/testfile.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['testfile.txt', 'test-folder/testfile.txt']
     })
@@ -625,7 +625,7 @@ test.describe('share', () => {
     await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Alice',
-      buttonLabel: buttonLabels.userDirect,
+      buttonLabel: shareIndicator.userDirect,
       resource: 'shareFolder'
     })
     // When "Alice" opens folder "shareFolder"
@@ -638,7 +638,7 @@ test.describe('share', () => {
     await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Alice',
-      buttonLabel: buttonLabels.userIndirect,
+      buttonLabel: shareIndicator.userIndirect,
       resource: 'subFolder'
     })
     // And "Alice" logs out

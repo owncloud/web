@@ -5,7 +5,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { applications, clients } from '../../support/constants'
+import { application, client } from '../../support/constants'
 
 test.describe('url stability for mobile and desktop client', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -55,8 +55,8 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       stepUser: 'Alice',
       resource: 'OpenDocument.odt',
       space: 'personal',
-      editorName: applications.collabora,
-      client: clients.desktop
+      editorName: application.collabora,
+      client: client.desktop
     })
     // Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
@@ -71,8 +71,8 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       stepUser: 'Alice',
       resource: 'MicrosoftWord.docx',
       space: 'personal',
-      editorName: applications.onlyOffice,
-      client: clients.desktop
+      editorName: application.onlyOffice,
+      client: client.desktop
     })
     // Then "Alice" should see the content "Microsoft Word Content" in editor "OnlyOffice"
     await ui.userShouldSeeContentInEditor({
@@ -89,8 +89,8 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       stepUser: 'Alice',
       resource: 'OpenDocument.odt',
       space: 'personal',
-      editorName: applications.collabora,
-      client: clients.mobile
+      editorName: application.collabora,
+      client: client.mobile
     })
     // Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
@@ -105,8 +105,8 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       stepUser: 'Alice',
       resource: 'MicrosoftWord.docx',
       space: 'personal',
-      editorName: applications.onlyOffice,
-      client: clients.mobile
+      editorName: application.onlyOffice,
+      client: client.mobile
     })
     // Then "Alice" should see the content "Microsoft Word Content" in editor "OnlyOffice"
     await ui.userShouldSeeContentInEditor({

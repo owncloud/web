@@ -3,7 +3,7 @@ import { editor } from '../../../e2e/support/objects/app-files/utils'
 import { substitute } from '../../../e2e/support/utils'
 import { expect } from '@playwright/test'
 import { World } from '../../support/world'
-import { actions, applications } from '../../support/constants'
+import { fileAction, application } from '../../support/constants'
 
 export async function userOpensPublicLink({
   world,
@@ -109,12 +109,12 @@ export async function userUploadsResourcesInPublicLink({
 export async function userDeletesResourcesFromPublicLink({
   world,
   stepUser,
-  actionType = actions.sideBarPanel,
+  actionType = fileAction.sideBarPanel,
   resources
 }: {
   world: World
   stepUser: string
-  actionType: typeof actions.sideBarPanel | typeof actions.batchAction
+  actionType: typeof fileAction.sideBarPanel | typeof fileAction.batchAction
   resources: { resource: string; parentFolder?: string }[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
@@ -136,9 +136,9 @@ export async function userShouldBeInFileViewer({
   world: World
   stepUser: string
   fileViewerType:
-    | typeof applications.mediaViewer
-    | typeof applications.pdfViewer
-    | typeof applications.textEditor
+    | typeof application.mediaViewer
+    | typeof application.pdfViewer
+    | typeof application.textEditor
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType })

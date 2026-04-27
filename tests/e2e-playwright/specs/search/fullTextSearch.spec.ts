@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { searchFilters, applications } from '../../support/constants'
+import { searchFilter, searchScope, application } from '../../support/constants'
 
 test.describe('Search', () => {
   test.beforeEach(async ({ world }) => {
@@ -142,7 +142,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       keyword: 'Cheers',
-      filter: searchFilters.allFiles,
+      filter: searchScope.allFiles,
       command: 'presses enter'
     })
 
@@ -171,7 +171,7 @@ test.describe('Search', () => {
     })
 
     // When "Brian" clears tags filter
-    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: searchFilters.tags })
+    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: searchFilter.tags })
 
     // And "Brian" selects tag "tag 1" from the search result filter chip
     await ui.userFiltersSearchResultWithTag({
@@ -196,7 +196,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       keyword: 'file',
-      filter: searchFilters.allFiles,
+      filter: searchScope.allFiles,
       command: 'presses enter'
     })
 
@@ -211,7 +211,7 @@ test.describe('Search', () => {
     })
 
     // When "Brian" clears tags filter
-    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: searchFilters.tags })
+    await ui.userClearsFilter({ world, stepUser: 'Brian', filter: searchFilter.tags })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource                      |
     //   | textfile.txt                  |
@@ -237,7 +237,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       keyword: 'Cheers',
-      filter: searchFilters.allFiles,
+      filter: searchScope.allFiles,
       command: 'presses enter'
     })
     // Then following resources should be displayed in the files list for user "Brian"
@@ -268,7 +268,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       resource: 'textfile.txt',
-      application: applications.textEditor
+      application: application.textEditor
     })
     // And "Brian" closes the file viewer
     await ui.userClosesFileViewer({ world, stepUser: 'Brian' })

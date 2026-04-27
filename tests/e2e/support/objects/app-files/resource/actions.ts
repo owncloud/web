@@ -18,7 +18,7 @@ import { environment, objects, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
-import { actions, applications } from '../../../../../e2e-playwright/support/constants'
+import { fileAction, application } from '../../../../../e2e-playwright/support/constants'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -518,10 +518,10 @@ const createDocumentFile = async (
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
   switch (editorToOpen) {
-    case applications.collabora:
+    case application.collabora:
       await fillCollaboraDocumentContent(page, content)
       break
-    case applications.onlyOffice:
+    case application.onlyOffice:
       await fillOnlyOfficeDocumentContent(page, content)
       break
     default:
@@ -545,7 +545,7 @@ export const fillDocumentContent = async ({
   editor: string
 }): Promise<void> => {
   switch (editor) {
-    case applications.textEditor:
+    case application.textEditor:
       await page.locator(textEditorPlainTextInput).fill(text)
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -553,10 +553,10 @@ export const fillDocumentContent = async ({
         'Text editor Save button is enabled after content change'
       )
       break
-    case applications.collabora:
+    case application.collabora:
       await fillCollaboraDocumentContent(page, text)
       break
-    case applications.onlyOffice:
+    case application.onlyOffice:
       await fillOnlyOfficeDocumentContent(page, text)
       break
     default:
@@ -574,10 +574,10 @@ export const getDocumentContent = async ({
   await page.waitForLoadState()
   await page.waitForURL(/.*\/external-.*/)
   switch (editor) {
-    case applications.collabora:
+    case application.collabora:
       await focusCollaboraEditor(page)
       break
-    case applications.onlyOffice:
+    case application.onlyOffice:
       await focusOnlyOfficeEditor(page)
       break
     default:
@@ -1206,7 +1206,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
   }
 
   switch (method) {
-    case actions.keyboard: {
+    case fileAction.keyboard: {
       await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -1217,7 +1217,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
     }
-    case actions.batchAction: {
+    case fileAction.batchAction: {
       await page.locator(util.format(checkBox, resourceBase)).click()
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -1228,7 +1228,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
     }
-    case actions.sideBarPanel: {
+    case fileAction.sideBarPanel: {
       await sidebar.open({ page: page, resource: resourceBase })
       await sidebar.openPanel({ page: page, name: 'actions' })
 
@@ -1242,7 +1242,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
     }
-    case actions.keyboard: {
+    case fileAction.keyboard: {
       const resourceCheckbox = page.locator(util.format(checkBox, resourceBase))
       await resourceCheckbox.check()
       const keyValue = action === 'copy' ? 'c' : 'x'
@@ -1265,7 +1265,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       ])
       break
     }
-    case actions.dragDrop: {
+    case fileAction.dragDrop: {
       const source = page.locator(util.format(resourceNameSelector, resourceBase))
       const target = page.locator(util.format(resourceNameSelector, newLocation))
 
@@ -1292,7 +1292,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
 
       break
     }
-    case actions.dragDropBreadcrumb: {
+    case fileAction.dragDropBreadcrumb: {
       const source = page.locator(util.format(resourceNameSelector, resourceBase))
       const target = page.locator(
         util.format(

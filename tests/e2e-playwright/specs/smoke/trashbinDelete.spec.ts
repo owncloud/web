@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { displayedResources, actions } from '../../support/constants'
+import { resourcePage, fileAction } from '../../support/constants'
 
 test.describe('Trashbin delete', () => {
   test.beforeEach(async ({ world }) => {
@@ -66,7 +66,7 @@ test.describe('Trashbin delete', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: actions.batchAction,
+      actionType: fileAction.batchAction,
       resources: [
         { name: 'FOLDER' },
         { name: 'PARENT' },
@@ -145,7 +145,7 @@ test.describe('Trashbin delete', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Brian',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ name: 'lorem.txt' }]
     })
     // And "Brian" navigates to the trashbin
@@ -155,7 +155,7 @@ test.describe('Trashbin delete', () => {
     //   | folderToShare/lorem.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: displayedResources.trashbin,
+      listType: resourcePage.trashbin,
       stepUser: 'Brian',
       resources: ['folderToShare/lorem.txt']
     })
@@ -167,7 +167,7 @@ test.describe('Trashbin delete', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ name: 'sample.txt' }, { name: 'empty-folder' }]
     })
     // And "Alice" navigates to the trashbin
@@ -177,7 +177,7 @@ test.describe('Trashbin delete', () => {
     //   | folderToShare/lorem.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.trashbin,
+      listType: resourcePage.trashbin,
       stepUser: 'Alice',
       resources: ['folderToShare/lorem.txt']
     })
@@ -207,7 +207,7 @@ test.describe('Trashbin delete', () => {
     //   | lorem.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['lorem.txt']
     })
@@ -220,7 +220,7 @@ test.describe('Trashbin delete', () => {
     //   | lorem.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['lorem.txt']
     })

@@ -2,7 +2,7 @@ import { Page } from '@playwright/test'
 import * as po from './actions'
 import { SpacesEnvironment } from '../../../environment'
 import { Space } from '../../../types'
-import { actions } from '../../../../../e2e-playwright/support/constants'
+import { fileAction } from '../../../../../e2e-playwright/support/constants'
 
 export class Spaces {
   #page: Page
@@ -32,7 +32,7 @@ export class Spaces {
   }: {
     spaceIds: string[]
     value: string
-    via: typeof actions.contextMenu | typeof actions.batchAction
+    via: typeof fileAction.contextMenu | typeof fileAction.batchAction
   }): Promise<void> {
     await po.changeSpaceQuota({ spaceIds, value, page: this.#page, via })
   }
@@ -42,7 +42,7 @@ export class Spaces {
     via
   }: {
     spaceIds: string[]
-    via: typeof actions.contextMenu | typeof actions.batchAction
+    via: typeof fileAction.contextMenu | typeof fileAction.batchAction
   }): Promise<void> {
     await po.disableSpace({ spaceIds, page: this.#page, via })
   }
@@ -52,7 +52,7 @@ export class Spaces {
     via
   }: {
     spaceIds: string[]
-    via: typeof actions.contextMenu | typeof actions.batchAction
+    via: typeof fileAction.contextMenu | typeof fileAction.batchAction
   }): Promise<void> {
     await po.enableSpace({ spaceIds, page: this.#page, via })
   }
@@ -62,7 +62,7 @@ export class Spaces {
     via
   }: {
     spaceIds: string[]
-    via: typeof actions.contextMenu | typeof actions.batchAction
+    via: typeof fileAction.contextMenu | typeof fileAction.batchAction
   }): Promise<void> {
     await po.deleteSpace({ spaceIds, page: this.#page, via })
   }

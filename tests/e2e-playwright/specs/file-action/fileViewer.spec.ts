@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { applications } from '../../support/constants'
+import { application } from '../../support/constants'
 
 test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
   test('file viewers', async ({ world }) => {
@@ -100,7 +100,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: applications.mediaViewer
+      fileViewerType: application.mediaViewer
     })
 
     // When "Alice" closes the file viewer
@@ -113,14 +113,14 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'testavatar.jpeg',
-      application: applications.mediaViewer
+      application: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: applications.mediaViewer
+      fileViewerType: application.mediaViewer
     })
 
     // When "Alice" navigates to the next media resource
@@ -147,14 +147,14 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'sampleGif.gif',
-      application: applications.mediaViewer
+      application: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: applications.mediaViewer
+      fileViewerType: application.mediaViewer
     })
 
     // When "Alice" closes the file viewer
@@ -167,14 +167,14 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'testimage.mp3',
-      application: applications.mediaViewer
+      application: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: applications.mediaViewer
+      fileViewerType: application.mediaViewer
     })
 
     // When "Alice" closes the file viewer
@@ -187,14 +187,14 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'sampleOgg.ogg',
-      application: applications.mediaViewer
+      application: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: applications.mediaViewer
+      fileViewerType: application.mediaViewer
     })
 
     // When "Alice" closes the file viewer
@@ -207,14 +207,14 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'sampleWebm.webm',
-      application: applications.mediaViewer
+      application: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: applications.mediaViewer
+      fileViewerType: application.mediaViewer
     })
 
     // When "Alice" closes the file viewer
@@ -227,14 +227,14 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'test_video.mp4',
-      application: applications.mediaViewer
+      application: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: applications.mediaViewer
+      fileViewerType: application.mediaViewer
     })
 
     // And "Alice" closes the file viewer

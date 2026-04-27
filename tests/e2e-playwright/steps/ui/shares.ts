@@ -7,7 +7,7 @@ import {
 } from '../../../e2e/support/objects/app-files/share/collaborator'
 import { substitute } from '../../../e2e/support/utils/substitute'
 import { World } from '../../support/world'
-import { actions } from '../../support/constants'
+import { fileAction } from '../../support/constants'
 
 const parseShareTable = function (
   world: World,
@@ -135,9 +135,9 @@ export async function userSharesResources({
   world: World
   stepUser: string
   actionType:
-    | typeof actions.sideBarPanel
-    | typeof actions.quickAction
-    | typeof actions.urlNavigation
+    | typeof fileAction.sideBarPanel
+    | typeof fileAction.quickAction
+    | typeof fileAction.urlNavigation
   shares: {
     resource: string
     recipient: string

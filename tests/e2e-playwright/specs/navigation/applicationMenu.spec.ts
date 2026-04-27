@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
-import { displayedResources } from '../../support/constants'
+import { resourcePage } from '../../support/constants'
 
 test.describe('Application menu', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -24,7 +24,7 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
     await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
     await ui.userShouldSeeResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['New file.txt']
     })

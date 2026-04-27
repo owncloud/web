@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { actions, displayedResources } from '../../support/constants'
+import { fileAction, resourcePage } from '../../support/constants'
 
 test.describe('password-protected folder operation', () => {
   test.beforeEach(async ({ world }) => {
@@ -131,7 +131,7 @@ test.describe('password-protected folder operation', () => {
       await ui.userDeletesResources({
         world,
         stepUser: 'Alice',
-        actionType: actions.sideBarPanel,
+        actionType: fileAction.sideBarPanel,
         resources: [{ name: 'folder1.psec' }]
       })
 
@@ -147,7 +147,7 @@ test.describe('password-protected folder operation', () => {
       //   | folder1  |
       await ui.userShouldNotSeeTheResources({
         world,
-        listType: displayedResources.filesList,
+        listType: resourcePage.filesList,
         stepUser: 'Alice',
         resources: ['folder1']
       })
@@ -158,7 +158,7 @@ test.describe('password-protected folder operation', () => {
       await ui.userDeletesResources({
         world,
         stepUser: 'Alice',
-        actionType: actions.sideBarPanel,
+        actionType: fileAction.sideBarPanel,
         resources: [{ name: 'folder2' }]
       })
 
@@ -167,7 +167,7 @@ test.describe('password-protected folder operation', () => {
       //   | folder2  |
       await ui.userShouldNotSeeTheResources({
         world,
-        listType: displayedResources.filesList,
+        listType: resourcePage.filesList,
         stepUser: 'Alice',
         resources: ['folder2']
       })
@@ -180,7 +180,7 @@ test.describe('password-protected folder operation', () => {
       //   | folder2.psec |
       await ui.userShouldNotSeeTheResources({
         world,
-        listType: displayedResources.filesList,
+        listType: resourcePage.filesList,
         stepUser: 'Alice',
         resources: ['folder2.psec']
       })
@@ -379,7 +379,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ name: 'space-folder3' }]
     })
 
@@ -411,7 +411,7 @@ test.describe('password-protected folder operation', () => {
     //   | space-folder3.psec |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['space-folder1.psec', 'space-folder3.psec']
     })
@@ -423,7 +423,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Brian',
-      actionType: actions.sideBarPanel,
+      actionType: fileAction.sideBarPanel,
       resources: [{ name: 'space-folder2.psec' }]
     })
 
@@ -491,7 +491,7 @@ test.describe('password-protected folder operation', () => {
     //   | space-folder3 |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: displayedResources.filesList,
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['space-folder1', 'space-folder3']
     })
