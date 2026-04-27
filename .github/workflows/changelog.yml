@@ -19,5 +19,5 @@ jobs:
     with:
       branch: ${{ github.ref_name }}
     secrets:
-      APP_ID: ${{ secrets.CALENS_APP_ID }}
-      APP_PRIVATE_KEY: ${{ secrets.CALENS_APP_PRIVATE_KEY }}
+      APP_ID: ${{ secrets.APP_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
