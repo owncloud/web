@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { actions, applications, displayedResources } from '../../support/constants'
 
 test.describe('internal link share', () => {
   test.beforeEach(async ({ world }) => {
@@ -117,7 +118,7 @@ test.describe('internal link share', () => {
         { resource: 'test#file.txt', type: 'file' },
         { resource: 'test#folder', type: 'folder' }
       ],
-      actionType: 'SIDEBAR_PANEL'
+      actionType: actions.sideBarPanel
     })
     // And "Alice" logs out
     await ui.userLogsOut({ world, stepUser: 'Alice' })
@@ -161,7 +162,7 @@ test.describe('internal link share', () => {
       world,
       stepUser: 'Alice',
       resource: 'simple.pdf',
-      application: 'pdfviewer'
+      application: applications.pdfViewer
     })
     // Then "Alice" closes the file viewer
     await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
@@ -185,7 +186,7 @@ test.describe('internal link share', () => {
     //   | sunday,monday.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['sunday,monday.txt']
     })
@@ -202,7 +203,7 @@ test.describe('internal link share', () => {
     })
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['FOLDER']
     })

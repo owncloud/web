@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
+import { applications, actions } from '../../support/constants'
 
 test.describe('Navigate web directly through urls', () => {
   test('pagination', async ({ world }) => {
@@ -115,7 +116,7 @@ test.describe('Navigate web directly through urls', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'URL_NAVIGATION',
+      actionType: actions.urlNavigation,
       shares: [
         {
           resource: 'lorem.txt',
@@ -140,7 +141,7 @@ test.describe('Navigate web directly through urls', () => {
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: 'text-editor'
+      fileViewerType: applications.textEditor
     })
 
     // And "Alice" closes the file viewer
@@ -179,13 +180,13 @@ test.describe('Navigate web directly through urls', () => {
       world,
       stepUser: 'Alice',
       resource: 'file_inside_folder.txt',
-      application: 'texteditor'
+      application: applications.textEditor
     })
     // Then "Alice" is in a text-editor
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: 'text-editor'
+      fileViewerType: applications.textEditor
     })
     // And "Alice" closes the file viewer
     await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
@@ -202,13 +203,13 @@ test.describe('Navigate web directly through urls', () => {
       world,
       stepUser: 'Alice',
       resource: 'spaceTextfile.txt',
-      application: 'texteditor'
+      application: applications.textEditor
     })
     // Then "Alice" is in a text-editor
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Alice',
-      fileViewerType: 'text-editor'
+      fileViewerType: applications.textEditor
     })
     // And "Alice" closes the file viewer
     await ui.userClosesFileViewer({ world, stepUser: 'Alice' })

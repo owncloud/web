@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { actions, displayedResources } from '../../support/constants'
 
 test.describe('link', () => {
   test.beforeEach(async ({ world }) => {
@@ -134,7 +135,7 @@ test.describe('link', () => {
     //   | simple.pdf   |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['textfile.txt', 'simple.pdf']
     })
@@ -163,7 +164,7 @@ test.describe('link', () => {
     //   | lorem.txt    |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['textfile.txt', 'simple.pdf', 'SubFolder', 'lorem.txt']
     })
@@ -173,7 +174,7 @@ test.describe('link', () => {
     await ui.userDeletesResourcesFromPublicLink({
       world,
       stepUser: 'Brian',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ resource: 'simple.pdf' }]
     })
     // And "Brian" logs out
@@ -188,7 +189,7 @@ test.describe('link', () => {
     await ui.userDownloadsThePublicLinkResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [
         { resource: 'lorem.txt', type: 'file' },
         { resource: 'textfile.txt', type: 'file' }
@@ -223,7 +224,7 @@ test.describe('link', () => {
     // And "Anonymous" should see the resource "PARENT" in the files list
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Anonymous',
       resources: ['PARENT']
     })
@@ -242,7 +243,7 @@ test.describe('link', () => {
     await ui.userCopiesResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'sidebar-panel',
+      actionType: actions.sideBarPanel,
       resources: [{ resource: 'lorem.txt', to: 'myfolder' }]
     })
     // And "Anonymous" renames the following public link resources
@@ -264,7 +265,7 @@ test.describe('link', () => {
     await ui.userDeletesResourcesFromPublicLink({
       world,
       stepUser: 'Anonymous',
-      actionType: 'BATCH_ACTION',
+      actionType: actions.batchAction,
       resources: [
         { resource: 'lorem.txt', parentFolder: 'myfolder' },
         { resource: 'child', parentFolder: 'myfolder' }

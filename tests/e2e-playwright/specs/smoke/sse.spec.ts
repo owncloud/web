@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { actions, buttonLabels, displayedResources } from '../../support/constants'
 
 test.describe('server sent events', { tag: '@sse' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -104,7 +105,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | space-folder |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['space-folder']
     })
@@ -153,7 +154,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'space-folder',
@@ -184,7 +185,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Brian',
-      buttonLabel: 'user-direct',
+      buttonLabel: buttonLabels.userDirect,
       resource: 'space-folder'
     })
 
@@ -240,7 +241,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userShouldSeeShareIndicatorOnResource({
       world,
       stepUser: 'Brian',
-      buttonLabel: 'link-direct',
+      buttonLabel: buttonLabels.linkDirect,
       resource: 'space-folder'
     })
 
@@ -290,7 +291,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userShouldNotSeeShareIndicatorOnResource({
       world,
       stepUser: 'Brian',
-      buttonLabel: 'user-direct',
+      buttonLabel: buttonLabels.userDirect,
       resource: 'space-folder'
     })
 
@@ -318,7 +319,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userShouldNotSeeShareIndicatorOnResource({
       world,
       stepUser: 'Brian',
-      buttonLabel: 'link-direct',
+      buttonLabel: buttonLabels.linkDirect,
       resource: 'space-folder'
     })
 
@@ -383,7 +384,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       shares: [
         {
           resource: 'sharedFolder',
@@ -564,7 +565,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | simple.pdf |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['simple.pdf']
     })
@@ -608,7 +609,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | example.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['example.txt']
     })
@@ -640,7 +641,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | simple-renamed.pdf |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['simple-renamed.pdf']
     })
@@ -652,7 +653,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: actions.sideBarPanel,
       resources: [{ name: 'example.txt' }]
     })
     // Then "Alice" should get "item-trashed" SSE event
@@ -672,7 +673,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | example.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['example.txt']
     })
@@ -710,7 +711,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | example.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Alice',
       resources: ['example.txt']
     })
@@ -754,7 +755,7 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | simple-renamed.pdf |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: displayedResources.filesList,
       stepUser: 'Brian',
       resources: ['simple-renamed.pdf']
     })

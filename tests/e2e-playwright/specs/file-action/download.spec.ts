@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { applications, actions } from '../../support/constants'
 
 test.describe('Download', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -92,7 +93,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resourceToDownload: resourceToDownloadInBatch,
-      actionType: 'BATCH_ACTION'
+      actionType: actions.batchAction
     })
 
     // And "Alice" opens the following file in mediaviewer
@@ -102,7 +103,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'testavatar.jpg',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // And "Alice" downloads the following resources using the preview topbar
@@ -113,7 +114,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resourceToDownload: downloadImage,
-      actionType: 'PREVIEW_TOPBAR'
+      actionType: actions.previewTopBar
     })
 
     // And "Alice" closes the file viewer
@@ -133,7 +134,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resourceToDownload: resourceToDownloadInBatch,
-      actionType: 'BATCH_ACTION'
+      actionType: actions.batchAction
     })
 
     // And "Brian" downloads the following resources using the sidebar panel
@@ -152,7 +153,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resourceToDownload: resourceToDownloadSidebar,
-      actionType: 'SIDEBAR_PANEL'
+      actionType: actions.sideBarPanel
     })
 
     // And "Brian" opens the following file in mediaviewer
@@ -162,7 +163,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
-      application: 'mediaviewer'
+      application: applications.mediaViewer
     })
 
     // And "Brian" downloads the following resources using the preview topbar
@@ -172,7 +173,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resourceToDownload: downloadImage,
-      actionType: 'PREVIEW_TOPBAR'
+      actionType: actions.previewTopBar
     })
 
     // And "Brian" logs out
