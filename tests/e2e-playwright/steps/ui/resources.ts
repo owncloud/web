@@ -160,12 +160,12 @@ export async function userOpensResourceInViewer({
   world,
   stepUser,
   resource,
-  application
+  viewer
 }: {
   world: World
   stepUser: string
   resource: string
-  application:
+  viewer:
     | typeof application.textEditor
     | typeof application.pdfViewer
     | typeof application.mediaViewer
@@ -176,7 +176,7 @@ export async function userOpensResourceInViewer({
   const resourceObject = new objects.applicationFiles.Resource({ page })
   await resourceObject.openFileInViewer({
     name: resource,
-    actionType: application
+    actionType: viewer
   })
 }
 
@@ -1149,7 +1149,10 @@ export async function userDownloadsThePublicLinkResources({
 }: {
   world: World
   stepUser: string
-  actionType: typeof fileAction.sideBarPanel | typeof fileAction.batchAction
+  actionType:
+    | typeof fileAction.sideBarPanel
+    | typeof fileAction.batchAction
+    | typeof fileAction.singleShareView
   resources: resourceToDownload[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })

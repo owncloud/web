@@ -268,7 +268,7 @@ test.describe('Search', () => {
       world,
       stepUser: 'Brian',
       resource: 'textfile.txt',
-      application: application.textEditor
+      viewer: application.textEditor
     })
     // And "Brian" closes the file viewer
     await ui.userClosesFileViewer({ world, stepUser: 'Brian' })

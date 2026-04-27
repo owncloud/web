@@ -162,7 +162,7 @@ test.describe('internal link share', () => {
       world,
       stepUser: 'Alice',
       resource: 'simple.pdf',
-      application: application.pdfViewer
+      viewer: application.pdfViewer
     })
     // Then "Alice" closes the file viewer
     await ui.userClosesFileViewer({ world, stepUser: 'Alice' })

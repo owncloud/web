@@ -103,7 +103,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'testavatar.jpg',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // And "Alice" downloads the following resources using the preview topbar
@@ -163,7 +163,7 @@ test.describe('Download', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // And "Brian" downloads the following resources using the preview topbar

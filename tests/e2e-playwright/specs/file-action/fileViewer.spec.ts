@@ -113,7 +113,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'testavatar.jpeg',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -147,7 +147,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'sampleGif.gif',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -167,7 +167,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'testimage.mp3',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -187,7 +187,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'sampleOgg.ogg',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -207,7 +207,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'sampleWebm.webm',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer
@@ -227,7 +227,7 @@ test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       resource: 'test_video.mp4',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // Then "Alice" is in a media-viewer

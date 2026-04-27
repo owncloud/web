@@ -55,7 +55,7 @@ test.describe('lock', { tag: '@sse' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'test.odt',
-      application: application.collabora
+      viewer: application.collabora
     })
     // Then "Brian" should see the content "some content" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({

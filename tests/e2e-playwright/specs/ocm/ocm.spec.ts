@@ -208,7 +208,7 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // Then "Brian" is in a media-viewer
@@ -277,7 +277,7 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.png',
-      application: application.mediaViewer
+      viewer: application.mediaViewer
     })
 
     // Then "Brian" is in a media-viewer

@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileAction, resourcePage } from '../../support/constants'
+import { fileAction, resourcePage, application } from '../../support/constants'
 
 test.describe('link', () => {
   test.beforeEach(async ({ world }) => {
@@ -526,7 +526,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
 
       // And "Brian" closes the file viewer
@@ -547,7 +547,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Brian" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
@@ -557,7 +557,7 @@ test.describe('link', () => {
       await ui.userDownloadsThePublicLinkResources({
         world,
         stepUser: 'Brian',
-        actionType: 'SINGLE_SHARE_VIEW',
+        actionType: fileAction.singleShareView,
         resources: [{ resource: 'shareToBrian.md', type: 'file' }]
       })
       // When "Brian" opens the public link "pdfLink"
@@ -576,7 +576,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'pdf-viewer'
+        fileViewerType: application.pdfViewer
       })
       // And "Brian" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
@@ -606,7 +606,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'media-viewer'
+        fileViewerType: application.mediaViewer
       })
       // And "Brian" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
@@ -663,7 +663,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Carol" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Carol' })
@@ -683,7 +683,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Carol" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Carol' })
@@ -712,7 +712,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
-        fileViewerType: 'pdf-viewer'
+        fileViewerType: application.pdfViewer
       })
       // And "Carol" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Carol' })
@@ -742,7 +742,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
-        fileViewerType: 'media-viewer'
+        fileViewerType: application.mediaViewer
       })
       // And "Carol" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Carol' })
@@ -796,7 +796,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })
@@ -816,7 +816,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })
@@ -845,7 +845,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'pdf-viewer'
+        fileViewerType: application.pdfViewer
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })
@@ -875,7 +875,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'media-viewer'
+        fileViewerType: application.mediaViewer
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })
@@ -904,7 +904,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'media-viewer'
+        fileViewerType: application.mediaViewer
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })

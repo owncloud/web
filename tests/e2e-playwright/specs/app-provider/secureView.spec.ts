@@ -102,7 +102,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'secureDocument.odt',
-      application: application.collabora
+      viewer: application.collabora
     })
 
     // we copy the contents of the file and compare the clipboard with the expected contents.
@@ -132,7 +132,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'simple.pdf',
-      application: application.collabora
+      viewer: application.collabora
     })
 
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
@@ -153,7 +153,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.jpeg',
-      application: application.collabora
+      viewer: application.collabora
     })
 
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
@@ -174,7 +174,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'lorem.txt',
-      application: application.collabora
+      viewer: application.collabora
     })
 
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"

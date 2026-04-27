@@ -56,7 +56,7 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       resource: 'OpenDocument.odt',
       space: 'personal',
       editorName: application.collabora,
-      client: client.desktop
+      clientType: client.desktop
     })
     // Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
@@ -72,7 +72,7 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       resource: 'MicrosoftWord.docx',
       space: 'personal',
       editorName: application.onlyOffice,
-      client: client.desktop
+      clientType: client.desktop
     })
     // Then "Alice" should see the content "Microsoft Word Content" in editor "OnlyOffice"
     await ui.userShouldSeeContentInEditor({
@@ -90,7 +90,7 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       resource: 'OpenDocument.odt',
       space: 'personal',
       editorName: application.collabora,
-      client: client.mobile
+      clientType: client.mobile
     })
     // Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
@@ -106,7 +106,7 @@ test.describe('url stability for mobile and desktop client', { tag: '@predefined
       resource: 'MicrosoftWord.docx',
       space: 'personal',
       editorName: application.onlyOffice,
-      client: client.mobile
+      clientType: client.mobile
     })
     // Then "Alice" should see the content "Microsoft Word Content" in editor "OnlyOffice"
     await ui.userShouldSeeContentInEditor({

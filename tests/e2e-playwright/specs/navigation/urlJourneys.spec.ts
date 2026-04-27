@@ -180,7 +180,7 @@ test.describe('Navigate web directly through urls', () => {
       world,
       stepUser: 'Alice',
       resource: 'file_inside_folder.txt',
-      application: application.textEditor
+      viewer: application.textEditor
     })
     // Then "Alice" is in a text-editor
     await ui.userShouldBeInFileViewer({
@@ -203,7 +203,7 @@ test.describe('Navigate web directly through urls', () => {
       world,
       stepUser: 'Alice',
       resource: 'spaceTextfile.txt',
-      application: application.textEditor
+      viewer: application.textEditor
     })
     // Then "Alice" is in a text-editor
     await ui.userShouldBeInFileViewer({
