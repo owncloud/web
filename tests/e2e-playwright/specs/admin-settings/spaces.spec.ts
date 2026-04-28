@@ -183,7 +183,7 @@ test.describe('spaces management', () => {
       stepUser: 'Admin',
       space: 'team A',
       sharee: [
-        { user: 'Brian', shareType: 'user', role: 'Can edit with versions and trashbin' },
+        { user: 'Brian', shareType: 'user', role: 'Can edit with versions and trash bin' },
         { user: 'Carol', shareType: 'user', role: 'Can view' },
         { user: 'David', shareType: 'user', role: 'Can view' },
         { user: 'Edith', shareType: 'user', role: 'Can view' }
@@ -202,7 +202,7 @@ test.describe('spaces management', () => {
       stepUser: 'Alice',
       expectedMembers: [
         { user: 'Admin', role: 'Can manage' },
-        { user: 'Brian', role: 'Can edit with versions and trashbin' },
+        { user: 'Brian', role: 'Can edit with versions and trash bin' },
         { user: 'Carol', role: 'Can view' },
         { user: 'David', role: 'Can view' },
         { user: 'Edith', role: 'Can view' }

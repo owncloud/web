@@ -53,7 +53,7 @@ test.describe('deny space access', () => {
       world,
       stepUser: 'Alice',
       space: 'sales',
-      sharee: [{ user: 'Brian', role: 'Can edit with versions and trashbin', shareType: 'user' }]
+      sharee: [{ user: 'Brian', role: 'Can edit with versions and trash bin', shareType: 'user' }]
     })
 
     // When "Alice" navigates to the project space "sales"

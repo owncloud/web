@@ -359,7 +359,7 @@ export const listSpaceMembers = async (args: {
     case 'Can view':
       users = await page.locator(util.format(spaceMemberList, filter)).allTextContents()
       break
-    case 'Can edit with versions and trashbin':
+    case 'Can edit with versions and trash bin':
       users = await page.locator(util.format(spaceMemberList, filter)).allTextContents()
       break
   }

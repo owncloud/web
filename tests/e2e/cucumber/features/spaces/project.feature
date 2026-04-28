@@ -145,9 +145,9 @@ Feature: spaces.personal
       | resource     | to     | option  |
       | textfile.txt | parent | replace |
     And "Alice" adds following users to the project space
-      | user  | role                                | kind |
-      | Carol | Can view                            | user |
-      | Brian | Can edit with versions and trashbin | user |
+      | user  | role                                 | kind |
+      | Carol | Can view                             | user |
+      | Brian | Can edit with versions and trash bin | user |
     And "Alice" logs out
 
     When "Carol" logs in

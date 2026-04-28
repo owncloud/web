@@ -149,8 +149,8 @@ test.describe('Notifications', () => {
       world,
       stepUser: 'Alice',
       members: [
-        { user: 'Brian', role: 'Can edit with versions and trashbin', kind: 'user' },
-        { user: 'Carol', role: 'Can edit with versions and trashbin', kind: 'user' }
+        { user: 'Brian', role: 'Can edit with versions and trash bin', kind: 'user' },
+        { user: 'Carol', role: 'Can edit with versions and trash bin', kind: 'user' }
       ]
     })
 
@@ -350,8 +350,8 @@ test.describe('Notifications', () => {
       stepUser: 'Alice',
       space: 'team.1',
       members: [
-        { reciver: 'Brian', role: 'Can edit with versions and trashbin', kind: 'user' },
-        { reciver: 'Carol', role: 'Can edit with versions and trashbin', kind: 'user' }
+        { reciver: 'Brian', role: 'Can edit with versions and trash bin', kind: 'user' },
+        { reciver: 'Carol', role: 'Can edit with versions and trash bin', kind: 'user' }
       ]
     })
 
@@ -362,7 +362,7 @@ test.describe('Notifications', () => {
       world,
       stepUser: 'Alice',
       reciver: 'Carol',
-      role: 'Can edit with versions and trashbin'
+      role: 'Can edit with versions and trash bin'
     })
 
     // Then "Alice" should see no notifications

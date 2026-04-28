@@ -44,7 +44,7 @@ test.describe('spaces member expiry', () => {
     await ui.userAddsMembersToSpace({
       world,
       stepUser: 'Alice',
-      members: [{ user: 'Brian', role: 'Can edit with versions and trashbin', kind: 'user' }]
+      members: [{ user: 'Brian', role: 'Can edit with versions and trash bin', kind: 'user' }]
     })
 
     // And "Alice" sets the expiration date of the member "Brian" of the project space to "+5 days"
