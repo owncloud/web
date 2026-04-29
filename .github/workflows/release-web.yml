@@ -37,9 +37,15 @@ jobs:
         run: pnpm install
 
       - name: Build release
-        run: make release
+        run: make -f Makefile.release
         env:
           NO_INSTALL: 'true'
+
+      - name: Generate checksums
+        run: |
+          cd ${{ github.workspace }}/release
+          md5sum * > md5sum.txt
+          sha256sum * > sha256sum.txt
 
       - name: Get release version
         id: version
