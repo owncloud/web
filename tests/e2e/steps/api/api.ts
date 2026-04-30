@@ -200,7 +200,8 @@ export async function userHasCreatedProjectSpaces({
     })
     world.spacesEnvironment.createSpace({
       key: space.id || space.name,
-      space: { name: space.name, id: spaceId }
+      space: { name: space.name, id: spaceId },
+      world
     })
   }
 }
@@ -280,7 +281,7 @@ export async function usersHaveBeenAddedToGroup({
   for (const info of usersToAdd) {
     const group = world.usersEnvironment.getGroup({ key: info.group, world })
     const user = world.usersEnvironment.getUser({ key: info.user, world })
-    await api.graph.addUserToGroup({ user, group, admin })
+    await api.graph.addUserToGroup({ user, group, admin, world })
   }
 }
 
@@ -294,8 +295,8 @@ export async function userHasDeletedGroup({
   name: string
 }): Promise<void> {
   const admin = world.usersEnvironment.getUser({ key: stepUser })
-  const group = world.usersEnvironment.getGroup({ key: name })
-  await api.graph.deleteGroup({ group, admin })
+  const group = world.usersEnvironment.getGroup({ key: name, world })
+  await api.graph.deleteGroup({ group, admin, world })
 }
 
 export async function userHasAddedMembersToSpace({

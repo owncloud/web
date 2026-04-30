@@ -7,9 +7,11 @@ import { fileAction } from '../../../../environment/constants'
 export class Spaces {
   #page: Page
   #spacesEnvironment: SpacesEnvironment
+  #world?: World
 
-  constructor({ page }: { page: Page }) {
+  constructor({ page, world }: { page: Page; world?: World }) {
     this.#spacesEnvironment = new SpacesEnvironment()
+    this.#world = world
     this.#page = page
   }
 
@@ -22,7 +24,7 @@ export class Spaces {
   }
 
   getSpace({ key }: { key: string }): Space {
-    return this.#spacesEnvironment.getSpace({ key })
+    return this.#spacesEnvironment.getSpace({ key, world: this.#world })
   }
 
   async changeQuota({
@@ -68,11 +70,19 @@ export class Spaces {
   }
 
   async select({ key }: { key: string }): Promise<void> {
-    await po.selectSpace({ page: this.#page, id: this.getUUID({ key }) })
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
+    await po.selectSpace({ page: this.#page, id })
   }
 
-  async renameSpaceUsingContextMenu({ key, value }: { key: string; value: string }): Promise<void> {
-    await po.renameSpaceUsingContextMenu({ page: this.#page, id: this.getUUID({ key }), value })
+  async renameSpaceUsingContextMenu({
+    key,
+    value
+  }: {
+    key: string
+    value: string
+  }): Promise<void> {
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
+    await po.renameSpaceUsingContextMenu({ page: this.#page, id, value })
   }
 
   async changeSubtitleUsingContextMenu({
@@ -82,22 +92,20 @@ export class Spaces {
     key: string
     value: string
   }): Promise<void> {
-    await po.changeSpaceSubtitleUsingContextMenu({
-      page: this.#page,
-      id: this.getUUID({ key }),
-      value
-    })
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
+    await po.changeSpaceSubtitleUsingContextMenu({ page: this.#page, id, value })
   }
 
   async openPanel({ key }: { key: string }): Promise<void> {
-    await po.openSpaceAdminSidebarPanel({ page: this.#page, id: this.getUUID({ key }) })
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
+    await po.openSpaceAdminSidebarPanel({ page: this.#page, id })
   }
 
   async openActionSideBarPanel({ action }: { action: string }): Promise<void> {
     await po.openSpaceAdminActionSidebarPanel({ page: this.#page, action })
   }
 
-  listMembers({ filter }: { filter: string }): Promise<Array<string>> {
+  async listMembers({ filter }: { filter: string }): Promise<string[]> {
     return po.listSpaceMembers({ page: this.#page, filter })
   }
 }

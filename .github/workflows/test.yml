@@ -75,11 +75,12 @@ jobs:
       fail-fast: false
       matrix:
         suites:
-          - suite: part-1
+        #   - suite: part-1
             # test_suites: admin-settings,spaces
-            test_suites: spaces
-        #   - suite: part-2
-        #     test_suites: navigation,user-settings,app-store,file-action
+            # test_suites: spaces
+          - suite: part-2
+            test_suites: navigation,user-settings,app-store,file-action
+
         #   - suite: part-3
         #     test_suites: shares,search,runtime
         #     tika: true

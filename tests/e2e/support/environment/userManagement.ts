@@ -125,7 +125,15 @@ export class UsersEnvironment {
     return base
   }
 
-  getCreatedGroup({ key }: { key: string }): Group {
+  getCreatedGroup({ key, world }: { key: string; world?: World }): Group {
+    // If world is provided, try world-aware key first for parallel test safety
+    if (world) {
+      const worldKey = world.getGroupId(key).toLowerCase()
+      if (createdGroupStore.has(worldKey)) {
+        return createdGroupStore.get(worldKey)
+      }
+    }
+    // Fall back to original key (for backward compatibility)
     const groupKey = key.toLowerCase()
     if (!createdGroupStore.has(groupKey)) {
       throw new Error(`group with key '${groupKey}' not found`)

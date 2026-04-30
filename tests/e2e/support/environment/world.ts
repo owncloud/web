@@ -1,6 +1,6 @@
-import { config } from '../config'
-import { environment } from '../support'
-import { state } from './shared'
+import { config } from '../../config'
+import { environment } from '../index'
+import { state } from '../../cucumber/environment/shared'
 
 export class World {
   workerIndex: number
@@ -59,8 +59,3 @@ export class World {
     return this.idCache.get(cacheKey)!
   }
 }
-=======
-// Re-export World from e2e support for use in e2e-playwright tests
-// eslint-disable-next-line import/namespace
-export { World } from '../../e2e/support/environment/world'
->>>>>>> 8827f9b36 (test: run navigation test suite parallely):tests/e2e-playwright/support/world.ts

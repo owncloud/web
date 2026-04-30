@@ -152,8 +152,8 @@ export async function userSharesResources({
     const shareRecipient = {
       collaborator:
         resource.type === 'group'
-          ? world.usersEnvironment.getGroup({ key: resource.recipient })
-          : world.usersEnvironment.getUser({ key: resource.recipient }),
+          ? world.usersEnvironment.getGroup({ key: resource.recipient, world })
+          : world.usersEnvironment.getUser({ key: resource.recipient, world }),
       role: resource.role,
       type: resource.type as CollaboratorType,
       resourceType: resource.resourceType,
@@ -214,7 +214,7 @@ export async function userAddsUsersToProjectSpace({
   members: { reciver: string; role: string; kind: 'user' | 'group' }[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const spacesObject = new objects.applicationFiles.Spaces({ page, world })
   const sharer = world.usersEnvironment.getUser({ key: stepUser })
 
   for (const member of members) {

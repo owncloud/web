@@ -1,22 +1,31 @@
 import { Space } from '../types'
 import { createdSpaceStore } from '../store'
+import { World } from '../../../e2e-playwright/support/world'
 
 export class SpacesEnvironment {
-  getSpace({ key }: { key: string }): Space {
-    if (!createdSpaceStore.has(key)) {
-      throw new Error(`space with key '${key}' not found`)
+  getSpace({ key, world }: { key: string; world?: World }): Space {
+    const storeKey = world ? this.getWorldKey(key, world) : key
+
+    if (!createdSpaceStore.has(storeKey)) {
+      throw new Error(`space with key '${storeKey}' not found`)
     }
 
-    return createdSpaceStore.get(key)
+    return createdSpaceStore.get(storeKey)
   }
 
-  createSpace({ key, space }: { key: string; space: Space }): Space {
-    if (createdSpaceStore.has(key)) {
-      throw new Error(`link with key '${key}' already exists`)
+  createSpace({ key, space, world }: { key: string; space: Space; world?: World }): Space {
+    const storeKey = world ? this.getWorldKey(key, world) : key
+
+    if (createdSpaceStore.has(storeKey)) {
+      throw new Error(`space with key '${storeKey}' already exists`)
     }
 
-    createdSpaceStore.set(key, space)
+    createdSpaceStore.set(storeKey, space)
 
     return space
+  }
+
+  private getWorldKey(key: string, world: World): string {
+    return `${key}-w${world.workerIndex}-${world.testId}`
   }
 }

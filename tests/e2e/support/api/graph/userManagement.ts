@@ -6,6 +6,7 @@ import { getApplicationEntity } from './utils'
 import { userRoleStore } from '../../store'
 import { UsersEnvironment } from '../../environment'
 import { setAccessAndRefreshToken } from '../token'
+import { World } from '../../environment/world'
 
 interface GroupResponse {
   value: Group[]
@@ -117,13 +118,17 @@ export const createGroup = async ({
 
 export const deleteGroup = async ({
   group,
-  admin
+  admin,
+  world
 }: {
   group: Group
   admin: User
+  world?: World
 }): Promise<Group> => {
   const usersEnvironment = new UsersEnvironment()
-  const groupId = usersEnvironment.getCreatedGroup({ key: group.id }).uuid
+  // Use world for group lookup if provided (parallel test safety)
+  const groupKey = world ? group.id : group.originalId || group.id
+  const groupId = usersEnvironment.getCreatedGroup({ key: groupKey, world }).uuid
 
   await request({
     method: 'DELETE',
@@ -136,16 +141,19 @@ export const deleteGroup = async ({
 export const addUserToGroup = async ({
   user,
   group,
-  admin
+  admin,
+  world
 }: {
   user: User
   group: Group
   admin: User
+  world?: World
 }): Promise<void> => {
   const usersEnvironment = new UsersEnvironment()
   const userId = usersEnvironment.getCreatedUser({ key: user.originalId || user.id }).uuid
-  // Use originalId for group lookup for parallel safety
-  const groupId = usersEnvironment.getCreatedGroup({ key: group.originalId || group.id }).uuid
+  // Use world for group lookup if provided (parallel test safety)
+  const groupKey = world ? group.id : group.originalId || group.id
+  const groupId = usersEnvironment.getCreatedGroup({ key: groupKey, world }).uuid
   const body = JSON.stringify({
     '@odata.id': join(config.baseUrl, 'graph', 'v1.0', 'users', userId)
   })

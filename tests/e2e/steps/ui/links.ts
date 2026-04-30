@@ -112,7 +112,7 @@ export async function userCreatesPublicLinkOfSpaceWithPassword({
   password: string
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const spaceObject = new objects.applicationFiles.Spaces({ page })
+  const spaceObject = new objects.applicationFiles.Spaces({ page, world })
   password = substitute(password)
   await spaceObject.createPublicLink({ password })
 }

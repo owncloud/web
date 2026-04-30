@@ -83,17 +83,6 @@ export const openSpace = async (args: openSpaceArgs): Promise<void> => {
   const { page, id } = args
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
   const locator = page.locator(util.format(spaceIdSelector, id))
-  // Debug: log expected id and all visible space ids with names before waiting for the target space
-  // eslint-disable-next-line no-console
-  console.log('DEBUG: Looking for space id:', id)
-  const allSpaceDetails = await page.$$eval('[data-item-id]', (els) =>
-    els.map((e) => ({
-      id: e.getAttribute('data-item-id'),
-      name: e.querySelector('.oc-resource-basename')?.textContent?.trim()
-    }))
-  )
-  // eslint-disable-next-line no-console
-  console.log('DEBUG: Visible spaces with names:', allSpaceDetails)
   await locator.waitFor({ state: 'visible', timeout: 30000 }) // Wait up to 30s for the space to appear
   await locator.click()
   await page.locator(spaceHeaderSelector).waitFor({ state: 'visible', timeout: 15000 })
