@@ -74,7 +74,6 @@ config = {
             "skip": False,
             "suites": [
                 "admin-settings",
-                "spaces",
             ],
         },
         "keycloak": {

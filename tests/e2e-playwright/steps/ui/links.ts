@@ -282,3 +282,21 @@ export async function userCopiesLinkOfResource({
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.copyLinkToClipboard({ resource })
 }
+
+export async function userChangesThePasswordOfPublicLink({
+  world,
+  stepUser,
+  linkName,
+  resource,
+  newPassword
+}: {
+  world: World
+  stepUser: string
+  linkName: string
+  resource: string
+  newPassword: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  await linkObject.addPassword({ resource, linkName, newPassword })
+}

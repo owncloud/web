@@ -288,6 +288,11 @@ export const addPassword = async (args: addPasswordArgs): Promise<void> => {
   const { page } = args
 
   await fillPassword(args)
+  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+    page,
+    ['notificationContainer'],
+    'notification popup after updating password'
+  )
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
 }
