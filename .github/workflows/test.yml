@@ -77,12 +77,13 @@ jobs:
         suites:
         #   - suite: part-1
             # test_suites: admin-settings,spaces
-            # test_suites: spaces
           - suite: part-2
             test_suites: navigation,user-settings,app-store,file-action
 
-        #   - suite: part-3
-        #     test_suites: shares,search,runtime
+          - suite: part-3
+            test_suites: shares
+            # test_suites: shares,search,runtime
+
         #     tika: true
         #   - suite: app-provider
         #     test_suites: app-provider

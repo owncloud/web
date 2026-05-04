@@ -406,20 +406,28 @@ export async function userChecksAccessDetailsOfShare({
   if (accessDetails.hasOwnProperty('Type') && accessDetails.Type === 'External') {
     selectorType = 'group'
   }
-  accessDetails.Name = substitute(accessDetails.Name)
+  const expectedAccessDetails = {
+    ...accessDetails,
+    Name: substitute(accessDetails.Name).replace(/\s+\(\d+\)$/, '')
+  }
 
   const actualDetails = await shareObject.getAccessDetails({
     resource,
     collaborator: {
       collaborator:
         sharee.type === 'group'
-          ? world.usersEnvironment.getGroup({ key: sharee.name })
-          : world.usersEnvironment.getUser({ key: sharee.name }),
+          ? world.usersEnvironment.getGroup({ key: sharee.name, world })
+          : world.usersEnvironment.getUser({ key: sharee.name, world }),
       type: selectorType
     } as ICollaborator
   })
 
-  expect(actualDetails).toMatchObject(accessDetails)
+  const normalizedActualDetails = {
+    ...actualDetails,
+    Name: (actualDetails.Name || '').replace(/\s+\(\d+\)$/, '')
+  }
+
+  expect(normalizedActualDetails).toMatchObject(expectedAccessDetails)
 }
 
 export async function userShouldSeeAccessDetailsOfShareForFederatedUser({
@@ -441,7 +449,7 @@ export async function userShouldSeeAccessDetailsOfShareForFederatedUser({
   const actualDetails = await shareObject.getAccessDetails({
     resource,
     collaborator: {
-      collaborator: world.usersEnvironment.getUser({ key: collaboratorName }),
+      collaborator: world.usersEnvironment.getUser({ key: collaboratorName, world }),
       type: 'group'
     } as ICollaborator
   })
@@ -468,8 +476,8 @@ export async function userSetsExpirationDateOfShare({
   const shareObject = new objects.applicationFiles.Share({ page })
   const collaborator =
     collaboratorType === 'group'
-      ? world.usersEnvironment.getGroup({ key: collaboratorName })
-      : world.usersEnvironment.getUser({ key: collaboratorName })
+      ? world.usersEnvironment.getGroup({ key: collaboratorName, world })
+      : world.usersEnvironment.getUser({ key: collaboratorName, world })
   await shareObject.addExpirationDate({
     resource,
     collaborator: { collaborator, type: collaboratorType } as ICollaborator,

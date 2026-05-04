@@ -20,6 +20,19 @@ export async function userRenamesMostRecentlyCreatedPublicLinkOfResource({
   expect(linkName).toBe(newName)
 }
 
+export async function userCopiesThePasswordOfThePublicLink({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const linkObject = new objects.applicationFiles.Link({ page })
+  // Copy password and store in linksEnvironment for parallel test safety
+  world.linksEnvironment.copiedPassword = await linkObject.copyEnteredPassword()
+}
+
 export async function userCopiesTheLinkOfPasswordProtectedFolder({
   world,
   stepUser,
@@ -243,18 +256,6 @@ export async function userGeneratesThePasswordForThePublicLink({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const linkObject = new objects.applicationFiles.Link({ page })
   await linkObject.generatePassword()
-}
-
-export async function userCopiesThePasswordOfThePublicLink({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
-  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const linkObject = new objects.applicationFiles.Link({ page })
-  await linkObject.copyEnteredPassword()
 }
 
 export async function userSetsThePasswordOfThePublicLink({

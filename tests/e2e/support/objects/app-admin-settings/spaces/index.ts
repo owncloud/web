@@ -74,13 +74,7 @@ export class Spaces {
     await po.selectSpace({ page: this.#page, id })
   }
 
-  async renameSpaceUsingContextMenu({
-    key,
-    value
-  }: {
-    key: string
-    value: string
-  }): Promise<void> {
+  async renameSpaceUsingContextMenu({ key, value }: { key: string; value: string }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
     await po.renameSpaceUsingContextMenu({ page: this.#page, id, value })
   }
