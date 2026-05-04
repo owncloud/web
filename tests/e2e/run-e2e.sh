@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SCRIPT_PATH=$(dirname "$0")
-SCRIPT_PATH=$(cd "${SCRIPT_PATH_REL}" && pwd) # absolute path
+SCRIPT_PATH=$(cd "${SCRIPT_PATH}" && pwd) # absolute path
 PROJECT_ROOT=$(cd "$SCRIPT_PATH/../../" && pwd)
 SCRIPT_PATH_REL=${SCRIPT_PATH//"$PROJECT_ROOT/"/}
 
@@ -117,27 +117,49 @@ fi
 
 function getFeaturePaths() {
     local paths
-    local real_paths
-    local a_path
-    local parent_path
+    local real_paths=""
+    local file_path
+    local line_number
+    local resolved_path
+    local playwright_root="$PROJECT_ROOT/tests/e2e-playwright"
+    local playwright_specs_dir="$playwright_root/specs"
 
     # $1    - paths to suite or feature file
     paths=$(echo "$1" | xargs)
-    real_paths=""
     for path in $paths; do
-        parent_path="."
-        real_paths+=" $SCRIPT_PATH/$path" # maintain the white space
-        if [[ "$TEST_TYPE" == "playwright" ]]; then
-            local spec_path
-            parent_path="../e2e-playwright"
-            spec_path=$(cd "$SCRIPT_PATH/../e2e-playwright" && pwd)
-            real_paths+=" $spec_path/$path"
+        # Split file and line number if present
+        file_path="${path%%:*}"
+        line_number="${path#*:}"
+        if [[ "$file_path" == "$line_number" ]]; then
+            # No line number present
+            line_number=""
         fi
-        a_path=$(echo "$parent_path/$path" | cut -d ":" -f1)
-        if [[ ! -f $a_path && ! -d $a_path ]]; then
-            log error "File or folder doesn't exist: '$a_path'"
-            log info "Path must be relative to '$SCRIPT_PATH_REL'"
+
+        # Resolve supported path formats used in CI and local runs.
+        resolved_path=""
+        if [[ -f "$file_path" || -d "$file_path" ]]; then
+            resolved_path="$file_path"
+        elif [[ -f "$PROJECT_ROOT/$file_path" || -d "$PROJECT_ROOT/$file_path" ]]; then
+            resolved_path="$PROJECT_ROOT/$file_path"
+        elif [[ "$TEST_TYPE" == "playwright" && ( -f "$playwright_root/$file_path" || -d "$playwright_root/$file_path" ) ]]; then
+            # Supports FEATURE_FILES like specs/admin-settings/spaces.spec.ts
+            resolved_path="$playwright_root/$file_path"
+        elif [[ "$TEST_TYPE" == "playwright" && ( -f "$playwright_specs_dir/$file_path" || -d "$playwright_specs_dir/$file_path" ) ]]; then
+            # Supports FEATURE_FILES like admin-settings/spaces.spec.ts
+            resolved_path="$playwright_specs_dir/$file_path"
+        else
+            log error "File or folder doesn't exist: '$file_path'"
+            log info "Tried: '$file_path', '$PROJECT_ROOT/$file_path', '$playwright_root/$file_path', and '$playwright_specs_dir/$file_path'"
             exit 1
+        fi
+
+        file_path="$resolved_path"
+
+        # Reconstruct path for runner (with :line if present)
+        if [[ -n "$line_number" && "$line_number" =~ ^[0-9]+$ ]]; then
+            real_paths+=" $file_path:$line_number"
+        else
+            real_paths+=" $file_path"
         fi
     done
     FEATURE_PATHS=$(echo "$real_paths" | xargs) # remove trailing white spaces

@@ -100,7 +100,7 @@ jobs:
             test_suites: mfa
             mfa: true
           - suite: keycloak
-            feature_files: specs/admin-settings/spaces.spec.ts,specs/journeys/kindergarten.spec.ts,specs/admin-settings/users.spec.ts
+            feature_files: specs/admin-settings/spaces.spec.ts,specs/journeys/kindergarten.spec.ts,specs/admin-settings/users.spec.ts:38,specs/admin-settings/users.spec.ts:75,specs/admin-settings/users.spec.ts:171,specs/admin-settings/users.spec.ts:206,specs/admin-settings/users.spec.ts:281
             keycloak: true
     env:
       BASE_URL_OCIS: localhost:9200
