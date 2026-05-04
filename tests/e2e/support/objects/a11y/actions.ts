@@ -45,7 +45,7 @@ export const selectors = {
   filesView: '#files-view',
   sidebarNavigationMenu: '.oc-sidebar-nav',
   sidebarPaneSharing: '#sidebar-panel-sharing',
-  fileAppBarActions: '.files-app-bar-actions',
+  filesAppBarActions: '.files-app-bar-actions',
   // visible tippy/popover (active)
   tippyBoxVisible: '.tippy-box[data-state="visible"]',
   logoWrapper: '.logo-wrapper',
@@ -64,12 +64,19 @@ export const selectors = {
   ocModalGenerateNewToken: '.oc-modal.oc-modal-passive',
   scienceMesh: '.sciencemesh',
   filesTable: '.files-table',
-  filesAppBarActions: '.files-app-bar-actions',
   notificationContainer: 'div.oc-notification',
   spaceInfoContainer: '.space-header-infos',
   saveTextEditorOrViewerButton: '#app-save-action',
   spaceDescriptionPreview: '#space-description-preview',
-  quotaValueDropDown: 'ul.vs__dropdown-menu'
+  quotaValueDropDown: 'ul.vs__dropdown-menu',
+  compareSaveDialog: '.compare-save-dialog',
+  batchQuotaInputDropdownToggle: '.quota-select-batch-action-form .vs__dropdown-toggle', //dropdown with icon
+  roleDropdownMenu: 'ul.vs__dropdown-menu',
+  groupsDropdownMenu: 'ul.vs__dropdown-menu',
+  usersTable: '.users-table',
+  usersList: '#user-list', //users list with filter options included
+  addUserToGroupForm: '#user-group-select-form',
+  loginErrorMessageLocator: '#oc-login-error-message'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']

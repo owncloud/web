@@ -54,7 +54,7 @@ export async function userAllowsLoginForUserUsingContextMenu({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
 
-  await usersObject.allowLogin({ key, action: 'context-menu' })
+  await usersObject.allowLogin({ key, action: fileAction.contextMenu })
 }
 
 export async function userForbidsLoginForUserUsingContextMenu({
@@ -69,7 +69,7 @@ export async function userForbidsLoginForUserUsingContextMenu({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
 
-  await usersObject.forbidLogin({ key, action: 'context-menu' })
+  await usersObject.forbidLogin({ key, action: fileAction.contextMenu })
 }
 
 export async function userChangesQuotaOfUserUsingContextMenu({
@@ -86,7 +86,7 @@ export async function userChangesQuotaOfUserUsingContextMenu({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
 
-  await usersObject.changeQuota({ key, value, action: 'context-menu' })
+  await usersObject.changeQuota({ key, value, action: fileAction.contextMenu })
 }
 
 export async function userChangesQuotaForUsersUsingBatchAction({
@@ -222,7 +222,12 @@ export async function userChangesNameOfUserUsingContextMenu({
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.changeUser({ key, attribute: 'userName', value, action: 'context-menu' })
+  await usersObject.changeUser({
+    key,
+    attribute: 'userName',
+    value,
+    action: fileAction.contextMenu
+  })
 }
 
 export async function userUpdatesUserAttributeUsingContextMenu({
@@ -240,7 +245,7 @@ export async function userUpdatesUserAttributeUsingContextMenu({
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.changeUser({ key: user, attribute, value, action: 'context-menu' })
+  await usersObject.changeUser({ key: user, attribute, value, action: fileAction.contextMenu })
 }
 
 export async function userDeletesUsersUsingBatchActions({
@@ -331,7 +336,7 @@ export async function userOpensEditPanelOfUserUsingQuickAction({
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.openEditPanel({ key: actionUser, action: 'quick-action' })
+  await usersObject.openEditPanel({ key: actionUser, action: fileAction.quickAction })
 }
 
 export async function userOpensEditPanelOfUserUsingContextMenu({
@@ -345,7 +350,7 @@ export async function userOpensEditPanelOfUserUsingContextMenu({
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.openEditPanel({ key: actionUser, action: 'context-menu' })
+  await usersObject.openEditPanel({ key: actionUser, action: fileAction.contextMenu })
 }
 
 export async function userShouldSeeEditPanel({
@@ -376,7 +381,7 @@ export async function userAddsUserToGroupsUsingContextMenu({
   await usersObject.addToGroups({
     key: user,
     groups,
-    action: 'context-menu'
+    action: fileAction.contextMenu
   })
 }
 
@@ -396,7 +401,7 @@ export async function userRemovesUserFromGroupsUsingContextMenu({
   await usersObject.removeFromGroups({
     key: user,
     groups,
-    action: 'context-menu'
+    action: fileAction.contextMenu
   })
 }
 
@@ -557,8 +562,6 @@ export async function userNavigatesToUserManagementPage({
   const pageObject = new objects.applicationAdminSettings.page.Users({ page })
   await pageObject.navigate()
 }
-
-
 
 export async function userAuthenticatesWithOTP({
   world,
