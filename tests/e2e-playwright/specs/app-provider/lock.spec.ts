@@ -1,7 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { application } from '../../support/constants'
+import { application, fileAction } from '../../support/constants'
 
 test.describe('lock', { tag: '@sse' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -113,7 +113,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'test.odt',

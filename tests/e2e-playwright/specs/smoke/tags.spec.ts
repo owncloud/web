@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { fileAction } from '../../support/constants'
 
 test.describe('Users can use web to organize tags', () => {
   test.beforeEach(async ({ world }) => {
@@ -198,7 +199,7 @@ test.describe('Users can use web to organize tags', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'folder_to_shared',

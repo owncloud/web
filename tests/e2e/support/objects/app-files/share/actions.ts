@@ -7,6 +7,7 @@ import { User } from '../../../types'
 import { locatorUtils } from '../../../utils'
 import { objects } from '../../..'
 import { a11y } from '../..'
+import { fileAction } from '../../../../../e2e-playwright/support/constants'
 
 const invitePanel = '//*[@id="oc-files-sharing-sidebar"]'
 const quickShareButton =
@@ -69,7 +70,10 @@ export const openSharingPanel = async function (
   }
 }
 
-export type ActionViaType = 'SIDEBAR_PANEL' | 'QUICK_ACTION' | 'URL_NAVIGATION'
+export type ActionViaType =
+  | typeof fileAction.sideBarPanel
+  | typeof fileAction.quickAction
+  | typeof fileAction.urlNavigation
 
 export interface createShareArgs extends ShareArgs {
   via: ActionViaType
@@ -78,7 +82,7 @@ export interface createShareArgs extends ShareArgs {
 export const createShare = async (args: createShareArgs): Promise<void> => {
   const { page, resource, recipients, via } = args
 
-  if (via !== 'URL_NAVIGATION') {
+  if (via !== fileAction.urlNavigation) {
     await openSharingPanel(page, resource, via)
 
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
@@ -140,7 +144,7 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
 /**/
 
 export interface ShareStatusArgs extends Omit<ShareArgs, 'recipients'> {
-  via?: 'STATUS' | 'CONTEXT_MENU'
+  via?: 'STATUS' | typeof fileAction.contextMenu
 }
 
 export const enableSync = async (args: ShareStatusArgs): Promise<void> => {

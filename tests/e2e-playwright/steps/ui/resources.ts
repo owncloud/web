@@ -637,7 +637,7 @@ export const processDownload = async (
       downloadedResources.push(name)
     })
 
-    if (actionType === 'SIDEBAR_PANEL' || actionType === 'PREVIEW_TOPBAR') {
+    if (actionType === fileAction.sideBarPanel || actionType === fileAction.previewTopBar) {
       expect(downloads.length).toBe(files.length)
       for (const resource of files) {
         const fileOrFolderName = path.parse(resource.name).name
@@ -650,7 +650,7 @@ export const processDownload = async (
     }
   }
 
-  if (actionType === 'BATCH_ACTION') {
+  if (actionType === fileAction.batchAction) {
     expect(downloads.length).toBe(1)
     downloads.forEach((download) => {
       const { name } = path.parse(download.suggestedFilename())

@@ -1,5 +1,6 @@
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { fileAction } from '../../support/constants'
 import { test } from '../../support/test'
 
 test.describe('spaces.personal', () => {
@@ -118,7 +119,7 @@ test.describe('spaces.personal', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'folder_to_shared',
@@ -283,7 +284,7 @@ test.describe('spaces.personal', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       resources: [
         {
           name: 'lorem_new.txt',

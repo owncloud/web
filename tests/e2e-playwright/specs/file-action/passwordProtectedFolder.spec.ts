@@ -395,7 +395,7 @@ test.describe('password-protected folder operation', () => {
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       resources: [{ name: 'space-folder1.psec' }]
     })
 

@@ -18,7 +18,11 @@ import { environment, objects, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
-import { fileAction, application, searchScope } from '../../../../../e2e-playwright/support/constants'
+import {
+  fileAction,
+  application,
+  searchScope
+} from '../../../../../e2e-playwright/support/constants'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -822,7 +826,10 @@ export const navigateMediaFile = async ({
     'preview controls action bar'
   )
   await page.locator(util.format(mediaNavigationButton, navigationType)).click()
-  const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType: application.mediaViewer })
+  const fileViewerLocator = editor.fileViewerLocator({
+    page,
+    fileViewerType: application.mediaViewer
+  })
   await expect(fileViewerLocator).toBeVisible()
 
   const currentFileInMediaViewer = await page
@@ -867,10 +874,10 @@ interface resourceArgs {
 }
 
 export type ActionViaType =
-  | 'sidebar panel'
-  | 'BATCH_ACTION'
-  | 'SINGLE_SHARE_VIEW'
-  | 'PREVIEW_TOPBAR'
+  | typeof fileAction.sideBarPanel
+  | typeof fileAction.batchAction
+  | typeof fileAction.singleShareView
+  | typeof fileAction.previewTopBar
 
 export interface downloadResourcesArgs {
   page: Page
@@ -1845,7 +1852,9 @@ export const searchResourceGlobalSearch = async (
     )
     await page
       .locator(
-        filter === searchScope.allFiles ? globalSearchBarFilterAllFiles : globalSearchBarFilterCurrentFolder
+        filter === searchScope.allFiles
+          ? globalSearchBarFilterAllFiles
+          : globalSearchBarFilterCurrentFolder
       )
       .click()
   }

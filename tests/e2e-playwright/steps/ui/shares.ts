@@ -321,7 +321,7 @@ export async function userEnablesSyncForShares({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   for (const share of shares) {
-    await shareObject.enableSync({ resource: share, via: 'CONTEXT_MENU' })
+    await shareObject.enableSync({ resource: share, via: fileAction.contextMenu })
   }
 }
 

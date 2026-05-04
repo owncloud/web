@@ -499,7 +499,7 @@ test.describe('link', () => {
       await ui.userDownloadsThePublicLinkResources({
         world,
         stepUser: 'Brian',
-        actionType: 'SIDEBAR_PANEL',
+        actionType: 'sidebar panel',
         resources: [{ resource: 'shareToBrian.txt', type: 'file' }]
       })
       // And "Brian" uploads the following resources
@@ -644,7 +644,7 @@ test.describe('link', () => {
       await ui.userDownloadsThePublicLinkResources({
         world,
         stepUser: 'Carol',
-        actionType: 'SIDEBAR_PANEL',
+        actionType: 'sidebar panel',
         resources: [{ resource: 'lorem.txt', type: 'file' }]
       })
       // When "Carol" opens the public link "textLink"
@@ -777,7 +777,7 @@ test.describe('link', () => {
       await ui.userDownloadsThePublicLinkResources({
         world,
         stepUser: 'Anonymous',
-        actionType: 'SIDEBAR_PANEL',
+        actionType: 'sidebar panel',
         resources: [{ resource: 'lorem.txt', type: 'file' }]
       })
       // When "Anonymous" opens the public link "textLink"
@@ -1099,7 +1099,7 @@ test.describe('link', () => {
     await ui.userDownloadsThePublicLinkResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: 'sidebar panel',
       resources: [{ resource: 'lorem.txt', type: 'file' }]
     })
     // And "Alice" logs out
