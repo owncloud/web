@@ -66,7 +66,7 @@
     "marked": "^17.0.6",
     "md-editor-v3": "^6.3.1",
     "mermaid": "^11.12.2",
-    "oidc-client-ts": "^3.4.1",
+    "oidc-client-ts": "^3.5.0",
     "p-queue": "^9.2.0",
     "password-sheriff": "^2.0.0",
     "pdf-lib": "^1.17.1",
