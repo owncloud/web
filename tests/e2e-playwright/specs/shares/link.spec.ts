@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { fileAction, resourcePage, application } from '../../support/constants'
 
 test.describe('link', () => {
   test.beforeEach(async ({ world }) => {
@@ -134,7 +135,7 @@ test.describe('link', () => {
     //   | simple.pdf   |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['textfile.txt', 'simple.pdf']
     })
@@ -163,7 +164,7 @@ test.describe('link', () => {
     //   | lorem.txt    |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['textfile.txt', 'simple.pdf', 'SubFolder', 'lorem.txt']
     })
@@ -173,7 +174,7 @@ test.describe('link', () => {
     await ui.userDeletesResourcesFromPublicLink({
       world,
       stepUser: 'Brian',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       resources: [{ resource: 'simple.pdf' }]
     })
     // And "Brian" logs out
@@ -188,7 +189,7 @@ test.describe('link', () => {
     await ui.userDownloadsThePublicLinkResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       resources: [
         { resource: 'lorem.txt', type: 'file' },
         { resource: 'textfile.txt', type: 'file' }
@@ -223,7 +224,7 @@ test.describe('link', () => {
     // And "Anonymous" should see the resource "PARENT" in the files list
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: resourcePage.filesList,
       stepUser: 'Anonymous',
       resources: ['PARENT']
     })
@@ -233,7 +234,7 @@ test.describe('link', () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'drag-drop',
+      actionType: fileAction.dragDrop,
       resources: [{ resource: 'new-lorem.txt', to: 'SubFolder' }]
     })
     // And "Anonymous" copies the following resource using sidebar-panel
@@ -242,7 +243,7 @@ test.describe('link', () => {
     await ui.userCopiesResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'sidebar-panel',
+      actionType: fileAction.sideBarPanel,
       resources: [{ resource: 'lorem.txt', to: 'myfolder' }]
     })
     // And "Anonymous" renames the following public link resources
@@ -264,7 +265,7 @@ test.describe('link', () => {
     await ui.userDeletesResourcesFromPublicLink({
       world,
       stepUser: 'Anonymous',
-      actionType: 'BATCH_ACTION',
+      actionType: fileAction.batchAction,
       resources: [
         { resource: 'lorem.txt', parentFolder: 'myfolder' },
         { resource: 'child', parentFolder: 'myfolder' }
@@ -498,7 +499,7 @@ test.describe('link', () => {
       await ui.userDownloadsThePublicLinkResources({
         world,
         stepUser: 'Brian',
-        actionType: 'SIDEBAR_PANEL',
+        actionType: 'sidebar panel',
         resources: [{ resource: 'shareToBrian.txt', type: 'file' }]
       })
       // And "Brian" uploads the following resources
@@ -525,7 +526,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
 
       // And "Brian" closes the file viewer
@@ -546,7 +547,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Brian" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
@@ -556,7 +557,7 @@ test.describe('link', () => {
       await ui.userDownloadsThePublicLinkResources({
         world,
         stepUser: 'Brian',
-        actionType: 'SINGLE_SHARE_VIEW',
+        actionType: fileAction.singleShareView,
         resources: [{ resource: 'shareToBrian.md', type: 'file' }]
       })
       // When "Brian" opens the public link "pdfLink"
@@ -575,7 +576,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'pdf-viewer'
+        fileViewerType: application.pdfViewer
       })
       // And "Brian" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
@@ -605,7 +606,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Brian',
-        fileViewerType: 'media-viewer'
+        fileViewerType: application.mediaViewer
       })
       // And "Brian" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
@@ -643,7 +644,7 @@ test.describe('link', () => {
       await ui.userDownloadsThePublicLinkResources({
         world,
         stepUser: 'Carol',
-        actionType: 'SIDEBAR_PANEL',
+        actionType: 'sidebar panel',
         resources: [{ resource: 'lorem.txt', type: 'file' }]
       })
       // When "Carol" opens the public link "textLink"
@@ -662,7 +663,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Carol" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Carol' })
@@ -682,7 +683,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Carol" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Carol' })
@@ -711,7 +712,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
-        fileViewerType: 'pdf-viewer'
+        fileViewerType: application.pdfViewer
       })
       // And "Carol" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Carol' })
@@ -741,7 +742,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Carol',
-        fileViewerType: 'media-viewer'
+        fileViewerType: application.mediaViewer
       })
       // And "Carol" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Carol' })
@@ -776,7 +777,7 @@ test.describe('link', () => {
       await ui.userDownloadsThePublicLinkResources({
         world,
         stepUser: 'Anonymous',
-        actionType: 'SIDEBAR_PANEL',
+        actionType: 'sidebar panel',
         resources: [{ resource: 'lorem.txt', type: 'file' }]
       })
       // When "Anonymous" opens the public link "textLink"
@@ -795,7 +796,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })
@@ -815,7 +816,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'text-editor'
+        fileViewerType: application.textEditor
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })
@@ -844,7 +845,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'pdf-viewer'
+        fileViewerType: application.pdfViewer
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })
@@ -874,7 +875,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'media-viewer'
+        fileViewerType: application.mediaViewer
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })
@@ -903,7 +904,7 @@ test.describe('link', () => {
       await ui.userShouldBeInFileViewer({
         world,
         stepUser: 'Anonymous',
-        fileViewerType: 'media-viewer'
+        fileViewerType: application.mediaViewer
       })
       // And "Anonymous" closes the file viewer
       await ui.userClosesFileViewer({ world, stepUser: 'Anonymous' })
@@ -1098,7 +1099,7 @@ test.describe('link', () => {
     await ui.userDownloadsThePublicLinkResources({
       world,
       stepUser: 'Anonymous',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: 'sidebar panel',
       resources: [{ resource: 'lorem.txt', type: 'file' }]
     })
     // And "Alice" logs out

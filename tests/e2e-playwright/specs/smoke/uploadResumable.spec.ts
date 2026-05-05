@@ -2,6 +2,7 @@ import { test } from '../../support/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 import { userCreatesAFileOfSizeInTempUploadDir } from '../../steps/runtimeFs'
+import { resourcePage } from '../../support/constants'
 
 test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -38,7 +39,7 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     // | largefile.txt |
     await ui.userShouldNotSeeTheResources({
       world,
-      listType: 'files list',
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['largefile.txt']
     })
@@ -63,7 +64,7 @@ test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
     // | largefile.txt |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['largefile.txt']
     })

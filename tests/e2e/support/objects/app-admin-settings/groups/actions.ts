@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import util from 'util'
 import { selectUser } from '../users/actions'
 import { objects } from '../../..'
+import { fileAction } from '../../../../../e2e-playwright/support/constants'
 
 const newGroupBtn = '#create-group-btn'
 const createGroupInput = '#create-group-input-display-name'
@@ -204,7 +205,7 @@ export const openEditPanel = async (args: {
     )
   }
   switch (action) {
-    case 'context-menu':
+    case fileAction.contextMenu:
       await page.locator(util.format(groupIdSelector, uuid)).click()
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -218,7 +219,7 @@ export const openEditPanel = async (args: {
         'Edit group sidebar panel'
       )
       break
-    case 'quick-action':
+    case fileAction.quickAction:
       await selectUser({ page, uuid })
       await page.locator(util.format(editActionBtnQuickActions, uuid)).click()
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(

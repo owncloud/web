@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { application, fileAction } from '../../support/constants'
 
 test.describe('lock', { tag: '@sse' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -54,7 +55,7 @@ test.describe('lock', { tag: '@sse' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'test.odt',
-      application: 'Collabora'
+      viewer: application.collabora
     })
     // Then "Brian" should see the content "some content" in editor "Collabora"
     await ui.userShouldSeeContentInEditor({
@@ -112,7 +113,7 @@ test.describe('lock', { tag: '@sse' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'test.odt',

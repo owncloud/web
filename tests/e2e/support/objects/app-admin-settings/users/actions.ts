@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import util from 'util'
 import { UsersEnvironment } from '../../../environment'
 import { objects } from '../../..'
+import { fileAction } from '../../../../../e2e-playwright/support/constants'
 
 const userIdSelector = `[data-item-id="%s"] .users-table-btn-action-dropdown`
 const editActionBtnContextMenu = '.context-menu .oc-users-actions-edit-trigger'
@@ -375,7 +376,7 @@ export const openEditPanel = async (args: {
     await page.locator(closeEditPanel).click()
   }
   switch (action) {
-    case 'context-menu':
+    case fileAction.contextMenu:
       await page.locator(util.format(userIdSelector, uuid)).click()
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -384,7 +385,7 @@ export const openEditPanel = async (args: {
       )
       await page.locator(editActionBtnContextMenu).click()
       break
-    case 'quick-action':
+    case fileAction.quickAction:
       await selectUser({ page, uuid })
       await page.locator(util.format(editActionBtnQuickActions, uuid)).click()
       break

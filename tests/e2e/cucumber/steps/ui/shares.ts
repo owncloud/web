@@ -9,6 +9,7 @@ import {
 import { ActionViaType } from '../../../support/objects/app-files/share/actions'
 import { substitute } from '../../../support/utils'
 import { getDynamicRoleIdByName, ResourceType } from '../../../support/api/share/share'
+import { fileAction } from '../../../../e2e-playwright/support/constants'
 
 const parseShareTable = function (
   stepTable: DataTable,
@@ -48,13 +49,13 @@ When(
     let via: ActionViaType
     switch (actionType) {
       case 'quick action':
-        via = 'QUICK_ACTION'
+        via = fileAction.quickAction
         break
       case 'sidebar panel':
-        via = 'SIDEBAR_PANEL'
+        via = fileAction.sideBarPanel
         break
       case 'direct url navigation':
-        via = 'URL_NAVIGATION'
+        via = fileAction.urlNavigation
         break
       default:
         throw new Error(`Unknown action type: ${actionType}`)
@@ -183,7 +184,7 @@ When(
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const resource of stepTable.hashes()) {
-      await shareObject.enableSync({ resource: resource.name, via: 'CONTEXT_MENU' })
+      await shareObject.enableSync({ resource: resource.name, via: fileAction.contextMenu })
     }
   }
 )
@@ -204,7 +205,7 @@ When(
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const resource of stepTable.hashes()) {
-      await shareObject.disableSync({ resource: resource.name, via: 'CONTEXT_MENU' })
+      await shareObject.disableSync({ resource: resource.name, via: fileAction.contextMenu })
     }
   }
 )

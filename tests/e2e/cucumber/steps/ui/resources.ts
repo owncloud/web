@@ -16,6 +16,7 @@ import * as runtimeFs from '../../../support/utils/runtimeFs'
 import { searchFilter } from '../../../support/objects/app-files/resource/actions'
 import { File } from '../../../support/types'
 import { substitute } from '../../../support/utils'
+import { fileAction } from '../../../../e2e-playwright/support/constants'
 
 When(
   '{string} creates the following resource(s)',
@@ -446,7 +447,7 @@ When(
 export const processDelete = async (
   stepTable: DataTable,
   pageObject: Public | Resource,
-  actionType: string
+  actionType: string = fileAction.batchAction
 ) => {
   let files, parentFolder
   const deleteInfo = stepTable
@@ -469,7 +470,7 @@ export const processDelete = async (
     await pageObject.delete({
       folder: parentFolder,
       resourcesWithInfo: files,
-      via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+      via: actionType as typeof fileAction.batchAction | typeof fileAction.sideBarPanel
     })
   }
 }
@@ -477,7 +478,7 @@ export const processDelete = async (
 export const processDownload = async (
   stepTable: DataTable,
   pageObject: Public | Resource,
-  actionType: string
+  actionType: string = fileAction.singleShareView
 ) => {
   let downloads, files, parentFolder
   const downloadedResources: string[] = []
@@ -502,25 +503,10 @@ export const processDownload = async (
     files = downloadInfo[folder]
     parentFolder = folder !== 'undefined' ? folder : null
 
-    let via: ActionViaType = 'SINGLE_SHARE_VIEW'
-    switch (actionType) {
-      case 'batch action':
-        via = 'BATCH_ACTION'
-        break
-      case 'sidebar panel':
-        via = 'SIDEBAR_PANEL'
-        break
-      case 'preview topbar':
-        via = 'PREVIEW_TOPBAR'
-        break
-      default:
-        break
-    }
-
     downloads = await pageObject.download({
       folder: parentFolder,
       resources: files,
-      via
+      via: actionType as ActionViaType
     })
 
     downloads.forEach((download) => {
@@ -528,7 +514,7 @@ export const processDownload = async (
       downloadedResources.push(name)
     })
 
-    if (actionType === 'sidebar panel' || actionType === 'preview topbar') {
+    if (actionType === fileAction.sideBarPanel || actionType === fileAction.previewTopBar) {
       expect(downloads.length).toBe(files.length)
       for (const resource of files) {
         const fileOrFolderName = path.parse(resource.name).name

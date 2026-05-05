@@ -1,6 +1,7 @@
 import { objects } from '../../../e2e/support'
 import { substitute } from '../../../e2e/support/utils'
 import { World } from '../../support/world'
+import { searchFilter } from '../../support/constants'
 
 export async function userShouldSeeMessageOnSearchResult({
   world,
@@ -38,7 +39,11 @@ export async function userClearsFilter({
 }: {
   world: World
   stepUser: string
-  filter: 'mediaType' | 'tags' | 'lastModified' | 'fullText'
+  filter:
+    | typeof searchFilter.mediaType
+    | typeof searchFilter.tags
+    | typeof searchFilter.lastModified
+    | typeof searchFilter.fullText
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const searchObject = new objects.applicationFiles.Search({ page })

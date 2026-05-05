@@ -1,5 +1,6 @@
 import { objects } from '../../../e2e/support'
 import { World } from '../../support/world'
+import { application, client } from '../../support/constants'
 
 export async function userNavigatesToNonExistingPage({
   world,
@@ -31,19 +32,19 @@ export async function userOpensResourceViaUrl({
   resource,
   space,
   editorName,
-  client
+  clientType
 }: {
   world: World
   stepUser: string
   resource: string
   space: string
-  editorName: 'Collabora' | 'OnlyOffice'
-  client: 'mobile' | 'desktop'
+  editorName: typeof application.collabora | typeof application.onlyOffice
+  clientType: keyof typeof client
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const user = world.usersEnvironment.getUser({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
-  await urlNavObject.openResourceViaUrl({ resource, user, space, editorName, client })
+  await urlNavObject.openResourceViaUrl({ resource, user, space, editorName, client: clientType })
 }
 
 export async function userOpensSpaceResourceViaUrl({

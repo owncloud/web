@@ -3,6 +3,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { searchScope, application, fileAction } from '../../support/constants'
 
 test.describe('Secure view', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -69,7 +70,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'secureDocument.odt',
@@ -101,7 +102,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'secureDocument.odt',
-      application: 'Collabora'
+      viewer: application.collabora
     })
 
     // we copy the contents of the file and compare the clipboard with the expected contents.
@@ -131,7 +132,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'simple.pdf',
-      application: 'Collabora'
+      viewer: application.collabora
     })
 
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
@@ -152,7 +153,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.jpeg',
-      application: 'Collabora'
+      viewer: application.collabora
     })
 
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
@@ -173,7 +174,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       resource: 'lorem.txt',
-      application: 'Collabora'
+      viewer: application.collabora
     })
 
     // Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
@@ -231,7 +232,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'secureDocument.odt',
@@ -401,7 +402,7 @@ test.describe('Secure view', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Brian',
       keyword: 'secure',
-      filter: 'all files',
+      filter: searchScope.allFiles,
       command: 'presses enter'
     })
 

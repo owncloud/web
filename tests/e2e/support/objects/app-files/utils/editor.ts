@@ -1,5 +1,6 @@
 import { Locator, Page } from '@playwright/test'
 import { objects } from '../../..'
+import { application } from '../../../../../e2e-playwright/support/constants'
 
 const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const saveTextEditorOrViewerButton = '#app-save-action'
@@ -36,11 +37,11 @@ export const fileViewerLocator = ({
   fileViewerType: string
 }): Locator => {
   switch (fileViewerType) {
-    case 'text-editor':
+    case application.textEditor:
       return page.locator(texEditor)
-    case 'pdf-viewer':
+    case application.pdfViewer:
       return page.locator(pdfViewer)
-    case 'media-viewer':
+    case application.mediaViewer:
       return page.locator(imageViewer)
     default:
       throw new Error(`${fileViewerType} not implemented`)

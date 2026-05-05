@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { fileAction, resourcePage } from '../../support/constants'
 
 test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -87,7 +88,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userDuplicatesResources({
       world,
       stepUser: 'Alice',
-      method: 'sidebar-panel',
+      method: fileAction.sideBarPanel,
       resources: ['duplicate.txt']
     })
 
@@ -97,7 +98,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userDuplicatesResources({
       world,
       stepUser: 'Alice',
-      method: 'dropdown-menu',
+      method: fileAction.dropDownMenu,
       resources: ['Duplicate']
     })
     // Then following resources should be displayed in the files list for user "Alice"
@@ -106,7 +107,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     //   | Duplicate (1)     |
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['duplicate (1).txt', 'Duplicate (1)']
     })
@@ -122,7 +123,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userDuplicatesResources({
       world,
       stepUser: 'Alice',
-      method: 'batch-action',
+      method: fileAction.batchAction,
       resources: ['duplicate.txt']
     })
     // And "Alice" duplicates the following resource at once using batch-action
@@ -132,7 +133,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userDuplicatesResources({
       world,
       stepUser: 'Alice',
-      method: 'batch-action',
+      method: fileAction.batchAction,
       resources: ['folderToDuplicate', 'duplicate.txt']
     })
     // And "Alice" duplicates the following resource at once using dropdown-menu
@@ -142,7 +143,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userDuplicatesResources({
       world,
       stepUser: 'Alice',
-      method: 'dropdown-menu',
+      method: fileAction.dropDownMenu,
       resources: ['folderToDuplicate', 'duplicate.txt']
     })
     // Then following resources should be displayed in the files list for user "Alice"
@@ -176,7 +177,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userCopiesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'sidebar-panel',
+      actionType: fileAction.sideBarPanel,
       resources: [{ resource: 'sidebar.txt', to: 'PARENTCopy2' }]
     })
     // And "Alice" copies the following resource using dropdown-menu
@@ -185,7 +186,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userCopiesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'dropdown-menu',
+      actionType: fileAction.dropDownMenu,
       resources: [{ resource: 'PARENTCopy3/example1.txt', to: 'PARENTCopy1' }]
     })
     // And "Alice" copies the following resource using batch-action
@@ -194,7 +195,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userCopiesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'batch-action',
+      actionType: fileAction.batchAction,
       resources: [{ resource: 'PARENTCopy3/example2.txt', to: 'PARENTCopy1' }]
     })
     // And "Alice" copies the following resource using keyboard
@@ -203,7 +204,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userCopiesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'keyboard',
+      actionType: fileAction.keyboard,
       resources: [{ resource: 'KeyboardExample.txt', to: 'PARENTCopy3' }]
     })
     // And "Alice" moves the following resource using drag-drop
@@ -212,7 +213,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'drag-drop',
+      actionType: fileAction.dragDrop,
       resources: [{ resource: 'dragDrop.txt', to: 'PARENTCopy2' }]
     })
     // And "Alice" moves the following resource using dropdown-menu
@@ -221,7 +222,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'dropdown-menu',
+      actionType: fileAction.dropDownMenu,
       resources: [{ resource: 'PARENTCopy1/example1.txt', to: 'PARENTMove' }]
     })
     // And "Alice" moves the following resource using batch-action
@@ -230,7 +231,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'batch-action',
+      actionType: fileAction.batchAction,
       resources: [{ resource: 'PARENTCopy1/example2.txt', to: 'PARENTMove' }]
     })
     // And "Alice" moves the following resource using keyboard
@@ -239,7 +240,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'keyboard',
+      actionType: fileAction.keyboard,
       resources: [{ resource: 'PARENTCopy2', to: 'PARENTMove' }]
     })
     // And "Alice" moves the following resource using sidebar-panel
@@ -248,7 +249,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'sidebar-panel',
+      actionType: fileAction.sideBarPanel,
       resources: [{ resource: 'PARENTCopy3', to: 'PARENTMove' }]
     })
     // And "Alice" opens folder "PARENTCopy4"
@@ -261,7 +262,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'drag-drop-breadcrumb',
+      actionType: fileAction.dragDropBreadcrumb,
       resources: [{ resource: 'Sub2', to: 'PARENTCopy4' }]
     })
 
@@ -282,7 +283,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       newLocation: 'PARENT/Sub1',
-      method: 'dropdown-menu',
+      method: fileAction.dropDownMenu,
       resources: [
         'fileToCopy1.txt',
         'fileToCopy2.txt',
@@ -306,7 +307,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       newLocation: 'PARENT/Sub2',
-      method: 'batch-action',
+      method: fileAction.batchAction,
       resources: [
         'fileToCopy1.txt',
         'fileToCopy2.txt',
@@ -330,7 +331,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       newLocation: 'PARENT/Sub3',
-      method: 'keyboard',
+      method: fileAction.keyboard,
       resources: [
         'fileToCopy1.txt',
         'fileToCopy2.txt',
@@ -356,7 +357,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       newLocation: 'PARENT/Sub1/Sub',
-      method: 'dropdown-menu',
+      method: fileAction.dropDownMenu,
       resources: [
         'fileToCopy1.txt',
         'fileToCopy2.txt',
@@ -382,7 +383,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       newLocation: 'PARENT/Sub1',
-      method: 'batch-action',
+      method: fileAction.batchAction,
       resources: [
         'fileToCopy1.txt',
         'fileToCopy2.txt',
@@ -414,7 +415,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       newLocation: 'Sub4',
-      method: 'drag-drop',
+      method: fileAction.dragDrop,
       resources: [
         'fileToCopy1.txt',
         'fileToCopy2.txt',
@@ -440,7 +441,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
       world,
       stepUser: 'Alice',
       newLocation: 'PARENT',
-      method: 'drag-drop-breadcrumb',
+      method: fileAction.dragDropBreadcrumb,
       resources: [
         'fileToCopy1.txt',
         'fileToCopy2.txt',
@@ -523,7 +524,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userCopiesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'sidebar-panel',
+      actionType: fileAction.sideBarPanel,
       resources: [
         { resource: 'example1.txt', to: 'folder1', option: 'keep both' },
         { resource: 'example1.txt', to: 'folder1', option: 'replace' }
@@ -536,7 +537,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'sidebar-panel',
+      actionType: fileAction.sideBarPanel,
       resources: [
         { resource: 'example1.txt', to: 'sub/folder1', option: 'keep both' },
         { resource: 'folder1/example1.txt', to: 'sub/folder1', option: 'replace' }
@@ -551,7 +552,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userCopiesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'sidebar-panel',
+      actionType: fileAction.sideBarPanel,
       resources: [
         { resource: 'folder1', to: 'sub', option: 'keep both' },
         { resource: 'folder1', to: 'sub', option: 'replace' }
@@ -565,7 +566,7 @@ test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
     await ui.userMovesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'sidebar-panel',
+      actionType: fileAction.sideBarPanel,
       resources: [
         { resource: 'folder1', to: 'sub', option: 'keep both' },
         { resource: 'sub1/folder1', to: 'sub', option: 'replace' }

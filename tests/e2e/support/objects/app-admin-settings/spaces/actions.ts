@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
 import { objects } from '../../..'
+import { fileAction } from '../../../../../e2e-playwright/support/constants'
 
 const spaceTrSelector = '.spaces-table tbody > tr'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'
@@ -40,21 +41,23 @@ export const getDisplayedSpaces = async (page: Page): Promise<string[]> => {
 const performSpaceAction = async (args: {
   page: Page
   action: string
-  via: 'context-menu' | 'batch-actions'
+  via: typeof fileAction.contextMenu | typeof fileAction.batchAction
   id?: string
 }): Promise<void> => {
   const { page, action, via, id } = args
 
-  if (id && via === 'context-menu') {
+  let actionButtonSelector = '.batch-actions '
+
+  if (id && via === fileAction.contextMenu) {
     await page.locator(util.format(contextMenuSelector, id)).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['contextMenuContainer'],
       'context menu container'
     )
+    actionButtonSelector = '.context-menu '
   }
 
-  let actionButtonSelector = `.${via} `
   switch (action) {
     case 'rename':
       actionButtonSelector += util.format(contextMenuActionButton, action)
@@ -85,7 +88,7 @@ export const changeSpaceQuota = async (args: {
   page: Page
   spaceIds: string[]
   value: string
-  via: 'context-menu' | 'batch-actions'
+  via: typeof fileAction.contextMenu | typeof fileAction.batchAction
 }): Promise<void> => {
   const { page, value, spaceIds, via } = args
   await performSpaceAction({ page, action: 'edit-quota', via, id: spaceIds[0] })
@@ -127,7 +130,7 @@ export const changeSpaceQuota = async (args: {
 export const disableSpace = async (args: {
   page: Page
   spaceIds: string[]
-  via: 'context-menu' | 'batch-actions'
+  via: typeof fileAction.contextMenu | typeof fileAction.batchAction
 }): Promise<void> => {
   const { page, spaceIds, via } = args
   await performSpaceAction({ page, action: 'disable', via, id: spaceIds[0] })
@@ -153,7 +156,7 @@ export const disableSpace = async (args: {
 export const enableSpace = async (args: {
   page: Page
   spaceIds: string[]
-  via: 'context-menu' | 'batch-actions'
+  via: typeof fileAction.contextMenu | typeof fileAction.batchAction
 }): Promise<void> => {
   const { page, spaceIds, via } = args
   await performSpaceAction({ page, action: 'restore', via, id: spaceIds[0] })
@@ -179,7 +182,7 @@ export const enableSpace = async (args: {
 export const deleteSpace = async (args: {
   page: Page
   spaceIds: string[]
-  via: 'context-menu' | 'batch-actions'
+  via: typeof fileAction.contextMenu | typeof fileAction.batchAction
 }): Promise<void> => {
   const { page, spaceIds, via } = args
   await performSpaceAction({ page, action: 'delete', via, id: spaceIds[0] })
@@ -223,7 +226,7 @@ export const renameSpaceUsingContextMenu = async (args: {
   value: string
 }): Promise<void> => {
   const { page, id, value } = args
-  await performSpaceAction({ page, action: 'rename', via: 'context-menu', id })
+  await performSpaceAction({ page, action: 'rename', via: fileAction.contextMenu, id })
   await page.locator(inputFieldSelector).fill(value)
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
@@ -253,7 +256,7 @@ export const changeSpaceSubtitleUsingContextMenu = async (args: {
   await performSpaceAction({
     page,
     action: 'edit-description',
-    via: 'context-menu',
+    via: fileAction.contextMenu,
     id
   })
   await page.locator(inputFieldSelector).fill(value)

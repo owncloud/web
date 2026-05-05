@@ -5,15 +5,15 @@ import {
   CollaboratorType,
   ICollaborator
 } from '../../../e2e/support/objects/app-files/share/collaborator'
-import { ActionViaType } from '../../../e2e/support/objects/app-files/share/actions'
 import { substitute } from '../../../e2e/support/utils/substitute'
 import { World } from '../../support/world'
+import { fileAction } from '../../support/constants'
 
 const parseShareTable = function (
   world: World,
   resource: string,
   recipient: string,
-  type: string,
+  type: CollaboratorType,
   role: string,
   resourceType: string,
   expirationDate?: string,
@@ -43,7 +43,7 @@ const parseShareTable = function (
           ? world.usersEnvironment.getGroup({ key: recipient })
           : world.usersEnvironment.getUser({ key: recipient }),
       role,
-      type: type as CollaboratorType,
+      type: type,
       resourceType,
       expirationDate,
       shareType
@@ -92,7 +92,7 @@ export async function userUpdatesShareeRole({
   stepUser: string
   resource: string
   recipient: string
-  type: string
+  type: CollaboratorType
   role: string
   resourceType: string
   expirationDate?: string
@@ -134,11 +134,14 @@ export async function userSharesResources({
 }: {
   world: World
   stepUser: string
-  actionType: ActionViaType
+  actionType:
+    | typeof fileAction.sideBarPanel
+    | typeof fileAction.quickAction
+    | typeof fileAction.urlNavigation
   shares: {
     resource: string
     recipient: string
-    type: string
+    type: CollaboratorType
     role: string
     resourceType: string
     expirationDate?: string
@@ -318,7 +321,7 @@ export async function userEnablesSyncForShares({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
   for (const share of shares) {
-    await shareObject.enableSync({ resource: share, via: 'CONTEXT_MENU' })
+    await shareObject.enableSync({ resource: share, via: fileAction.contextMenu })
   }
 }
 

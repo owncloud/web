@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
+import { resourcePage } from '../../support/constants'
 
 test.describe('Application menu', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {
@@ -17,14 +18,13 @@ test.describe('Application menu', { tag: '@predefined-users' }, () => {
     await ui.userAddsContentInTextEditor({
       world,
       stepUser: 'Alice',
-      text: 'Hello world',
-      editor: 'TextEditor'
+      text: 'Hello world'
     })
     await ui.userSavesTextEditor({ world, stepUser: 'Alice' })
     await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
     await ui.userShouldSeeResources({
       world,
-      listType: 'files list',
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['New file.txt']
     })

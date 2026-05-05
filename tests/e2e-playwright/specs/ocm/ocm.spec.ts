@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
+import { application, fileAction } from '../../support/constants'
 
 test.describe('federation management', { tag: '@ocm' }, async () => {
   test('user creates a federated share', async ({ world }) => {
@@ -121,7 +122,7 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'folderPublic',
@@ -207,14 +208,14 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.jpg',
-      application: 'mediaviewer'
+      viewer: application.mediaViewer
     })
 
     // Then "Brian" is in a media-viewer
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Brian',
-      fileViewerType: 'media-viewer'
+      fileViewerType: application.mediaViewer
     })
 
     // And "Brian" navigates to the next media resource
@@ -243,7 +244,7 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
         { resource: 'sampleGif.gif', type: 'file' },
         { resource: 'testavatar.jpg', type: 'file' }
       ],
-      actionType: 'SIDEBAR_PANEL'
+      actionType: fileAction.sideBarPanel
     })
 
     // When "Brian" uploads the following resources
@@ -276,14 +277,14 @@ test.describe('federation management', { tag: '@ocm' }, async () => {
       world,
       stepUser: 'Brian',
       resource: 'testavatar.png',
-      application: 'mediaviewer'
+      viewer: application.mediaViewer
     })
 
     // Then "Brian" is in a media-viewer
     await ui.userShouldBeInFileViewer({
       world,
       stepUser: 'Brian',
-      fileViewerType: 'media-viewer'
+      fileViewerType: application.mediaViewer
     })
 
     // And "Brian" logs out

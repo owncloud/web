@@ -2,6 +2,7 @@ import { Download, Locator, Page, Response } from '@playwright/test'
 import * as po from './actions'
 import { Space } from '../../../types'
 import { showShareIndicator } from './utils'
+import { resourcePage } from '../../../../../e2e-playwright/support/constants'
 
 export class Resource {
   #page: Page
@@ -190,13 +191,13 @@ export class Resource {
 
   getDisplayedResources(args: Omit<po.getDisplayedResourcesArgs, 'page'>): Promise<string[]> {
     switch (args.keyword) {
-      case 'files list':
+      case resourcePage.filesList:
         return po.getDisplayedResourcesFromFilesList(this.#page)
-      case 'search list':
+      case resourcePage.searchList:
         return po.getDisplayedResourcesFromSearch(this.#page)
-      case 'Shares':
+      case resourcePage.shares:
         return po.getDisplayedResourcesFromShares(this.#page)
-      case 'trashbin':
+      case resourcePage.trashbin:
         return po.getDisplayedResourcesFromTrashbin(this.#page)
       default:
         throw new Error('Unknown keyword')

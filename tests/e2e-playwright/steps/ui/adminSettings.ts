@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../../e2e/support'
 import { World } from '../../support/world'
+import { fileAction } from '../../support/constants'
 
 export async function userNavigatesToGeneralManagementPage({
   world,
@@ -126,21 +127,21 @@ export async function userDeletesGroups({
 }: {
   world: World
   stepUser: string
-  actionType: string
+  actionType: typeof fileAction.batchAction | typeof fileAction.contextMenu
   groupsToBeDeleted: string[]
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
   const groupIds = []
   switch (actionType) {
-    case 'batch actions':
+    case fileAction.batchAction:
       for (const group of groupsToBeDeleted) {
         groupIds.push(groupsObject.getUUID({ key: group }))
         await groupsObject.selectGroup({ key: group })
       }
       await groupsObject.deleteGroupUsingBatchAction({ groupIds })
       break
-    case 'context menu':
+    case fileAction.contextMenu:
       for (const group of groupsToBeDeleted) {
         await groupsObject.deleteGroupUsingContextMenu({ key: group })
       }
@@ -163,7 +164,7 @@ export async function userChangesGroup({
   key: string
   attribute: string
   value: string
-  action: string
+  action: typeof fileAction.contextMenu | typeof fileAction.quickAction
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.Groups({ page })
@@ -200,7 +201,7 @@ export async function userChangesUserQuota({
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.changeQuota({ key, value, action: 'context-menu' })
+  await usersObject.changeQuota({ key, value, action: fileAction.contextMenu })
 }
 
 export async function userAuthenticatesWithOTP({
