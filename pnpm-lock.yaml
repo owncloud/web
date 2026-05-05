@@ -256,7 +256,7 @@ importers:
         specifier: ^7.1.0
         version: 7.1.0
       lodash-es:
-        specifier: ^4.17.23
+        specifier: ^4.18.1
         version: 4.18.1
       luxon:
         specifier: ^3.7.2
@@ -877,7 +877,7 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2
       lodash-es:
-        specifier: ^4.17.23
+        specifier: ^4.18.1
         version: 4.18.1
       luxon:
         specifier: ^3.7.2
@@ -993,7 +993,7 @@ importers:
         specifier: ^0.16.45
         version: 0.16.45
       lodash-es:
-        specifier: ^4.17.23
+        specifier: ^4.18.1
         version: 4.18.1
       luxon:
         specifier: ^3.7.2
