@@ -37,7 +37,7 @@ export interface ShareArgs {
 export const openSharingPanel = async function (
   page: Page,
   resource: string,
-  via = 'SIDEBAR_PANEL'
+  via: ActionViaType = fileAction.sideBarPanel
 ): Promise<void> {
   const folderPaths = resource.split('/')
   const item = folderPaths.pop()
@@ -47,7 +47,7 @@ export const openSharingPanel = async function (
   }
 
   switch (via) {
-    case 'QUICK_ACTION':
+    case fileAction.quickAction:
       await page.locator(util.format(quickShareButton, item)).click()
       await objects.a11y.Accessibility.assertNoSevereA11yViolations(
         page,
@@ -56,7 +56,7 @@ export const openSharingPanel = async function (
       )
       break
 
-    case 'SIDEBAR_PANEL':
+    case fileAction.sideBarPanel:
       await sidebar.open({ page, resource: item })
       await sidebar.openPanel({ page, name: 'sharing' })
       await page.locator(invitePanel).waitFor()

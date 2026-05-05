@@ -1228,12 +1228,12 @@ export async function userRestoresResourcesFromTrashbin({
   world,
   stepUser,
   resources,
-  actionType = fileAction.batchAction
+  actionType
 }: {
   world: World
   stepUser: string
   resources: string[]
-  actionType?: typeof fileAction.batchAction | typeof fileAction.sideBarPanel
+  actionType?: typeof fileAction.batchAction
 }): Promise<void> {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })

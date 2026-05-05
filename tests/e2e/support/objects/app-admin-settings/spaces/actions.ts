@@ -46,6 +46,8 @@ const performSpaceAction = async (args: {
 }): Promise<void> => {
   const { page, action, via, id } = args
 
+  let actionButtonSelector = '.batch-actions '
+
   if (id && via === fileAction.contextMenu) {
     await page.locator(util.format(contextMenuSelector, id)).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
@@ -53,9 +55,9 @@ const performSpaceAction = async (args: {
       ['contextMenuContainer'],
       'context menu container'
     )
+    actionButtonSelector = '.context-menu '
   }
 
-  let actionButtonSelector = `.${via} `
   switch (action) {
     case 'rename':
       actionButtonSelector += util.format(contextMenuActionButton, action)

@@ -1,6 +1,6 @@
 export const fileAction = {
-  contextMenu: 'context-menu',
-  batchAction: 'batch action',
+  contextMenu: 'context menu',
+  batchAction: 'batch actions',
   sideBarPanel: 'sidebar panel',
   quickAction: 'QUICK_ACTION',
   urlNavigation: 'URL_NAVIGATION',
