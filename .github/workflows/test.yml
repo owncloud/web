@@ -50,7 +50,7 @@ jobs:
 
       - name: SonarCloud Scan
         if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/')
-        uses: SonarSource/sonarqube-scan-action@299e4b793aaa83bf2aba7c9c14bedbb485688ec4 # v7.1.0
+        uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7.2.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_PULL_REQUEST_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || '' }}
