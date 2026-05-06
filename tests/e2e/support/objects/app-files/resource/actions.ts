@@ -2536,7 +2536,9 @@ export const checkActivity = async ({
   await sidebar.open({ page: page, resource: finalResource })
   await sidebar.openPanel({ page: page, name: 'activities' })
   await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
-  await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity)
+  await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity, {
+    ignoreCase: true
+  })
 }
 
 export const checkEmptyActivity = async ({

@@ -1075,7 +1075,7 @@ export async function userShouldSeeActivityOfResources({
   for (const info of resources) {
     await resourceObject.checkActivity({
       resource: info.resource,
-      activity: substitute(info.activity)
+      activity: substitute(info.activity, world)
     })
   }
 }

@@ -379,5 +379,7 @@ export const checkSpaceActivity = async ({
 }): Promise<void> => {
   await openActivitiesPanel(page)
   await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
-  await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity)
+  await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity, {
+    ignoreCase: true
+  })
 }

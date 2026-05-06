@@ -298,7 +298,7 @@ export async function userShouldSeeActivitiesOfSpace({
   const spacesObject = new objects.applicationFiles.Spaces({ page, world })
 
   for (const activity of activities) {
-    await spacesObject.checkSpaceActivity({ activity: substitute(activity) })
+    await spacesObject.checkSpaceActivity({ activity: substitute(activity, world) })
   }
 }
 

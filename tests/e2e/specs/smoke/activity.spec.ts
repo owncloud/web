@@ -177,7 +177,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
         },
         {
           resource: 'sharedFolder',
-          activity: '%user_alice_displayName% shared sharedFolder with brian'
+          activity: '%user_alice_displayName% shared sharedFolder with %user_brian_id%'
         },
         {
           resource: 'sharedFolder',
@@ -225,7 +225,7 @@ test.describe('Users can see all activities of the resources and spaces', () => 
       stepUser: 'Brian',
       activities: [
         '%user_alice_displayName% shared team via link',
-        '%user_alice_displayName% added brian as member of team',
+        '%user_alice_displayName% added %user_brian_id% as member of team',
         '%user_alice_displayName% added readme.md to .space'
       ]
     })
