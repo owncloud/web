@@ -21,7 +21,7 @@ export const onSSESpaceMemberAddedEvent = async ({
   }
 
   const space = await clientService.graphAuthenticated.drives.getDrive(
-    sseData.itemid,
+    sseData.spaceid,
     sharesStore.graphRoles
   )
   spacesStore.upsertSpace(space)
@@ -51,7 +51,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
 
   if (!sseData.affecteduserids?.includes(userStore.user.id)) {
     const space = await clientService.graphAuthenticated.drives.getDrive(
-      sseData.itemid,
+      sseData.spaceid,
       sharesStore.graphRoles
     )
     return spacesStore.upsertSpace(space)
@@ -98,7 +98,7 @@ export const onSSESpaceShareUpdatedEvent = async ({
   }
 
   const space = await clientService.graphAuthenticated.drives.getDrive(
-    sseData.itemid,
+    sseData.spaceid,
     sharesStore.graphRoles
   )
   spacesStore.upsertSpace(space)
