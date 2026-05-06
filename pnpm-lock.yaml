@@ -1005,8 +1005,8 @@ importers:
         specifier: ^17.0.6
         version: 17.0.6
       md-editor-v3:
-        specifier: ^6.3.1
-        version: 6.3.1(vue@3.5.29(typescript@5.9.3))
+        specifier: ^6.5.0
+        version: 6.5.0(vue@3.5.29(typescript@5.9.3))
       mermaid:
         specifier: ^11.12.2
         version: 11.12.2
@@ -3343,8 +3343,8 @@ packages:
   '@vavt/copy2clipboard@1.0.3':
     resolution: {integrity: sha512-HtG48r2FBYp9eRvGB3QGmtRBH1zzRRAVvFbGgFstOwz4/DDaNiX0uZc3YVKPydqgOav26pibr9MtoCaWxn7aeA==}
 
-  '@vavt/util@2.1.0':
-    resolution: {integrity: sha512-YIfAvArSFVXmWvoF+DEGD0FhkhVNcCtVWWkfYtj76eSrwHh/wuEEFhiEubg1XLNM3tChO8FH8xJCT/hnizjgFQ==}
+  '@vavt/util@2.1.2':
+    resolution: {integrity: sha512-L3UbSJthJwr3wq0x93O5TrCepimrmVZaIl2ciZbeL18G5++gBhJXNhcH7RcVk/6rr3SavWOvwhig0mqRLoR7dw==}
 
   '@vitejs/plugin-vue@6.0.1':
     resolution: {integrity: sha512-+MaE752hU0wfPFJEUAIxqw18+20euHHdxVtMvbFcOEpjEyfqXH/5DCoTHiVJ0J29EhTJdoTkjEv5YBKU9dnoTw==}
@@ -5705,8 +5705,8 @@ packages:
   mathml-tag-names@4.0.0:
     resolution: {integrity: sha512-aa6AU2Pcx0VP/XWnh8IGL0SYSgQHDT6Ucror2j2mXeFAlN3ahaNs8EZtG1YiticMkSLj3Gt6VPFfZogt7G5iFQ==}
 
-  md-editor-v3@6.3.1:
-    resolution: {integrity: sha512-k9ynxS6Pexs+yNBuuWZ4cDpqvv/zD9p9lbPFGlCqhsCYyFJL7p/mYjUGNH3l8lsQJOUqlgbZe4Kta0ajN030Ug==}
+  md-editor-v3@6.5.0:
+    resolution: {integrity: sha512-GhGhPebfJeOrFuybFMUZRM6GzLMhu7Sg03MWLwO6tuIKMkRN71/SeTbLYYzY95qpaMbXDMWKlTkj3UNf9Bz4dg==}
     peerDependencies:
       vue: ^3.5.3
 
@@ -10244,7 +10244,7 @@ snapshots:
 
   '@vavt/copy2clipboard@1.0.3': {}
 
-  '@vavt/util@2.1.0': {}
+  '@vavt/util@2.1.2': {}
 
   '@vitejs/plugin-vue@6.0.1(vite@7.3.2(@types/node@25.6.0)(sass@1.94.1)(terser@5.46.2)(yaml@2.8.2))(vue@3.5.29(typescript@5.9.3))':
     dependencies:
@@ -12844,7 +12844,7 @@ snapshots:
 
   mathml-tag-names@4.0.0: {}
 
-  md-editor-v3@6.3.1(vue@3.5.29(typescript@5.9.3)):
+  md-editor-v3@6.5.0(vue@3.5.29(typescript@5.9.3)):
     dependencies:
       '@codemirror/autocomplete': 6.18.7
       '@codemirror/commands': 6.8.1
@@ -12857,9 +12857,8 @@ snapshots:
       '@lezer/highlight': 1.2.1
       '@types/markdown-it': 14.1.2
       '@vavt/copy2clipboard': 1.0.3
-      '@vavt/util': 2.1.0
+      '@vavt/util': 2.1.2
       codemirror: 6.0.2
-      lru-cache: 11.2.2
       lucide-vue-next: 0.543.0(vue@3.5.29(typescript@5.9.3))
       markdown-it: 14.1.0
       markdown-it-image-figures: 2.1.1(markdown-it@14.1.0)
