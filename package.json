@@ -56,7 +56,7 @@
     "@vitest/web-worker": "4.1.5",
     "@vue/compiler-dom": "3.5.29",
     "@vue/compiler-sfc": "3.5.29",
-    "@vue/test-utils": "2.4.6",
+    "@vue/test-utils": "^2.4.10",
     "axe-core": "^4.11.0",
     "browserslist-to-esbuild": "^2.1.1",
     "browserslist-useragent-regexp": "^4.1.3",
