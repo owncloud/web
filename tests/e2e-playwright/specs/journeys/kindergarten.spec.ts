@@ -1,8 +1,9 @@
 import { test } from '../../support/test'
+import { fileAction } from '../../support/constants'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 
-test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-users' }, () => {
+test.describe('Kindergarten can use web to organize a day', () => {
   test.beforeEach(async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
@@ -84,6 +85,9 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
       ]
     })
 
+    // Implementation of sharing with different roles is currently broken
+    // since we switched to bulk creating of shares with a single dropdown
+
     // And "Alice" shares the following resources using the sidebar panel
     //   | resource                                           | recipient | type  | role                   | resourceType |
     //   | groups/Pre-Schools Pirates/meal plan               | Brian     | user  | Can edit with trashbin | folder       |
@@ -100,7 +104,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit with trashbin | file         |
     await ui.userSharesResources({
       world,
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       stepUser: 'Alice',
       shares: [
         {
@@ -190,7 +194,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
       ]
     })
 
-    // # update share
+    // update share
     // And "Alice" updates following sharee role
     //   | resource                                           | recipient | type  | role                   | resourceType |
     //   | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can view               | folder       |
@@ -245,7 +249,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
       world,
       stepUser: 'Brian',
       resourceToDownload: [{ resource: 'data.zip', from: 'meal plan', type: 'file' }],
-      actionType: 'SIDEBAR_PANEL'
+      actionType: fileAction.sideBarPanel
     })
 
     // Then what do we check for to be confident that the above things done by Brian have worked?
@@ -272,7 +276,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
         { resource: 'lorem-big.txt', from: 'meal plan', type: 'file' },
         { resource: 'meal plan', type: 'folder' }
       ],
-      actionType: 'SIDEBAR_PANEL'
+      actionType: fileAction.sideBarPanel
     })
     // And "Carol" logs out
     await ui.userLogsOut({ world, stepUser: 'Carol' })
@@ -292,7 +296,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
         { resource: 'lorem-big.txt', from: 'meal plan', type: 'file' },
         { resource: 'meal plan', type: 'folder' }
       ],
-      actionType: 'SIDEBAR_PANEL'
+      actionType: fileAction.sideBarPanel
     })
 
     // And "Brian" logs out
@@ -399,7 +403,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
           type: 'folder'
         }
       ],
-      actionType: 'SIDEBAR_PANEL'
+      actionType: fileAction.sideBarPanel
     })
     // And "Alice" deletes the following resources using the batch action
     //   | resource            | from                                 |
@@ -419,7 +423,7 @@ test.describe('Kindergarten can use web to organize a day', { tag: '@predefined-
     await ui.userDeletesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       resources: [
         { name: 'lorem.txt', from: 'groups/Kindergarten Koalas/meal plan' },
         { name: 'lorem-big.txt', from: 'groups/Kindergarten Koalas/meal plan' },

@@ -84,13 +84,15 @@ export async function userUpdatesShareeRoles({
 }: {
   world: World
   stepUser: string
-  resource: string
-  recipient: string
-  type: CollaboratorType
-  role: string
-  resourceType: string
-  expirationDate?: string
-  shareType?: string
+  roleUpdates: {
+    resource: string
+    recipient: string
+    type: CollaboratorType
+    role: string
+    resourceType: string
+    expirationDate?: string
+    shareType?: string
+  }[]
 }) {
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const shareObject = new objects.applicationFiles.Share({ page })
