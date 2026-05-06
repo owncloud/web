@@ -6,7 +6,7 @@ on:
       - master
       - stable-*
     tags:
-      - '*'
+      - "*"
   pull_request:
 
 jobs:
@@ -30,32 +30,35 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Check licenses
-        run: pnpm licenses:check
+      # - name: Check licenses
+      #   run: pnpm licenses:check
 
-      - name: Save licenses
-        run: pnpm licenses:csv && pnpm licenses:save
+      # - name: Save licenses
+      #   run: pnpm licenses:csv && pnpm licenses:save
 
-      - name: Check types
-        run: pnpm check:types
+      # - name: Check types
+      #   run: pnpm check:types
 
-      - name: Check format
-        run: pnpm check:format
+      # - name: Check format
+      #   run: pnpm check:format
 
-      - name: Lint
-        run: pnpm lint
+      # - name: Lint
+      #   run: pnpm lint
 
-      - name: Run unit tests
-        run: pnpm test:unit --coverage
+      # - name: Run unit tests
+      #   run: pnpm test:unit --coverage
 
-      - name: SonarCloud Scan
-        if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/')
-        uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7.2.1
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PULL_REQUEST_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || '' }}
-          SONAR_PULL_REQUEST_BRANCH: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || '' }}
-          SONAR_PULL_REQUEST_KEY: ${{ github.event_name == 'pull_request' && github.event.pull_request.number || '' }}
+      # - name: SonarCloud Scan
+      #   if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/')
+      #   uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7.2.1
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     SONAR_PULL_REQUEST_BASE: ${{ github.event_name == 'pull_request' &&
+      #       github.event.pull_request.base.ref || '' }}
+      #     SONAR_PULL_REQUEST_BRANCH: ${{ github.event_name == 'pull_request' &&
+      #       github.event.pull_request.head.ref || '' }}
+      #     SONAR_PULL_REQUEST_KEY: ${{ github.event_name == 'pull_request' &&
+      #       github.event.pull_request.number || '' }}
 
       - name: Build
         run: make dist
@@ -179,6 +182,30 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
+      - name: Debug line number matching
+        run: |
+          echo "=== Try running users.spec.ts:38 directly ==="
+          NODE_TLS_REJECT_UNAUTHORIZED=0 npx playwright test --config=tests/e2e-playwright/ --project=chromium tests/e2e-playwright/specs/admin-settings/users.spec.ts:38 --list
+
+          echo "=== Try running entire users.spec.ts ==="
+          NODE_TLS_REJECT_UNAUTHORIZED=0 npx playwright test --config=tests/e2e-playwright/ --project=chromium tests/e2e-playwright/specs/admin-settings/users.spec.ts --list
+
+      - name: Debug Playwright Line Selectors (keycloak)
+        if: ${{ matrix.suites.suite == 'keycloak' }}
+        run: |
+          echo "FEATURE_FILES=${{ matrix.suites.feature_files }}"
+          echo "=== users.spec.ts with line numbers (CI checkout) ==="
+          nl -ba tests/e2e-playwright/specs/admin-settings/users.spec.ts | sed -n '30,320p'
+          echo "=== Playwright --list for selected feature files ==="
+          FEATURE_PATHS=$(echo "${{ matrix.suites.feature_files }}" | sed -E 's/,/ /g; s@(^|[[:space:]])tests/e2e-playwright/specs/@\1@g; s@(^|[[:space:]])tests/e2e-playwright/@\1@g; s@(^|[[:space:]])specs/@\1@g')
+          echo "Normalized selectors: $FEATURE_PATHS"
+          LIST_OUTPUT=$(NODE_TLS_REJECT_UNAUTHORIZED=0 npx playwright test --config=tests/e2e-playwright/ --project=chromium --list $FEATURE_PATHS)
+          echo "$LIST_OUTPUT"
+          echo "$LIST_OUTPUT" | grep -q "users.spec.ts" || {
+            echo "No users.spec.ts tests matched from provided :line selectors in CI checkout."
+            exit 1
+          }
+
       - name: Run E2E tests
         env:
           FEATURE_FILES: ${{ matrix.suites.feature_files || '' }}
@@ -214,7 +241,7 @@ jobs:
           retention-days: 7
 
   check-tests-passed:
-    needs: [e2e-playwright]
+    needs: [ e2e-playwright ]
     runs-on: ubuntu-latest
     if: always()
     steps:

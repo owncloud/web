@@ -121,6 +121,7 @@ function getFeaturePaths() {
     local file_path
     local line_number
     local resolved_path
+    local runner_path
     local playwright_root="$PROJECT_ROOT/tests/e2e-playwright"
     local playwright_specs_dir="$playwright_root/specs"
 
@@ -154,12 +155,22 @@ function getFeaturePaths() {
         fi
 
         file_path="$resolved_path"
+        runner_path="$file_path"
+        if [[ "$runner_path" == "$PROJECT_ROOT/"* ]]; then
+            runner_path="${runner_path#"$PROJECT_ROOT/"}"
+        fi
+        if [[ "$TEST_TYPE" == "playwright" ]]; then
+            # Playwright testDir is tests/e2e-playwright/specs, so normalize selectors to that base.
+            runner_path="${runner_path#tests/e2e-playwright/specs/}"
+            runner_path="${runner_path#tests/e2e-playwright/}"
+            runner_path="${runner_path#specs/}"
+        fi
 
         # Reconstruct path for runner (with :line if present)
         if [[ -n "$line_number" && "$line_number" =~ ^[0-9]+$ ]]; then
-            real_paths+=" $file_path:$line_number"
+            real_paths+=" $runner_path:$line_number"
         else
-            real_paths+=" $file_path"
+            real_paths+=" $runner_path"
         fi
     done
     FEATURE_PATHS=$(echo "$real_paths" | xargs) # remove trailing white spaces
