@@ -1011,8 +1011,8 @@ importers:
         specifier: ^11.12.2
         version: 11.12.2
       oidc-client-ts:
-        specifier: ^3.4.1
-        version: 3.4.1
+        specifier: ^3.5.0
+        version: 3.5.0
       p-queue:
         specifier: ^9.2.0
         version: 9.2.0
@@ -1154,8 +1154,8 @@ importers:
         specifier: 8.11.1
         version: 8.11.1
       oidc-client-ts:
-        specifier: ^3.4.1
-        version: 3.4.1
+        specifier: ^3.5.0
+        version: 3.5.0
       p-queue:
         specifier: 9.2.0
         version: 9.2.0
@@ -5966,8 +5966,8 @@ packages:
   obug@2.1.1:
     resolution: {integrity: sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==}
 
-  oidc-client-ts@3.4.1:
-    resolution: {integrity: sha512-jNdst/U28Iasukx/L5MP6b274Vr7ftQs6qAhPBCvz6Wt5rPCA+Q/tUmCzfCHHWweWw5szeMy2Gfrm1rITwUKrw==}
+  oidc-client-ts@3.5.0:
+    resolution: {integrity: sha512-l2q8l9CTCTOlbX+AnK4p3M+4CEpKpyQhle6blQkdFhm0IsBqsxm15bYaSa11G7pWdsYr6epdsRZxJpCyCRbT8A==}
     engines: {node: '>=18'}
 
   omggif@1.0.10:
@@ -13155,7 +13155,7 @@ snapshots:
 
   obug@2.1.1: {}
 
-  oidc-client-ts@3.4.1:
+  oidc-client-ts@3.5.0:
     dependencies:
       jwt-decode: 4.0.0
 
