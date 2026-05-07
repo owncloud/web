@@ -97,7 +97,7 @@ test.describe('users management', () => {
       stepUser: 'Admin',
       expectedUsers: ['Alice', 'Brian', 'Carol']
     })
-    await ui.removeUsersFromGroupsUsingBatchActions({
+    await ui.userRemovesUsersFromGroupsUsingBatchActions({
       world,
       stepUser: 'Admin',
       groups: ['sales', 'finance'],

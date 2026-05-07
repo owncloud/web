@@ -218,7 +218,7 @@ test.describe('internal link share', () => {
     // And "Admin" navigates to the users management page
     await ui.userNavigatesToUsersManagementPage({ world, stepUser: 'Admin' })
     // And "Admin" changes the quota of the user "Alice" to "0.00001" using the sidebar panel
-    await ui.userChangesQuotaOfUserUsingContextMenu({
+    await ui.userChangesQuotaOfUserUsingSidebarPanel({
       world,
       stepUser: 'Admin',
       key: 'Alice',

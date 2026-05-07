@@ -30,35 +30,32 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # - name: Check licenses
-      #   run: pnpm licenses:check
+      - name: Check licenses
+        run: pnpm licenses:check
 
-      # - name: Save licenses
-      #   run: pnpm licenses:csv && pnpm licenses:save
+      - name: Save licenses
+        run: pnpm licenses:csv && pnpm licenses:save
 
-      # - name: Check types
-      #   run: pnpm check:types
+      - name: Check types
+        run: pnpm check:types
 
-      # - name: Check format
-      #   run: pnpm check:format
+      - name: Check format
+        run: pnpm check:format
 
-      # - name: Lint
-      #   run: pnpm lint
+      - name: Lint
+        run: pnpm lint
 
-      # - name: Run unit tests
-      #   run: pnpm test:unit --coverage
+      - name: Run unit tests
+        run: pnpm test:unit --coverage
 
-      # - name: SonarCloud Scan
-      #   if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/')
-      #   uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7.2.1
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #     SONAR_PULL_REQUEST_BASE: ${{ github.event_name == 'pull_request' &&
-      #       github.event.pull_request.base.ref || '' }}
-      #     SONAR_PULL_REQUEST_BRANCH: ${{ github.event_name == 'pull_request' &&
-      #       github.event.pull_request.head.ref || '' }}
-      #     SONAR_PULL_REQUEST_KEY: ${{ github.event_name == 'pull_request' &&
-      #       github.event.pull_request.number || '' }}
+      - name: SonarCloud Scan
+        if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/')
+        uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7.2.1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PULL_REQUEST_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || '' }}
+          SONAR_PULL_REQUEST_BRANCH: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || '' }}
+          SONAR_PULL_REQUEST_KEY: ${{ github.event_name == 'pull_request' && github.event.pull_request.number || '' }}
 
       - name: Build
         run: make dist

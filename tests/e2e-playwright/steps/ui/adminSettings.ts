@@ -89,6 +89,23 @@ export async function userChangesQuotaOfUserUsingContextMenu({
   await usersObject.changeQuota({ key, value, action: fileAction.contextMenu })
 }
 
+export async function userChangesQuotaOfUserUsingSidebarPanel({
+  world,
+  stepUser,
+  key,
+  value
+}: {
+  world: World
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  await usersObject.changeQuota({ key, value, action: fileAction.quickAction })
+}
+
 export async function userChangesQuotaForUsersUsingBatchAction({
   world,
   stepUser,
@@ -131,7 +148,7 @@ export async function userAddsUsersToGroupsUsingBatchActions({
   await usersObject.addToGroupsBatchAction({ userIds, groups })
 }
 
-export async function removeUsersFromGroupsUsingBatchActions({
+export async function userRemovesUsersFromGroupsUsingBatchActions({
   world,
   stepUser,
   groups,
