@@ -209,14 +209,18 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       // When "Alice" updates following sharee role
       //   | resource         | recipient | type | role                   | resourceType |
       //   | OpenDocument.odt | Brian     | user | Can edit with trashbin | file         |
-      await ui.userUpdatesShareeRole({
+      await ui.userUpdatesShareeRoles({
         world,
         stepUser: 'Alice',
-        resource: 'OpenDocument.odt',
-        recipient: 'Brian',
-        type: 'user',
-        role: 'Can edit with trashbin',
-        resourceType: 'file'
+        roleUpdates: [
+          {
+            resource: 'OpenDocument.odt',
+            recipient: 'Brian',
+            type: 'user',
+            role: 'Can edit with trashbin',
+            resourceType: 'file'
+          }
+        ]
       })
 
       // And "Alice" opens the following file in Collabora
@@ -510,14 +514,18 @@ test.describe('Integrate with online office suites like Collabora and OnlyOffice
       // When "Alice" updates following sharee role
       //   | resource           | recipient | type | role                   | resourceType |
       //   | MicrosoftWord.docx | Brian     | user | Can edit with trashbin | file         |
-      await ui.userUpdatesShareeRole({
+      await ui.userUpdatesShareeRoles({
         world,
         stepUser: 'Alice',
-        resource: 'MicrosoftWord.docx',
-        recipient: 'Brian',
-        type: 'user',
-        role: 'Can edit with trashbin',
-        resourceType: 'file'
+        roleUpdates: [
+          {
+            resource: 'MicrosoftWord.docx',
+            recipient: 'Brian',
+            type: 'user',
+            role: 'Can edit with trashbin',
+            resourceType: 'file'
+          }
+        ]
       })
 
       // And "Alice" opens the following file in OnlyOffice
