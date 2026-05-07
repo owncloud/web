@@ -120,53 +120,49 @@ function getFeaturePaths() {
     local real_paths=""
     local file_path
     local line_number
-    local resolved_path
+    local check_path
     local runner_path
-    local playwright_root="$PROJECT_ROOT/tests/e2e-playwright"
-    local playwright_specs_dir="$playwright_root/specs"
+    local spec_path
 
     # $1    - paths to suite or feature file
     paths=$(echo "$1" | xargs)
     for path in $paths; do
-        # Split file and line number if present
         file_path="${path%%:*}"
         line_number="${path#*:}"
-        if [[ "$file_path" == "$line_number" ]]; then
-            # No line number present
-            line_number=""
-        fi
+        [[ "$file_path" == "$line_number" ]] && line_number=""
 
-        # Resolve supported path formats used in CI and local runs.
-        resolved_path=""
-        if [[ -f "$file_path" || -d "$file_path" ]]; then
-            resolved_path="$file_path"
-        elif [[ -f "$PROJECT_ROOT/$file_path" || -d "$PROJECT_ROOT/$file_path" ]]; then
-            resolved_path="$PROJECT_ROOT/$file_path"
-        elif [[ "$TEST_TYPE" == "playwright" && ( -f "$playwright_root/$file_path" || -d "$playwright_root/$file_path" ) ]]; then
-            # Supports FEATURE_FILES like specs/admin-settings/spaces.spec.ts
-            resolved_path="$playwright_root/$file_path"
-        elif [[ "$TEST_TYPE" == "playwright" && ( -f "$playwright_specs_dir/$file_path" || -d "$playwright_specs_dir/$file_path" ) ]]; then
-            # Supports FEATURE_FILES like admin-settings/spaces.spec.ts
-            resolved_path="$playwright_specs_dir/$file_path"
-        else
-            log error "File or folder doesn't exist: '$file_path'"
-            log info "Tried: '$file_path', '$PROJECT_ROOT/$file_path', '$playwright_root/$file_path', and '$playwright_specs_dir/$file_path'"
-            exit 1
-        fi
-
-        file_path="$resolved_path"
-        runner_path="$file_path"
-        if [[ "$runner_path" == "$PROJECT_ROOT/"* ]]; then
-            runner_path="${runner_path#"$PROJECT_ROOT/"}"
-        fi
         if [[ "$TEST_TYPE" == "playwright" ]]; then
-            # Playwright testDir is tests/e2e-playwright/specs, so normalize selectors to that base.
+            spec_path=$(cd "$SCRIPT_PATH/../e2e-playwright" && pwd)
+
+            if [[ -f "$file_path" || -d "$file_path" ]]; then
+                runner_path="$file_path"
+            elif [[ -f "$PROJECT_ROOT/$file_path" || -d "$PROJECT_ROOT/$file_path" ]]; then
+                runner_path="$PROJECT_ROOT/$file_path"
+            elif [[ -f "$spec_path/$file_path" || -d "$spec_path/$file_path" ]]; then
+                runner_path="$spec_path/$file_path"
+            elif [[ -f "$spec_path/specs/$file_path" || -d "$spec_path/specs/$file_path" ]]; then
+                runner_path="$spec_path/specs/$file_path"
+            else
+                log error "File or folder doesn't exist: '$file_path'"
+                log info "Tried: '$file_path', '$PROJECT_ROOT/$file_path', '$spec_path/$file_path', and '$spec_path/specs/$file_path'"
+                exit 1
+            fi
+
+            [[ "$runner_path" == "$PROJECT_ROOT/"* ]] && runner_path="${runner_path#"$PROJECT_ROOT/"}"
+            # Playwright testDir is tests/e2e-playwright/specs.
             runner_path="${runner_path#tests/e2e-playwright/specs/}"
             runner_path="${runner_path#tests/e2e-playwright/}"
             runner_path="${runner_path#specs/}"
+        else
+            check_path=$(echo "./$file_path" | cut -d ":" -f1)
+            if [[ ! -f "$check_path" && ! -d "$check_path" ]]; then
+                log error "File or folder doesn't exist: '$check_path'"
+                log info "Path must be relative to '$SCRIPT_PATH_REL'"
+                exit 1
+            fi
+            runner_path="$SCRIPT_PATH/$file_path"
         fi
 
-        # Reconstruct path for runner (with :line if present)
         if [[ -n "$line_number" && "$line_number" =~ ^[0-9]+$ ]]; then
             real_paths+=" $runner_path:$line_number"
         else
