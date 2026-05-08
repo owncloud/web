@@ -66,7 +66,6 @@ export const test = base.extend<{
   globalBeforeHook: [
     async ({ world }: { world: World }, use, testInfo) => {
       if (!config.basicAuth && !config.predefinedUsers && !config.mfa) {
-        // let user = world.usersEnvironment.getUser({ key: config.keycloakAdminUser })
         let user = world.usersEnvironment.getUser({ key: config.adminUsername })
         if (config.keycloak) {
           user = world.usersEnvironment.getUser({ key: config.keycloakAdminUser })

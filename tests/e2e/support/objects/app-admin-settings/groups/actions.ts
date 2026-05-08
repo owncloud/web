@@ -11,7 +11,8 @@ const editActionBtnContextMenu = '.context-menu .oc-groups-actions-edit-trigger'
 const editActionBtnQuickActions =
   '[data-item-id="%s"] .oc-table-data-cell-actions .groups-table-btn-edit'
 const groupTrSelector = 'tr'
-const groupNameSelector = 'tr > td:nth-child(3)'
+const groupNameSelector =
+  '//div[@id="group-list"]//td[contains(@class,"oc-table-data-cell-displayName")]'
 const groupIdSelector = `[data-item-id="%s"] .groups-table-btn-action-dropdown`
 const groupCheckboxSelector = `[data-item-id="%s"]:not(.oc-table-highlighted) input[type=checkbox]`
 const deleteBtnContextMenu = '.context-menu .oc-groups-actions-delete-trigger'

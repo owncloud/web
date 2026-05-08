@@ -1,6 +1,7 @@
 import { test } from '../../support/test'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
+import { application, fileAction } from '../../support/constants'
 
 // For synchronization-related details, see https://owncloud.dev/services/proxy/#claim-updates
 test.describe('groups management', () => {
@@ -61,10 +62,9 @@ test.describe('groups management', () => {
     // When "Admin" navigates to the users management page
     await ui.userNavigatesToUserManagementPage({ world, stepUser: 'Admin' })
     // And "Admin" adds the user "Brian" to the groups "security,keycloak sales" using the sidebar panel
-    await ui.userAddsUserToGroup({
+    await ui.userAddsUserToGroupsUsingContextMenu({
       world,
       stepUser: 'Admin',
-      action: 'adds',
       groups: ['security', 'keycloak sales'],
       user: 'Brian'
     })
@@ -81,7 +81,7 @@ test.describe('groups management', () => {
     await ui.userSharesResources({
       world,
       stepUser: 'Alice',
-      actionType: 'SIDEBAR_PANEL',
+      actionType: fileAction.sideBarPanel,
       shares: [
         {
           resource: 'shareToSales.txt',
@@ -116,7 +116,7 @@ test.describe('groups management', () => {
       world,
       stepUser: 'Brian',
       resource: 'shareToSales.txt',
-      application: 'texteditor'
+      viewer: application.textEditor
     })
     // And "Brian" closes the file viewer
     await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
@@ -154,7 +154,7 @@ test.describe('groups management', () => {
       attribute: 'displayName',
       key: 'keycloak finance',
       value: 'a renamed group',
-      action: 'context-menu'
+      action: 'context menu'
     })
 
     // When "Admin" deletes the following group using the context menu
@@ -163,7 +163,7 @@ test.describe('groups management', () => {
     await ui.userDeletesGroups({
       world,
       stepUser: 'Admin',
-      actionType: 'context menu',
+      actionType: fileAction.contextMenu,
       groupsToBeDeleted: ['sales']
     })
     // Then "Admin" should not see the following group

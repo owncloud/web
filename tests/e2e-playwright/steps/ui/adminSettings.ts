@@ -621,38 +621,3 @@ export async function userAuthenticatesWithOTP({
   const generalObject = new objects.applicationAdminSettings.General({ page })
   await generalObject.userAuthenticatesWithOTP({ deviceName })
 }
-
-export async function userAddsUserToGroup({
-  world,
-  stepUser,
-  action,
-  groups,
-  user
-}: {
-  world: World
-  stepUser: string
-  action: string
-  groups: string[]
-  user: string
-}): Promise<void> {
-  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const usersObject = new objects.applicationAdminSettings.Users({ page })
-  switch (action) {
-    case 'adds':
-      await usersObject.addToGroups({
-        key: user,
-        groups,
-        action: 'context-menu'
-      })
-      break
-    case 'removes':
-      await usersObject.removeFromGroups({
-        key: user,
-        groups,
-        action: 'context-menu'
-      })
-      break
-    default:
-      throw new Error(`'${action}' not implemented`)
-  }
-}
