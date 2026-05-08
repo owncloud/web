@@ -125,50 +125,78 @@ export async function userChangesQuotaForUsersUsingBatchAction({
   await usersObject.changeQuotaUsingBatchAction({ value, users })
 }
 
+async function selectUsersAndGetIds({
+  usersObject,
+  userKeys
+}: {
+  usersObject: InstanceType<typeof objects.applicationAdminSettings.Users>
+  userKeys: string[]
+}): Promise<string[]> {
+  const selectedUserIds: string[] = []
+
+  for (const userKey of userKeys) {
+    selectedUserIds.push(usersObject.getUUID({ key: userKey }))
+    await usersObject.select({ key: userKey })
+  }
+
+  return selectedUserIds
+}
+
 export async function userAddsUsersToGroupsUsingBatchActions({
   world,
   stepUser,
-  groups,
-  users
+  assignments
 }: {
   world: World
   stepUser: string
-  groups: string[]
-  users: string[]
+  assignments: Array<{ group: string; users: string[] }>
 }): Promise<void> {
-  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const usersObject = new objects.applicationAdminSettings.Users({ page })
-  const userIds = []
-
-  for (const user of users) {
-    userIds.push(usersObject.getUUID({ key: user }))
-    await usersObject.select({ key: user })
+  if (assignments.length === 0) {
+    return
   }
 
-  await usersObject.addToGroupsBatchAction({ userIds, groups })
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  for (const { group, users } of assignments) {
+    const selectedUserIds = await selectUsersAndGetIds({
+      usersObject,
+      userKeys: users
+    })
+
+    await usersObject.addToGroupsBatchAction({
+      userIds: selectedUserIds,
+      groups: [group]
+    })
+  }
 }
 
 export async function userRemovesUsersFromGroupsUsingBatchActions({
   world,
   stepUser,
-  groups,
-  users
+  assignments
 }: {
   world: World
   stepUser: string
-  groups: string[]
-  users: string[]
+  assignments: Array<{ user: string; groups: string[] }>
 }): Promise<void> {
-  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const usersObject = new objects.applicationAdminSettings.Users({ page })
-  const userIds = []
-
-  for (const user of users) {
-    userIds.push(usersObject.getUUID({ key: user }))
-    await usersObject.select({ key: user })
+  if (assignments.length === 0) {
+    return
   }
 
-  await usersObject.removeFromGroupsBatchAtion({ userIds, groups })
+  const users = assignments.map(({ user }) => user)
+  const groups = assignments[0].groups
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const selectedUserIds = await selectUsersAndGetIds({
+    usersObject,
+    userKeys: users
+  })
+
+  await usersObject.removeFromGroupsBatchAtion({
+    userIds: selectedUserIds,
+    groups
+  })
 }
 
 export async function userSetsFilters({

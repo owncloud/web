@@ -84,8 +84,10 @@ test.describe('users management', () => {
     await ui.userAddsUsersToGroupsUsingBatchActions({
       world,
       stepUser: 'Admin',
-      groups: ['sales', 'finance'],
-      users: ['Alice', 'Brian', 'Carol']
+      assignments: [
+        { group: 'sales', users: ['Alice', 'Brian', 'Carol'] },
+        { group: 'finance', users: ['Alice', 'Brian', 'Carol'] }
+      ]
     })
     await ui.userSetsFilters({
       world,
@@ -100,8 +102,10 @@ test.describe('users management', () => {
     await ui.userRemovesUsersFromGroupsUsingBatchActions({
       world,
       stepUser: 'Admin',
-      groups: ['sales', 'finance'],
-      users: ['Alice', 'Brian']
+      assignments: [
+        { user: 'Alice', groups: ['sales', 'finance'] },
+        { user: 'Brian', groups: ['sales', 'finance'] }
+      ]
     })
     await ui.userReloadsPage({ world, stepUser: 'Admin' })
     await ui.usersShouldBeVisible({
