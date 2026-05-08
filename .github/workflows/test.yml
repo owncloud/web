@@ -83,9 +83,9 @@ jobs:
           - suite: part-3
             test_suites: shares,search,runtime
             tika: true
-        #   - suite: app-provider
-        #     test_suites: app-provider
-        #     collaboration: true
+          - suite: app-provider
+            test_suites: app-provider
+            collaboration: true
         #   - suite: ocm
         #     test_suites: ocm
         #     federated: true
