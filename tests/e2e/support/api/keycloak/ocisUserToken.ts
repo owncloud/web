@@ -60,10 +60,12 @@ const getCode = async ({
   auhorizationUrl: string
   cookies: string
 }) => {
+  // Use originalId for Keycloak login (transformed id is for parallel test safety)
+  const keycloakUsername = user.originalId || user.id
   const authCodeResponse = await fetch(auhorizationUrl, {
     method: 'POST',
     body: new URLSearchParams({
-      username: user.id,
+      username: keycloakUsername,
       password: user.password
     }),
     redirect: 'manual',

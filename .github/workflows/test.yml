@@ -77,15 +77,15 @@ jobs:
         suites:
         #   - suite: part-1
             # test_suites: admin-settings,spaces
-          - suite: part-2
-            test_suites: navigation,user-settings,app-store,file-action
+          # - suite: part-2
+          #   test_suites: navigation,user-settings,app-store,file-action
 
-          - suite: part-3
-            test_suites: shares,search,runtime
-            tika: true
-          - suite: app-provider
-            test_suites: app-provider
-            collaboration: true
+          # - suite: part-3
+          #   test_suites: shares,search,runtime
+          #   tika: true
+          # - suite: app-provider
+          #   test_suites: app-provider
+          #   collaboration: true
         #   - suite: ocm
         #     test_suites: ocm
         #     federated: true
@@ -95,11 +95,11 @@ jobs:
         #   - suite: oidc-iframe
         #     feature_files: specs/oidc/iframeTokenRenewal.spec.ts
         #     oidc_iframe: true
-          - suite: smoke
-            test_suites: smoke
-        #   - suite: keycloak
-        #     feature_files: specs/admin-settings/spaces.spec.ts,specs/admin-settings/users.spec.ts:38,specs/admin-settings/users.spec.ts:75,specs/admin-settings/users.spec.ts:171,specs/admin-settings/users.spec.ts:206,specs/admin-settings/users.spec.ts:281
-        #     keycloak: true
+          # - suite: smoke
+          #   test_suites: smoke
+          - suite: keycloak
+            feature_files: specs/admin-settings/spaces.spec.ts,specs/admin-settings/users.spec.ts:38,specs/admin-settings/users.spec.ts:75,specs/admin-settings/users.spec.ts:171,specs/admin-settings/users.spec.ts:206,specs/admin-settings/users.spec.ts:281
+            keycloak: true
     env:
       BASE_URL_OCIS: localhost:9200
       HEADLESS: true

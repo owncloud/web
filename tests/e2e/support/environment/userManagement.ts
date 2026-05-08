@@ -152,10 +152,12 @@ export class UsersEnvironment {
   }
 
   storeCreatedKeycloakUser({ user }: { user: User }): User {
-    if (keycloakCreatedUser.has(user.id)) {
-      throw new Error(`Keycloak user '${user.id}' already exists`)
+    // Use originalId as key if available (parallel test safety)
+    const keycloakUserKey = user.originalId || user.id
+    if (keycloakCreatedUser.has(keycloakUserKey)) {
+      throw new Error(`Keycloak user '${keycloakUserKey}' already exists`)
     }
-    keycloakCreatedUser.set(user.id, user)
+    keycloakCreatedUser.set(keycloakUserKey, user)
     return user
   }
 
