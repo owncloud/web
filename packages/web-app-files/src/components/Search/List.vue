@@ -342,7 +342,8 @@ const doSearch = (manuallyUpdateFilterChip = false) => {
     lastModified,
     mediaType,
     scope: queryItemAsString(unref(scopeQuery)),
-    useScope: unref(doUseScope) === 'true'
+    useScope: unref(doUseScope) === 'true',
+    isVault: unref(route).params?.scope === 'vault'
   })
 
   const updateFilter = (v: Ref<InstanceType<typeof ItemFilter>>) => {

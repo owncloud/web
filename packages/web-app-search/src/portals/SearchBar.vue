@@ -498,6 +498,10 @@ const search = async () => {
     terms.push(`scope:${unref(scope)}`)
   }
 
+  if (unref(route).params?.scope === 'vault') {
+    terms.push('vault:true')
+  }
+
   loading.value = true
 
   for (const availableProvider of unref(availableProviders)) {
