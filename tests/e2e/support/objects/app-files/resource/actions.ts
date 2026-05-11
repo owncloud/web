@@ -1073,7 +1073,7 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
   }
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
-    ['filesSpaceTable', 'breadcrumb', 'fileAppBarActions'],
+    ['filesSpaceTable', 'breadcrumb', 'filesAppBarActions'],
     `Personal Page and breadcrumb after pasting resource with ${action} action`
   )
 }

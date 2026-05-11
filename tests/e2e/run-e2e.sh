@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SCRIPT_PATH=$(dirname "$0")
-SCRIPT_PATH=$(cd "${SCRIPT_PATH_REL}" && pwd) # absolute path
+SCRIPT_PATH=$(cd "${SCRIPT_PATH}" && pwd) # absolute path
 PROJECT_ROOT=$(cd "$SCRIPT_PATH/../../" && pwd)
 SCRIPT_PATH_REL=${SCRIPT_PATH//"$PROJECT_ROOT/"/}
 
@@ -117,27 +117,56 @@ fi
 
 function getFeaturePaths() {
     local paths
-    local real_paths
-    local a_path
-    local parent_path
+    local real_paths=""
+    local file_path
+    local line_number
+    local check_path
+    local runner_path
+    local spec_path
 
     # $1    - paths to suite or feature file
     paths=$(echo "$1" | xargs)
-    real_paths=""
     for path in $paths; do
-        parent_path="."
-        real_paths+=" $SCRIPT_PATH/$path" # maintain the white space
+        file_path="${path%%:*}"
+        line_number="${path#*:}"
+        [[ "$file_path" == "$line_number" ]] && line_number=""
+
         if [[ "$TEST_TYPE" == "playwright" ]]; then
-            local spec_path
-            parent_path="../e2e-playwright"
             spec_path=$(cd "$SCRIPT_PATH/../e2e-playwright" && pwd)
-            real_paths+=" $spec_path/$path"
+
+            if [[ -f "$file_path" || -d "$file_path" ]]; then
+                runner_path="$file_path"
+            elif [[ -f "$PROJECT_ROOT/$file_path" || -d "$PROJECT_ROOT/$file_path" ]]; then
+                runner_path="$PROJECT_ROOT/$file_path"
+            elif [[ -f "$spec_path/$file_path" || -d "$spec_path/$file_path" ]]; then
+                runner_path="$spec_path/$file_path"
+            elif [[ -f "$spec_path/specs/$file_path" || -d "$spec_path/specs/$file_path" ]]; then
+                runner_path="$spec_path/specs/$file_path"
+            else
+                log error "File or folder doesn't exist: '$file_path'"
+                log info "Tried: '$file_path', '$PROJECT_ROOT/$file_path', '$spec_path/$file_path', and '$spec_path/specs/$file_path'"
+                exit 1
+            fi
+
+            [[ "$runner_path" == "$PROJECT_ROOT/"* ]] && runner_path="${runner_path#"$PROJECT_ROOT/"}"
+            # Playwright testDir is tests/e2e-playwright/specs.
+            runner_path="${runner_path#tests/e2e-playwright/specs/}"
+            runner_path="${runner_path#tests/e2e-playwright/}"
+            runner_path="${runner_path#specs/}"
+        else
+            check_path=$(echo "./$file_path" | cut -d ":" -f1)
+            if [[ ! -f "$check_path" && ! -d "$check_path" ]]; then
+                log error "File or folder doesn't exist: '$check_path'"
+                log info "Path must be relative to '$SCRIPT_PATH_REL'"
+                exit 1
+            fi
+            runner_path="$SCRIPT_PATH/$file_path"
         fi
-        a_path=$(echo "$parent_path/$path" | cut -d ":" -f1)
-        if [[ ! -f $a_path && ! -d $a_path ]]; then
-            log error "File or folder doesn't exist: '$a_path'"
-            log info "Path must be relative to '$SCRIPT_PATH_REL'"
-            exit 1
+
+        if [[ -n "$line_number" && "$line_number" =~ ^[0-9]+$ ]]; then
+            real_paths+=" $runner_path:$line_number"
+        else
+            real_paths+=" $runner_path"
         fi
     done
     FEATURE_PATHS=$(echo "$real_paths" | xargs) # remove trailing white spaces

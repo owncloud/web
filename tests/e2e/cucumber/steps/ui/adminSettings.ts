@@ -145,10 +145,10 @@ When(
 
     switch (action) {
       case 'allows':
-        await usersObject.allowLogin({ key, action: 'context-menu' })
+        await usersObject.allowLogin({ key, action: fileAction.contextMenu })
         break
       case 'forbids':
-        await usersObject.forbidLogin({ key, action: 'context-menu' })
+        await usersObject.forbidLogin({ key, action: fileAction.contextMenu })
         break
       default:
         throw new Error(`${action} not implemented`)
@@ -189,7 +189,7 @@ When(
   async function (this: World, stepUser: string, key: string, value: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
-    await usersObject.changeQuota({ key, value, action: 'context-menu' })
+    await usersObject.changeQuota({ key, value, action: fileAction.contextMenu })
   }
 )
 
@@ -270,7 +270,7 @@ When(
 
     switch (action) {
       case 'adds':
-        await usersObject.addToGroupsBatchAtion({ userIds, groups: groups.split(',') })
+        await usersObject.addToGroupsBatchAction({ userIds, groups: groups.split(',') })
         break
       case 'removes':
         await usersObject.removeFromGroupsBatchAtion({ userIds, groups: groups.split(',') })
@@ -297,7 +297,7 @@ When(
       key: user,
       attribute: attribute,
       value: value,
-      action: 'context-menu'
+      action: fileAction.contextMenu
     })
   }
 )
@@ -318,14 +318,14 @@ When(
         await usersObject.addToGroups({
           key: user,
           groups: groups.split(','),
-          action: 'context-menu'
+          action: fileAction.contextMenu
         })
         break
       case 'removes':
         await usersObject.removeFromGroups({
           key: user,
           groups: groups.split(','),
-          action: 'context-menu'
+          action: fileAction.contextMenu
         })
         break
       default:
@@ -401,7 +401,7 @@ When(
       key: user,
       attribute: attribute,
       value: value,
-      action: 'context-menu'
+      action: fileAction.contextMenu
     })
   }
 )
@@ -485,7 +485,8 @@ When(
   async function (this: World, stepUser: string, actionUser: string, action: string) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
-    await usersObject.openEditPanel({ key: actionUser, action: action.replace(' ', '-') })
+    const actionValue = action === 'quick action' ? fileAction.quickAction : fileAction.contextMenu
+    await usersObject.openEditPanel({ key: actionUser, action: actionValue })
   }
 )
 

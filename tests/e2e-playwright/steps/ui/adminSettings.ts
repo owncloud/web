@@ -42,6 +42,414 @@ export async function userResetsLogo({
   await generalObject.resetLogo()
 }
 
+export async function userAllowsLoginForUserUsingContextMenu({
+  world,
+  stepUser,
+  key
+}: {
+  world: World
+  stepUser: string
+  key: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  await usersObject.allowLogin({ key, action: fileAction.contextMenu })
+}
+
+export async function userForbidsLoginForUserUsingContextMenu({
+  world,
+  stepUser,
+  key
+}: {
+  world: World
+  stepUser: string
+  key: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  await usersObject.forbidLogin({ key, action: fileAction.contextMenu })
+}
+
+export async function userChangesQuotaOfUserUsingContextMenu({
+  world,
+  stepUser,
+  key,
+  value
+}: {
+  world: World
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  await usersObject.changeQuota({ key, value, action: fileAction.contextMenu })
+}
+
+export async function userChangesQuotaOfUserUsingSidebarPanel({
+  world,
+  stepUser,
+  key,
+  value
+}: {
+  world: World
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  await usersObject.changeQuota({ key, value, action: fileAction.quickAction })
+}
+
+export async function userChangesQuotaForUsersUsingBatchAction({
+  world,
+  stepUser,
+  value,
+  users
+}: {
+  world: World
+  stepUser: string
+  value: string
+  users: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  for (const user of users) {
+    await usersObject.selectUser({ key: user })
+  }
+  await usersObject.changeQuotaUsingBatchAction({ value, users })
+}
+
+async function selectUsersAndGetIds({
+  usersObject,
+  userKeys
+}: {
+  usersObject: InstanceType<typeof objects.applicationAdminSettings.Users>
+  userKeys: string[]
+}): Promise<string[]> {
+  const selectedUserIds: string[] = []
+
+  for (const userKey of userKeys) {
+    selectedUserIds.push(usersObject.getUUID({ key: userKey }))
+    await usersObject.select({ key: userKey })
+  }
+
+  return selectedUserIds
+}
+
+export async function userAddsUsersToGroupsUsingBatchActions({
+  world,
+  stepUser,
+  assignments
+}: {
+  world: World
+  stepUser: string
+  assignments: Array<{ group: string; users: string[] }>
+}): Promise<void> {
+  if (assignments.length === 0) {
+    return
+  }
+
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  for (const { group, users } of assignments) {
+    const selectedUserIds = await selectUsersAndGetIds({
+      usersObject,
+      userKeys: users
+    })
+
+    await usersObject.addToGroupsBatchAction({
+      userIds: selectedUserIds,
+      groups: [group]
+    })
+  }
+}
+
+export async function userRemovesUsersFromGroupsUsingBatchActions({
+  world,
+  stepUser,
+  assignments
+}: {
+  world: World
+  stepUser: string
+  assignments: Array<{ user: string; groups: string[] }>
+}): Promise<void> {
+  if (assignments.length === 0) {
+    return
+  }
+
+  const users = assignments.map(({ user }) => user)
+  const groups = assignments[0].groups
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const selectedUserIds = await selectUsersAndGetIds({
+    usersObject,
+    userKeys: users
+  })
+
+  await usersObject.removeFromGroupsBatchAtion({
+    userIds: selectedUserIds,
+    groups
+  })
+}
+
+export async function userSetsFilters({
+  world,
+  stepUser,
+  filters
+}: {
+  world: World
+  stepUser: string
+  filters: { filter: string; values: string[] }[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  for (const { filter, values } of filters) {
+    await usersObject.filter({ filter, values })
+  }
+}
+
+export async function usersShouldBeVisible({
+  world,
+  stepUser,
+  expectedUsers
+}: {
+  world: World
+  stepUser: string
+  expectedUsers: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const displayedUsers = await usersObject.getDisplayedUsers()
+
+  for (const user of expectedUsers) {
+    const userId = usersObject.getUUID({ key: user })
+    expect(displayedUsers).toContain(userId)
+  }
+}
+
+export async function usersShouldNotBeVisible({
+  world,
+  stepUser,
+  expectedUsers
+}: {
+  world: World
+  stepUser: string
+  expectedUsers: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const displayedUsers = await usersObject.getDisplayedUsers()
+
+  for (const user of expectedUsers) {
+    const userId = usersObject.getUUID({ key: user })
+    expect(displayedUsers).not.toContain(userId)
+  }
+}
+
+export async function userChangesNameOfUserUsingContextMenu({
+  world,
+  stepUser,
+  key,
+  value
+}: {
+  world: World
+  stepUser: string
+  key: string
+  value: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.changeUser({
+    key,
+    attribute: 'userName',
+    value,
+    action: fileAction.contextMenu
+  })
+}
+
+export async function userUpdatesUserAttributeUsingContextMenu({
+  world,
+  stepUser,
+  user,
+  attribute,
+  value
+}: {
+  world: World
+  stepUser: string
+  user: string
+  attribute: string
+  value: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.changeUser({ key: user, attribute, value, action: fileAction.contextMenu })
+}
+
+export async function userDeletesUsersUsingBatchActions({
+  world,
+  stepUser,
+  users
+}: {
+  world: World
+  stepUser: string
+  users: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  const userIds = []
+
+  for (const user of users) {
+    userIds.push(usersObject.getUUID({ key: user }))
+    await usersObject.select({ key: user })
+  }
+
+  await usersObject.deleteUserUsingBatchAction({ userIds })
+}
+
+export async function userDeletesUsersUsingContextMenu({
+  world,
+  stepUser,
+  users
+}: {
+  world: World
+  stepUser: string
+  users: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+
+  for (const user of users) {
+    await usersObject.deleteUserUsingContextMenu({ key: user })
+  }
+}
+
+export async function userShouldHaveSelfInfo({
+  world,
+  stepUser,
+  info
+}: {
+  world: World
+  stepUser: string
+  info: { key: string; value: string }[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const accountObject = new objects.account.Account({ page })
+
+  for (const { key, value } of info) {
+    const actual = await accountObject.getUserInfo(key)
+    expect(actual).toBe(value)
+  }
+}
+
+export async function userCreatesUser({
+  world,
+  stepUser,
+  userData
+}: {
+  world: World
+  stepUser: string
+  userData: { name: string; displayname: string; email: string; password: string }[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  for (const info of userData) {
+    await usersObject.createUser({
+      name: info.name,
+      displayname: info.displayname,
+      email: info.email,
+      password: info.password
+    })
+  }
+}
+
+export async function userOpensEditPanelOfUserUsingQuickAction({
+  world,
+  stepUser,
+  actionUser
+}: {
+  world: World
+  stepUser: string
+  actionUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.openEditPanel({ key: actionUser, action: fileAction.quickAction })
+}
+
+export async function userOpensEditPanelOfUserUsingContextMenu({
+  world,
+  stepUser,
+  actionUser
+}: {
+  world: World
+  stepUser: string
+  actionUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.openEditPanel({ key: actionUser, action: fileAction.contextMenu })
+}
+
+export async function userShouldSeeEditPanel({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.waitForEditPanelToBeVisible()
+}
+
+export async function userAddsUserToGroupsUsingContextMenu({
+  world,
+  stepUser,
+  user,
+  groups
+}: {
+  world: World
+  stepUser: string
+  user: string
+  groups: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.addToGroups({
+    key: user,
+    groups,
+    action: fileAction.contextMenu
+  })
+}
+
+export async function userRemovesUserFromGroupsUsingContextMenu({
+  world,
+  stepUser,
+  user,
+  groups
+}: {
+  world: World
+  stepUser: string
+  user: string
+  groups: string[]
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const usersObject = new objects.applicationAdminSettings.Users({ page })
+  await usersObject.removeFromGroups({
+    key: user,
+    groups,
+    action: fileAction.contextMenu
+  })
+}
+
 export async function userNavigatesToGroupsManagementPage({
   world,
   stepUser
@@ -52,6 +460,18 @@ export async function userNavigatesToGroupsManagementPage({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const groupsObject = new objects.applicationAdminSettings.page.Groups({ page })
   await groupsObject.navigate()
+}
+
+export async function userNavigatesToUsersManagementPage({
+  world,
+  stepUser
+}: {
+  world: World
+  stepUser: string
+}): Promise<void> {
+  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const pageObject = new objects.applicationAdminSettings.page.Users({ page })
+  await pageObject.navigate()
 }
 
 export async function userCreatesGroups({
@@ -186,22 +606,6 @@ export async function userNavigatesToUserManagementPage({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationAdminSettings.page.Users({ page })
   await pageObject.navigate()
-}
-
-export async function userChangesUserQuota({
-  world,
-  stepUser,
-  key,
-  value
-}: {
-  world: World
-  stepUser: string
-  key: string
-  value: string
-}): Promise<void> {
-  const { page } = world.actorsEnvironment.getActor({ key: stepUser })
-  const usersObject = new objects.applicationAdminSettings.Users({ page })
-  await usersObject.changeQuota({ key, value, action: fileAction.contextMenu })
 }
 
 export async function userAuthenticatesWithOTP({
