@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { searchFilter, searchScope, application } from '../../support/constants'
+import { searchFilter, searchScope, application } from '../../environment/constants'
 
 test.describe('Search', () => {
   test.beforeEach(async ({ world }) => {

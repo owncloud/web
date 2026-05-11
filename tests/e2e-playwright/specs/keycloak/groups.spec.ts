@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
-import { application, fileAction } from '../../support/constants'
+import { application, fileAction } from '../../environment/constants'
 
 // For synchronization-related details, see https://owncloud.dev/services/proxy/#claim-updates
 test.describe('groups management', () => {

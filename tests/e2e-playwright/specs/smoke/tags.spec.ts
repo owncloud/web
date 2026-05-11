@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileAction } from '../../support/constants'
+import { fileAction } from '../../environment/constants'
 
 test.describe('Users can use web to organize tags', () => {
   test.beforeEach(async ({ world }) => {

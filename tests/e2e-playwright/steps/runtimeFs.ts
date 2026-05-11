@@ -1,4 +1,4 @@
-import * as tempFs from '../../e2e/support/utils/runtimeFs'
+import * as tempFs from '../support/utils/runtimeFs'
 
 export function userCreatesAFileOfSizeInTempUploadDir({
   fileName,

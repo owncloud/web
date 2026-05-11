@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { resourcePage, fileAction } from '../../support/constants'
+import { resourcePage, fileAction } from '../../environment/constants'
 
 test.describe('Trashbin delete', () => {
   test.beforeEach(async ({ world }) => {

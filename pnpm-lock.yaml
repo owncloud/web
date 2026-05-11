@@ -1277,6 +1277,24 @@ importers:
         specifier: ^1.6.11
         version: 1.6.11
 
+  tests/e2e-playwright:
+    devDependencies:
+      '@ai-zen/node-fetch-event-source':
+        specifier: ^2.1.4
+        version: 2.1.4
+      join-path:
+        specifier: 1.1.1
+        version: 1.1.1
+      lodash-es:
+        specifier: 4.17.21
+        version: 4.17.21
+      luxon:
+        specifier: 3.5.0
+        version: 3.5.0
+      xml-js:
+        specifier: ^1.6.11
+        version: 1.6.11
+
 packages:
 
   '@acemir/cssom@0.9.23':

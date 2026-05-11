@@ -1,7 +1,7 @@
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileAction } from '../../support/constants'
-import { test } from '../../support/test'
+import { fileAction } from '../../environment/constants'
+import { test } from '../../environment/test'
 
 test.describe('spaces.personal', () => {
   test.beforeEach(async ({ world }) => {

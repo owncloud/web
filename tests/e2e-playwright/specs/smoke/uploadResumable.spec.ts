@@ -1,8 +1,8 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
 import { userCreatesAFileOfSizeInTempUploadDir } from '../../steps/runtimeFs'
-import { resourcePage } from '../../support/constants'
+import { resourcePage } from '../../environment/constants'
 
 test.describe('Upload large resources', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {

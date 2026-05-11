@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileAction, resourcePage, application } from '../../support/constants'
+import { fileAction, resourcePage, application } from '../../environment/constants'
 
 test.describe('link', () => {
   test.beforeEach(async ({ world }) => {

@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { application } from '../../support/constants'
+import { application } from '../../environment/constants'
 
 test.describe('Different file viewers', { tag: '@predefined-users' }, () => {
   test('file viewers', async ({ world }) => {

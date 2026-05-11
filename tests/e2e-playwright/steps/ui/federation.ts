@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test'
-import { objects } from '../../../e2e/support'
-import { substitute } from '../../../e2e/support/utils'
-import { World } from '../../support/world'
+import { objects } from '../../support'
+import { substitute } from '../../support/utils'
+import { World } from '../../environment/world'
 
 export async function userGeneratesInvitationTokenForTheFederationShare({
   world,

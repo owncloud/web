@@ -1,9 +1,9 @@
-import { config } from '../../../e2e/config.js'
-import { api } from '../../../e2e/support'
-import { ResourceType } from '../../../e2e/support/api/share/share'
-import { Space } from '../../../e2e/support/types'
+import { config } from '../../config'
+import { api } from '../../support'
+import { ResourceType } from '../../support/api/share/share'
+import { Space } from '../../support/types'
 import fs from 'fs'
-import { World } from '../../support/world'
+import { World } from '../../environment/world'
 
 export async function usersHaveBeenCreated({
   world,

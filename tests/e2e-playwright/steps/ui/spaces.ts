@@ -1,14 +1,10 @@
-import { objects } from '../../../e2e/support'
-import { Space } from '../../../e2e/support/types'
-import {
-  getDynamicRoleIdByName,
-  ResourceType,
-  shareRoles
-} from '../../../e2e/support/api/share/share'
+import { objects } from '../../support'
+import { Space } from '../../support/types'
+import { getDynamicRoleIdByName, ResourceType, shareRoles } from '../../support/api/share/share'
 import { expect } from '@playwright/test'
-import { substitute } from '../../../e2e/support/utils'
-import { World } from '../../support/world'
-import { fileAction } from '../../support/constants'
+import { substitute } from '../../support/utils'
+import { World } from '../../environment/world'
+import { fileAction } from '../../environment/constants'
 
 export async function userNavigatesToPersonalSpacePage({
   world,

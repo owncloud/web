@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileAction, shareIndicator, resourcePage } from '../../support/constants'
+import { fileAction, shareIndicator, resourcePage } from '../../environment/constants'
 
 test.describe('server sent events', { tag: '@sse' }, () => {
   test.beforeEach(async ({ world }) => {

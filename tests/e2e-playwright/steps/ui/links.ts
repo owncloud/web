@@ -1,7 +1,7 @@
-import { objects } from '../../../e2e/support'
+import { objects } from '../../support'
 import { expect } from '@playwright/test'
-import { World } from '../../support/world'
-import { substitute } from '../../../e2e/support/utils'
+import { World } from '../../environment/world'
+import { substitute } from '../../support/utils'
 
 export async function userRenamesMostRecentlyCreatedPublicLinkOfResource({
   world,

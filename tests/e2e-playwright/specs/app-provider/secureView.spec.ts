@@ -1,9 +1,9 @@
 // To run this feature we need to run the external app-provider service along OnlyOffice, Collabora services
 
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { searchScope, application, fileAction } from '../../support/constants'
+import { searchScope, application, fileAction } from '../../environment/constants'
 
 test.describe('Secure view', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {

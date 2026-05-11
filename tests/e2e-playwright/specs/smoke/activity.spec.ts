@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileAction } from '../../support/constants'
+import { fileAction } from '../../environment/constants'
 
 test.describe('Users can see all activities of the resources and spaces', () => {
   test('Upload files in personal space', { tag: '@predefined-users' }, async ({ world }) => {

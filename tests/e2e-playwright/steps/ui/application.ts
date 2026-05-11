@@ -1,8 +1,8 @@
 import { expect } from '@playwright/test'
-import { objects } from '../../../e2e/support'
-import { config } from '../../../e2e/config'
-import { World } from '../../support/world'
-import { substitute } from '../../../e2e/support/utils'
+import { objects } from '../../support'
+import { config } from '../../config'
+import { World } from '../../environment/world'
+import { substitute } from '../../support/utils'
 
 export async function userOpensApplication({
   world,

@@ -2,10 +2,10 @@
 // This is a minimal test for the integration of ocis with different online office suites like Collabora and OnlyOffice
 // Check that the file can be opened in collabora or onlyoffice using the url. https://github.com/owncloud/web/issues/9897
 
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { application, client } from '../../support/constants'
+import { application, client } from '../../environment/constants'
 
 test.describe('url stability for mobile and desktop client', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {

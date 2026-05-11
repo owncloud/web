@@ -1,5 +1,5 @@
-import { test } from '../../support/test'
-import { fileAction } from '../../support/constants'
+import { test } from '../../environment/test'
+import { fileAction } from '../../environment/constants'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 

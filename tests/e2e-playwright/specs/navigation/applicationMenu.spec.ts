@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
-import { resourcePage } from '../../support/constants'
+import { resourcePage } from '../../environment/constants'
 
 test.describe('Application menu', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {

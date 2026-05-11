@@ -3,10 +3,10 @@
  * This is a minimal test for the integration of ocis with different online office suites like Collabora and OnlyOffice
  */
 
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileAction, application, resourcePage } from '../../support/constants'
+import { fileAction, application, resourcePage } from '../../environment/constants'
 
 test.describe('Integrate with online office suites like Collabora and OnlyOffice', () => {
   test.beforeEach(async ({ world }) => {

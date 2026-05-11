@@ -1,12 +1,12 @@
-import { config } from '../../../e2e/config.js'
-import { api, objects } from '../../../e2e/support'
-import { User } from '../../../e2e/support/types'
-import { listenSSE } from '../../../e2e/support/environment/sse.js'
+import { config } from '../../config.js'
+import { api, objects } from '../../support'
+import { User } from '../../support/types'
+import { listenSSE } from '../../support/environment/sse.js'
 import { test, expect } from '@playwright/test'
-import { waitForSSEEvent } from '../../../e2e/support/utils/locator.js'
-import { World } from '../../support/world'
+import { waitForSSEEvent } from '../../support/utils/locator.js'
+import { World } from '../../environment/world'
 import { Jimp } from 'jimp'
-import { getOtpFromImage } from '../../../e2e/support/utils/mfa.js'
+import { getOtpFromImage } from '../../support/utils/mfa.js'
 
 async function createNewSession(world: World, stepUser: string) {
   const { page } = await world.actorsEnvironment.createActor({

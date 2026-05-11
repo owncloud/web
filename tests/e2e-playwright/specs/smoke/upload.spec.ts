@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileAction, application, resourcePage } from '../../support/constants'
+import { fileAction, application, resourcePage } from '../../environment/constants'
 
 test.describe('internal link share', () => {
   test.beforeEach(async ({ world }) => {

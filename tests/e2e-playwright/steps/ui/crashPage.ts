@@ -1,5 +1,5 @@
-import { CrashPage } from '../../../e2e/support/objects/crash-page'
-import { config } from '../../../e2e/config'
+import { CrashPage } from '../../support/objects/crash-page'
+import { config } from '../../config'
 import { Page } from '@playwright/test'
 
 export function expectCrashPageToBeVisible({ page }: { page: Page }) {

@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { defineConfig, devices, ReporterDescription } from '@playwright/test'
-import { config } from '../e2e/config'
+import { config } from './config'
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname)
 const reportsDir = path.resolve(__dirname, '../../', config.reportDir)

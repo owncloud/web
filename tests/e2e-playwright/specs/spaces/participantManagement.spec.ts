@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
-import { fileAction } from '../../support/constants'
+import { fileAction } from '../../environment/constants'
 
 test.describe('check files pagination in project space', () => {
   test('pagination', async ({ world }) => {

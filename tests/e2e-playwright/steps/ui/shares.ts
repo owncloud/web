@@ -1,13 +1,10 @@
 import { expect } from '@playwright/test'
-import { objects } from '../../../e2e/support'
-import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
-import {
-  CollaboratorType,
-  ICollaborator
-} from '../../../e2e/support/objects/app-files/share/collaborator'
-import { substitute } from '../../../e2e/support/utils/substitute'
-import { World } from '../../support/world'
-import { fileAction } from '../../support/constants'
+import { objects } from '../../support'
+import { getDynamicRoleIdByName, ResourceType } from '../../support/api/share/share'
+import { CollaboratorType, ICollaborator } from '../../support/objects/app-files/share/collaborator'
+import { substitute } from '../../support/utils/substitute'
+import { World } from '../../environment/world'
+import { fileAction } from '../../environment/constants'
 
 const parseShareTable = function (
   world: World,

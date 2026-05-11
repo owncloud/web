@@ -1,6 +1,6 @@
-import { objects } from '../../../e2e/support'
-import { World } from '../../support/world'
-import { application, client } from '../../support/constants'
+import { objects } from '../../support'
+import { World } from '../../environment/world'
+import { application, client } from '../../environment/constants'
 
 export async function userNavigatesToNonExistingPage({
   world,

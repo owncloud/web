@@ -1,4 +1,4 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as ui from '../../steps/ui/index'
 
 test.describe('details', { tag: '@predefined-users' }, () => {

@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { resourcePage, searchScope } from '../../support/constants'
+import { resourcePage, searchScope } from '../../environment/constants'
 
 test.describe('Search in the project space', () => {
   test.beforeEach(async ({ world }) => {

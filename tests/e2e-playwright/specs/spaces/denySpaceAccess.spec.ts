@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as ui from '../../steps/ui/index'
 import * as api from '../../steps/api/api'
-import { resourcePage, fileAction } from '../../support/constants'
+import { resourcePage, fileAction } from '../../environment/constants'
 
 test.describe('deny space access', () => {
   test('deny and grant access', async ({ world }) => {

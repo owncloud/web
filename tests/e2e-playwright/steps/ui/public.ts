@@ -1,9 +1,9 @@
-import { objects } from '../../../e2e/support'
-import { editor } from '../../../e2e/support/objects/app-files/utils'
-import { substitute } from '../../../e2e/support/utils'
+import { objects } from '../../support'
+import { editor } from '../../support/objects/app-files/utils'
+import { substitute } from '../../support/utils'
 import { expect } from '@playwright/test'
-import { World } from '../../support/world'
-import { fileAction, application } from '../../support/constants'
+import { World } from '../../environment/world'
+import { fileAction, application } from '../../environment/constants'
 
 export async function userOpensPublicLink({
   world,

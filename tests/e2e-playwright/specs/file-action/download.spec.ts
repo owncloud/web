@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { application, fileAction } from '../../support/constants'
+import { application, fileAction } from '../../environment/constants'
 
 test.describe('Download', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {

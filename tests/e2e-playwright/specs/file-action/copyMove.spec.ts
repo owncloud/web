@@ -1,7 +1,7 @@
-import { test } from '../../support/test'
+import { test } from '../../environment/test'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
-import { fileAction, resourcePage } from '../../support/constants'
+import { fileAction, resourcePage } from '../../environment/constants'
 
 test.describe('file action - copy/move', { tag: '@predefined-users' }, () => {
   test.beforeEach(async ({ world }) => {

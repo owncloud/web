@@ -1,24 +1,21 @@
 import { expect } from '@playwright/test'
-import { objects } from '../../../e2e/support'
-import {
-  createResourceTypes,
-  shortcutType
-} from '../../../e2e/support/objects/app-files/resource/actions'
-import { editor } from '../../../e2e/support/objects/app-files/utils'
+import { objects } from '../../support'
+import { createResourceTypes, shortcutType } from '../../support/objects/app-files/resource/actions'
+import { editor } from '../../support/objects/app-files/utils'
 import path from 'path'
-import { Public } from '../../../e2e/support/objects/app-files/page'
-import { Resource } from '../../../e2e/support/objects/app-files/resource'
-import { config } from '../../../e2e/config'
-import * as runtimeFs from '../../../e2e/support/utils/runtimeFs'
-import { substitute } from '../../../e2e/support/utils'
-import { World } from '../../support/world'
+import { Public } from '../../support/objects/app-files/page'
+import { Resource } from '../../support/objects/app-files/resource'
+import { config } from '../../config'
+import * as runtimeFs from '../../support/utils/runtimeFs'
+import { substitute } from '../../support/utils'
+import { World } from '../../environment/world'
 import {
   fileAction,
   application,
   searchScope,
   resourcePage,
   shareIndicator
-} from '../../support/constants'
+} from '../../environment/constants'
 
 export async function userUploadsResources({
   world,
