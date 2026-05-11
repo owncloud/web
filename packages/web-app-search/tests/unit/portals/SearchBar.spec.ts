@@ -269,6 +269,22 @@ describe('Search Bar portal component', () => {
     const spyRouterPushStub = wrapper.vm.$router.push
     expect(spyRouterPushStub).not.toHaveBeenCalled()
   })
+  test('includes vault:true in search term when route scope is vault', async () => {
+    wrapper = getMountedWrapper({ routeParams: { scope: 'vault' } }).wrapper
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(providerFiles.previewSearch.search).toHaveBeenCalledWith(
+      expect.stringContaining('vault:true')
+    )
+  })
+  test('does not include vault:true in search term when route scope is not vault', async () => {
+    wrapper = getMountedWrapper().wrapper
+    wrapper.find(selectors.searchInput).setValue('albert')
+    await flushPromises()
+    expect(providerFiles.previewSearch.search).not.toHaveBeenCalledWith(
+      expect.stringContaining('vault:true')
+    )
+  })
 })
 
 type Mocks = {
@@ -284,7 +300,8 @@ function getMountedWrapper({
   userContextReady = true,
   providers = [providerFiles, providerContacts],
   route = 'files-spaces-generic',
-  store = {}
+  store = {},
+  routeParams = {} as Record<string, string>
 } = {}) {
   vi.mocked(useAvailableProviders).mockReturnValue(ref(providers))
 
@@ -293,7 +310,8 @@ function getMountedWrapper({
     query: {
       term: mocks?.$route?.query?.term || '',
       provider: ''
-    }
+    },
+    params: routeParams
   })
   const localMocks = {
     ...defaultComponentMocks({ currentRoute }),
