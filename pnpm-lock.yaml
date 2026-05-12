@@ -603,8 +603,8 @@ importers:
         specifier: 3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3))
       qs:
-        specifier: ^6.14.2
-        version: 6.14.2
+        specifier: ^6.15.1
+        version: 6.15.1
       uuid:
         specifier: 14.0.0
         version: 14.0.0
@@ -670,8 +670,8 @@ importers:
         specifier: 3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3))
       qs:
-        specifier: 6.14.2
-        version: 6.14.2
+        specifier: 6.15.1
+        version: 6.15.1
       uuid:
         specifier: 14.0.0
         version: 14.0.0
@@ -1035,8 +1035,8 @@ importers:
         specifier: ^1.30.0
         version: 1.30.0
       qs:
-        specifier: ^6.14.1
-        version: 6.14.2
+        specifier: ^6.15.1
+        version: 6.15.1
       screenfull:
         specifier: ^6.0.2
         version: 6.0.2
@@ -1169,8 +1169,8 @@ importers:
         specifier: ^8.3.0
         version: 8.3.0
       qs:
-        specifier: 6.14.2
-        version: 6.14.2
+        specifier: 6.15.1
+        version: 6.15.1
       semver:
         specifier: 7.7.4
         version: 7.7.4
@@ -6388,6 +6388,10 @@ packages:
 
   qs@6.14.2:
     resolution: {integrity: sha512-V/yCWTTF7VJ9hIh18Ugr2zhJMP01MY7c5kh4J870L7imm6/DIzBsNLTXzMwUA3yZ5b/KBqLx8Kp3uRvd7xSe3Q==}
+    engines: {node: '>=0.6'}
+
+  qs@6.15.1:
+    resolution: {integrity: sha512-6YHEFRL9mfgcAvql/XhwTvf5jKcOiiupt2FiJxHkiX1z4j7WL8J/jRHYLluORvc1XxB5rV20KoeK00gVJamspg==}
     engines: {node: '>=0.6'}
 
   quansync@0.2.11:
@@ -13570,6 +13574,10 @@ snapshots:
     dependencies:
       side-channel: 1.1.0
 
+  qs@6.15.1:
+    dependencies:
+      side-channel: 1.1.0
+
   quansync@0.2.11: {}
 
   querystring-es3@0.2.1: {}
@@ -14461,7 +14469,7 @@ snapshots:
   url@0.11.4:
     dependencies:
       punycode: 1.4.1
-      qs: 6.14.2
+      qs: 6.15.1
 
   utf8@3.0.0: {}
 
