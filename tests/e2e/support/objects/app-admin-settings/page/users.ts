@@ -15,8 +15,8 @@ export class Users {
     await this.#page.locator(appLoadingSpinnerSelector).waitFor({ state: 'detached' })
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       this.#page,
-      ['#admin-settings-wrapper'],
-      'account page'
+      ['adminSettingsWrapper', 'appSidebar'],
+      'users page'
     )
   }
 }

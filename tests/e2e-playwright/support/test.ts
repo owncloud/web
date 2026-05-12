@@ -66,13 +66,13 @@ export const test = base.extend<{
   globalBeforeHook: [
     async ({ world }: { world: World }, use, testInfo) => {
       if (!config.basicAuth && !config.predefinedUsers && !config.mfa) {
+        let user = world.usersEnvironment.getUser({ key: config.adminUsername })
         if (config.keycloak) {
-          const user = world.usersEnvironment.getUser({ key: config.keycloakAdminUser })
+          user = world.usersEnvironment.getUser({ key: config.keycloakAdminUser })
           await api.keycloak.setAccessTokenForKeycloakOcisUser(user)
           await api.keycloak.setAccessTokenForKeycloakUser(user)
           await storeKeycloakGroups(user, world.usersEnvironment)
         } else {
-          const user = world.usersEnvironment.getUser({ key: config.adminUsername })
           await api.token.setAccessAndRefreshToken(user)
           if (isOcm(testInfo)) {
             config.federatedServer = true
