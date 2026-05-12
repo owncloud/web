@@ -78,7 +78,8 @@ export const useSearch = () => {
     lastModified,
     mediaType,
     scope,
-    useScope
+    useScope,
+    isVault
   }: {
     term: string
     isTitleOnlySearch?: boolean
@@ -87,6 +88,7 @@ export const useSearch = () => {
     mediaType?: string
     scope?: string
     useScope?: boolean
+    isVault?: boolean
   }) => {
     const query: string[] = []
 
@@ -120,6 +122,11 @@ export const useSearch = () => {
       const mediatypes = mediaType.split('+').map((t) => `"${t}"`)
       query.push(`mediatype:(${mediatypes.join(' OR ')})`)
     }
+
+    if (isVault) {
+      query.push('vault:true')
+    }
+
     return query
       .sort((a, b) => Number(a.startsWith('scope:')) - Number(b.startsWith('scope:')))
       .join(' AND ')

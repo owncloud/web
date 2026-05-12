@@ -3,6 +3,44 @@ import { CapabilityStore, useSearch } from '../../../../src/composables'
 import { SearchResource, SpaceResource } from '@ownclouders/web-client'
 
 describe('useSearch', () => {
+  describe('method "buildSearchTerm"', () => {
+    it('appends vault:true when isVault is true', () => {
+      const wrapper = createWrapper()
+      const result = wrapper.vm.buildSearchTerm({ term: 'test', isVault: true })
+      expect(result).toContain('vault:true')
+    })
+    it('does not append vault:true when isVault is false', () => {
+      const wrapper = createWrapper()
+      const result = wrapper.vm.buildSearchTerm({ term: 'test', isVault: false })
+      expect(result).not.toContain('vault:true')
+    })
+    it('does not append vault:true when isVault is undefined', () => {
+      const wrapper = createWrapper()
+      const result = wrapper.vm.buildSearchTerm({ term: 'test' })
+      expect(result).not.toContain('vault:true')
+    })
+    it('combines vault:true with other query parts', () => {
+      const wrapper = createWrapper()
+      const result = wrapper.vm.buildSearchTerm({
+        term: 'test',
+        tags: 'lorem',
+        isVault: true
+      })
+      expect(result).toContain('vault:true')
+      expect(result).toContain('tag:("lorem")')
+      expect(result).toContain('name:"*test*"')
+    })
+    it('places scope: at the end of the query', () => {
+      const wrapper = createWrapper()
+      const result = wrapper.vm.buildSearchTerm({
+        term: 'test',
+        scope: 'lorem',
+        useScope: true,
+        isVault: true
+      })
+      expect(result).toMatch(/scope:lorem$/)
+    })
+  })
   describe('method "search"', () => {
     it('can search', async () => {
       const files = [
@@ -58,10 +96,11 @@ const createWrapper = ({ resources = [] }: { resources?: SearchResource[] } = {}
 
   return getComposableWrapper(
     () => {
-      const { search } = useSearch()
+      const { search, buildSearchTerm } = useSearch()
 
       return {
-        search
+        search,
+        buildSearchTerm
       }
     },
     {
