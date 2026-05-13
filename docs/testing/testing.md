@@ -80,12 +80,12 @@ This will start all the services. The ENV variables specific to each services ar
 The following command will run all available e2e tests:
 
 ```shell
-$ pnpm test:e2e:playwright 'tests/e2e-playwright/specs/**/*.spec.ts'
+$ pnpm test:e2e:playwright 'tests/e2e/specs/**/*.spec.ts'
 ```
 
 ### Options
 
-To run a particular test, simply add the spec file and line number to the test command, e.g. `pnpm test:e2e:playwright tests/e2e-playwright/specs/admin-settings/users.feature:14`
+To run a particular test, simply add the spec file and line number to the test command, e.g. `pnpm test:e2e:playwright tests/e2e/specs/admin-settings/users.feature:14`
 
 Various options are available via ENV variables, e.g.
 
@@ -161,7 +161,7 @@ There's a documentation to serve [oCIS with Keycloak](https://owncloud.dev/ocis/
 ```bash
 KEYCLOAK=true \
 BASE_URL_OCIS=ocis.owncloud.test \
-pnpm run test:e2e:playwright tests/e2e-playwright/specs/journeys
+pnpm run test:e2e:playwright tests/e2e/specs/journeys
 ```
 
 Following environment variables come in use while running e2e tests on oCIS with Keycloak:
@@ -230,7 +230,7 @@ The test scenarios that can run with predefined users are marked with the `@pred
 ```bash
 PREDEFINED_USERS=true \
 PREDEFINED_USERS_FILE='<path-to>/users.json' \
-pnpm test:e2e:playwright tests/e2e-playwright/specs/file-action/rename.feature --tags '@predefined-users'
+pnpm test:e2e:playwright tests/e2e/specs/file-action/rename.feature --tags '@predefined-users'
 ```
 
 **The following tests cannot be run with predefined users:**
@@ -254,7 +254,7 @@ Test suites may include the `web-packages.txt` file to denote which web packages
 The `web-packages.txt` file should be included within the test suite directory as shown below:
 
 ```
-└── tests/e2e-playwright/specs
+└── tests/e2e/specs
     └── admin-settings
         ├── users.feature
         └── web-packages.txt

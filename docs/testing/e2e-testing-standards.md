@@ -24,7 +24,7 @@ Here are the test standards and guidelines we adhere to when creating Playwright
 ## Folder Structure:
 - `tests/:`
 
-    - `e2e-playwright/`: Main folder containing all (end-to-end) E2E test-related files.
+    - `e2e/`: Main folder containing all (end-to-end) E2E test-related files.
     
       - `specs/`: Main folder containing all test-related files.
 

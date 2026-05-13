@@ -1247,7 +1247,7 @@ importers:
         version: 4.5.4(@types/node@25.6.0)(rollup@4.60.2)(typescript@5.9.3)(vite@7.3.2(@types/node@25.6.0)(sass@1.94.1)(terser@5.46.2)(yaml@2.8.2))
     publishDirectory: package
 
-  tests/e2e-playwright:
+  tests/e2e:
     devDependencies:
       '@ai-zen/node-fetch-event-source':
         specifier: ^2.1.4

@@ -104,7 +104,7 @@ if [[ -z $BROWSER ]]; then
     BROWSER="chromium"
 fi
 
-FEATURES_DIR="${SCRIPT_PATH}/../e2e-playwright/specs"
+FEATURES_DIR="${SCRIPT_PATH}/../e2e/specs"
 FEATURES_DIR=$(cd "$FEATURES_DIR" && pwd) # get absolute path
 E2E_COMMAND="pnpm test:e2e:playwright --project=$BROWSER" # run command defined in package.json
 ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
@@ -126,7 +126,7 @@ function getFeaturePaths() {
         [[ "$file_path" == "$line_number" ]] && line_number=""
 
         if [[ "$TEST_TYPE" == "playwright" ]]; then
-            spec_path=$(cd "$SCRIPT_PATH/../e2e-playwright" && pwd)
+            spec_path=$(cd "$SCRIPT_PATH/../e2e" && pwd)
 
             if [[ -f "$file_path" || -d "$file_path" ]]; then
                 runner_path="$file_path"
@@ -143,9 +143,9 @@ function getFeaturePaths() {
             fi
 
             [[ "$runner_path" == "$PROJECT_ROOT/"* ]] && runner_path="${runner_path#"$PROJECT_ROOT/"}"
-            # Playwright testDir is tests/e2e-playwright/specs.
-            runner_path="${runner_path#tests/e2e-playwright/specs/}"
-            runner_path="${runner_path#tests/e2e-playwright/}"
+            # Playwright testDir is tests/e2e/specs.
+            runner_path="${runner_path#tests/e2e/specs/}"
+            runner_path="${runner_path#tests/e2e/}"
             runner_path="${runner_path#specs/}"
         else
             check_path=$(echo "./$file_path" | cut -d ":" -f1)

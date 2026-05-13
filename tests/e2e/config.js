@@ -2,8 +2,8 @@ const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `https://${url}`)
 
 export const config = {
   // environment
-  assets: './tests/e2e-playwright/filesForUpload',
-  tempAssetsPath: './tests/e2e-playwright/filesForUpload/temp',
+  assets: './tests/e2e/filesForUpload',
+  tempAssetsPath: './tests/e2e/filesForUpload/temp',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   basicAuth: process.env.BASIC_AUTH === 'true',
   testType: process.env.TEST_TYPE ?? 'playwright',
@@ -38,6 +38,7 @@ export const config = {
   },
   debug: process.env.DEBUG === 'true',
   logLevel: process.env.LOG_LEVEL || 'silent',
+  retry: parseInt(process.env.RETRY) || 0,
   // playwright
   slowMo: parseInt(process.env.SLOW_MO) || 0,
   timeout: parseInt(process.env.TIMEOUT) || 180,

@@ -67,7 +67,7 @@ jobs:
           path: dist
           if-no-files-found: error
 
-  e2e-playwright:
+  e2e:
     needs: build
     runs-on: ubuntu-latest
     name: e2e-tests-${{ matrix.suites.suite }}
@@ -187,7 +187,7 @@ jobs:
           MFA: ${{ matrix.suites.mfa || '' }}
           RETRY: ${{ matrix.suites.mfa && 0 || 1 }}
           KEYCLOAK_HOST: ${{ matrix.suites.keycloak && 'localhost:8443' || '' }}
-        run: cd ${{ github.workspace }}/tests/e2e-playwright && bash run-e2e.sh --type playwright
+        run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright
 
       - name: Dump oCIS logs on failure
         if: failure()
@@ -214,7 +214,7 @@ jobs:
           retention-days: 7
 
   check-tests-passed:
-    needs: [ e2e-playwright ]
+    needs: [ e2e ]
     runs-on: ubuntu-latest
     if: always()
     steps:
