@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v12.3.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v12.3.3...master
 
 Summary
 -------
@@ -12,10 +12,9 @@ Summary
 * Bugfix - Use dynamic viewport units (dvh/dvw) instead of viewport units (vh/vw): [#13578](https://github.com/owncloud/web/pull/13578)
 * Bugfix - Cannot-edit-public-link-when-name-is-too-long: [#13610](https://github.com/owncloud/web/pull/13610)
 * Bugfix - Fix space key selecting wrong resource: [#13634](https://github.com/owncloud/web/pull/13634)
-* Bugfix - Share button not usable when role dropdown text is too long: [#13638](https://github.com/owncloud/web/pull/13638)
-* Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
 * Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
 * Enhancement - Use spaceId: [#13577](https://github.com/owncloud/web/pull/13577)
+* Enhancement - Support log and conf files in text editor: [#13632](https://github.com/owncloud/web/issues/13632)
 
 Details
 -------
@@ -54,22 +53,6 @@ Details
    https://github.com/owncloud/web/pull/13634
    https://kiteworks.atlassian.net/browse/OCISDEV-718
 
-* Bugfix - Share button not usable when role dropdown text is too long: [#13638](https://github.com/owncloud/web/pull/13638)
-
-   We've fixed an issue where the share button was not usable when the text in the
-   role dropdown was too long.
-
-   https://github.com/owncloud/web/pull/13638
-
-* Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
-
-   When requesting resources from public links, we now request also
-   `oc:signature-auth` property. This property is then used to sign the archiver
-   download URL within password protected public links.
-
-   https://github.com/owncloud/ocis/issues/11963
-   https://github.com/owncloud/web/pull/13576
-
 * Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
 
    Added a new logic to the WebDAV client to strip the prefix from the path if it
@@ -86,6 +69,99 @@ Details
    manually constructed `storageId` from the resource ID.
 
    https://github.com/owncloud/web/pull/13577
+
+* Enhancement - Support log and conf files in text editor: [#13632](https://github.com/owncloud/web/issues/13632)
+
+   We've added support for `.log` and `.conf` files in the text editor.
+
+   https://github.com/owncloud/web/issues/13632
+   https://github.com/owncloud/web/pull/13650
+
+Changelog for ownCloud Web [12.3.3] (2026-04-27)
+=======================================
+The following sections list the changes in ownCloud web 12.3.3 relevant to
+ownCloud admins and users.
+
+[12.3.3]: https://github.com/owncloud/web/compare/v12.3.2...v12.3.3
+
+Summary
+-------
+
+* Bugfix - Share button not usable when role dropdown text is too long: [#13638](https://github.com/owncloud/web/pull/13638)
+* Bugfix - Shared with does not show members: [#13667](https://github.com/owncloud/web/pull/13667)
+* Bugfix - Escape strings when returned from server: [#13680](https://github.com/owncloud/web/pull/13680)
+
+Details
+-------
+
+* Bugfix - Share button not usable when role dropdown text is too long: [#13638](https://github.com/owncloud/web/pull/13638)
+
+   We've fixed an issue where the share button was not usable when the text in the
+   role dropdown was too long.
+
+   https://github.com/owncloud/web/pull/13638
+
+* Bugfix - Shared with does not show members: [#13667](https://github.com/owncloud/web/pull/13667)
+
+   We've fixed an issue where the list of external users in the "Shared with"
+   section was not displayed.
+
+   https://github.com/owncloud/web/pull/13667
+
+* Bugfix - Escape strings when returned from server: [#13680](https://github.com/owncloud/web/pull/13680)
+
+   We've fixed an issue where strings returned from the server were not escaped
+
+   https://github.com/owncloud/web/pull/13680
+
+Changelog for ownCloud Web [12.3.2] (2026-02-27)
+=======================================
+The following sections list the changes in ownCloud web 12.3.2 relevant to
+ownCloud admins and users.
+
+[12.3.2]: https://github.com/owncloud/web/compare/v12.3.1...v12.3.2
+
+Summary
+-------
+
+* Bugfix - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
+
+Details
+-------
+
+* Bugfix - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
+
+   When requesting resources from public links, we now request also
+   `oc:signature-auth` property. This property is then used to sign the archiver
+   download URL within password protected public links.
+
+   https://github.com/owncloud/ocis/issues/11963
+   https://github.com/owncloud/web/pull/13576
+
+Changelog for ownCloud Web [12.3.1] (2026-02-05)
+=======================================
+The following sections list the changes in ownCloud web 12.3.1 relevant to
+ownCloud admins and users.
+
+[12.3.1]: https://github.com/owncloud/web/compare/v12.3.0...v12.3.1
+
+Summary
+-------
+
+* Bugfix - Search Text Overlaps With Search Icon In The Search Bar: [#13542](https://github.com/owncloud/web/issues/13542)
+
+Details
+-------
+
+* Bugfix - Search Text Overlaps With Search Icon In The Search Bar: [#13542](https://github.com/owncloud/web/issues/13542)
+
+   We have fixed an issue where the search text in the search bar would overlap
+   with the search icon, making it difficult to read. This improvement enhances the
+   user experience by ensuring that the search text is clearly visible and does not
+   interfere with the functionality of the search icon.
+
+   https://github.com/owncloud/web/issues/13542
+   https://github.com/owncloud/web/pull/13553
 
 Changelog for ownCloud Web [12.3.0] (2026-01-23)
 =======================================
