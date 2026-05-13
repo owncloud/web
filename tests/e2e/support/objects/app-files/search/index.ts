@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test'
-import * as po from '../search/actions'
+import * as po from './actions'
 
 export class Search {
   #page: Page

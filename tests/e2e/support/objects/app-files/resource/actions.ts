@@ -14,15 +14,11 @@ import {
   waitForCollaboraEditor
 } from './webOffice'
 import { editor, sidebar } from '../utils'
-import { environment, objects, utils } from '../../../../support'
+import { environment, objects, utils } from '../../../index'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
-import {
-  fileAction,
-  application,
-  searchScope
-} from '../../../../../e2e-playwright/support/constants'
+import { fileAction, application, searchScope } from '../../../../environment/constants'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'

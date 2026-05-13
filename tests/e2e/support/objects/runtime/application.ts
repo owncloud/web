@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { config } from '../../../config'
-import { objects } from '../..'
+import { objects } from '../../index'
 
 const appSwitcherButton = '#_appSwitcherButton'
 const appSelector = `//ul[contains(@class, "applications-list")]//*[@data-test-id="%s"]`

@@ -1,7 +1,7 @@
 import { Page, expect } from '@playwright/test'
 import util from 'util'
 import { config } from '../../../config'
-import { objects } from '../..'
+import { objects } from '../../index'
 
 const accountMenuButton = '.oc-topbar-avatar'
 const quotaValue = '.quota-information-text'

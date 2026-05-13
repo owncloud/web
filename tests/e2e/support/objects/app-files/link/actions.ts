@@ -3,7 +3,7 @@ import util from 'util'
 import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { clickResource } from '../resource/actions'
-import { objects } from '../../..'
+import { objects } from '../../../index'
 
 export interface createLinkArgs {
   page: Page

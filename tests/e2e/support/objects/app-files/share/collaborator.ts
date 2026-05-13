@@ -4,7 +4,7 @@ import util from 'util'
 import { Group, User } from '../../../types'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { locatorUtils } from '../../../utils'
-import { objects } from '../../..'
+import { objects } from '../../../index'
 
 export interface ICollaborator {
   collaborator: User | Group

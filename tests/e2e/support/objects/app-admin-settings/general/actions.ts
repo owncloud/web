@@ -1,6 +1,6 @@
 import { basename } from 'path'
 import { Page, expect } from '@playwright/test'
-import { objects } from '../../..'
+import { objects } from '../../../index'
 import { getOtpFromImage } from '../../../utils/mfa'
 import { Jimp } from 'jimp'
 

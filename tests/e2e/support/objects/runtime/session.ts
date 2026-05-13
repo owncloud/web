@@ -2,7 +2,7 @@ import { Page } from '@playwright/test'
 import { User } from '../../types'
 import { config } from '../../../config'
 import { TokenEnvironmentFactory } from '../../environment'
-import { objects } from '../..'
+import { objects } from '../../index'
 
 export class Session {
   #page: Page

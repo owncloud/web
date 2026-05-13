@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
-import { objects } from '../../..'
+import { objects } from '../../../index'
 
 const sidebarPanel = '#app-sidebar'
 const contextMenuButton =

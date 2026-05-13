@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test'
 import util from 'util'
-import { objects } from '../../..'
+import { objects } from '../../../index'
 
 const spaceIdSelector = '//tr[@data-item-id="%s"]//a'
 export interface openTrashBinArgs {

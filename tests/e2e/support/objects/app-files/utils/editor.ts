@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test'
-import { objects } from '../../..'
-import { application } from '../../../../../e2e-playwright/support/constants'
+import { objects } from '../../../index'
+import { application } from '../../../../environment/constants'
 
 const closeTextEditorOrViewerButton = '#app-top-bar-close'
 const saveTextEditorOrViewerButton = '#app-save-action'

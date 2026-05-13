@@ -5,7 +5,7 @@ import { checkResponseStatus } from '../http'
 import { User, KeycloakRealmRole } from '../../types'
 import { UsersEnvironment } from '../../environment'
 import { keycloakRealmRoles } from '../../store'
-import { state } from '../../../cucumber/environment/shared'
+import { state } from '../../../environment/shared'
 import { initializeUser } from '../../utils/tokenHelper'
 import { setAccessTokenForKeycloakOcisUser } from './ocisUserToken'
 

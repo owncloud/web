@@ -2,7 +2,7 @@ import { expect, Page } from '@playwright/test'
 import util from 'util'
 import { federatedInvitationCode } from '../../store'
 import { config } from '../../../config'
-import { objects } from '../../../support'
+import { objects } from '../../index'
 
 const generateInvitationButton =
   '//button[contains(@aria-label,"Generate invitation link that can be shared with one or more invitees")]'

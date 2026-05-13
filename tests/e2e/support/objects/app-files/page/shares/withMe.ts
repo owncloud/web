@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test'
-import { Actor } from '../../../../../support/types'
-import { objects } from '../../../..'
+import { Actor } from '../../../../types'
+import { objects } from '../../../../index'
 
 const sharesNavSelector = '//a[@data-nav-name="files-shares"]'
 const openShareWithMeButton = `//a/span[text()='Open "Shared with me"']`

@@ -1,5 +1,5 @@
-import { UsersEnvironment } from '../../support/environment'
-import { User } from '../../support/types'
+import { UsersEnvironment } from '../environment'
+import { User } from '../types'
 
 const getValue = (pattern): string => {
   switch (pattern) {

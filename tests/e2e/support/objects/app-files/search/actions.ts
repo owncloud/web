@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test'
 import util from 'util'
-import { objects } from '../../..'
-import { a11y } from '../..'
+import { objects } from '../../../index'
+import { a11y } from '../../index'
 
 const searchResultMessageSelector = '//p[@class="oc-text-muted"]'
 const selectTagDropdownSelector =

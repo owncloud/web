@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test'
-import { objects } from '../../..'
+import { objects } from '../../../index'
 
 const usersNavSelector = '//a[@data-nav-name="admin-settings-users"]'
 const appLoadingSpinnerSelector = '#app-loading-spinner'

@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test'
-import { objects } from '../../../..'
+import { objects } from '../../../../index'
 
 export class Projects {
   #page: Page

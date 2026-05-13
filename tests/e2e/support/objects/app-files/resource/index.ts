@@ -2,7 +2,7 @@ import { Download, Locator, Page, Response } from '@playwright/test'
 import * as po from './actions'
 import { Space } from '../../../types'
 import { showShareIndicator } from './utils'
-import { resourcePage } from '../../../../../e2e-playwright/support/constants'
+import { resourcePage } from '../../../../environment/constants'
 
 export class Resource {
   #page: Page

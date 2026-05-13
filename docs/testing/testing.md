@@ -80,12 +80,12 @@ This will start all the services. The ENV variables specific to each services ar
 The following command will run all available e2e tests:
 
 ```shell
-$ pnpm test:e2e:cucumber 'tests/e2e/cucumber/**/*.feature'
+$ pnpm test:e2e:playwright 'tests/e2e/specs/**/*.spec.ts'
 ```
 
 ### Options
 
-To run a particular test, simply add the feature file and line number to the test command, e.g. `pnpm test:e2e:cucumber tests/e2e/cucumber/features/smoke/admin-settings/users.feature:84`
+To run a particular test, simply add the spec file and line number to the test command, e.g. `pnpm test:e2e:playwright tests/e2e/specs/admin-settings/users.feature:14`
 
 Various options are available via ENV variables, e.g.
 
@@ -129,19 +129,23 @@ If the lint problems are not fixed by `--fix` option, we have to manually fix th
 
 ## Analyze the Test Report
 
-The cucumber library is used as the test runner for e2e tests. The report generator script lives inside the `tests/e2e/cucumber/report` folder. If you want to create a report after the tests are done, run the command:
+After running tests, report artifacts are written under `REPORT_DIR` (defaults to `reports/e2e`).
+
+- Accessibility report: `reports/e2e/a11y-report.json`
+- Traces (when `REPORT_TRACING=true`): `reports/e2e/playwright/tracing/*.zip`
+- Optional videos/HAR files (when enabled via `REPORT_VIDEO=true` or `REPORT_HAR=true`) are also stored in the report directory.
+
+To inspect a trace file:
 
 ```bash
-node tests/e2e/cucumber/report --report-input=tests/e2e/cucumber/report/report.json
+npx playwright show-trace reports/e2e/playwright/tracing/<trace-file>.zip
 ```
 
-By default, the report gets generated to reports/e2e/cucumber/releaseReport/cucumber_report.html.
-The location can be changed by adding the `--report-location` flag.
-
-To see all available options run
+If you want an HTML Playwright report for a run, execute tests with the HTML reporter enabled and then open it:
 
 ```bash
-node tests/e2e/cucumber/report --help
+pnpm test:e2e:playwright -- --reporter=html
+npx playwright show-report
 ```
 
 ## E2E Tests on oCIS With Keycloak
@@ -157,7 +161,7 @@ There's a documentation to serve [oCIS with Keycloak](https://owncloud.dev/ocis/
 ```bash
 KEYCLOAK=true \
 BASE_URL_OCIS=ocis.owncloud.test \
-pnpm run test:e2e:cucumber tests/e2e/cucumber/features/journeys
+pnpm run test:e2e:playwright tests/e2e/specs/journeys
 ```
 
 Following environment variables come in use while running e2e tests on oCIS with Keycloak:
@@ -226,7 +230,7 @@ The test scenarios that can run with predefined users are marked with the `@pred
 ```bash
 PREDEFINED_USERS=true \
 PREDEFINED_USERS_FILE='<path-to>/users.json' \
-pnpm test:e2e:cucumber tests/e2e/cucumber/features/file-action/rename.feature --tags '@predefined-users'
+pnpm test:e2e:playwright tests/e2e/specs/file-action/rename.feature --tags '@predefined-users'
 ```
 
 **The following tests cannot be run with predefined users:**
@@ -250,7 +254,7 @@ Test suites may include the `web-packages.txt` file to denote which web packages
 The `web-packages.txt` file should be included within the test suite directory as shown below:
 
 ```
-└── tests/e2e/cucumber/features
+└── tests/e2e/specs
     └── admin-settings
         ├── users.feature
         └── web-packages.txt

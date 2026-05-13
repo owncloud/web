@@ -5,9 +5,9 @@ import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import { User } from '../../../types'
 import { locatorUtils } from '../../../utils'
-import { objects } from '../../..'
-import { a11y } from '../..'
-import { fileAction } from '../../../../../e2e-playwright/support/constants'
+import { objects } from '../../../index'
+import { a11y } from '../../index'
+import { fileAction } from '../../../../environment/constants'
 
 const invitePanel = '//*[@id="oc-files-sharing-sidebar"]'
 const quickShareButton =

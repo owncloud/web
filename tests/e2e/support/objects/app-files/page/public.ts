@@ -3,7 +3,7 @@ import { File } from '../../../types'
 import util from 'util'
 import path from 'path'
 import * as po from '../resource/actions'
-import { objects } from '../../..'
+import { objects } from '../../../index'
 
 const passwordInput = 'input[type="password"]'
 const fileUploadInput = '//input[@id="files-file-upload-input"]'

@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test'
-import { a11y } from '../../..'
+import { a11y } from '../../../index'
 
 const sharesNavSelector = '//a[@data-nav-name="files-shares"]'
 

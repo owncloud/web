@@ -2,7 +2,7 @@ import { Page } from '@playwright/test'
 import { dav, graph, external } from '../../api'
 import { config } from '../../../config'
 import { User } from '../../types'
-import { objects } from '../..'
+import { objects } from '../../index'
 
 export interface navigateToDetailsPanelOfResourceArgs {
   page: Page

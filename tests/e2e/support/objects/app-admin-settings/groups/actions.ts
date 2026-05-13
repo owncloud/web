@@ -1,8 +1,8 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { selectUser } from '../users/actions'
-import { objects } from '../../..'
-import { fileAction } from '../../../../../e2e-playwright/support/constants'
+import { objects } from '../../../index'
+import { fileAction } from '../../../../environment/constants'
 
 const newGroupBtn = '#create-group-btn'
 const createGroupInput = '#create-group-input-display-name'

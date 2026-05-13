@@ -1,6 +1,6 @@
 import { Download, Page } from '@playwright/test'
 import util from 'util'
-import { objects } from '../..'
+import { objects } from '../../index'
 
 const selectors = {
   appLoadingSpinner: '#app-loading-spinner',

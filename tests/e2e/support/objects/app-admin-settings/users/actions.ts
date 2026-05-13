@@ -1,8 +1,8 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { UsersEnvironment } from '../../../environment'
-import { objects } from '../../..'
-import { fileAction } from '../../../../../e2e-playwright/support/constants'
+import { objects } from '../../../index'
+import { fileAction } from '../../../../environment/constants'
 
 const userIdSelector = `[data-item-id="%s"] .users-table-btn-action-dropdown`
 const editActionBtnContextMenu = '.context-menu .oc-users-actions-edit-trigger'

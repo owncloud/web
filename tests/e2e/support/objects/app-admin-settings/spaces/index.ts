@@ -2,7 +2,7 @@ import { Page } from '@playwright/test'
 import * as po from './actions'
 import { SpacesEnvironment } from '../../../environment'
 import { Space } from '../../../types'
-import { fileAction } from '../../../../../e2e-playwright/support/constants'
+import { fileAction } from '../../../../environment/constants'
 
 export class Spaces {
   #page: Page

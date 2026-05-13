@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test'
-import { objects } from '../..'
+import { objects } from '../../index'
 
 const selectors = {
   page: '#page-crash'

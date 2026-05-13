@@ -1,8 +1,8 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
-import { objects } from '../../..'
-import { fileAction } from '../../../../../e2e-playwright/support/constants'
+import { objects } from '../../../index'
+import { fileAction } from '../../../../environment/constants'
 
 const spaceTrSelector = '.spaces-table tbody > tr'
 const actionConfirmButton = '.oc-modal-body-actions-confirm'

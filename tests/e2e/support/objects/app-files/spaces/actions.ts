@@ -5,7 +5,7 @@ import { sidebar, editor } from '../utils'
 import Collaborator, { ICollaborator } from '../share/collaborator'
 import { createLink } from '../link/actions'
 import { File } from '../../../types'
-import { objects } from '../../..'
+import { objects } from '../../../index'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
