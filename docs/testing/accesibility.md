@@ -28,7 +28,7 @@ We use [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm) to auto
 To run the accessibility tests, you can simply run our existing E2E tests using the following command:
 
 ```bash
-pnpm test:e2e:cucumber
+pnpm test:e2e:playwright
 ```
 
 #### Skipping Accessibility Tests Locally
@@ -36,7 +36,7 @@ pnpm test:e2e:cucumber
 If you want to skip the accessibility tests, you can add the `SKIP_A11Y_TESTS` environment variable to your command.
 
 ```bash
-SKIP_A11Y_TESTS=true pnpm test:e2e:cucumber
+SKIP_A11Y_TESTS=true pnpm test:e2e:playwright
 ```
 
 #### Skipping Accessibility Tests in CI

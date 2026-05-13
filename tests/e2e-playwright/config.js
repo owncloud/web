@@ -6,7 +6,7 @@ export const config = {
   tempAssetsPath: './tests/e2e-playwright/filesForUpload/temp',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   basicAuth: process.env.BASIC_AUTH === 'true',
-  testType: process.env.TEST_TYPE ?? 'cucumber',
+  testType: process.env.TEST_TYPE ?? 'playwright',
   // admin user
   adminUsername: process.env.ADMIN_USERNAME ?? 'admin',
   adminPassword: process.env.ADMIN_PASSWORD ?? 'admin',
@@ -38,8 +38,6 @@ export const config = {
   },
   debug: process.env.DEBUG === 'true',
   logLevel: process.env.LOG_LEVEL || 'silent',
-  // cucumber
-  retry: parseInt(process.env.RETRY) || 0,
   // playwright
   slowMo: parseInt(process.env.SLOW_MO) || 0,
   timeout: parseInt(process.env.TIMEOUT) || 180,
