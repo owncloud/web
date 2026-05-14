@@ -3,6 +3,7 @@ import * as po from './actions'
 import { SpacesEnvironment } from '../../../environment'
 import { Space } from '../../../types'
 import { fileAction } from '../../../../environment/constants'
+import { World } from '../../../../environment/world'
 
 export class Spaces {
   #page: Page

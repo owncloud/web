@@ -1,6 +1,6 @@
 import { UsersEnvironment } from '../environment'
 import { User } from '../types'
-import { World } from '../../../e2e-playwright/support/world'
+import { World } from '../../environment/world'
 
 const getValue = (pattern, world?: World): string => {
   switch (pattern) {

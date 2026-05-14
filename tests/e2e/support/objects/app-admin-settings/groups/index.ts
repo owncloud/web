@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test'
 import { UsersEnvironment } from '../../../environment'
-import { World } from '../../../../../e2e-playwright/support/world'
+import { World } from '../../../../environment/world'
 import * as po from './actions'
 
 export class Groups {
@@ -36,7 +36,7 @@ export class Groups {
     return po.getDisplayedGroupsIds({ page: this.#page })
   }
 
-  async getGroupsDisplayName(): Promise<string> {
+  getGroupsDisplayName(): Promise<string> {
     return po.getGroupsDisplayName({ page: this.#page })
   }
 

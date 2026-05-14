@@ -58,9 +58,29 @@ export class World {
 
     return this.idCache.get(cacheKey)!
   }
+
+  /**
+   * Transform resource name for parallel test safety.
+   * Transforms: testfile.txt -> testfile-w1.txt (only when workerIndex > 0)
+   */
+  getResourceId(key: string): string {
+    if (this.workerIndex === 0) {
+      return key
+    }
+
+    const cacheKey = `resource:${key}`
+
+    if (!this.idCache.has(cacheKey)) {
+      const parts = key.split('/')
+      const fileName = parts[parts.length - 1]
+      const dir = parts.slice(0, -1).join('/')
+      const newFileName = fileName.includes('.')
+        ? fileName.replace(/(\.[^.]+)$/, `-w${this.workerIndex}$1`)
+        : `${fileName}-w${this.workerIndex}`
+      const transformed = dir ? `${dir}/${newFileName}` : newFileName
+      this.idCache.set(cacheKey, transformed)
+    }
+
+    return this.idCache.get(cacheKey)!
+  }
 }
-=======
-// Re-export World from e2e support for use in e2e-playwright tests
-// eslint-disable-next-line import/namespace
-export { World } from '../../e2e/support/environment/world'
->>>>>>> 8827f9b36 (test: run navigation test suite parallely):tests/e2e-playwright/support/world.ts

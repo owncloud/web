@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test'
 import * as po from './actions'
 import { SpacesEnvironment } from '../../../environment'
-import { World } from '../../../environment/world'
+import { World } from '../../../../environment/world'
 
 export class Trashbin {
   #page: Page

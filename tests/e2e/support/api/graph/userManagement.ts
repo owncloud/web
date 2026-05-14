@@ -6,7 +6,7 @@ import { getApplicationEntity } from './utils'
 import { userRoleStore } from '../../store'
 import { UsersEnvironment } from '../../environment'
 import { setAccessAndRefreshToken } from '../token'
-import { World } from '../../environment/world'
+import { World } from '../../../environment/world'
 
 interface GroupResponse {
   value: Group[]

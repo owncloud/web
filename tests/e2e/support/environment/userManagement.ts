@@ -1,5 +1,5 @@
 import { Group, User, UserState } from '../types'
-import { World } from '../../../e2e-playwright/support/world'
+import { World } from '../../environment/world'
 import {
   userStore,
   dummyGroupStore,

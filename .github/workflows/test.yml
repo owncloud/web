@@ -77,15 +77,15 @@ jobs:
         suites:
         #   - suite: part-1
             # test_suites: admin-settings,spaces
-          # - suite: part-2
-          #   test_suites: navigation,user-settings,app-store,file-action
+          - suite: part-2
+            test_suites: navigation,user-settings,app-store,file-action
 
-          # - suite: part-3
-          #   test_suites: shares,search,runtime
-          #   tika: true
-          # - suite: app-provider
-          #   test_suites: app-provider
-          #   collaboration: true
+          - suite: part-3
+            test_suites: shares,search,runtime
+            tika: true
+          - suite: app-provider
+            test_suites: app-provider
+            collaboration: true
         #   - suite: ocm
         #     test_suites: ocm
         #     federated: true

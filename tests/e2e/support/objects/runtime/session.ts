@@ -49,7 +49,7 @@ export class Session {
 
   async login(user: User): Promise<void> {
     // Use originalId for Keycloak login (transformed id is for parallel test safety)
-    const keycloakUsername = config.keycloak ? (user.originalId || user.id) : user.id
+    const keycloakUsername = config.keycloak ? user.originalId || user.id : user.id
     const { id, password } = user
 
     const [response] = await Promise.all([

@@ -1,6 +1,6 @@
 import { Space } from '../types'
 import { createdSpaceStore } from '../store'
-import { World } from '../../../e2e-playwright/support/world'
+import { World } from '../../environment/world'
 
 export class SpacesEnvironment {
   getSpace({ key, world }: { key: string; world?: World }): Space {

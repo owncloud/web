@@ -4,7 +4,7 @@ import { File } from '../../../types'
 import * as po from './actions'
 import { spaceLocator } from './utils'
 import { ICollaborator } from '../share/collaborator'
-import { World } from '../../../environment/world'
+import { World } from '../../../../environment/world'
 
 export class Spaces {
   #page: Page
