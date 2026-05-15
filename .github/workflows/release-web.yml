@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      CHANGELOG_PATH: ${{ github.workspace }}/dist/CHANGELOG.md
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -35,9 +37,15 @@ jobs:
         run: pnpm install
 
       - name: Build release
-        run: make dist
+        run: make -f Makefile.release
         env:
           NO_INSTALL: 'true'
+
+      - name: Generate checksums
+        run: |
+          cd ${{ github.workspace }}/release
+          md5sum * > md5sum.txt
+          sha256sum * > sha256sum.txt
 
       - name: Get release version
         id: version
@@ -47,5 +55,14 @@ jobs:
         uses: actionhippie/calens@244f3e5c328b842a740113859b87bbebf697f63b # v1.13.1
         with:
           version: ${{ steps.version.outputs.version }}
-          target: dist/CHANGELOG.md
+          target: ${{ env.CHANGELOG_PATH }}
           template: changelog/CHANGELOG-Release.tmpl
+
+      - name: Publish release
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
+        with:
+          working_directory: ${{ github.workspace }}
+          files: |
+            release/*
+          name: ${{ steps.version.outputs.version }}
+          body_path: ${{ env.CHANGELOG_PATH }}
