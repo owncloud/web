@@ -5,14 +5,7 @@ import path from 'path'
 const targetBranch = process.env.DRONE_TARGET_BRANCH || 'stable-12.3'
 
 // paths that if changed will run all test suites
-const mandatoryPaths = [
-  'tests/e2e/',
-  'tests/e2e-playwright/',
-  'tests/drone/',
-  '.drone.star',
-  '.drone.env',
-  'package.json'
-]
+const mandatoryPaths = ['tests/e2e/', 'tests/drone/', 'package.json']
 
 // INFO: 1 and 2 elements are node and script name respectively
 const scriptDir = path.dirname(process.argv[1])
@@ -53,18 +46,12 @@ const allWebPackages = fs
  test suites
 --------------------
  */
-const testSuitesDir = `${scriptDir}/../e2e/cucumber/features`
-const testSuitesDirPw = `${scriptDir}/../e2e-playwright/specs`
-// merge test suites from both directories eliminating duplicates
-const mergedTestSuites = Array.from(
-  new Set(fs.readdirSync(testSuitesDir)).union(new Set(fs.readdirSync(testSuitesDirPw)))
-)
+const testSuitesDir = `${scriptDir}/../e2e/specs`
+// list test suites from the specs directory
+const mergedTestSuites = Array.from(new Set(fs.readdirSync(testSuitesDir)))
 
 const testSuites = mergedTestSuites.filter((entry) => {
-  let suitePath = path.join(testSuitesDir, entry)
-  if (!fs.existsSync(suitePath)) {
-    suitePath = path.join(testSuitesDirPw, entry)
-  }
+  const suitePath = path.join(testSuitesDir, entry)
 
   if (!fs.statSync(suitePath).isDirectory()) {
     return false
@@ -146,9 +133,6 @@ function createSuitesToRunEnvFile(suites = []) {
   console.log('[INFO] Provided test suites/features:\n  - ' + suitesToCheck.join('\n  - '))
   console.log('[INFO] Test suites/features to run:\n  - ' + suites.join('\n  - '))
   const envContent = ['TEST_SUITES', suites.join(',')]
-  if (suites[0].startsWith('cucumber/')) {
-    envContent[0] = ['FEATURE_FILES']
-  }
   // create suites.env file in the same directory as the script
   fs.writeFileSync(`${scriptDir}/suites.env`, envContent.join('='))
 }
@@ -167,9 +151,6 @@ function main() {
   if (suitesToCheck.length) {
     const suitesToRun = suitesToCheck.filter((suite) => {
       suite = suite.trim()
-      if (suite.startsWith('cucumber/')) {
-        suite = suite.replace('cucumber/features/', '').split('/').shift()
-      }
       return affectedTestSuites.includes(suite)
     })
     if (suitesToRun.length === 0) {

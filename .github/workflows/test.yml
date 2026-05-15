@@ -10,7 +10,86 @@ on:
   pull_request:
 
 jobs:
+  check-flags:
+    runs-on: ubuntu-latest
+    outputs:
+      full-ci: ${{ steps.pr-title.outputs.full-ci }}
+      ci-relevant: ${{ steps.paths.outputs.ci-relevant }}
+      affected-suites: ${{ steps.affected-suites.outputs.suites }}
+    steps:
+      - name: Check for full-ci flag in PR title
+        id: pr-title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if [[ "${PR_TITLE,,}" == *"full-ci"* ]]; then
+            echo "full-ci=true" >> $GITHUB_OUTPUT
+          else
+            echo "full-ci=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout code
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        if: github.event_name == 'pull_request'
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 24.15.0
+
+      - name: Detect changed files
+        id: paths
+        if: github.event_name == 'pull_request'
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
+        with:
+          filters: |
+            ci-relevant:
+              - 'packages/**'
+              - '!packages/web-app-skeleton/**'
+              - 'polyfills/**'
+              - 'tests/**'
+              - '!tests/e2e/**'
+              - 'vite*.ts'
+              - 'tsconfig.json'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'eslint.config.js'
+              - 'babel.config.cjs'
+              - 'index.html'
+              - 'web.d.ts'
+              - 'gettext.config.cjs'
+              - 'vitest.config.ts'
+              - 'cucumber.mjs'
+              - '.github/workflows/**'
+
+      - name: Determine affected test suites
+        id: affected-suites
+        if: github.event_name == 'pull_request'
+        env:
+          DRONE_TARGET_BRANCH: ${{ github.base_ref }}
+          DRONE_BUILD_EVENT: pull_request
+        run: |
+          all_suites="admin-settings,spaces,navigation,user-settings,app-store,file-action,shares,search,runtime,app-provider,ocm,oidc,smoke,mfa"
+          node tests/drone/filterTestSuitesToRun.js "$all_suites" || exit_code=$?
+          if [ "${exit_code:-0}" -eq 78 ]; then
+            echo "suites=" >> $GITHUB_OUTPUT
+          elif [ "${exit_code:-0}" -ne 0 ]; then
+            exit $exit_code
+          else
+            source tests/drone/suites.env
+            echo "suites=$TEST_SUITES" >> $GITHUB_OUTPUT
+          fi
+
   build:
+    needs: check-flags
+    if: |
+      github.event_name != 'pull_request' ||
+      needs.check-flags.outputs.full-ci == 'true' ||
+      needs.check-flags.outputs.ci-relevant == 'true' ||
+      needs.check-flags.outputs.affected-suites != ''
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -68,7 +147,14 @@ jobs:
           if-no-files-found: error
 
   e2e:
-    needs: build
+    needs: [build, check-flags]
+    if: |
+      !cancelled() &&
+      needs.build.result != 'failure' &&
+      needs.build.result != 'cancelled' &&
+      (github.event_name != 'pull_request' ||
+       needs.check-flags.outputs.full-ci == 'true' ||
+       needs.check-flags.outputs.affected-suites != '')
     runs-on: ubuntu-latest
     name: e2e-tests-${{ matrix.suites.suite }}
     strategy:
@@ -85,9 +171,11 @@ jobs:
           - suite: app-provider
             test_suites: app-provider
             collaboration: true
+            requires_full_ci: true
           - suite: ocm
             test_suites: ocm
             federated: true
+            requires_full_ci: true
           - suite: oidc
             feature_files: specs/oidc/refreshToken.spec.ts
             oidc: true
@@ -113,36 +201,94 @@ jobs:
       TEST_TYPE: playwright
       FEDERATED_BASE_URL_OCIS: localhost:10200
     steps:
+      - name: Determine if suite should be skipped
+        id: skip-check
+        run: |
+          # always run on push/tag events or when full-ci is requested
+          if [[ "${{ github.event_name }}" != "pull_request" ]] || \
+             [[ "${{ needs.check-flags.outputs.full-ci }}" == "true" ]]; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # suites that require full-ci are skipped unless full-ci flag is set (handled above)
+          if [[ "${{ matrix.suites.requires_full_ci }}" == "true" ]]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "::notice::Skipping suite '${{ matrix.suites.suite }}' - requires full-ci flag"
+            exit 0
+          fi
+
+          # check if suite is in the affected suites list
+          affected_suites="${{ needs.check-flags.outputs.affected-suites }}"
+          if [[ -z "$affected_suites" ]]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "::notice::Skipping suite '${{ matrix.suites.suite }}' - no affected packages changed"
+            exit 0
+          fi
+
+          # check each test_suite in the comma-separated list
+          test_suites="${{ matrix.suites.test_suites }}"
+          feature_files="${{ matrix.suites.feature_files }}"
+
+          if [[ -n "$test_suites" ]]; then
+            IFS=',' read -ra suites <<< "$test_suites"
+            for suite in "${suites[@]}"; do
+              if [[ ",$affected_suites," == *",$suite,"* ]]; then
+                echo "skip=false" >> $GITHUB_OUTPUT
+                exit 0
+              fi
+            done
+          fi
+
+          # for feature_files entries, extract the suite directory name
+          if [[ -n "$feature_files" ]]; then
+            suite_dir=$(echo "$feature_files" | sed 's|specs/||' | cut -d'/' -f1)
+            if [[ ",$affected_suites," == *",$suite_dir,"* ]]; then
+              echo "skip=false" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+          fi
+
+          echo "skip=true" >> $GITHUB_OUTPUT
+          echo "::notice::Skipping suite '${{ matrix.suites.suite }}' - no affected packages changed"
+
       - name: Checkout code
+        if: steps.skip-check.outputs.skip != 'true'
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
 
       - name: Setup pnpm
+        if: steps.skip-check.outputs.skip != 'true'
         uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 #v5.0.0
         with:
           version: 10.33.3
 
       - name: Setup Node.js
+        if: steps.skip-check.outputs.skip != 'true'
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 24.15.0
           cache: pnpm
 
       - name: Setup Go
+        if: steps.skip-check.outputs.skip != 'true'
         uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
         with:
           go-version: 1.26.3
           cache: true
 
       - name: Install dependencies
+        if: steps.skip-check.outputs.skip != 'true'
         run: pnpm install
 
       - name: Download build artifact
+        if: steps.skip-check.outputs.skip != 'true'
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: web-dist
           path: dist
 
       - name: Setup services
+        if: steps.skip-check.outputs.skip != 'true'
         run: |
           flags=""
           if [[ "${{ matrix.suites.tika }}" == "true" ]]; then
@@ -170,6 +316,7 @@ jobs:
           bash setup-services.sh $flags
 
       - name: Cache Playwright browsers
+        if: steps.skip-check.outputs.skip != 'true'
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: playwright-cache
         with:
@@ -177,9 +324,11 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Playwright browsers
+        if: steps.skip-check.outputs.skip != 'true'
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Run E2E tests
+        if: steps.skip-check.outputs.skip != 'true'
         env:
           FEATURE_FILES: ${{ matrix.suites.feature_files || '' }}
           TEST_SUITES: ${{ matrix.suites.test_suites || '' }}
@@ -214,7 +363,7 @@ jobs:
           retention-days: 7
 
   check-tests-passed:
-    needs: [ e2e ]
+    needs: [build, e2e]
     runs-on: ubuntu-latest
     if: always()
     steps:
