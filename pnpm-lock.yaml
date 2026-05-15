@@ -30,7 +30,7 @@ importers:
         specifier: ^1.0.6
         version: 1.0.6
       mermaid:
-        specifier: ^11.12.2
+        specifier: ^11.15.0
         version: 11.15.0
       vscode-jsonrpc:
         specifier: ^8.2.1
@@ -996,7 +996,7 @@ importers:
         specifier: ^6.5.0
         version: 6.5.0(vue@3.5.29(typescript@5.9.3))
       mermaid:
-        specifier: ^11.12.2
+        specifier: ^11.15.0
         version: 11.15.0
       oidc-client-ts:
         specifier: ^3.5.0
@@ -5424,6 +5424,7 @@ packages:
 
   lucide-vue-next@0.543.0:
     resolution: {integrity: sha512-Az5kpNm/koKAwSNIKjsZ4uHV2tVfmlQlcHwFBygQ8gc5/jFg7An9OrxgDy/aE5m+HLx7VfLYqDxLr8gWecZbQA==}
+    deprecated: Package deprecated. Please use @lucide/vue instead.
     peerDependencies:
       vue: '>=3.0.1'
 
