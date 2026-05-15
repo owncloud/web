@@ -4,6 +4,7 @@ export interface Link {
   name: string
   url: string
   password?: string
+  originalId?: string
 }
 
 export interface Space {
@@ -33,6 +34,10 @@ export interface User {
   mail?: string
   role?: string
   preferredLanguage?: string
+  /**
+   * original id preserved for token lookups (used in parallel test scenarios)
+   */
+  originalId?: string
 }
 
 export interface File {
@@ -49,6 +54,7 @@ export interface Group {
   id: string
   displayName: string
   groupTypes?: string[]
+  originalId?: string
 }
 
 export interface Token {

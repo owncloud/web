@@ -1,7 +1,8 @@
 import { UsersEnvironment } from '../environment'
 import { User } from '../types'
+import { World } from '../../environment/world'
 
-const getValue = (pattern): string => {
+const getValue = (pattern, world?: World): string => {
   switch (pattern) {
     case '%public%':
       return 'Pwd:12345567'
@@ -20,14 +21,14 @@ const getValue = (pattern): string => {
           // useful for ocm tests where users are from different server
           console.error('[ERR] Failed to get user from created list.', err)
           console.info('[INFO] Getting user from user store.')
-          user = usersEnvironment.getUser({ key: userKey })
+          user = usersEnvironment.getUser({ key: userKey, world })
         }
         return user[property]
       }
   }
 }
 
-export const substitute = (text: string): string => {
+export const substitute = (text: string, world?: World): string => {
   if (!text) {
     return text
   }
@@ -36,7 +37,7 @@ export const substitute = (text: string): string => {
   const matches = text.match(regex)
   if (matches) {
     for (const match of matches) {
-      const value = getValue(match)
+      const value = getValue(match, world)
       text = text.replace(match, value)
     }
   }

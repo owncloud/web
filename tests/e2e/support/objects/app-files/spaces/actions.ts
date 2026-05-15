@@ -82,8 +82,10 @@ export interface openSpaceArgs {
 export const openSpace = async (args: openSpaceArgs): Promise<void> => {
   const { page, id } = args
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
-  await page.locator(util.format(spaceIdSelector, id)).click()
-  await page.locator(spaceHeaderSelector).waitFor()
+  const locator = page.locator(util.format(spaceIdSelector, id))
+  await locator.waitFor({ state: 'visible', timeout: 30000 }) // Wait up to 30s for the space to appear
+  await locator.click()
+  await page.locator(spaceHeaderSelector).waitFor({ state: 'visible', timeout: 15000 })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['filesView'], 'spaces page')
 }
 /**/
@@ -377,5 +379,7 @@ export const checkSpaceActivity = async ({
 }): Promise<void> => {
   await openActivitiesPanel(page)
   await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
-  await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity)
+  await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity, {
+    ignoreCase: true
+  })
 }

@@ -4,20 +4,23 @@ import { File } from '../../../types'
 import * as po from './actions'
 import { spaceLocator } from './utils'
 import { ICollaborator } from '../share/collaborator'
+import { World } from '../../../../environment/world'
 
 export class Spaces {
   #page: Page
   #spacesEnvironment: SpacesEnvironment
   #linksEnvironment: LinksEnvironment
+  #world?: World
 
-  constructor({ page }: { page: Page }) {
+  constructor({ page, world }: { page: Page; world?: World }) {
     this.#page = page
+    this.#world = world
     this.#spacesEnvironment = new SpacesEnvironment()
     this.#linksEnvironment = new LinksEnvironment()
   }
 
   getSpaceID({ key }: { key: string }): string {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
     return id
   }
 
@@ -29,21 +32,25 @@ export class Spaces {
     space: Omit<po.createSpaceArgs, 'page'>
   }): Promise<void> {
     const id = await po.createSpace({ ...space, page: this.#page })
-    this.#spacesEnvironment.createSpace({ key, space: { name: space.name, id } })
+    this.#spacesEnvironment.createSpace({
+      key,
+      space: { name: space.name, id },
+      world: this.#world
+    })
   }
 
   async open({ key }: { key: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
     await po.openSpace({ page: this.#page, id })
   }
 
   async changeName({ key, value }: { key: string; value: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
     await po.changeSpaceName({ id, value, page: this.#page })
   }
 
   async changeSubtitle({ key, value }: { key: string; value: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
     await po.changeSpaceSubtitle({ id, value, page: this.#page })
   }
 
@@ -52,7 +59,7 @@ export class Spaces {
   }
 
   async changeQuota({ key, value }: { key: string; value: string }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
     await po.changeQuota({ id, value, page: this.#page })
   }
 
@@ -74,7 +81,7 @@ export class Spaces {
   }
 
   async changeSpaceImage({ key, resource }: { key: string; resource: File }): Promise<void> {
-    const { id } = this.#spacesEnvironment.getSpace({ key })
+    const { id } = this.#spacesEnvironment.getSpace({ key, world: this.#world })
     await po.changeSpaceImage({ id, resource, page: this.#page })
   }
 

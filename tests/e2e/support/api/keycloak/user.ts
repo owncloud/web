@@ -17,9 +17,11 @@ const ocisKeycloakUserRoles: Record<string, string> = {
 }
 
 export const createUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
+  // Use originalId for Keycloak username (transformed id is for parallel test safety)
+  const keycloakUsername = user.originalId || user.id
   const fullName = user.displayName.split(' ')
   const body = JSON.stringify({
-    username: user.id,
+    username: keycloakUsername,
     credentials: [{ value: user.password, type: 'password' }],
     firstName: fullName[0],
     lastName: fullName[1] ?? '',
@@ -65,7 +67,9 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   })
 
   // store oCIS user information
-  usersEnvironment.storeCreatedUser(user.id, {
+  // Use originalId as key if available (parallel test safety)
+  const ocisUserKey = user.originalId || user.id
+  usersEnvironment.storeCreatedUser(ocisUserKey, {
     ...user,
     uuid: await getUserId({ user, admin }),
     role: defaultNewUserRole
@@ -123,7 +127,9 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   await graphDeleteUser({ user, admin })
 
   const usersEnvironment = new UsersEnvironment()
-  const keyclockUser = usersEnvironment.getCreatedKeycloakUser({ key: user.id })
+  // Use originalId for lookup if available (parallel test safety)
+  const keycloakUserKey = user.originalId || user.id
+  const keyclockUser = usersEnvironment.getCreatedKeycloakUser({ key: keycloakUserKey })
   const response = await request({
     method: 'DELETE',
     path: join(realmBasePath, 'users', keyclockUser.uuid),
@@ -136,7 +142,9 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   if (response.ok) {
     try {
       const usersEnvironment = new UsersEnvironment()
-      usersEnvironment.removeCreatedKeycloakUser({ key: user.id })
+      // Use originalId for removal if available (parallel test safety)
+      const keycloakUserKey = user.originalId || user.id
+      usersEnvironment.removeCreatedKeycloakUser({ key: keycloakUserKey })
     } catch (e) {
       console.error('Error removing Keycloak user:', e)
     }

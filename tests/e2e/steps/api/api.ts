@@ -14,9 +14,9 @@ export async function usersHaveBeenCreated({
   stepUser: string
   users: Array<string>
 }): Promise<void> {
-  const admin = world.usersEnvironment.getUser({ key: stepUser })
+  const admin = world.usersEnvironment.getUser({ key: stepUser, world })
   for (const userToBeCreated of users) {
-    const user = world.usersEnvironment.getUser({ key: userToBeCreated })
+    const user = world.usersEnvironment.getUser({ key: userToBeCreated, world })
     // do not try to create users when using predefined users
     if (!config.predefinedUsers) {
       await api.provision.createUser({ user, admin })
@@ -169,7 +169,7 @@ export async function userHasAssignedRolesToUsers({
 }) {
   const admin = world.usersEnvironment.getUser({ key: stepUser })
   for (const { id, role } of users) {
-    const user = world.usersEnvironment.getUser({ key: id })
+    const user = world.usersEnvironment.getUser({ key: id, world })
     /**
      The oCIS API request for assigning roles allows only one role per user,
       whereas the Keycloak API request can assign multiple roles to a user.
@@ -200,7 +200,8 @@ export async function userHasCreatedProjectSpaces({
     })
     world.spacesEnvironment.createSpace({
       key: space.id || space.name,
-      space: { name: space.name, id: spaceId }
+      space: { name: space.name, id: spaceId },
+      world
     })
   }
 }
@@ -276,11 +277,11 @@ export async function usersHaveBeenAddedToGroup({
   stepUser: string
   usersToAdd: { user: string; group: string }[]
 }) {
-  const admin = world.usersEnvironment.getUser({ key: stepUser })
+  const admin = world.usersEnvironment.getUser({ key: stepUser, world })
   for (const info of usersToAdd) {
-    const group = world.usersEnvironment.getGroup({ key: info.group })
-    const user = world.usersEnvironment.getUser({ key: info.user })
-    await api.graph.addUserToGroup({ user, group, admin })
+    const group = world.usersEnvironment.getGroup({ key: info.group, world })
+    const user = world.usersEnvironment.getUser({ key: info.user, world })
+    await api.graph.addUserToGroup({ user, group, admin, world })
   }
 }
 
@@ -294,8 +295,8 @@ export async function userHasDeletedGroup({
   name: string
 }): Promise<void> {
   const admin = world.usersEnvironment.getUser({ key: stepUser })
-  const group = world.usersEnvironment.getGroup({ key: name })
-  await api.graph.deleteGroup({ group, admin })
+  const group = world.usersEnvironment.getGroup({ key: name, world })
+  await api.graph.deleteGroup({ group, admin, world })
 }
 
 export async function userHasAddedMembersToSpace({
@@ -330,9 +331,9 @@ export async function groupsHaveBeenCreated({
   groupIds: string[]
   stepUser: string
 }): Promise<void> {
-  const admin = world.usersEnvironment.getUser({ key: stepUser })
+  const admin = world.usersEnvironment.getUser({ key: stepUser, world })
   for (const groupId of groupIds) {
-    const group = world.usersEnvironment.getGroup({ key: groupId })
+    const group = world.usersEnvironment.getGroup({ key: groupId, world })
     await api.graph.createGroup({ group, admin })
   }
 }

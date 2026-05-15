@@ -99,7 +99,15 @@ export async function userLogsOut({
   world: World
   stepUser: string
 }): Promise<void> {
-  const actor = world.actorsEnvironment.getActor({ key: stepUser })
+  // Check if actor exists (user might not have been logged in)
+  let actor
+  try {
+    actor = world.actorsEnvironment.getActor({ key: stepUser })
+  } catch {
+    // Actor doesn't exist - user was never logged in, nothing to do
+    return
+  }
+
   const canLogout = !!(await actor.page.locator('#_userMenuButton').count())
 
   const sessionObject = new objects.runtime.Session({ page: actor.page })

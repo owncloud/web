@@ -68,8 +68,8 @@ export async function anonymousUserOpensPublicLink({
 
 export async function userUnlocksPublicLink({
   world,
-  stepUser,
-  password
+  password,
+  stepUser
 }: {
   world: World
   password: string
@@ -78,7 +78,8 @@ export async function userUnlocksPublicLink({
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
   if (password === '%copied_password%') {
-    password = await page.evaluate('navigator.clipboard.readText()')
+    // Use world-specific stored password instead of clipboard (parallel safety)
+    password = world.linksEnvironment.copiedPassword
   } else {
     password = substitute(password)
   }
