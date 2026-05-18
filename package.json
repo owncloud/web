@@ -74,7 +74,7 @@
     "qs": "6.14.2",
     "requirejs": "2.3.7",
     "rollup-plugin-gzip": "^4.1.1",
-    "rollup-plugin-visualizer": "6.0.5",
+    "rollup-plugin-visualizer": "7.0.1",
     "simple-git": "3.36.0",
     "speakeasy": "^2.0.0",
     "ts-node": "10.9.2",
