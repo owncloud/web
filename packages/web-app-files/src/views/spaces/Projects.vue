@@ -462,7 +462,7 @@ const spacesHelpList = computed(() => {
 const breadcrumbs = computed(() => {
   return [
     {
-      text: unref(route).params.scope === 'vault' ? $gettext('Vault') : $gettext('Drive'),
+      text: $gettext('Spaces'),
       onClick: () => loadResourcesTask.perform(),
       isStativNav: true
     }

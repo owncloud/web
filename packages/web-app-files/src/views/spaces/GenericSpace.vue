@@ -261,7 +261,7 @@ const breadcrumbs = computed(() => {
   if (isProjectSpaceResource(unref(space))) {
     rootBreadcrumbItems.push({
       id: uuidV4(),
-      text: unref(route).params.scope === 'vault' ? $gettext('Vault') : $gettext('Drive'),
+      text: $gettext('Spaces'),
       to: createLocationSpaces('files-spaces-projects'),
       isStaticNav: true
     })
