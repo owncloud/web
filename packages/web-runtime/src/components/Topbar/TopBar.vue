@@ -334,9 +334,14 @@ export default {
   }
 
   .oc-topbar-mode-switch {
+    color: var(--oc-color-swatch-brand-contrast);
     flex-shrink: 0;
     text-transform: uppercase;
     font-weight: bold;
+
+    .oc-icon > svg {
+      fill: var(--oc-color-swatch-brand-contrast);
+    }
   }
 
   .oc-topbar-mode-switch-list li {

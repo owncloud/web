@@ -12,6 +12,7 @@
         :class="viewMode.name"
         :appearance="viewModeCurrent === viewMode.name ? 'filled' : 'outline'"
         :aria-label="$gettext(viewMode.label)"
+        variation="primary"
         @click="setViewMode(viewMode)"
       >
         <oc-icon
@@ -29,6 +30,7 @@
       data-testid="files-view-options-btn"
       :aria-label="viewOptionsButtonLabel"
       appearance="raw"
+      variation="primary"
       class="oc-my-s oc-p-xs"
     >
       <oc-icon name="settings-3" fill-type="line" />
@@ -257,6 +259,10 @@ const fileExtensionsShownModel = computed(() => unref(areFileExtensionsShown))
 <style lang="scss" scoped>
 .viewmode-switch-buttons {
   flex-flow: initial;
+}
+
+.viewmode-switch-buttons.oc-button-group {
+  outline: 1px solid var(--oc-color-swatch-primary-default);
 }
 
 #files-view-options-btn {

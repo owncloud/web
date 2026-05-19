@@ -713,9 +713,15 @@ onBeforeUnmount(() => {
   }
 
   .oc-search-input {
-    background-color: var(--oc-color-input-bg);
+    background-color: var(--oc-color-search-input-bg, var(--oc-color-input-bg));
+    border: 1px solid var(--oc-color-search-input-border, var(--oc-color-input-border));
+    color: var(--oc-color-search-input-text-default, var(--oc-color-input-text-default));
     transition: 0s;
     height: 2.3rem;
+
+    &::placeholder {
+      color: var(--oc-color-search-input-text-muted, --oc-color-text-muted);
+    }
 
     @media (max-width: 639px) {
       border: none;
@@ -750,11 +756,16 @@ onBeforeUnmount(() => {
 
       input,
       input:not(:placeholder-shown) {
-        background-color: var(--oc-color-input-bg);
-        border: 1px solid var(--oc-color-input-border);
+        background-color: var(--oc-color-search-input-bg, var(--oc-color-input-bg));
+        border: 1px solid var(--oc-color-search-input-border, var(--oc-color-input-border));
+        color: var(--oc-color-search-input-text-default, var(--oc-color-input-text-default));
         z-index: var(--oc-z-index-modal);
         margin: 0 auto;
         padding-right: 5.875rem;
+
+        &::placeholder {
+          color: var(--oc-color-search-input-text-muted, --oc-color-text-muted);
+        }
       }
     }
   }
@@ -831,6 +842,14 @@ onBeforeUnmount(() => {
         }
       }
     }
+  }
+
+  .oc-filter-chip-button.oc-pill {
+    color: var(--oc-color-search-input-text-default, var(--oc-color-text-muted)) !important;
+  }
+
+  .oc-button-passive-raw .oc-icon > svg {
+    fill: var(--oc-color-search-input-text-default, var(--oc-color-text-muted));
   }
 }
 </style>

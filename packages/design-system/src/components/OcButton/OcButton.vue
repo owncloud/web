@@ -187,12 +187,30 @@ const handlers = computed(() => {
     .oc-icon > svg {
       fill: $color;
     }
+
+    &:focus:not([disabled]),
+    &:hover:not([disabled]) {
+      color: $hover-color;
+
+      .oc-icon > svg {
+        fill: $hover-color;
+      }
+    }
   }
   &-raw-inverse {
     color: $contrast-color;
 
     .oc-icon > svg {
       fill: $contrast-color;
+    }
+
+    &:focus:not([disabled]),
+    &:hover:not([disabled]) {
+      color: $contrast-color;
+
+      .oc-icon > svg {
+        fill: $contrast-color;
+      }
     }
   }
 
@@ -340,12 +358,12 @@ const handlers = computed(() => {
     &-outline {
       &:focus:not([disabled]),
       &:hover:not([disabled]) {
-        color: var(--oc-color-swatch-passive-default);
+        color: var(--oc-color-swatch-passive-contrast);
         background-color: var(--oc-color-swatch-passive-hover-outline);
         border-color: var(--oc-color-swatch-passive-hover-outline);
 
         .oc-icon > svg {
-          fill: var(--oc-color-swatch-passive-default);
+          fill: var(--oc-color-swatch-passive-contrast);
         }
       }
     }

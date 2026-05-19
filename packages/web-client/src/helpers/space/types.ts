@@ -91,10 +91,6 @@ export const isMountPointSpaceResource = (
   return (resource as SpaceResource)?.driveType === 'mountpoint'
 }
 
-export interface ProtectedPersonalSpaceResource extends SpaceResource {}
-
-export interface ProtectedProjectSpaceResource extends SpaceResource {}
-
 export interface PublicSpaceResource extends SpaceResource {
   publicLinkPassword?: string
   publicLinkItemType?: string
