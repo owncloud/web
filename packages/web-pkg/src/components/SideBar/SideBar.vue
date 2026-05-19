@@ -284,7 +284,7 @@ onBeforeUnmount(() => {
   max-height: 100%;
   display: grid;
   grid-template-rows: auto auto 1fr;
-  background-color: var(--oc-color-background-default);
+  background-color: var(--oc-color-background-sidebar, var(--oc-color-background-default));
   top: 0;
   position: absolute;
   transform: translateX(100%);
