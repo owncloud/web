@@ -19,18 +19,36 @@
           class="oc-logo-image"
         />
       </router-link>
-      <div class="oc-flex oc-flex-middle">
-        <oc-select
-          v-if="!isEmbedModeEnabled"
-          v-model="selectedMode"
+      <div v-if="!isEmbedModeEnabled" class="oc-flex oc-flex-middle">
+        <oc-button
+          id="oc-topbar-mode-switch-btn"
           class="oc-topbar-mode-switch"
-          :label="$gettext('Mode')"
-          :label-hidden="true"
-          :clearable="false"
-          :searchable="false"
-          :options="modeOptions"
-          option-label="label"
-        />
+          appearance="raw"
+          gap-size="none"
+        >
+          <span class="oc-mr-xs" v-text="selectedMode.label" />
+          <oc-icon name="arrow-down-s" />
+        </oc-button>
+        <oc-drop
+          toggle="#oc-topbar-mode-switch-btn"
+          mode="click"
+          padding-size="small"
+          close-on-click
+        >
+          <oc-list class="oc-topbar-mode-switch-list">
+            <li v-for="option in modeOptions" :key="option.id">
+              <oc-button
+                appearance="raw"
+                justify-content="space-between"
+                class="oc-topbar-mode-switch-option oc-p-s oc-width-1-1"
+                @click="selectedMode = option"
+              >
+                <span>{{ option.label }}</span>
+                <oc-icon v-if="selectedMode.id === option.id" name="check" />
+              </oc-button>
+            </li>
+          </oc-list>
+        </oc-drop>
       </div>
     </div>
     <div v-if="!contentOnLeftPortal" class="oc-topbar-center oc-width-1-1">
@@ -308,15 +326,32 @@ export default {
       gap: 20px;
       justify-content: flex-end;
     }
-
-    .oc-topbar-mode-switch {
-      min-width: 12rem;
-    }
   }
 
   .oc-topbar-mode-switch {
     flex-shrink: 0;
-    min-width: 12rem;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .oc-topbar-mode-switch-list li {
+    margin: var(--oc-space-xsmall) 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .oc-topbar-mode-switch-option {
+    &:hover,
+    &:focus {
+      background-color: var(--oc-color-background-hover);
+      text-decoration: none;
+    }
   }
 }
 </style>
