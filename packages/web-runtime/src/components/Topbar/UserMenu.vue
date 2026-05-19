@@ -184,7 +184,10 @@ export default defineComponent({
 
     const accountPageRoute = computed(() => ({
       name: 'account',
-      query: routeToContextQuery(unref(route))
+      query: routeToContextQuery(unref(route)),
+      params: {
+        scope: unref(route).params.scope
+      }
     }))
 
     const loginLink = computed(() => {
