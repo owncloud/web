@@ -82,7 +82,7 @@
         </template>
       </oc-select>
     </div>
-    <div class="oc-flex oc-flex-between oc-flex-wrap oc-mb-l oc-mt-s">
+    <div class="oc-flex oc-flex-between oc-flex-middle oc-mb-l oc-mt-s">
       <role-dropdown
         mode="create"
         :show-icon="isRunningOnEos"
@@ -90,7 +90,7 @@
         :is-external="isExternalShareRoleType"
         @option-change="collaboratorRoleChanged"
       />
-      <div class="oc-flex oc-flex-middle">
+      <div class="oc-flex oc-flex-middle oc-flex-nowrap">
         <expiration-date-indicator
           v-if="expirationDate"
           :expiration-date="DateTime.fromISO(expirationDate)"
@@ -135,14 +135,9 @@
           <span v-text="$gettext(saveButtonText)" />
         </oc-button>
       </div>
-      <div class="oc-width-1-1 oc-mt-s">
-        <oc-checkbox
-          v-if="isRunningOnEos"
-          v-model="notifyEnabled"
-          :value="false"
-          :label="$gettext('Notify via mail')"
-        />
-      </div>
+    </div>
+    <div v-if="isRunningOnEos" class="oc-mb-l">
+      <oc-checkbox v-model="notifyEnabled" :value="false" :label="$gettext('Notify via mail')" />
     </div>
     <oc-hidden-announcer level="assertive" :announcement="announcement" />
   </div>
@@ -577,6 +572,7 @@ function resetFocusOnInvite(event: CollaboratorAutoCompleteItem[]) {
 #new-collaborators-form-create-button {
   padding-left: 30px;
   padding-right: 30px;
+  white-space: nowrap;
 
   .oc-spinner {
     margin-left: -0.5rem;
