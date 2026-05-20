@@ -35,10 +35,10 @@
             </div>
           </div>
 
-          <div class="oc-overflow-hidden">
+          <div>
             <upload-info
               id="files-drop-upload-info"
-              class="oc-width-1-1 oc-height-1-1 oc-overflow-hidden oc-display-grid"
+              class="oc-width-1-1 oc-height-1-1"
               :info-expanded-initial="true"
               :headless="true"
               :show-expand-details-button="false"
@@ -331,6 +331,7 @@ defineExpose({ loading })
     padding: var(--oc-space-medium);
     border: none;
     position: relative;
+    overflow-y: auto;
 
     @media (min-width: $oc-breakpoint-small-default) {
       border: 3px dashed var(--oc-color-input-border);
@@ -392,9 +393,5 @@ defineExpose({ loading })
   bottom: 0;
   position: absolute;
   z-index: 9;
-}
-
-#files-drop-upload-info {
-  grid-template-columns: max-content;
 }
 </style>
