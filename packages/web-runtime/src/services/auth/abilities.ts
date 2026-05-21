@@ -51,7 +51,8 @@ export const getAbilities = (
       { action: 'update-all', subject: 'Drive' }
     ],
     'Drives.List.all': [{ action: 'read-all', subject: 'Drive' }],
-    'Drives.ReadWriteProjectQuota.all': [{ action: 'set-quota-all', subject: 'Drive' }]
+    'Drives.ReadWriteProjectQuota.all': [{ action: 'set-quota-all', subject: 'Drive' }],
+    'VaultMode.ReadWriteEnabled.own': [{ action: 'read-all', subject: 'Vault' }]
   }
 
   return Object.keys(abilities).reduce((acc, permission) => {
