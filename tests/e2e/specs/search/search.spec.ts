@@ -265,6 +265,9 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     })
 
     // # search difficult names
+    // allow extra time for search indexing of Unicode folder name after rename operations
+    const { page } = world.actorsEnvironment.getActor({ key: 'Alice' })
+    await page.waitForTimeout(5000)
     // When "Alice" searches "strängéनेपालीName" using the global search and the "all files" filter and presses enter
     await ui.userSearchesGloballyWithFilter({
       world,
@@ -279,7 +282,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | strängéनेपालीName |
     await ui.userShouldSeeResources({
       world,
-      listType: resourcePage.filesList,
+      listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['strängéनेपालीName']
     })
