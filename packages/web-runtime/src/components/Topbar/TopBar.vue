@@ -19,7 +19,7 @@
           class="oc-logo-image"
         />
       </router-link>
-      <div v-if="!isEmbedModeEnabled" class="oc-flex oc-flex-middle">
+      <div v-if="!isEmbedModeEnabled && canAccessVault" class="oc-flex oc-flex-middle">
         <oc-button
           id="oc-topbar-mode-switch-btn"
           class="oc-topbar-mode-switch"
@@ -95,7 +95,8 @@ import {
   useOpenEmptyEditor,
   useRouter,
   useThemeStore,
-  useClipboardStore
+  useClipboardStore,
+  useAbility
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { isRuntimeRoute } from '../../router'
@@ -128,6 +129,7 @@ export default {
     const extensionRegistry = useExtensionRegistry()
     const { openEmptyEditor } = useOpenEmptyEditor()
     const { clearClipboard } = useClipboardStore()
+    const ability = useAbility()
 
     const authStore = useAuthStore()
     const router = useRouter()
@@ -212,6 +214,8 @@ export default {
       }
     })
 
+    const canAccessVault = computed(() => ability.can('read-all', 'Vault'))
+
     return {
       configOptions,
       contentOnLeftPortal,
@@ -229,7 +233,8 @@ export default {
       hideAccountMenu,
       isUniversalAccessEnabled,
       modeOptions,
-      selectedMode
+      selectedMode,
+      canAccessVault
     }
   },
   computed: {
