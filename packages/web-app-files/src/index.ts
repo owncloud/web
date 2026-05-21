@@ -40,6 +40,8 @@ const appInfo: ApplicationInformation = {
 }
 
 export const navItems = (context: ComponentCustomProperties): AppNavigationItem[] => {
+  const currentPath = window.location.pathname
+  const isVault = currentPath.startsWith('/vault')
   const spacesStores = useSpacesStore()
   const userStore = useUserStore()
   const capabilityStore = useCapabilityStore()
@@ -48,7 +50,7 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
   return [
     {
       name() {
-        return $gettext('Personal')
+        return isVault ? $gettext('Safe-Personal') : $gettext('Personal')
       },
       icon: appInfo.icon,
       route: {
@@ -101,7 +103,7 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       priority: 30
     },
     {
-      name: $gettext('Spaces'),
+      name: isVault ? $gettext('Safe-Spaces') : $gettext('Spaces'),
       icon: 'layout-grid',
       route: {
         path: `/${appInfo.id}/spaces/projects`
