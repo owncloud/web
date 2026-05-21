@@ -75,8 +75,8 @@ export class UserManager extends OidcUserManager {
       // we trigger the token renewal manually via a timer running in a web worker
       automaticSilentRenew: false,
 
-      // do not filter acr
-      filterProtocolClaims: ['nbf', 'jti', 'auth_time', 'nonce', 'amr', 'azp', 'at_hash']
+      // do not filter acr and auth_time (needed for MFA session expiry detection)
+      filterProtocolClaims: ['nbf', 'jti', 'nonce', 'amr', 'azp', 'at_hash']
     }
 
     if (options.configStore.isOIDC) {
