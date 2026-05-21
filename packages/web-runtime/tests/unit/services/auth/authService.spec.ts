@@ -48,6 +48,7 @@ describe('AuthService', () => {
         Object.defineProperty(authService, 'userManager', {
           value: {
             signinRedirectCallback: vi.fn(),
+            getUser: vi.fn().mockResolvedValue(null),
             getAndClearPostLoginRedirectUrl: () => url
           }
         })
@@ -73,6 +74,7 @@ describe('AuthService', () => {
       Object.defineProperty(authService, 'userManager', {
         value: mock<UserManager>({
           getAccessToken: vi.fn().mockResolvedValue('access-token'),
+          getUser: vi.fn().mockResolvedValue(mock<User>({ expires_in: 3600 })),
           updateContext: mockUpdateContext
         })
       })
@@ -107,6 +109,7 @@ describe('AuthService', () => {
       Object.defineProperty(authService, 'userManager', {
         value: mock<UserManager>({
           getAccessToken: vi.fn().mockResolvedValue('access-token'),
+          getUser: vi.fn().mockResolvedValue(mock<User>({ expires_in: 3600 })),
           updateContext: mockUpdateContext
         })
       })
@@ -143,6 +146,7 @@ describe('AuthService', () => {
       Object.defineProperty(authService, 'userManager', {
         value: mock<UserManager>({
           getAccessToken: vi.fn().mockResolvedValue('access-token'),
+          getUser: vi.fn().mockResolvedValue(mock<User>({ expires_in: 3600 })),
           updateContext: mockUpdateContext
         })
       })
