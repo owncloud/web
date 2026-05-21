@@ -12,8 +12,11 @@ Summary
 * Bugfix - Use dynamic viewport units (dvh/dvw) instead of viewport units (vh/vw): [#13578](https://github.com/owncloud/web/pull/13578)
 * Bugfix - Cannot-edit-public-link-when-name-is-too-long: [#13610](https://github.com/owncloud/web/pull/13610)
 * Bugfix - Fix space key selecting wrong resource: [#13634](https://github.com/owncloud/web/pull/13634)
+* Bugfix - Fix share invite button being pushed down in space sharing: [#13793](https://github.com/owncloud/web/pull/13793)
+* Bugfix - Fix upload confirmation not visible on file drop page: [#13799](https://github.com/owncloud/web/pull/13799)
 * Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
 * Enhancement - Use spaceId: [#13577](https://github.com/owncloud/web/pull/13577)
+* Enhancement - Add theme mode: [#13631](https://github.com/owncloud/web/pull/13631)
 * Enhancement - Support log and conf files in text editor: [#13632](https://github.com/owncloud/web/issues/13632)
 
 Details
@@ -53,6 +56,24 @@ Details
    https://github.com/owncloud/web/pull/13634
    https://kiteworks.atlassian.net/browse/OCISDEV-718
 
+* Bugfix - Fix share invite button being pushed down in space sharing: [#13793](https://github.com/owncloud/web/pull/13793)
+
+   We have fixed a bug where the "Share" button in the invite collaborator form was
+   being pushed down when sharing a space. The layout now properly aligns items
+   vertically and prevents the button from wrapping to a new line.
+
+   https://github.com/owncloud/web/pull/13793
+
+* Bugfix - Fix upload confirmation not visible on file drop page: [#13799](https://github.com/owncloud/web/pull/13799)
+
+   We've fixed a responsive layout issue where the upload confirmation message was
+   not visible at small browser window sizes on the file drop page. The
+   `UploadInfo` panel was being clipped due to broken CSS. The layout now uses
+   natural document flow so the confirmation is always visible regardless of
+   viewport size.
+
+   https://github.com/owncloud/web/pull/13799
+
 * Enhancement - Strip WebDAV prefix: [#13545](https://github.com/owncloud/web/pull/13545)
 
    Added a new logic to the WebDAV client to strip the prefix from the path if it
@@ -69,6 +90,14 @@ Details
    manually constructed `storageId` from the resource ID.
 
    https://github.com/owncloud/web/pull/13577
+
+* Enhancement - Add theme mode: [#13631](https://github.com/owncloud/web/pull/13631)
+
+   We've added a new property to the theme called `mode`. This property specifies
+   whether the theme is suitable for regular mode or vault mode. Valid values are
+   `regular` and `vault`.
+
+   https://github.com/owncloud/web/pull/13631
 
 * Enhancement - Support log and conf files in text editor: [#13632](https://github.com/owncloud/web/issues/13632)
 
