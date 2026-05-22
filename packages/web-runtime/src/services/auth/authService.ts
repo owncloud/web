@@ -181,7 +181,7 @@ export class AuthService implements AuthServiceInterface {
           )
           try {
             await this.userManager.updateContext(user.access_token, fetchUserData)
-            this.updateMfaExpiryTimer(user.profile?.auth_time as number | undefined)
+            this.updateMfaExpiryTimer()
           } catch (e) {
             console.error(e)
             await this.handleAuthError(unref(this.router.currentRoute))
@@ -243,7 +243,7 @@ export class AuthService implements AuthServiceInterface {
               expiryThreshold: this.accessTokenExpiryThreshold
             })
 
-            this.updateMfaExpiryTimer(user.profile?.auth_time as number | undefined)
+            this.updateMfaExpiryTimer()
 
             this.tokenTimerInitialized = true
           }
@@ -286,7 +286,7 @@ export class AuthService implements AuthServiceInterface {
 
       const user = await this.userManager.getUser()
       if (user) {
-        this.updateMfaExpiryTimer(user.profile?.auth_time as number | undefined)
+        this.updateMfaExpiryTimer()
       }
 
       const redirectRoute = this.router.resolve(this.userManager.getAndClearPostLoginRedirectUrl())
@@ -435,18 +435,20 @@ export class AuthService implements AuthServiceInterface {
     return this.userManager.signinRedirect({ acr_values: acrValue })
   }
 
-  private updateMfaExpiryTimer(authTime: number | undefined) {
+  private updateMfaExpiryTimer() {
     if (!this.mfaExpiryWorker) {
       return
     }
 
     const sessionDuration = this.capabilityStore.authMfaSessionDuration
-    if (!authTime || !sessionDuration) {
+    if (!sessionDuration) {
       return
     }
 
-    this.mfaExpiryModalDismissed = false
-    this.mfaExpiryWorker.setMfaTimer({ authTime, sessionDuration })
+    const baseTime = this.clientService.lastSuccessfulRequestTime ?? Math.floor(Date.now() / 1000)
+    const expiresAt = baseTime + sessionDuration
+
+    this.mfaExpiryWorker.setMfaTimer({ expiresAt })
   }
 
   private showMfaExpiryWarning() {
@@ -465,10 +467,10 @@ export class AuthService implements AuthServiceInterface {
       ),
       confirmText: $gettext('Extend session'),
       cancelText: $gettext('Dismiss'),
-      onConfirm: async () => {
+      onConfirm: () => {
         this.mfaExpiryModalId = null
         this.mfaExpiryBroadcastChannel?.postMessage({ action: 'prolonged' })
-        await this.prolongMfaSession()
+        this.prolongMfaSession()
       },
       onCancel: () => {
         this.mfaExpiryModalId = null
@@ -478,26 +480,30 @@ export class AuthService implements AuthServiceInterface {
     this.mfaExpiryModalId = modal.id
   }
 
-  private async prolongMfaSession() {
-    const acrValue = this.capabilityStore.authMfaRequiredLevelname
-    if (!acrValue) {
+  private prolongMfaSession() {
+    const sessionDuration = this.capabilityStore.authMfaSessionDuration
+    if (!sessionDuration) {
       return
     }
 
-    try {
-      await this.userManager.signinSilent({ acr_values: acrValue })
-    } catch {
-      const redirectUrl = unref(this.router.currentRoute)?.fullPath
-      this.userManager.setPostLoginRedirectUrl(redirectUrl)
-      await this.userManager.signinRedirect({ acr_values: acrValue })
-    }
+    this.mfaExpiryModalDismissed = false
+    const expiresAt = Math.floor(Date.now() / 1000) + sessionDuration
+    this.mfaExpiryWorker?.setMfaTimer({ expiresAt })
   }
 
   private initMfaExpiryBroadcastChannel() {
     this.mfaExpiryBroadcastChannel = new BroadcastChannel('oc-mfa-expiry')
     this.mfaExpiryBroadcastChannel.onmessage = (event: MessageEvent) => {
       const { action } = event.data
-      if (action === 'prolonged' || action === 'dismissed') {
+      if (action === 'prolonged') {
+        this.mfaExpiryModalDismissed = true
+        if (this.mfaExpiryModalId) {
+          const modalStore = useModals()
+          modalStore.removeModal(this.mfaExpiryModalId)
+          this.mfaExpiryModalId = null
+        }
+        this.prolongMfaSession()
+      } else if (action === 'dismissed') {
         this.mfaExpiryModalDismissed = true
         if (this.mfaExpiryModalId) {
           const modalStore = useModals()

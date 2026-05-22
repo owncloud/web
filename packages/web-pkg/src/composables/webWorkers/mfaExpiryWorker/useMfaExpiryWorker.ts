@@ -19,19 +19,11 @@ export const useMfaExpiryWorker = ({ onExpiring }: { onExpiring: () => void }) =
     }
   }
 
-  const setMfaTimer = ({
-    authTime,
-    sessionDuration
-  }: {
-    authTime: number
-    sessionDuration: number
-  }) => {
+  const setMfaTimer = ({ expiresAt }: { expiresAt: number }) => {
     if (!unref(worker)) {
       console.error('mfa expiry worker is not running')
       return
     }
-
-    const expiresAt = authTime + sessionDuration
 
     unref(worker).post(
       JSON.stringify({

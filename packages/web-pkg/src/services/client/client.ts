@@ -43,6 +43,7 @@ export class ClientService {
   private webDavClient: WebDAV
 
   public initiatorId = uuidV4()
+  public lastSuccessfulRequestTime: number | null = null
 
   private staticHeaders: Record<string, string> = {
     'Initiator-ID': this.initiatorId,
@@ -187,6 +188,8 @@ export class ClientService {
     if (response.status !== 503) {
       this.configStore.setMaintenanceMode(false)
     }
+
+    this.lastSuccessfulRequestTime = Math.floor(Date.now() / 1000)
 
     return response
   }
