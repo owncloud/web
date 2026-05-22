@@ -71,6 +71,9 @@ const defaultValues = {
     max_quota: 0,
     projects: false,
     server_managed: false
+  },
+  vault: {
+    enabled: false
   }
 } satisfies Partial<Capabilities['capabilities']>
 
@@ -155,6 +158,8 @@ export const useCapabilityStore = defineStore('capabilities', () => {
   const authMfaRequiredLevelname = computed(() => unref(capabilities).auth.mfa.levelnames.at(0))
   const authMfaSessionDuration = computed(() => unref(capabilities).auth.mfa.session_duration)
 
+  const vaultEnabled = computed(() => unref(capabilities).vault?.enabled)
+
   return {
     isInitialized,
     capabilities,
@@ -204,7 +209,8 @@ export const useCapabilityStore = defineStore('capabilities', () => {
     searchContent,
     authMfaEnabled,
     authMfaRequiredLevelname,
-    authMfaSessionDuration
+    authMfaSessionDuration,
+    vaultEnabled
   }
 })
 

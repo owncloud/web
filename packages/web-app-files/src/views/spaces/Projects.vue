@@ -186,7 +186,8 @@ import {
   useRoute,
   Pagination,
   FileSideBar,
-  NoContentMessage
+  NoContentMessage,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import {
@@ -221,6 +222,7 @@ const { $gettext } = language
 const filterTerm = ref('')
 const markInstance = ref(undefined)
 const includeDisabledParam = useRouteQuery('q_includeDisabled')
+const capabilityStore = useCapabilityStore()
 
 const { setSelection, initResourceList, clearResourceList, setAncestorMetaData } =
   useResourcesStore()
@@ -335,7 +337,7 @@ watch(filterTerm, async () => {
 })
 
 const hasCreatePermission = computed(() => can('create-all', 'Drive'))
-const canAccessVault = computed(() => can('read-all', 'Vault'))
+const canAccessVault = computed(() => capabilityStore.vaultEnabled && can('read-all', 'Vault'))
 
 const extensionRegistry = useExtensionRegistry()
 const viewModes = computed(() => {

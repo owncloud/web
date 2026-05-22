@@ -134,7 +134,8 @@ describe('Projects view', () => {
     it('shows "Drive" when user can access vault and scope is not vault', async () => {
       const { wrapper } = getMountedWrapper({
         spaces: spacesResources,
-        abilities: [{ action: 'read-all', subject: 'Vault' }]
+        abilities: [{ action: 'read-all', subject: 'Vault' }],
+        store: { capabilityState: { capabilities: { vault: { enabled: true } } } }
       })
       await (wrapper.vm as any).loadResourcesTask.last
       expect(wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs[0].text).toBe(
@@ -145,6 +146,7 @@ describe('Projects view', () => {
       const { wrapper } = getMountedWrapper({
         spaces: spacesResources,
         abilities: [{ action: 'read-all', subject: 'Vault' }],
+        store: { capabilityState: { capabilities: { vault: { enabled: true } } } },
         currentRoute: mock<RouteLocation>({
           name: 'files-spaces-projects',
           params: { scope: 'vault' }

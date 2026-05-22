@@ -214,7 +214,9 @@ export default {
       }
     })
 
-    const canAccessVault = computed(() => ability.can('read-all', 'Vault'))
+    const canAccessVault = computed(
+      () => capabilityStore.vaultEnabled && ability.can('read-all', 'Vault')
+    )
 
     return {
       configOptions,

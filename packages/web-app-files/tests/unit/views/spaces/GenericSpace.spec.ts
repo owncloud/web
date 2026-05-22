@@ -11,7 +11,8 @@ import {
   defaultStubs,
   RouteLocation,
   ComponentProps,
-  PartialComponentProps
+  PartialComponentProps,
+  PiniaMockOptions
 } from '@ownclouders/web-test-helpers'
 import {
   AppBar,
@@ -126,7 +127,8 @@ describe('GenericSpace view', () => {
         const { wrapper } = getMountedWrapper({
           files: [mockDeep<Resource>()],
           props: { space },
-          abilities: [{ action: 'read-all', subject: 'Vault' }]
+          abilities: [{ action: 'read-all', subject: 'Vault' }],
+          capabilityState: { capabilities: { vault: { enabled: true } } }
         })
         const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
         expect(breadcrumbs.length).toBe(2)
@@ -145,6 +147,7 @@ describe('GenericSpace view', () => {
           files: [mockDeep<Resource>()],
           props: { space },
           abilities: [{ action: 'read-all', subject: 'Vault' }],
+          capabilityState: { capabilities: { vault: { enabled: true } } },
           currentRoute: { name: 'files-spaces-generic', path: '/', params: { scope: 'vault' } }
         })
         const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
@@ -192,7 +195,8 @@ describe('GenericSpace view', () => {
         const { wrapper } = getMountedWrapper({
           files: [mockDeep<Resource>()],
           props: { space },
-          abilities: [{ action: 'read-all', subject: 'Vault' }]
+          abilities: [{ action: 'read-all', subject: 'Vault' }],
+          capabilityState: { capabilities: { vault: { enabled: true } } }
         })
         const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
         expect(breadcrumbs[0].text).toBe('Drive')
@@ -207,6 +211,7 @@ describe('GenericSpace view', () => {
           files: [mockDeep<Resource>()],
           props: { space },
           abilities: [{ action: 'read-all', subject: 'Vault' }],
+          capabilityState: { capabilities: { vault: { enabled: true } } },
           currentRoute: { name: 'files-spaces-generic', path: '/', params: { scope: 'vault' } }
         })
         const breadcrumbs = wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs
@@ -358,7 +363,8 @@ function getMountedWrapper({
   }),
   breadcrumbsFromPath = [],
   stubs = {},
-  abilities = []
+  abilities = [],
+  capabilityState = {}
 }: {
   mocks?: Record<string, unknown>
   props?: PartialComponentProps<typeof GenericSpace>
@@ -371,12 +377,14 @@ function getMountedWrapper({
   breadcrumbsFromPath?: BreadcrumbItem[]
   stubs?: any
   abilities?: AbilityRule[]
+  capabilityState?: PiniaMockOptions['capabilityState']
 } = {}) {
   const plugins = defaultPlugins({
     abilities,
     piniaOptions: {
       configState: { options: { runningOnEos } },
-      resourcesStore: { currentFolder }
+      resourcesStore: { currentFolder },
+      capabilityState
     }
   })
 

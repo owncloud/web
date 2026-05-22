@@ -159,7 +159,8 @@ import {
   useKeyboardActions,
   useRoute,
   useRouteQuery,
-  FolderLoaderOptions
+  FolderLoaderOptions,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
@@ -191,6 +192,7 @@ const { space = null, item = null, itemId = null } = defineProps<Props>()
 
 const router = useRouter()
 const { can } = useAbility()
+const capabilityStore = useCapabilityStore()
 const userStore = useUserStore()
 const { $gettext, $ngettext } = useGettext()
 const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
@@ -258,7 +260,7 @@ const titleSegments = computed(() => {
 useDocumentTitle({ titleSegments })
 
 const route = useRoute()
-const canAccessVault = computed(() => can('read-all', 'Vault'))
+const canAccessVault = computed(() => capabilityStore.vaultEnabled && can('read-all', 'Vault'))
 
 const getSpacesBreadcrumbText = () => {
   if (!unref(canAccessVault)) {

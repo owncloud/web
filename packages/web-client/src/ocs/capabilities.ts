@@ -175,6 +175,9 @@ export interface Capabilities {
       version?: string
       server_managed?: boolean
     }
+    vault?: {
+      enabled?: boolean
+    }
     graph?: {
       'personal-data-export'?: boolean
       users: {
