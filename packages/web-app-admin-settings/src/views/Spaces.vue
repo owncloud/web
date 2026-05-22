@@ -126,7 +126,7 @@ const loadResourcesTask = useTask(function* (signal) {
       sharesStore.graphRoles,
       {
         orderBy: 'name asc',
-        filter: 'driveType'
+        filter: 'driveType eq project'
       },
       { signal }
     )
