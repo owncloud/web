@@ -27,6 +27,7 @@ export type AbilitySubjects =
   | 'Role'
   | 'Setting'
   | 'Share'
+  | 'Vault'
 
 export type Ability = MongoAbility<[AbilityActions, AbilitySubjects]>
 export type AbilityRule = SubjectRawRule<AbilityActions, AbilitySubjects, any>

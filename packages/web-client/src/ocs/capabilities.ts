@@ -54,6 +54,7 @@ interface AuthCapability {
   mfa: {
     enabled?: boolean
     levelnames?: string[]
+    session_duration?: number
   }
 }
 
@@ -173,6 +174,9 @@ export interface Capabilities {
       projects?: boolean
       version?: string
       server_managed?: boolean
+    }
+    vault?: {
+      enabled?: boolean
     }
     graph?: {
       'personal-data-export'?: boolean

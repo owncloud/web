@@ -194,7 +194,13 @@ export const useSpacesStore = defineStore('spaces', () => {
     }
   }
 
-  const loadSpaces = async ({ graphClient }: { graphClient: Graph }) => {
+  const loadSpaces = async ({
+    graphClient,
+    isInVault
+  }: {
+    graphClient: Graph
+    isInVault: boolean
+  }) => {
     spacesLoading.value = true
     try {
       /**
@@ -254,9 +260,11 @@ export const useSpacesStore = defineStore('spaces', () => {
 
   const reloadProjectSpaces = async ({
     graphClient,
+    isInVault,
     signal
   }: {
     graphClient: Graph
+    isInVault: boolean
     signal?: AbortSignal
   }) => {
     const projectSpaces = await getSpacesByType({

@@ -398,8 +398,8 @@ watch(
 
 .details-preview,
 .details-icon-wrapper {
-  background-color: var(--oc-color-background-muted);
-  border: 10px solid var(--oc-color-background-muted);
+  background-color: var(--oc-color-background-highlight);
+  border: 10px solid var(--oc-color-background-highlight);
   height: 230px;
 
   background-size: contain;

@@ -233,9 +233,14 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
         await clientService.graphAuthenticated.permissions.listRoleDefinitions()
       sharesStore.setGraphRoles(graphRoleDefinitions)
 
+      const isInVault = window.location.pathname.startsWith('/vault')
+
+      configStore.setIsInVault(isInVault)
+      clientService.reinitializeGraphClient(isInVault)
+
       // Load spaces to make them available across the application
       try {
-        await spacesStore.loadSpaces({ graphClient: clientService.graphAuthenticated })
+        await spacesStore.loadSpaces({ graphClient: clientService.graphAuthenticated, isInVault })
         const personalSpace = spacesStore.spaces.find(isPersonalSpaceResource)
 
         if (personalSpace) {

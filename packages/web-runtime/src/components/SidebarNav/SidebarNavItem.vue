@@ -111,7 +111,6 @@ export default defineComponent({
   }
   .text {
     opacity: 1;
-    transition: all 0.3s;
   }
   .text-invisible {
     opacity: 0 !important;
@@ -119,7 +118,12 @@ export default defineComponent({
   }
 
   &:hover:not(.active) {
-    color: var(--oc-color-swatch-brand-hover) !important;
+    background-color: var(--oc-color-swatch-primary-hover) !important;
+    color: var(--oc-color-swatch-primary-contrast) !important;
+
+    .oc-icon > svg {
+      fill: var(--oc-color-swatch-primary-contrast);
+    }
   }
 
   &:hover,
@@ -128,10 +132,10 @@ export default defineComponent({
   }
   &.active {
     overflow: hidden;
-  }
 
-  .oc-icon svg {
-    transition: all 0.3s;
+    &:hover .oc-icon > svg {
+      fill: var(--oc-color-swatch-primary-contrast);
+    }
   }
 }
 </style>

@@ -38,7 +38,7 @@ const announceRoutes = (applicationId: string, router: Router, routes: RouteReco
           applicationId === route.name ? route.name : namespaceRouteName(String(route.name))
       }
 
-      route.path = `/${encodeURI(applicationId)}${route.path}`
+      route.path = `/:scope(vault)?/${encodeURI(applicationId)}${route.path}`
 
       if (route.children) {
         route.children = route.children.map((childRoute) => {

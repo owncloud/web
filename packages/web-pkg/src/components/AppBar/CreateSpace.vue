@@ -43,7 +43,7 @@ const { upsertResource } = useResourcesStore()
 
 const addNewSpace = async (name: string) => {
   try {
-    const createdSpace = await createSpace(name)
+    const createdSpace = await createSpace(name, 'project')
     upsertResource(createdSpace)
     spacesStore.upsertSpace(createdSpace)
     emit('spaceCreated', createdSpace)

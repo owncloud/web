@@ -19,6 +19,37 @@
           class="oc-logo-image"
         />
       </router-link>
+      <div v-if="!isEmbedModeEnabled && canAccessVault" class="oc-flex oc-flex-middle">
+        <oc-button
+          id="oc-topbar-mode-switch-btn"
+          class="oc-topbar-mode-switch"
+          appearance="raw"
+          gap-size="none"
+        >
+          <span class="oc-mr-xs" v-text="selectedMode.label" />
+          <oc-icon name="arrow-down-s" />
+        </oc-button>
+        <oc-drop
+          toggle="#oc-topbar-mode-switch-btn"
+          mode="click"
+          padding-size="small"
+          close-on-click
+        >
+          <oc-list class="oc-topbar-mode-switch-list">
+            <li v-for="option in modeOptions" :key="option.id">
+              <oc-button
+                appearance="raw"
+                justify-content="space-between"
+                class="oc-topbar-mode-switch-option oc-p-s oc-width-1-1"
+                @click="selectedMode = option"
+              >
+                <span>{{ option.label }}</span>
+                <oc-icon v-if="selectedMode.id === option.id" name="check" />
+              </oc-button>
+            </li>
+          </oc-list>
+        </oc-drop>
+      </div>
     </div>
     <div v-if="!contentOnLeftPortal" class="oc-topbar-center oc-width-1-1">
       <custom-component-target :extension-point="topBarCenterExtensionPoint" />
@@ -63,8 +94,11 @@ import {
   useExtensionRegistry,
   useOpenEmptyEditor,
   useRouter,
-  useThemeStore
+  useThemeStore,
+  useClipboardStore,
+  useAbility
 } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
 import { isRuntimeRoute } from '../../router'
 import { appMenuExtensionPoint, topBarCenterExtensionPoint } from '../../extensionPoints'
 
@@ -86,6 +120,7 @@ export default {
     }
   },
   setup() {
+    const { $gettext } = useGettext()
     const capabilityStore = useCapabilityStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
@@ -93,6 +128,8 @@ export default {
     const { options: configOptions } = storeToRefs(configStore)
     const extensionRegistry = useExtensionRegistry()
     const { openEmptyEditor } = useOpenEmptyEditor()
+    const { clearClipboard } = useClipboardStore()
+    const ability = useAbility()
 
     const authStore = useAuthStore()
     const router = useRouter()
@@ -120,7 +157,8 @@ export default {
         }
       }
 
-      return '/'
+      const isVaultScope = unref(router.currentRoute).params?.scope === 'vault'
+      return isVaultScope ? '/vault/files' : '/'
     })
 
     const isFilesPublicUpoad = computed(() => {
@@ -146,6 +184,40 @@ export default {
       )
     })
 
+    const modeOptions = computed(() => {
+      return [
+        {
+          id: 'default-mode',
+          label: $gettext('Drive'),
+          route: '/'
+        },
+        {
+          id: 'vault-mode',
+          label: $gettext('Vault'),
+          route: '/vault/files'
+        }
+      ]
+    })
+
+    const selectedMode = computed({
+      get() {
+        const currentPath = window.location.pathname
+        return currentPath.startsWith('/vault') ? unref(modeOptions)[1] : unref(modeOptions)[0]
+      },
+      set(mode) {
+        if (mode.id === 'default-mode') {
+          clearClipboard()
+        }
+        if (mode?.route && mode.route !== window.location.pathname) {
+          window.location.href = mode.route
+        }
+      }
+    })
+
+    const canAccessVault = computed(
+      () => capabilityStore.vaultEnabled && ability.can('read-all', 'Vault')
+    )
+
     return {
       configOptions,
       contentOnLeftPortal,
@@ -161,7 +233,10 @@ export default {
       appMenuExtensions,
       hideAppSwitcher,
       hideAccountMenu,
-      isUniversalAccessEnabled
+      isUniversalAccessEnabled,
+      modeOptions,
+      selectedMode,
+      canAccessVault
     }
   },
   computed: {
@@ -257,6 +332,37 @@ export default {
     @media (min-width: $oc-breakpoint-small-default) {
       gap: 20px;
       justify-content: flex-end;
+    }
+  }
+
+  .oc-topbar-mode-switch {
+    color: var(--oc-color-swatch-brand-contrast);
+    flex-shrink: 0;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    .oc-icon > svg {
+      fill: var(--oc-color-swatch-brand-contrast);
+    }
+  }
+
+  .oc-topbar-mode-switch-list li {
+    margin: var(--oc-space-xsmall) 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .oc-topbar-mode-switch-option {
+    &:hover,
+    &:focus {
+      background-color: var(--oc-color-background-hover);
+      text-decoration: none;
     }
   }
 }

@@ -7,6 +7,8 @@ import {
   CapabilityStore,
   ConfigStore,
   useTokenTimerWorker,
+  useMfaExpiryWorker,
+  useModals,
   AuthServiceInterface
 } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
@@ -39,6 +41,11 @@ export class AuthService implements AuthServiceInterface {
 
   private tokenTimerWorker: ReturnType<typeof useTokenTimerWorker>
   private tokenTimerInitialized = false
+
+  private mfaExpiryWorker: ReturnType<typeof useMfaExpiryWorker>
+  private mfaExpiryModalDismissed = false
+  private mfaExpiryModalId: string | null = null
+  private mfaExpiryBroadcastChannel: BroadcastChannel
 
   // number of seconds before an access token is to expire to raise the accessTokenExpiring event
   private accessTokenExpiryThreshold = 10
@@ -119,8 +126,18 @@ export class AuthService implements AuthServiceInterface {
         if (!options.embed?.enabled || !options.embed?.delegateAuthentication) {
           this.tokenTimerWorker = useTokenTimerWorker({ authService: this })
           this.tokenTimerWorker.startWorker()
+
+          this.mfaExpiryWorker = useMfaExpiryWorker({
+            onExpiring: () => this.showMfaExpiryWarning()
+          })
+          this.mfaExpiryWorker.startWorker()
+          this.initMfaExpiryBroadcastChannel()
         }
       }
+    }
+
+    if (to.params.scope === 'vault') {
+      this.requireAcr('advanced', to.fullPath)
     }
 
     if (isPublicLinkContextRequired(this.router, to)) {
@@ -164,6 +181,7 @@ export class AuthService implements AuthServiceInterface {
           )
           try {
             await this.userManager.updateContext(user.access_token, fetchUserData)
+            this.updateMfaExpiryTimer()
           } catch (e) {
             console.error(e)
             await this.handleAuthError(unref(this.router.currentRoute))
@@ -173,6 +191,7 @@ export class AuthService implements AuthServiceInterface {
         this.userManager.events.addUserUnloaded(() => {
           console.log('user unloaded…')
           this.tokenTimerWorker?.resetTokenTimer()
+          this.mfaExpiryWorker?.resetMfaTimer()
           this.resetStateAfterUserLogout()
 
           if (this.userManager.unloadReason === 'authError') {
@@ -224,6 +243,8 @@ export class AuthService implements AuthServiceInterface {
               expiryThreshold: this.accessTokenExpiryThreshold
             })
 
+            this.updateMfaExpiryTimer()
+
             this.tokenTimerInitialized = true
           }
         } catch (e) {
@@ -261,6 +282,11 @@ export class AuthService implements AuthServiceInterface {
         window.addEventListener('message', this.handleDelegatedTokenUpdate)
       } else {
         await this.userManager.signinRedirectCallback(this.buildSignInCallbackUrl())
+      }
+
+      const user = await this.userManager.getUser()
+      if (user) {
+        this.updateMfaExpiryTimer()
       }
 
       const redirectRoute = this.router.resolve(this.userManager.getAndClearPostLoginRedirectUrl())
@@ -407,6 +433,85 @@ export class AuthService implements AuthServiceInterface {
 
     this.userManager.setPostLoginRedirectUrl(redirectUrl)
     return this.userManager.signinRedirect({ acr_values: acrValue })
+  }
+
+  private updateMfaExpiryTimer() {
+    if (!this.mfaExpiryWorker) {
+      return
+    }
+
+    const sessionDuration = this.capabilityStore.authMfaSessionDuration
+    if (!sessionDuration) {
+      return
+    }
+
+    const baseTime = this.clientService.lastSuccessfulRequestTime ?? Math.floor(Date.now() / 1000)
+    const expiresAt = baseTime + sessionDuration
+
+    this.mfaExpiryWorker.setMfaTimer({ expiresAt })
+  }
+
+  private showMfaExpiryWarning() {
+    if (this.mfaExpiryModalDismissed) {
+      return
+    }
+
+    this.mfaExpiryModalDismissed = true
+    const { $gettext } = this.language
+
+    const modalStore = useModals()
+    const modal = modalStore.dispatchModal({
+      title: $gettext('Session expiring'),
+      message: $gettext(
+        'Your multi-factor authentication session is about to expire. Would you like to extend it?'
+      ),
+      confirmText: $gettext('Extend session'),
+      cancelText: $gettext('Dismiss'),
+      onConfirm: () => {
+        this.mfaExpiryModalId = null
+        this.mfaExpiryBroadcastChannel?.postMessage({ action: 'prolonged' })
+        this.prolongMfaSession()
+      },
+      onCancel: () => {
+        this.mfaExpiryModalId = null
+        this.mfaExpiryBroadcastChannel?.postMessage({ action: 'dismissed' })
+      }
+    })
+    this.mfaExpiryModalId = modal.id
+  }
+
+  private prolongMfaSession() {
+    const sessionDuration = this.capabilityStore.authMfaSessionDuration
+    if (!sessionDuration) {
+      return
+    }
+
+    this.mfaExpiryModalDismissed = false
+    const expiresAt = Math.floor(Date.now() / 1000) + sessionDuration
+    this.mfaExpiryWorker?.setMfaTimer({ expiresAt })
+  }
+
+  private initMfaExpiryBroadcastChannel() {
+    this.mfaExpiryBroadcastChannel = new BroadcastChannel('oc-mfa-expiry')
+    this.mfaExpiryBroadcastChannel.onmessage = (event: MessageEvent) => {
+      const { action } = event.data
+      if (action === 'prolonged') {
+        this.mfaExpiryModalDismissed = true
+        if (this.mfaExpiryModalId) {
+          const modalStore = useModals()
+          modalStore.removeModal(this.mfaExpiryModalId)
+          this.mfaExpiryModalId = null
+        }
+        this.prolongMfaSession()
+      } else if (action === 'dismissed') {
+        this.mfaExpiryModalDismissed = true
+        if (this.mfaExpiryModalId) {
+          const modalStore = useModals()
+          modalStore.removeModal(this.mfaExpiryModalId)
+          this.mfaExpiryModalId = null
+        }
+      }
+    }
   }
 }
 

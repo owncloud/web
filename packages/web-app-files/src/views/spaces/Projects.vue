@@ -186,7 +186,8 @@ import {
   useRoute,
   Pagination,
   FileSideBar,
-  NoContentMessage
+  NoContentMessage,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import {
@@ -221,6 +222,7 @@ const { $gettext } = language
 const filterTerm = ref('')
 const markInstance = ref(undefined)
 const includeDisabledParam = useRouteQuery('q_includeDisabled')
+const capabilityStore = useCapabilityStore()
 
 const { setSelection, initResourceList, clearResourceList, setAncestorMetaData } =
   useResourcesStore()
@@ -230,7 +232,8 @@ const loadResourcesTask = useTask(function* (signal) {
   setAncestorMetaData({})
   yield spacesStore.reloadProjectSpaces({
     graphClient: clientService.graphAuthenticated,
-    signal
+    signal,
+    isInVault: unref(route)?.params?.scope === 'vault'
   })
   initResourceList({ currentFolder: null, resources: unref(spaces) })
 })
@@ -248,7 +251,7 @@ let loadPreviewToken: string = null
 const { isSideBarOpen, sideBarActivePanel } = useSideBar()
 
 const runtimeSpaces = computed(() => {
-  return spacesStore.spaces.filter(isProjectSpaceResource) || []
+  return spacesStore.spaces.filter((space) => isProjectSpaceResource(space)) || []
 })
 const selectedSpace = computed(() => {
   if (
@@ -334,6 +337,7 @@ watch(filterTerm, async () => {
 })
 
 const hasCreatePermission = computed(() => can('create-all', 'Drive'))
+const canAccessVault = computed(() => capabilityStore.vaultEnabled && can('read-all', 'Vault'))
 
 const extensionRegistry = useExtensionRegistry()
 const viewModes = computed(() => {
@@ -458,10 +462,22 @@ const spacesHelpList = computed(() => {
     }
   ]
 })
+const getBreadcrumbText = () => {
+  if (!unref(canAccessVault)) {
+    return $gettext('Spaces')
+  }
+
+  if (unref(route).params.scope === 'vault') {
+    return $gettext('Vault')
+  }
+
+  return $gettext('Drive')
+}
+
 const breadcrumbs = computed(() => {
   return [
     {
-      text: $gettext('Spaces'),
+      text: getBreadcrumbText(),
       onClick: () => loadResourcesTask.perform(),
       isStativNav: true
     }

@@ -129,6 +129,7 @@ import {
 import {
   ResourceTransfer,
   TransferType,
+  useAbility,
   useConfigStore,
   useExtensionRegistry,
   useFileActions,
@@ -158,7 +159,8 @@ import {
   useKeyboardActions,
   useRoute,
   useRouteQuery,
-  FolderLoaderOptions
+  FolderLoaderOptions,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
@@ -189,6 +191,8 @@ interface Props {
 const { space = null, item = null, itemId = null } = defineProps<Props>()
 
 const router = useRouter()
+const { can } = useAbility()
+const capabilityStore = useCapabilityStore()
 const userStore = useUserStore()
 const { $gettext, $ngettext } = useGettext()
 const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
@@ -256,12 +260,26 @@ const titleSegments = computed(() => {
 useDocumentTitle({ titleSegments })
 
 const route = useRoute()
+const canAccessVault = computed(() => capabilityStore.vaultEnabled && can('read-all', 'Vault'))
+
+const getSpacesBreadcrumbText = () => {
+  if (!unref(canAccessVault)) {
+    return $gettext('Spaces')
+  }
+
+  if (unref(route).params.scope === 'vault') {
+    return $gettext('Vault')
+  }
+
+  return $gettext('Drive')
+}
+
 const breadcrumbs = computed(() => {
   const rootBreadcrumbItems: BreadcrumbItem[] = []
   if (isProjectSpaceResource(unref(space))) {
     rootBreadcrumbItems.push({
       id: uuidV4(),
-      text: $gettext('Spaces'),
+      text: getSpacesBreadcrumbText(),
       to: createLocationSpaces('files-spaces-projects'),
       isStaticNav: true
     })
@@ -286,6 +304,17 @@ const breadcrumbs = computed(() => {
   let { params, query } = createFileRouteOptions(unref(space), { fileId: unref(space).fileId })
   query = omit({ ...unref(route).query, ...query }, 'page')
   if (isPersonalSpaceResource(unref(space))) {
+    if (unref(canAccessVault)) {
+      const vaultText =
+        unref(route).params.scope === 'vault' ? $gettext('Vault') : $gettext('Drive')
+      rootBreadcrumbItems.push({
+        id: uuidV4(),
+        text: vaultText,
+        to: createLocationSpaces('files-spaces-projects'),
+        isStaticNav: true
+      })
+    }
+
     spaceBreadcrumbItem = {
       id: uuidV4(),
       text: unref(space).name,

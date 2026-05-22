@@ -8,9 +8,9 @@
       </p>
     </div>
     <template v-else>
-      <space-members v-if="showSpaceMembers" class="oc-background-highlight oc-p-m oc-mb-s" />
-      <file-shares v-else class="oc-background-highlight oc-p-m oc-mb-s" />
-      <file-links v-if="showLinks" class="oc-background-highlight oc-p-m" />
+      <space-members v-if="showSpaceMembers" class="oc-background-muted oc-p-m oc-mb-s" />
+      <file-shares v-else class="oc-background-muted oc-p-m oc-mb-s" />
+      <file-links v-if="showLinks" class="oc-background-muted oc-p-m" />
     </template>
   </div>
 </template>

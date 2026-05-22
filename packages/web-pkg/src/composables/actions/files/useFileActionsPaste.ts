@@ -10,7 +10,13 @@ import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
 import { Resource, SpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
-import { useClipboardStore, useResourcesStore } from '../../piniaStores'
+import {
+  ClipboardMode,
+  useClipboardStore,
+  useConfigStore,
+  useMessages,
+  useResourcesStore
+} from '../../piniaStores'
 import { ClipboardActions, ResourceTransfer, TransferType } from '../../../helpers'
 import { storeToRefs } from 'pinia'
 import { usePasteWorker } from '../../webWorkers/pasteWorker'
@@ -20,12 +26,29 @@ export const useFileActionsPaste = () => {
   const clientService = useClientService()
   const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $ngettext } = useGettext()
+  const { showErrorMessage } = useMessages()
   const clipboardStore = useClipboardStore()
+  const configStore = useConfigStore()
   const { startWorker } = usePasteWorker()
 
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
   const { resources: clipboardResources } = storeToRefs(clipboardStore)
+
+  const isCrossModePasteAllowed = computed(() => {
+    return (
+      !clipboardStore.sourceMode ||
+      clipboardStore.sourceMode !== ClipboardMode.Vault ||
+      configStore.isInVault
+    )
+  })
+
+  const getSourceSpace = (resource: Resource): SpaceResource => {
+    const sourceBucketId = clipboardStore.getClipboardSourceSpaceKey(resource)
+    const persistedSpace = clipboardStore.sourceSpaces[sourceBucketId]
+
+    return (persistedSpace as SpaceResource) || getMatchingSpace(resource)
+  }
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -135,6 +158,13 @@ export const useFileActionsPaste = () => {
   })
 
   const handler = async ({ space: targetSpace }: FileActionOptions) => {
+    if (!unref(isCrossModePasteAllowed)) {
+      showErrorMessage({
+        title: $gettext('Pasting from Vault into the default mode is not supported.')
+      })
+      return
+    }
+
     if (unref(isCuttingAndPastingIntoSameFolder)) {
       return
     }
@@ -142,18 +172,19 @@ export const useFileActionsPaste = () => {
     const resourceSpaceMapping = clipboardStore.resources.reduce<
       Record<string, { space: SpaceResource; resources: Resource[] }>
     >((acc, resource) => {
-      if (resource.storageId in acc) {
-        acc[resource.storageId].resources.push(resource)
+      const sourceBucketId = clipboardStore.getClipboardSourceSpaceKey(resource)
+      const sourceSpace = getSourceSpace(resource)
+
+      if (sourceBucketId in acc) {
+        acc[sourceBucketId].resources.push(resource)
         return acc
       }
 
-      const matchingSpace = getMatchingSpace(resource)
-
-      if (!(matchingSpace.id in acc)) {
-        acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
+      if (!(sourceSpace.id in acc)) {
+        acc[sourceSpace.id] = { space: sourceSpace, resources: [] }
       }
 
-      acc[matchingSpace.id].resources.push(resource)
+      acc[sourceSpace.id].resources.push(resource)
       return acc
     }, {})
 
@@ -175,6 +206,9 @@ export const useFileActionsPaste = () => {
       shortcut: unref(pasteShortcutString),
       isVisible: ({ resources }) => {
         if (clipboardStore.resources.length === 0) {
+          return false
+        }
+        if (!unref(isCrossModePasteAllowed)) {
           return false
         }
         if (
