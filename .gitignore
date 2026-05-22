@@ -3,6 +3,7 @@ release/*
 **/l10n/locale
 **/l10n/template.pot
 **/hugo
+*claude*
 
 build/version.json
 
