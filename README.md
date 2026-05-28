@@ -1,100 +1,144 @@
-<div align=center>
-  
-  
-[![Matrix](https://img.shields.io/matrix/ocis%3Amatrix.org?logo=matrix)](https://app.element.io/#/room/#ocis:matrix.org)
-[![Test and build](https://github.com/owncloud/web/actions/workflows/test.yml/badge.svg)](https://github.com/owncloud/web/actions/workflows/test.yml)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=owncloud_web&metric=security_rating)](https://sonarcloud.io/dashboard?id=owncloud_web)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_web&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_web)
-[![web docker image](https://img.shields.io/docker/v/owncloud/web?label=web%20docker%20image&logo=docker&sort=semver)](https://hub.docker.com/r/owncloud/web)
-
 # ownCloud Web
 
-With ownCloud Web you can manage your ownCloud in your browser.
+<!-- OSPO-managed README | Generated: 2026-04-16 | v2 -->
 
-</div>
-<img width="100%" alt="Screenshot of ownCloud Web" src="https://user-images.githubusercontent.com/26610733/168603602-5ba37b4d-2ee1-413c-9a55-03380c79cd3d.png">
+[![License](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE) [![ownCloud OSPO](https://img.shields.io/badge/OSPO-ownCloud-blue)](https://kiteworks.com/opensource) [![Docker Hub](https://img.shields.io/docker/pulls/owncloud)](https://hub.docker.com/r/owncloud/web)
 
-ownCloud Web is a single page, standalone frontend, based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server.
+ownCloud Web is the next-generation frontend for ownCloud Infinite Scale, built as a single-page application with Vue.js and TypeScript. It provides a modern, accessible and themeable user interface for managing files, sharing, real-time collaboration and administration -- designed to be extensible through a plugin-based architecture that allows third-party developers to build custom apps and extensions.
 
-## Compatibility
+## Part of oCIS
 
-Usage of Web UI and [ownCloud Classic](https://github.com/owncloud/core) as backend is **not** recommended starting with version `7.1.0` of the Web UI, meaning newer versions only support [ownCloud Infinite Scale](https://github.com/owncloud/ocis). If you want to use the Web UI with ownCloud Classic, please use App version `7.0.2`. Critical bugs can be fixed upon request.
+ownCloud Web is the primary frontend for [ownCloud Infinite Scale (oCIS)](https://github.com/owncloud/ocis). Starting with version 7.1.0, the Web UI supports only oCIS as a backend (for ownCloud 10 compatibility, use version 7.0.2).
 
-## Examples
+ownCloud Web is available on [Docker Hub](https://hub.docker.com/r/owncloud/web).
 
-Here are some examples of what you can do with ownCloud Web:
+**Live Demo:** [https://demo.owncloud.com/](https://demo.owncloud.com/)
 
-- 🗂 **Files**: Upload, download, search and manage files (as you may know it for example from Dropbox, OneDrive, Google Drive etc.).
-- 👥 **Share:** Allow fine-grained access to files and whole folders directly with other users on your ownCloud.
-- 🔗 **Links**: Create links and share them with anyone in the world - optional password-protection available.
-- 📝 **Write**: Edit your documents with the editor of your choice like ONLYOFFICE, Collabora or Microsoft Word and more.
-- 🤝 **Collaborate** in real-time on documents.
-- 🚀 **Spaces**: You have to manage important projects? Let Spaces, the new special folders, keep order.
-- ◀️ **Versioning** Saved the wrong version? We have the time machine you were looking for! Easily go back in time and restore older versions of your files.
-- 📥 **Drop-folders:** Collect files from other people in one folder via a simple link, ex. homework from pupils or photos from your family - optional password-protection available.
-- 🔒 **Privacy first:** ownCloud Web is GDPR compliant and can both be used completely internally or together with external people. It also will never "phone home".
-- 🛡 **Secure:** ownCloud Web is an open source project which means that you can track every action, update and dependency of the software.
-- ♿ **Inclusive:** Our goal is to be accessible for kids as well as seniors and for newbies as well as experts - since we are all affected by physical and cognitive limitations, depending on our personal situation.
-- 🧩 **Extensible:** ownCloud Web is build as a plattform that can be extended in the most developer friendly way.
-- 🌗 **Darkmode:** Initialized with your browser settings, and easily switched to please your eyes better.
-- 🎭 **Themes**: Customize to your branding needs or personal taste in no time.
-- 👉 and many more...
+## Getting Started
 
-While the `web` frontend provides a performant, elegant, accessible and themeable base, it also aims to be extendable with custom extensions provided by external developers.
+Follow the steps below to set up a development environment for ownCloud Web.
 
-## Live Demos
+### Prerequisites
 
-- **Infinitescale** - Try the latest commit on the master branch with an ownCloud Infinite Scale backend:
-  - Demo: [https://demo.owncloud.com/](https://demo.owncloud.com/)
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- [pnpm](https://pnpm.io/)
+- [Docker Compose](https://docs.docker.com/compose/) (for backend)
 
-## Repository structure
+### Development Setup
 
-The backbone of this project is built by the following parts of the `packages`:
+```bash
+git clone https://github.com/owncloud/web.git
+cd web
+pnpm install
+pnpm build
+```
 
-- **client:** Generated TypeScript client for communications with the ownCloud Infinite Scale graph API
-- **container:** Static assets and rarely changing base files
-- **extension-sdk:** Provides utilities for developing and integrating custom extensions
-- **pkg:** Shared logic for various places inside the codebase
-- **runtime:** Central place of (user) authentication, provisioning of the user interface layout, client side storage, routing, theming, dependencies and (sub)application handling
+For the complete development setup, see the [setup guide](https://owncloud.dev/clients/web/getting-started/).
 
-The repository's `packages` also contains the following apps, which can be en-/disabled via the `config.json`:
+### Repository Structure
 
-- **activities:** An extension that provides a detailed activity stream, showing recent updates
-- **admin-settings:** An extension that allows administrators to manage users, groups, spaces and generic settings for their ownCloud instance efficiently
-- **app-store:** An extension that allows users to browse and download additional apps and extensions directly from the web interface
-- **epub-reader:** An extension for opening ebook files
-- **external:** An extension for creating, opening and editing files using the WOPI server
-- **files:** The default extension and core part of the project, responsible for file sync-and-share - up- and downloading, sharing with other users/groups or via links, version management and more
-- **ocm:** Open cloud mesh integration to allow for collaboration across ownCloud instances
-- **pdf-viewer:** An extension for opening PDF files without leaving the UI
-- **preview:** An extension for opening audio, video and image files
-- **search:** An extension for registering search providers, which then get rendered into the layout in the **runtime** using a portal
-- **text-editor:** An extension for creating, opening and editing plain text files, like e.g. `.md` or `.txt`
-- **webfinger:** Redirect app for the oCIS webfinger service
+The `packages` directory contains the core modules:
 
-The full documentation on all available packages and the general repository structure [can be found in the docs](https://owncloud.dev/clients/web/development/repo-structure/).
+- **client** -- Generated TypeScript client for the oCIS Graph API
+- **container** -- Static assets and base files
+- **extension-sdk** -- Utilities for developing custom extensions
+- **pkg** -- Shared logic used across the codebase
+- **runtime** -- Authentication, routing, theming and application handling
 
-## Releases
+Built-in apps (also in `packages`):
 
-We currently publish a new release every couple of weeks, strictly following [semver](https://semver.org/). Releases and their corresponding changelogs can be found on the [release page](https://github.com/owncloud/web/releases) on GitHub.
+- **files** -- Core file sync-and-share functionality
+- **admin-settings** -- User, group and space administration
+- **activities** -- Activity stream
+- **app-store** -- Browse and install extensions
+- **epub-reader** -- Ebook file viewer
+- **external** -- WOPI-based document editing (Collabora, ONLYOFFICE)
+- **pdf-viewer** -- PDF file viewer
+- **preview** -- Audio, video and image previewer
+- **text-editor** -- Plain text editor
 
 ## Documentation
 
-The documentation is an important part of this project and can be found on [owncloud.dev](https://owncloud.dev/clients/web).
-If you want to contribute to the documentation you can find the source files in the [docs](https://github.com/owncloud/web/tree/master/docs) folder of this repository.
+- [ownCloud Web Documentation](https://owncloud.dev/clients/web)
+- [Development Guide](https://owncloud.dev/clients/web/getting-started/)
+- [Extension System](https://owncloud.dev/clients/web/extension-system/)
+- [Testing Documentation](https://owncloud.dev/clients/web/testing/testing/)
+- [Repository Structure](https://owncloud.dev/clients/web/development/repo-structure/)
 
-## Contribution
+## Community & Support
 
-Contribution in the form of bug reports, user feedback or actual code is always welcome! We do have a [contribution guide](https://github.com/owncloud/web/blob/master/.github/CONTRIBUTING.md), actively use the [good-first-issue](https://github.com/owncloud/web/issues?q=is%3Aopen+is%3Aissue+label%3ATopic%3Agood-first-issue) label and try to feedback on issues and pull requests in a timely manner. There is also a [setup guide](https://owncloud.dev/clients/web/getting-started/) for building and running `web` locally.
+**[Star](https://github.com/owncloud/web)** this repo and **Watch** for release notifications!
 
-## Tests
+- [ownCloud Website](https://owncloud.com)
+- [Community Discussions](https://github.com/orgs/owncloud/discussions)
+- [Matrix Chat](https://app.element.io/#/room/#owncloud:matrix.org)
+- [Documentation](https://doc.owncloud.com)
+- [Enterprise Support](https://owncloud.com/contact-us/)
+- [OSPO Home](https://kiteworks.com/opensource)
 
-We assert the quality of this project by running an [automated CI](https://drone.owncloud.com/owncloud/web), while a guide on running the tests locally can be found in the [testing documentation](https://owncloud.dev/clients/web/testing/testing/).
+## Contributing
 
-## Jobs
+We welcome contributions! Please read the [Contributing Guidelines](CONTRIBUTING.md)
+and our [Code of Conduct](CODE_OF_CONDUCT.md) before getting started.
 
-At ownCloud, we are always looking for new additions to our team. You are welcome to take a look at [our open positions](https://owncloud.com/career/).
+### Workflow
+
+- **Rebase Early, Rebase Often!** We use a rebase workflow. Always rebase on the target branch before submitting a PR.
+- **Dependabot**: Automated dependency updates are managed via Dependabot. Review and merge dependency PRs promptly.
+- **Signed Commits**: All commits **must** be PGP/GPG signed. See [GitHub's signing guide](https://docs.github.com/en/authentication/managing-commit-signature-verification).
+- **DCO Sign-off**: Every commit must carry a `Signed-off-by` line:
+  ```
+  git commit -s -S -m "your commit message"
+  ```
+- **GitHub Actions Policy**: Workflows may only use actions that are (a) owned by `owncloud`, (b) created by GitHub (`actions/*`), or (c) verified in the GitHub Marketplace.
+
+## Translations
+
+Help translate this project on Transifex:
+**<https://explore.transifex.com/owncloud-org/owncloud-web/>**
+
+Please submit translations via Transifex -- do not open pull requests for translation changes.
+
+## Security
+
+**Do not open a public GitHub issue for security vulnerabilities.**
+
+Report vulnerabilities at **<https://security.owncloud.com>** -- see [SECURITY.md](SECURITY.md).
+
+Bug bounty: [YesWeHack ownCloud Program](https://yeswehack.com/programs/owncloud-bug-bounty-program)
 
 ## License
 
-GNU Affero General Public License - [Details](https://github.com/owncloud/web/blob/master/LICENSE)
+This project is licensed under the [AGPL-3.0](LICENSE).
+
+## About the ownCloud OSPO
+
+The [Kiteworks Open Source Program Office](https://kiteworks.com/opensource), operating under
+the [ownCloud](https://owncloud.com) brand, launched on May 5, 2026, to steward the open source
+ecosystem around ownCloud's products. The OSPO ensures transparent governance, license compliance,
+community health, and sustainable collaboration between the open source community and
+[Kiteworks](https://www.kiteworks.com), which acquired ownCloud in 2023.
+
+- **OSPO Home**: <https://kiteworks.com/opensource>
+- **GitHub**: <https://github.com/owncloud>
+- **ownCloud**: <https://owncloud.com>
+
+For questions about the OSPO or licensing, contact ospo@kiteworks.com.
+
+### License Migration to Apache 2.0
+
+The OSPO is driving a strategic relicensing of ownCloud repositories toward the
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0), following
+the [Apache Software Foundation's third-party license policy](https://www.apache.org/legal/resolved.html).
+
+Individual repositories will migrate as their audit is completed. The LICENSE file
+in each repo reflects its **current** license status (not the target).
+
+**Current license: AGPL-3.0** (Category X per Apache policy -- cannot be included in Apache-2.0 works).
+
+Migration prerequisites for this repository:
+
+- **CLA/DCO coverage**: All past contributors must have signed agreements permitting relicensing
+- **Copyleft dependency audit**: All AGPL/GPL dependencies must be replaced or isolated
+- **KDE heritage review**: Any code with KDE-era copyrights requires legal analysis
+- **Complete relicensing**: AGPL-3.0 is a strong copyleft license; migration requires full relicensing of all files, not just a header change
