@@ -126,12 +126,6 @@ export class AuthService implements AuthServiceInterface {
         if (!options.embed?.enabled || !options.embed?.delegateAuthentication) {
           this.tokenTimerWorker = useTokenTimerWorker({ authService: this })
           this.tokenTimerWorker.startWorker()
-
-          this.mfaExpiryWorker = useMfaExpiryWorker({
-            onExpiring: () => this.showMfaExpiryWarning()
-          })
-          this.mfaExpiryWorker.startWorker()
-          this.initMfaExpiryBroadcastChannel()
         }
       }
     }
@@ -436,13 +430,21 @@ export class AuthService implements AuthServiceInterface {
   }
 
   private updateMfaExpiryTimer() {
-    if (!this.mfaExpiryWorker) {
+    if (!this.capabilityStore?.vaultEnabled) {
       return
     }
 
     const sessionDuration = this.capabilityStore.authMfaSessionDuration
     if (!sessionDuration) {
       return
+    }
+
+    if (!this.mfaExpiryWorker) {
+      this.mfaExpiryWorker = useMfaExpiryWorker({
+        onExpiring: () => this.showMfaExpiryWarning()
+      })
+      this.mfaExpiryWorker.startWorker()
+      this.initMfaExpiryBroadcastChannel()
     }
 
     const baseTime = this.clientService.lastSuccessfulRequestTime ?? Math.floor(Date.now() / 1000)
