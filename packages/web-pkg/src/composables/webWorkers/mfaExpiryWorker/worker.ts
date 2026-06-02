@@ -13,7 +13,7 @@ const resetTimer = () => {
   timerId = undefined
 }
 
-self.onmessage = (e: MessageEvent) => {
+globalThis.onmessage = (e: MessageEvent) => {
   const { topic, expiresAt, warningThreshold } = JSON.parse(e.data) as Message
 
   if (topic === 'reset') {
