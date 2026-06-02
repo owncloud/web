@@ -300,6 +300,8 @@ const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
       border: none;
       cursor: pointer;
       outline: none;
+      height: 100%;
+      width: 100%;
     }
   }
 
