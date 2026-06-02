@@ -287,7 +287,7 @@ export const useFileActions = () => {
       ...secondaryActions,
       ...unref(extensionActions).filter(
         (a) =>
-          a.isVisible(options as FileActionOptions) &&
+          a.isVisible(options as FileActionOptions) && // NOSONAR
           (a.category === 'actions' || isNil(a.category))
       )
     ]

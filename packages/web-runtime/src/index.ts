@@ -233,7 +233,7 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
         await clientService.graphAuthenticated.permissions.listRoleDefinitions()
       sharesStore.setGraphRoles(graphRoleDefinitions)
 
-      const isInVault = window.location.pathname.startsWith('/vault')
+      const isInVault = globalThis.location.pathname.startsWith('/vault')
 
       configStore.setIsInVault(isInVault)
       clientService.reinitializeGraphClient(isInVault)

@@ -63,29 +63,29 @@ const DavPropertyMapping = {
   Tags: defStringOrNumber('tags' as const),
   Audio: {
     value: 'audio',
-    type: null as Audio
+    type: null as Audio // NOSONAR
   },
   Location: {
     value: 'location',
-    type: null as GeoCoordinates
+    type: null as GeoCoordinates // NOSONAR
   },
   Image: {
     value: 'image',
-    type: null as Image
+    type: null as Image // NOSONAR
   },
   Photo: {
     value: 'photo',
-    type: null as Photo
+    type: null as Photo // NOSONAR
   },
   ETag: defString('getetag' as const),
   MimeType: defString('getcontenttype' as const),
   ResourceType: defStringArray('resourcetype' as const),
-  LockDiscovery: { value: 'lockdiscovery', type: null as Record<string, unknown> },
+  LockDiscovery: { value: 'lockdiscovery', type: null as Record<string, unknown> }, // NOSONAR
   LockOwner: defString('owner' as const),
   LockTime: defString('locktime' as const),
   ActiveLock: {
     value: 'activelock',
-    type: null as Record<string, unknown>
+    type: null as Record<string, unknown> // NOSONAR
   },
   DownloadURL: defString('downloadURL' as const),
   Highlights: defString('highlights' as const),
@@ -94,7 +94,7 @@ const DavPropertyMapping = {
 
   ShareId: defString('shareid' as const),
   ShareRoot: defString('shareroot' as const),
-  ShareTypes: { value: 'share-types', type: null as Record<string, number[]> },
+  ShareTypes: { value: 'share-types', type: null as Record<string, number[]> }, // NOSONAR
   SharePermissions: defString('share-permissions' as const),
 
   TrashbinOriginalFilename: defString('trashbin-original-filename' as const),
@@ -108,7 +108,7 @@ const DavPropertyMapping = {
   PublicLinkShareOwner: defString('public-link-share-owner' as const),
   SignatureAuth: {
     value: 'signature-auth',
-    type: null as Record<'signature' | 'expiration', string>
+    type: null as Record<'signature' | 'expiration', string> // NOSONAR
   },
   SpaceId: defString('spaceid' as const)
 } as const satisfies Record<string, M<unknown, unknown>>

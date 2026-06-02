@@ -201,15 +201,15 @@ export default {
 
     const selectedMode = computed({
       get() {
-        const currentPath = window.location.pathname
+        const currentPath = globalThis.location.pathname
         return currentPath.startsWith('/vault') ? unref(modeOptions)[1] : unref(modeOptions)[0]
       },
       set(mode) {
         if (mode.id === 'default-mode') {
           clearClipboard()
         }
-        if (mode?.route && mode.route !== window.location.pathname) {
-          window.location.href = mode.route
+        if (mode?.route && mode.route !== globalThis.location.pathname) {
+          globalThis.location.href = mode.route
         }
       }
     })

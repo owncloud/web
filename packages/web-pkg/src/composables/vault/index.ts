@@ -30,7 +30,7 @@ function getIsVaultUrl(url: string): boolean {
 
 export function useVault(): VaultComposable {
   const isInVault = (() => {
-    const { pathname, hash } = window.location
+    const { pathname, hash } = globalThis.location
 
     if (getIsVaultUrl(pathname + hash)) {
       return true

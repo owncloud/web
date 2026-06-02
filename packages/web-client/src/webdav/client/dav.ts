@@ -13,7 +13,7 @@ import { buildPropFindBody, buildPropPatchBody } from './builders'
 import { parseError, parseMultiStatus, parseTusHeaders } from './parsers'
 import { WebDavResponseResource } from '../../helpers'
 import { DavHttpError } from '../../errors'
-import { normalize } from 'path'
+import { normalize } from 'node:path'
 
 export interface DAVOptions {
   baseUrl: string

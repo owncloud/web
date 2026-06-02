@@ -44,8 +44,8 @@ jobs:
       - name: Generate checksums
         run: |
           cd ${{ github.workspace }}/release
-          md5sum * > md5sum.txt
-          sha256sum * > sha256sum.txt
+          md5sum ./* > md5sum.txt
+          sha256sum ./* > sha256sum.txt
 
       - name: Get release version
         id: version

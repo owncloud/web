@@ -3,7 +3,7 @@ import { XMLParser } from 'fast-xml-parser'
 import { WebDavResponseResource, WebDavResponseTusSupport } from '../../helpers'
 import { urlJoin } from '../../utils'
 import { DavErrorCode } from '../constants'
-import { join, normalize } from 'path'
+import { join, normalize } from 'node:path'
 
 export const parseTusHeaders = (headers: Headers) => {
   const result: WebDavResponseTusSupport = {}

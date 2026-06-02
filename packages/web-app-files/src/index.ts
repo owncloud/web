@@ -40,7 +40,7 @@ const appInfo: ApplicationInformation = {
 }
 
 export const navItems = (context: ComponentCustomProperties): AppNavigationItem[] => {
-  const currentPath = window.location.pathname
+  const currentPath = globalThis.location.pathname
   const isVault = currentPath.startsWith('/vault')
   const spacesStores = useSpacesStore()
   const userStore = useUserStore()

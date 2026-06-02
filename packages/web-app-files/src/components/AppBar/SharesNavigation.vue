@@ -73,7 +73,7 @@ const locationToPath = (location: RouteLocationRaw) => {
     ...location,
     ...(scope && {
       params: {
-        ...((location as { params?: Record<string, unknown> }).params || {}),
+        ...(location as { params?: Record<string, unknown> }).params,
         scope
       }
     })
