@@ -282,7 +282,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | strängéनेपालीName |
     await ui.userShouldSeeResources({
       world,
-      listType: resourcePage.searchList,
+      listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['strängéनेपालीName']
     })
