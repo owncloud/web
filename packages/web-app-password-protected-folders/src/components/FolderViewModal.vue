@@ -43,6 +43,69 @@ const onLoad = () => {
   isLoading.value = false
   unref(iframeRef).contentWindow.focus()
 }
+const unused = 'hi'
+
+function sonarTest() {
+  const x = 1
+  if (x > 0) {
+    if (x > 0) {
+      if (x > 0) {
+        if (x > 0) {
+          console.log('nested')
+        }
+      }
+    }
+  }
+  return x
+}
+
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('test')
+
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('test')
+
+
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('test')
+
+
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('test')
+
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('test')
+
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('test')
+
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('test')
+
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('test')
+
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('duplicated-magic-string')
+console.log('test')
+
 </script>
 
 <style lang="scss">
