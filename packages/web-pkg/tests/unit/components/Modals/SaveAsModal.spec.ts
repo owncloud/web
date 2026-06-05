@@ -42,6 +42,7 @@ describe('SaveAsModal', () => {
       mocks.$clientService.webdav.putFileContents.mockResolvedValue(mock<Resource>())
       ;(wrapper.vm as any).onLocationPick(
         mock<MessageEvent>({
+          origin: window.location.origin,
           data: {
             name: 'owncloud-embed:select',
             data: {
@@ -57,6 +58,26 @@ describe('SaveAsModal', () => {
       expect(modalStore.removeModal).toHaveBeenCalled()
       expect(window.open).toHaveBeenCalled()
     })
+    it('does nothing when the message originates from an untrusted origin', async () => {
+      const { wrapper, mocks } = getWrapper()
+
+      ;(wrapper.vm as any).onLocationPick(
+        mock<MessageEvent>({
+          origin: 'https://attacker.example.com',
+          data: {
+            name: 'owncloud-embed:select',
+            data: {
+              resources: [mock<Resource>({ storageId: '1', spaceId: '1' })],
+              fileName: 'test with new name.txt'
+            }
+          }
+        })
+      )
+
+      await nextTicks(4)
+      expect(mocks.$clientService.webdav.putFileContents).not.toHaveBeenCalled()
+      expect(window.open).not.toHaveBeenCalled()
+    })
     it('shows an error message when the file when message does equal "owncloud-embed:select and request fails"', async () => {
       console.error = vi.fn()
       const { wrapper, mocks } = getWrapper()
@@ -66,6 +87,7 @@ describe('SaveAsModal', () => {
       mocks.$clientService.webdav.putFileContents.mockRejectedValue(new Error(''))
       ;(wrapper.vm as any).onLocationPick(
         mock<MessageEvent>({
+          origin: window.location.origin,
           data: {
             name: 'owncloud-embed:select',
             data: {

@@ -18,6 +18,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   EDITOR_MODE_EDIT,
   Modal,
+  useEmbedMode,
   useGetMatchingSpace,
   useModals,
   useRouter,
@@ -44,6 +45,7 @@ const { removeModal } = useModals()
 const { getMatchingSpace } = useGetMatchingSpace()
 const themeStore = useThemeStore()
 const { getEditorRouteOpts } = useFileActions()
+const { verifyMessageOrigin } = useEmbedMode()
 const parentFolderRoute = router.resolve(parentFolderLink)
 
 const availableFileTypes = (app as ApplicationInformation).extensions.map((e) =>
@@ -65,7 +67,11 @@ const onLoad = () => {
   unref(iframeRef).contentWindow.focus()
 }
 
-const onFilePick = ({ data }: MessageEvent) => {
+const onFilePick = ({ data, origin }: MessageEvent) => {
+  if (!verifyMessageOrigin(origin)) {
+    return
+  }
+
   if (data.name !== 'owncloud-embed:file-pick') {
     return
   }
@@ -91,7 +97,11 @@ const onFilePick = ({ data }: MessageEvent) => {
   window.open(editorRouteUrl.href, '_blank')
 }
 
-const onCancel = ({ data }: MessageEvent) => {
+const onCancel = ({ data, origin }: MessageEvent) => {
+  if (!verifyMessageOrigin(origin)) {
+    return
+  }
+
   if (data.name !== 'owncloud-embed:cancel') {
     return
   }
