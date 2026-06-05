@@ -12,8 +12,6 @@ permissions:
 jobs:
   build:
     uses: ./.github/workflows/_build.yml
-    secrets:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   e2e:
     needs: build
