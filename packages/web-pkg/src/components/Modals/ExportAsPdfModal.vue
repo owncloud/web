@@ -18,6 +18,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   embedModeLocationPickMessageData,
   Modal,
+  useEmbedMode,
   useGetMatchingSpace,
   useMessages,
   useModals,
@@ -45,6 +46,7 @@ const { removeModal } = useModals()
 const { showMessage, showErrorMessage } = useMessages()
 const { getMatchingSpace } = useGetMatchingSpace()
 const { startWorker } = useExportAsPdfWorker()
+const { verifyMessageOrigin } = useEmbedMode()
 
 const parentFolderRoute = router.resolve(parentFolderLink)
 const iframeTitle = themeStore.currentTheme.common?.name
@@ -101,6 +103,10 @@ function onLocationPick({ data }: MessageEvent) {
 }
 
 function handleMessage(event: MessageEvent) {
+  if (!verifyMessageOrigin(event.origin)) {
+    return
+  }
+
   if (event.data.name === 'owncloud-embed:select') {
     onLocationPick(event)
     return
