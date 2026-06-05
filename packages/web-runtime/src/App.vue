@@ -113,6 +113,35 @@ watch(
     resourcesStore.setCurrentFolder(null)
   }
 )
+const x = "unused"
+console.log('test')
+
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
+console.log('test')
 
 watch(
   () => route,
