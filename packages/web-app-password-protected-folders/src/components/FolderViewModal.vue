@@ -66,6 +66,18 @@ const onLoad = () => {
 
   .oc-modal-body-actions {
     background-color: var(--oc-color-swatch-brand-default);
+
+    .oc-modal-body-actions-cancel {
+      color: var(--oc-color-swatch-brand-contrast);
+      outline-color: var(--oc-color-swatch-brand-contrast);
+
+      &:hover:not([disabled]),
+      &:focus:not([disabled]) {
+        background-color: var(--oc-color-swatch-brand-contrast);
+        color: var(--oc-color-swatch-brand-default);
+        border-color: var(--oc-color-swatch-brand-contrast);
+      }
+    }
   }
 }
 </style>
