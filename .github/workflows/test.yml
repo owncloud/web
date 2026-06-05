@@ -6,22 +6,28 @@ on:
       - master
       - stable-*
     tags:
-      - "*"
+      - '*'
   pull_request:
 
 jobs:
   check-flags:
     runs-on: ubuntu-latest
     outputs:
-      full-ci: ${{ steps.pr-title.outputs.full-ci }}
+      full-ci: ${{ steps.full-ci.outputs.full-ci }}
       ci-relevant: ${{ steps.paths.outputs.ci-relevant }}
+      workflows: ${{ steps.paths.outputs.workflows }}
       affected-suites: ${{ steps.affected-suites.outputs.suites }}
     steps:
-      - name: Check for full-ci flag in PR title
-        id: pr-title
+      - name: Resolve full-ci flag
+        id: full-ci
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
+          # non-PR events (push, tag) always run the full matrix
+          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+            echo "full-ci=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           if [[ "${PR_TITLE,,}" == *"full-ci"* ]]; then
             echo "full-ci=true" >> $GITHUB_OUTPUT
           else
@@ -63,6 +69,7 @@ jobs:
               - 'gettext.config.cjs'
               - 'vitest.config.ts'
               - 'cucumber.mjs'
+            workflows:
               - '.github/workflows/**'
 
       - name: Determine affected test suites
@@ -89,62 +96,9 @@ jobs:
       github.event_name != 'pull_request' ||
       needs.check-flags.outputs.full-ci == 'true' ||
       needs.check-flags.outputs.ci-relevant == 'true' ||
+      needs.check-flags.outputs.workflows == 'true' ||
       needs.check-flags.outputs.affected-suites != ''
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
-        with:
-          version: 10.33.3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 24.15.0
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Check licenses
-        run: pnpm licenses:check
-
-      - name: Save licenses
-        run: pnpm licenses:csv && pnpm licenses:save
-
-      - name: Check types
-        run: pnpm check:types
-
-      - name: Check format
-        run: pnpm check:format
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Run unit tests
-        run: pnpm test:unit --coverage
-
-      - name: SonarCloud Scan
-        if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/')
-        uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7.2.1
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PULL_REQUEST_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || '' }}
-          SONAR_PULL_REQUEST_BRANCH: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || '' }}
-          SONAR_PULL_REQUEST_KEY: ${{ github.event_name == 'pull_request' && github.event.pull_request.number || '' }}
-
-      - name: Build
-        run: make dist
-
-      - name: Store build artifact
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: web-dist
-          path: dist
-          if-no-files-found: error
+    uses: ./.github/workflows/_build.yml
 
   e2e:
     needs: [build, check-flags]
@@ -154,213 +108,12 @@ jobs:
       needs.build.result != 'cancelled' &&
       (github.event_name != 'pull_request' ||
        needs.check-flags.outputs.full-ci == 'true' ||
+       needs.check-flags.outputs.workflows == 'true' ||
        needs.check-flags.outputs.affected-suites != '')
-    runs-on: ubuntu-latest
-    name: e2e-tests-${{ matrix.suites.suite }}
-    strategy:
-      fail-fast: false
-      matrix:
-        suites:
-          - suite: part-1
-            test_suites: admin-settings,spaces,journeys
-          - suite: part-2
-            test_suites: navigation,user-settings,app-store,file-action
-          - suite: part-3
-            test_suites: shares,search,runtime
-            tika: true
-          - suite: app-provider
-            test_suites: app-provider
-            collaboration: true
-            requires_full_ci: true
-          - suite: ocm
-            test_suites: ocm
-            federated: true
-            requires_full_ci: true
-          - suite: oidc
-            feature_files: specs/oidc/refreshToken.spec.ts
-            oidc: true
-          - suite: oidc-iframe
-            feature_files: specs/oidc/iframeTokenRenewal.spec.ts
-            oidc_iframe: true
-          - suite: smoke
-            test_suites: smoke
-          - suite: mfa
-            test_suites: mfa
-            mfa: true
-          - suite: keycloak
-            feature_files: specs/admin-settings/spaces.spec.ts,specs/journeys/kindergarten.spec.ts, specs/keycloak/groups.spec.ts,specs/admin-settings/users.spec.ts:38,specs/admin-settings/users.spec.ts:75,specs/admin-settings/users.spec.ts:175,specs/admin-settings/users.spec.ts:210,specs/admin-settings/users.spec.ts:285
-            keycloak: true
-    env:
-      BASE_URL_OCIS: localhost:9200
-      HEADLESS: true
-      RETRY: 1
-      BROWSER: chromium
-      REPORT_TRACING: false
-      FAIL_ON_UNCAUGHT_CONSOLE_ERR: true
-      SKIP_A11Y_TESTS: true
-      TEST_TYPE: playwright
-      FEDERATED_BASE_URL_OCIS: localhost:10200
-    steps:
-      - name: Determine if suite should be skipped
-        id: skip-check
-        run: |
-          # always run on push/tag events or when full-ci is requested
-          if [[ "${{ github.event_name }}" != "pull_request" ]] || \
-             [[ "${{ needs.check-flags.outputs.full-ci }}" == "true" ]]; then
-            echo "skip=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          # suites that require full-ci are skipped unless full-ci flag is set (handled above)
-          if [[ "${{ matrix.suites.requires_full_ci }}" == "true" ]]; then
-            echo "skip=true" >> $GITHUB_OUTPUT
-            echo "::notice::Skipping suite '${{ matrix.suites.suite }}' - requires full-ci flag"
-            exit 0
-          fi
-
-          # check if suite is in the affected suites list
-          affected_suites="${{ needs.check-flags.outputs.affected-suites }}"
-          if [[ -z "$affected_suites" ]]; then
-            echo "skip=true" >> $GITHUB_OUTPUT
-            echo "::notice::Skipping suite '${{ matrix.suites.suite }}' - no affected packages changed"
-            exit 0
-          fi
-
-          # check each test_suite in the comma-separated list
-          test_suites="${{ matrix.suites.test_suites }}"
-          feature_files="${{ matrix.suites.feature_files }}"
-
-          if [[ -n "$test_suites" ]]; then
-            IFS=',' read -ra suites <<< "$test_suites"
-            for suite in "${suites[@]}"; do
-              if [[ ",$affected_suites," == *",$suite,"* ]]; then
-                echo "skip=false" >> $GITHUB_OUTPUT
-                exit 0
-              fi
-            done
-          fi
-
-          # for feature_files entries, extract the suite directory name
-          if [[ -n "$feature_files" ]]; then
-            suite_dir=$(echo "$feature_files" | sed 's|specs/||' | cut -d'/' -f1)
-            if [[ ",$affected_suites," == *",$suite_dir,"* ]]; then
-              echo "skip=false" >> $GITHUB_OUTPUT
-              exit 0
-            fi
-          fi
-
-          echo "skip=true" >> $GITHUB_OUTPUT
-          echo "::notice::Skipping suite '${{ matrix.suites.suite }}' - no affected packages changed"
-
-      - name: Checkout code
-        if: steps.skip-check.outputs.skip != 'true'
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
-
-      - name: Setup pnpm
-        if: steps.skip-check.outputs.skip != 'true'
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 #v5.0.0
-        with:
-          version: 10.33.3
-
-      - name: Setup Node.js
-        if: steps.skip-check.outputs.skip != 'true'
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 24.15.0
-          cache: pnpm
-
-      - name: Setup Go
-        if: steps.skip-check.outputs.skip != 'true'
-        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
-        with:
-          go-version: 1.26.3
-          cache: true
-
-      - name: Install dependencies
-        if: steps.skip-check.outputs.skip != 'true'
-        run: pnpm install
-
-      - name: Download build artifact
-        if: steps.skip-check.outputs.skip != 'true'
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: web-dist
-          path: dist
-
-      - name: Setup services
-        if: steps.skip-check.outputs.skip != 'true'
-        run: |
-          flags=""
-          if [[ "${{ matrix.suites.tika }}" == "true" ]]; then
-            flags="$flags --tika"
-          fi
-          if [[ "${{ matrix.suites.federated }}" == "true" ]]; then
-            flags="$flags --federation"
-          fi
-          if [[ "${{ matrix.suites.collaboration }}" == "true" ]]; then
-            flags="$flags --collaboration"
-          fi
-          if [[ "${{ matrix.suites.oidc }}" == "true" ]]; then
-            flags="$flags --oidc"
-          fi
-          if [[ "${{ matrix.suites.oidc_iframe }}" == "true" ]]; then
-            flags="$flags --oidc-iframe"
-          fi
-          if [[ "${{ matrix.suites.keycloak }}" == "true" ]]; then
-            flags="$flags --keycloak"
-          fi
-          if [[ "${{ matrix.suites.mfa }}" == "true" ]]; then
-            flags="$flags --mfa"
-          fi
-          cd "${{ github.workspace }}/tests/actions"
-          bash setup-services.sh $flags
-
-      - name: Cache Playwright browsers
-        if: steps.skip-check.outputs.skip != 'true'
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-
-      - name: Install Playwright browsers
-        if: steps.skip-check.outputs.skip != 'true'
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Run E2E tests
-        if: steps.skip-check.outputs.skip != 'true'
-        env:
-          FEATURE_FILES: ${{ matrix.suites.feature_files || '' }}
-          TEST_SUITES: ${{ matrix.suites.test_suites || '' }}
-          KEYCLOAK: ${{ matrix.suites.keycloak || '' }}
-          MFA: ${{ matrix.suites.mfa || '' }}
-          RETRY: ${{ matrix.suites.mfa && 0 || 1 }}
-          KEYCLOAK_HOST: ${{ matrix.suites.keycloak && 'localhost:8443' || '' }}
-        run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright
-
-      - name: Dump oCIS logs on failure
-        if: failure()
-        run: |
-          echo "=== oCIS LOCAL: relevant log lines ==="
-          grep -i "ocm\|provider\|invite\|federation\|error\|ERR\|permissions\|drives.*items\|Federated" /tmp/ocis-ocis.log 2>/dev/null | tail -300 || echo "(no log file)"
-          echo "=== oCIS FEDERATED: relevant log lines ==="
-          grep -i "ocm\|provider\|invite\|federation\|error\|ERR\|permissions\|drives.*items\|Federated" /tmp/ocis-ocis-federated.log 2>/dev/null | tail -300 || echo "(no log file)"
-
-      - name: Upload tracing result
-        if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: playwright-traces-${{ strategy.job-index }}-${{ github.run_attempt }}
-          path: ${{ github.workspace }}/reports/e2e
-          retention-days: 7
-
-      - name: Upload a11y result
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: playwright-a11y-result-${{ strategy.job-index }}-${{ github.run_attempt }}
-          path: ${{ github.workspace }}/reports/e2e/a11y-report.json
-          retention-days: 7
+    uses: ./.github/workflows/_e2e.yml
+    with:
+      full-ci: ${{ needs.check-flags.outputs.full-ci == 'true' || needs.check-flags.outputs.workflows == 'true' }}
+      affected-suites: ${{ needs.check-flags.outputs.affected-suites }}
 
   check-tests-passed:
     needs: [build, e2e]
