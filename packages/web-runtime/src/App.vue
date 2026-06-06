@@ -36,6 +36,142 @@ import { MaybeElement, useElementSize } from '@vueuse/core'
 import { useMaintenanceMode } from './composables/maintenanceMode'
 import { useGettext } from 'vue3-gettext'
 
+const x = 'unused'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+var y = 'unsued'
+t = 'woooot'
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
+console.log('unused')
 const resourcesStore = useResourcesStore()
 const themeStore = useThemeStore()
 const { currentTheme } = storeToRefs(themeStore)
