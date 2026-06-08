@@ -25,7 +25,8 @@ import {
   useMessages,
   useModals,
   useRouter,
-  useThemeStore
+  useThemeStore,
+  useEmbedMode
 } from '../../composables'
 import { LocationQuery, RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
@@ -52,6 +53,7 @@ const { removeModal } = useModals()
 const { showMessage, showErrorMessage } = useMessages()
 const { getMatchingSpace } = useGetMatchingSpace()
 const { getEditorRouteOpts } = useFileActions()
+const { verifyMessageOrigin } = useEmbedMode()
 
 const parentFolderRoute = router.resolve(parentFolderLink)
 const iframeTitle = themeStore.currentTheme.common?.name
@@ -70,7 +72,11 @@ const onLoad = () => {
   unref(iframeRef).contentWindow.focus()
 }
 
-const onLocationPick = async ({ data }: MessageEvent) => {
+const onLocationPick = async ({ data, origin }: MessageEvent) => {
+  if (!verifyMessageOrigin(origin)) {
+    return
+  }
+
   if (data.name !== 'owncloud-embed:select') {
     return
   }
@@ -153,7 +159,11 @@ const openFile = ({
   window.open(editorRouteUrl.href, '_blank')
 }
 
-const onCancel = ({ data }: MessageEvent) => {
+const onCancel = ({ data, origin }: MessageEvent) => {
+  if (!verifyMessageOrigin(origin)) {
+    return
+  }
+
   if (data.name !== 'owncloud-embed:cancel') {
     return
   }
