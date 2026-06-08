@@ -1,0 +1,226 @@
+name: E2E
+
+on:
+  workflow_call:
+    inputs:
+      full-ci:
+        description: 'Run all suites regardless of changed paths'
+        type: boolean
+        required: false
+        default: true
+      affected-suites:
+        description: 'Comma-separated list of suites affected by changed paths'
+        type: string
+        required: false
+        default: ''
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    name: e2e-tests-${{ matrix.suites.suite }}
+    strategy:
+      fail-fast: false
+      matrix:
+        suites:
+          - suite: part-1
+            test_suites: admin-settings,spaces,journeys
+          - suite: part-2
+            test_suites: navigation,user-settings,app-store,file-action
+          - suite: part-3
+            test_suites: shares,search,runtime
+            tika: true
+          - suite: app-provider
+            test_suites: app-provider
+            collaboration: true
+            requires_full_ci: true
+          - suite: ocm
+            test_suites: ocm
+            federated: true
+            requires_full_ci: true
+          - suite: oidc
+            feature_files: specs/oidc/refreshToken.spec.ts
+            oidc: true
+          - suite: oidc-iframe
+            feature_files: specs/oidc/iframeTokenRenewal.spec.ts
+            oidc_iframe: true
+          - suite: smoke
+            test_suites: smoke
+          - suite: mfa
+            test_suites: mfa
+            mfa: true
+          - suite: keycloak
+            feature_files: specs/admin-settings/spaces.spec.ts,specs/journeys/kindergarten.spec.ts,specs/keycloak/groups.spec.ts,specs/admin-settings/users.spec.ts:38,specs/admin-settings/users.spec.ts:75,specs/admin-settings/users.spec.ts:175,specs/admin-settings/users.spec.ts:210,specs/admin-settings/users.spec.ts:285
+            keycloak: true
+    env:
+      BASE_URL_OCIS: localhost:9200
+      HEADLESS: true
+      RETRY: 1
+      BROWSER: chromium
+      REPORT_TRACING: false
+      FAIL_ON_UNCAUGHT_CONSOLE_ERR: true
+      SKIP_A11Y_TESTS: true
+      TEST_TYPE: playwright
+      FEDERATED_BASE_URL_OCIS: localhost:10200
+    steps:
+      - name: Determine if suite should be skipped
+        id: skip-check
+        env:
+          FULL_CI: ${{ inputs.full-ci }}
+          AFFECTED_SUITES: ${{ inputs.affected-suites }}
+          REQUIRES_FULL_CI: ${{ matrix.suites.requires_full_ci }}
+          TEST_SUITES: ${{ matrix.suites.test_suites }}
+          FEATURE_FILES: ${{ matrix.suites.feature_files }}
+          SUITE_NAME: ${{ matrix.suites.suite }}
+        run: |
+          # full-ci mode: run everything
+          if [[ "$FULL_CI" == "true" ]]; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # suites that require full-ci are skipped unless full-ci is set (handled above)
+          if [[ "$REQUIRES_FULL_CI" == "true" ]]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "::notice::Skipping suite '$SUITE_NAME' - requires full-ci flag"
+            exit 0
+          fi
+
+          # nothing affected -> skip
+          if [[ -z "$AFFECTED_SUITES" ]]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "::notice::Skipping suite '$SUITE_NAME' - no affected packages changed"
+            exit 0
+          fi
+
+          # check each test_suite in the comma-separated list
+          if [[ -n "$TEST_SUITES" ]]; then
+            IFS=',' read -ra suites <<< "$TEST_SUITES"
+            for suite in "${suites[@]}"; do
+              if [[ ",$AFFECTED_SUITES," == *",$suite,"* ]]; then
+                echo "skip=false" >> $GITHUB_OUTPUT
+                exit 0
+              fi
+            done
+          fi
+
+          # for feature_files entries, extract the suite directory name
+          if [[ -n "$FEATURE_FILES" ]]; then
+            suite_dir=$(echo "$FEATURE_FILES" | sed 's|specs/||' | cut -d'/' -f1)
+            if [[ ",$AFFECTED_SUITES," == *",$suite_dir,"* ]]; then
+              echo "skip=false" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+          fi
+
+          echo "skip=true" >> $GITHUB_OUTPUT
+          echo "::notice::Skipping suite '$SUITE_NAME' - no affected packages changed"
+
+      - name: Checkout code
+        if: steps.skip-check.outputs.skip != 'true'
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        if: steps.skip-check.outputs.skip != 'true'
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+        with:
+          version: 10.33.3
+
+      - name: Setup Node.js
+        if: steps.skip-check.outputs.skip != 'true'
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 24.15.0
+          cache: pnpm
+
+      - name: Setup Go
+        if: steps.skip-check.outputs.skip != 'true'
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
+        with:
+          go-version: 1.26.3
+          cache: true
+
+      - name: Install dependencies
+        if: steps.skip-check.outputs.skip != 'true'
+        run: pnpm install
+
+      - name: Download build artifact
+        if: steps.skip-check.outputs.skip != 'true'
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: web-dist
+          path: dist
+
+      - name: Setup services
+        if: steps.skip-check.outputs.skip != 'true'
+        run: |
+          flags=""
+          if [[ "${{ matrix.suites.tika }}" == "true" ]]; then
+            flags="$flags --tika"
+          fi
+          if [[ "${{ matrix.suites.federated }}" == "true" ]]; then
+            flags="$flags --federation"
+          fi
+          if [[ "${{ matrix.suites.collaboration }}" == "true" ]]; then
+            flags="$flags --collaboration"
+          fi
+          if [[ "${{ matrix.suites.oidc }}" == "true" ]]; then
+            flags="$flags --oidc"
+          fi
+          if [[ "${{ matrix.suites.oidc_iframe }}" == "true" ]]; then
+            flags="$flags --oidc-iframe"
+          fi
+          if [[ "${{ matrix.suites.keycloak }}" == "true" ]]; then
+            flags="$flags --keycloak"
+          fi
+          if [[ "${{ matrix.suites.mfa }}" == "true" ]]; then
+            flags="$flags --mfa"
+          fi
+          cd "${{ github.workspace }}/tests/actions"
+          bash setup-services.sh $flags
+
+      - name: Cache Playwright browsers
+        if: steps.skip-check.outputs.skip != 'true'
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright browsers
+        if: steps.skip-check.outputs.skip != 'true'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        if: steps.skip-check.outputs.skip != 'true'
+        env:
+          FEATURE_FILES: ${{ matrix.suites.feature_files || '' }}
+          TEST_SUITES: ${{ matrix.suites.test_suites || '' }}
+          KEYCLOAK: ${{ matrix.suites.keycloak || '' }}
+          MFA: ${{ matrix.suites.mfa || '' }}
+          RETRY: ${{ matrix.suites.mfa && 0 || 1 }}
+          KEYCLOAK_HOST: ${{ matrix.suites.keycloak && 'localhost:8443' || '' }}
+        run: cd ${{ github.workspace }}/tests/e2e && bash run-e2e.sh --type playwright
+
+      - name: Dump oCIS logs on failure
+        if: failure()
+        run: |
+          echo "=== oCIS LOCAL: relevant log lines ==="
+          grep -i "ocm\|provider\|invite\|federation\|error\|ERR\|permissions\|drives.*items\|Federated" /tmp/ocis-ocis.log 2>/dev/null | tail -300 || echo "(no log file)"
+          echo "=== oCIS FEDERATED: relevant log lines ==="
+          grep -i "ocm\|provider\|invite\|federation\|error\|ERR\|permissions\|drives.*items\|Federated" /tmp/ocis-ocis-federated.log 2>/dev/null | tail -300 || echo "(no log file)"
+
+      - name: Upload tracing result
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-traces-${{ strategy.job-index }}-${{ github.run_attempt }}
+          path: ${{ github.workspace }}/reports/e2e
+          retention-days: 7
+
+      - name: Upload a11y result
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-a11y-result-${{ strategy.job-index }}-${{ github.run_attempt }}
+          path: ${{ github.workspace }}/reports/e2e/a11y-report.json
+          retention-days: 7

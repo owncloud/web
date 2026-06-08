@@ -1,0 +1,20 @@
+name: Nightly
+
+on:
+  schedule:
+    # Run every day at 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: ./.github/workflows/_build.yml
+
+  e2e:
+    needs: build
+    uses: ./.github/workflows/_e2e.yml
+    with:
+      full-ci: true
