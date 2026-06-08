@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { z } from 'zod'
-import { applyCustomProp } from '@ownclouders/design-system/helpers'
+import { applyCustomProp, removeCustomProp } from '@ownclouders/design-system/helpers'
 import { ShareRole } from '@ownclouders/web-client'
 import { useVault } from '../vault'
 
@@ -153,6 +153,7 @@ export const useThemeStore = defineStore('theme', () => {
   })
 
   const setAndApplyTheme = (theme: WebThemeType, updateStorage = true) => {
+    const previousTheme = unref(currentTheme)
     currentTheme.value = theme
     if (updateStorage) {
       currentLocalStorageThemeName.value = unref(currentTheme).name
@@ -165,6 +166,14 @@ export const useThemeStore = defineStore('theme', () => {
       { name: 'sizes', prefix: 'size' },
       { name: 'spacing', prefix: 'spacing' }
     ] as const
+
+    if (previousTheme) {
+      customizableDesignTokens.forEach((token) => {
+        for (const param in previousTheme.designTokens[token.name]) {
+          removeCustomProp(`${token.prefix}-${param}`)
+        }
+      })
+    }
 
     applyCustomProp('font-family', unref(currentTheme).designTokens.fontFamily)
 
