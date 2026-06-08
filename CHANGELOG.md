@@ -8,14 +8,29 @@ ownCloud admins and users.
 Summary
 -------
 
+* Security - Validate postMessage origin in embed mode modals: [#13844](https://github.com/owncloud/web/issues/13844)
 * Bugfix - Add open button to PDF viewer on iOS/iPadOS: [#13797](https://github.com/owncloud/web/issues/13797)
 * Bugfix - Add explicit size to space header image: [#13822](https://github.com/owncloud/web/issues/13822)
 * Bugfix - Apply vault theme after OIDC callback: [#13826](https://github.com/owncloud/web/pull/13826)
 * Bugfix - Gate MFA expiry dialog on vault capability: [#13827](https://github.com/owncloud/web/pull/13827)
 * Bugfix - Logo not rendering in Firefox: [#13834](https://github.com/owncloud/web/pull/13834)
+* Bugfix - Fix theme switching issues: [#13843](https://github.com/owncloud/web/pull/13843)
 
 Details
 -------
+
+* Security - Validate postMessage origin in embed mode modals: [#13844](https://github.com/owncloud/web/issues/13844)
+
+   We've fixed a cross-site request forgery (CSRF) vulnerability where the embed
+   mode modals (Save As, Export As PDF and the file picker) processed incoming
+   `postMessage` events without verifying the sender's origin. A malicious page
+   holding a reference to an authenticated ownCloud window could forge
+   `owncloud-embed:select`, `owncloud-embed:file-pick` or `owncloud-embed:cancel`
+   messages and trigger authenticated file writes in the victim's space. Incoming
+   messages are now validated against an allowlist consisting of the application's
+   own origin and the optionally configured `embed.messagesOrigin`.
+
+   https://github.com/owncloud/web/issues/13844
 
 * Bugfix - Add open button to PDF viewer on iOS/iPadOS: [#13797](https://github.com/owncloud/web/issues/13797)
 
@@ -63,6 +78,19 @@ Details
    image as 0×0. Chrome infers the dimensions from `viewBox` alone.
 
    https://github.com/owncloud/web/pull/13834
+
+* Bugfix - Fix theme switching issues: [#13843](https://github.com/owncloud/web/pull/13843)
+
+   When switching between themes, colors could get stuck or become unreadable until
+   a page refresh. Empty string values in theme tokens were overriding stylesheet
+   defaults with nothing, making elements invisible. Additionally, tokens from the
+   previous theme were not cleared before applying the new theme, causing stale
+   values to persist. We now remove previous theme properties before applying the
+   new theme and treat empty token values as unset. We also fixed the cancel button
+   in the password protected folder modal being invisible because its color matched
+   the dark action bar background.
+
+   https://github.com/owncloud/web/pull/13843
 
 Changelog for ownCloud Web [12.4.0] (2026-05-22)
 =======================================
