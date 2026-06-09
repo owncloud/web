@@ -1,6 +1,6 @@
 import { loadDesignSystem, pages, loadTranslations, supportedLanguages } from './defaults'
 import { router } from './router'
-import { PortalTarget } from '@ownclouders/web-pkg'
+import { PortalTarget, useVault } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
@@ -53,6 +53,7 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
   const isSilentRedirect = isSilentRedirectRoute()
 
   const pinia = createPinia()
+  const { isInVault } = useVault()
   const app = createApp(isSilentRedirect ? pages.tokenRenewal : pages.success)
   app.use(pinia)
 
@@ -86,6 +87,9 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
   })
 
   const clientService = announceClientService({ app, configStore, authStore })
+
+  configStore.setIsInVault(isInVault)
+  clientService.reinitializeOcsClient(isInVault)
   announceAuthService({
     app,
     configStore,
@@ -233,10 +237,9 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
         await clientService.graphAuthenticated.permissions.listRoleDefinitions()
       sharesStore.setGraphRoles(graphRoleDefinitions)
 
-      const isInVault = window.location.pathname.startsWith('/vault')
-
       configStore.setIsInVault(isInVault)
       clientService.reinitializeGraphClient(isInVault)
+      clientService.reinitializeOcsClient(isInVault)
 
       // Load spaces to make them available across the application
       try {
