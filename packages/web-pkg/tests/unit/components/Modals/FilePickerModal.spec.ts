@@ -31,6 +31,7 @@ describe('FilePickerModal', () => {
       const modalStore = useModals()
       ;(wrapper.vm as any).onFilePick(
         mock<MessageEvent>({
+          origin: window.location.origin,
           data: {
             name: 'owncloud-embed:file-pick',
             data: {
@@ -42,6 +43,22 @@ describe('FilePickerModal', () => {
       )
       expect(modalStore.removeModal).toHaveBeenCalled()
       expect(window.open).toHaveBeenCalled()
+    })
+    it('does nothing when the message originates from an untrusted origin', () => {
+      const { wrapper } = getWrapper()
+      ;(wrapper.vm as any).onFilePick(
+        mock<MessageEvent>({
+          origin: 'https://attacker.example.com',
+          data: {
+            name: 'owncloud-embed:file-pick',
+            data: {
+              resource: mock<Resource>({ spaceId: '1' }),
+              originRoute: mock<RouteLocation>()
+            }
+          }
+        })
+      )
+      expect(window.open).not.toHaveBeenCalled()
     })
   })
 })

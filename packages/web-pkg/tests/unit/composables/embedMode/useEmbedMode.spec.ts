@@ -201,6 +201,52 @@ describe('useEmbedMode', () => {
       )
     })
   })
+
+  describe('verifyMessageOrigin', () => {
+    it('returns true for the application origin', () => {
+      getComposableWrapper(
+        () => {
+          const { verifyMessageOrigin } = useEmbedMode()
+
+          expect(verifyMessageOrigin(window.location.origin)).toStrictEqual(true)
+        },
+        { mocks: defaultComponentMocks() }
+      )
+    })
+
+    it('returns false for a foreign origin when messagesOrigin is not set', () => {
+      getComposableWrapper(
+        () => {
+          const { verifyMessageOrigin } = useEmbedMode()
+
+          expect(verifyMessageOrigin('https://attacker.example.com')).toStrictEqual(false)
+        },
+        { mocks: defaultComponentMocks() }
+      )
+    })
+
+    it('returns true for the configured messagesOrigin', () => {
+      getComposableWrapper(
+        () => {
+          const { verifyMessageOrigin } = useEmbedMode()
+
+          expect(verifyMessageOrigin('https://trusted.example.com')).toStrictEqual(true)
+        },
+        getWrapperOptions({ messagesOrigin: 'https://trusted.example.com' })
+      )
+    })
+
+    it('returns false for a foreign origin even when messagesOrigin is set', () => {
+      getComposableWrapper(
+        () => {
+          const { verifyMessageOrigin } = useEmbedMode()
+
+          expect(verifyMessageOrigin('https://attacker.example.com')).toStrictEqual(false)
+        },
+        getWrapperOptions({ messagesOrigin: 'https://trusted.example.com' })
+      )
+    })
+  })
 })
 
 const getWrapperOptions = (embed = {}) => ({
