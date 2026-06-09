@@ -3,7 +3,88 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v12.3.3...master
+[unreleased]: https://github.com/owncloud/web/compare/v12.4.0...master
+
+Summary
+-------
+
+* Bugfix - Add explicit size to space header image: [#13822](https://github.com/owncloud/web/issues/13822)
+* Bugfix - Apply vault theme after OIDC callback: [#13826](https://github.com/owncloud/web/pull/13826)
+* Bugfix - Gate MFA expiry dialog on vault capability: [#13827](https://github.com/owncloud/web/pull/13827)
+* Bugfix - Logo not rendering in Firefox: [#13834](https://github.com/owncloud/web/pull/13834)
+* Bugfix - Fix theme switching issues: [#13843](https://github.com/owncloud/web/pull/13843)
+* Bugfix - Pass vault parameter to capabilities endpoint: [#13867](https://github.com/owncloud/web/pull/13867)
+
+Details
+-------
+
+* Bugfix - Add explicit size to space header image: [#13822](https://github.com/owncloud/web/issues/13822)
+
+   The space header image did not have explicit width and height causing the image
+   to overflow its container. Adding explicit width and height with values of 100%
+   makes sure that the image stays within the boundaries of the container.
+
+   https://github.com/owncloud/web/issues/13822
+   https://github.com/owncloud/web/pull/13835
+
+* Bugfix - Apply vault theme after OIDC callback: [#13826](https://github.com/owncloud/web/pull/13826)
+
+   When opening the vault for the first time, the user is redirected to an external
+   IdP for 2FA. Upon returning, the OIDC callback URL contains no vault context,
+   causing the regular theme to be applied instead of the vault theme. We now also
+   check the stored post-login redirect URL during the OIDC callback to correctly
+   detect vault mode.
+
+   https://github.com/owncloud/web/pull/13826
+
+* Bugfix - Gate MFA expiry dialog on vault capability: [#13827](https://github.com/owncloud/web/pull/13827)
+
+   We've fixed the MFA session expiry warning to only appear when the vault
+   capability is enabled. Previously, the expiry worker and broadcast channel were
+   initialized unconditionally, causing the dialog to fire even when vault mode was
+   off. They are now lazily created only when vault is enabled and a session
+   duration is configured.
+
+   https://github.com/owncloud/web/pull/13827
+
+* Bugfix - Logo not rendering in Firefox: [#13834](https://github.com/owncloud/web/pull/13834)
+
+   The topbar logo was not visible in Firefox because the SVG files lacked explicit
+   `width` and `height` attributes. Firefox requires these attributes to establish
+   intrinsic dimensions when loading SVGs via `<img>`; without them it renders the
+   image as 0×0. Chrome infers the dimensions from `viewBox` alone.
+
+   https://github.com/owncloud/web/pull/13834
+
+* Bugfix - Fix theme switching issues: [#13843](https://github.com/owncloud/web/pull/13843)
+
+   When switching between themes, colors could get stuck or become unreadable until
+   a page refresh. Empty string values in theme tokens were overriding stylesheet
+   defaults with nothing, making elements invisible. Additionally, tokens from the
+   previous theme were not cleared before applying the new theme, causing stale
+   values to persist. We now remove previous theme properties before applying the
+   new theme and treat empty token values as unset. We also fixed the cancel button
+   in the password protected folder modal being invisible because its color matched
+   the dark action bar background.
+
+   https://github.com/owncloud/web/pull/13843
+
+* Bugfix - Pass vault parameter to capabilities endpoint: [#13867](https://github.com/owncloud/web/pull/13867)
+
+   We've fixed the capabilities request to include the `vault=true` query parameter
+   when the application is in vault mode. This ensures the backend returns
+   vault-specific capabilities. The OCS client is now reinitialized with the
+   correct base URL when vault mode is detected, following the same pattern as the
+   graph client.
+
+   https://github.com/owncloud/web/pull/13867
+
+Changelog for ownCloud Web [12.4.0] (2026-05-22)
+=======================================
+The following sections list the changes in ownCloud web 12.4.0 relevant to
+ownCloud admins and users.
+
+[12.4.0]: https://github.com/owncloud/web/compare/v12.3.3...v12.4.0
 
 Summary
 -------
@@ -18,6 +99,12 @@ Summary
 * Enhancement - Use spaceId: [#13577](https://github.com/owncloud/web/pull/13577)
 * Enhancement - Add theme mode: [#13631](https://github.com/owncloud/web/pull/13631)
 * Enhancement - Support log and conf files in text editor: [#13632](https://github.com/owncloud/web/issues/13632)
+* Enhancement - Show correct modal for saveAs and open actions: [#13759](https://github.com/owncloud/web/pull/13759)
+* Enhancement - Add vault search separation: [#13769](https://github.com/owncloud/web/pull/13769)
+* Enhancement - Add new theme colors: [#13795](https://github.com/owncloud/web/pull/13795)
+* Enhancement - Check vault permission: [#13802](https://github.com/owncloud/web/pull/13802)
+* Enhancement - MFA session expiry warning: [#13803](https://github.com/owncloud/web/pull/13803)
+* Enhancement - Vault-aware breadcrumbs: [#13803](https://github.com/owncloud/web/pull/13803)
 
 Details
 -------
@@ -105,6 +192,55 @@ Details
 
    https://github.com/owncloud/web/issues/13632
    https://github.com/owncloud/web/pull/13650
+
+* Enhancement - Show correct modal for saveAs and open actions: [#13759](https://github.com/owncloud/web/pull/13759)
+
+   We've added logic to show the correct modal when the user clicks on "Save As" or
+   "Open" from the 3 dots context menu.
+
+   https://github.com/owncloud/web/pull/13759
+
+* Enhancement - Add vault search separation: [#13769](https://github.com/owncloud/web/pull/13769)
+
+   We've implemented vault search separation by adding the `vault:true` query token
+   to the `<oc:pattern>` search payload. The token is now included in both "All
+   files" and "Current folder" search requests, ensuring vault content is correctly
+   scoped in all search scenarios.
+
+   https://github.com/owncloud/web/pull/13769
+
+* Enhancement - Add new theme colors: [#13795](https://github.com/owncloud/web/pull/13795)
+
+   We've added new theme colors. These new colors are:
+
+   - background-sidebar - search-input-text-default - search-input-text-muted -
+   search-input-border - search-input-bg
+
+   https://github.com/owncloud/web/pull/13795
+
+* Enhancement - Check vault permission: [#13802](https://github.com/owncloud/web/pull/13802)
+
+   When the user has the `VaultMode.ReadWriteEnabled.own` permission, the mode
+   switch will be shown in the topbar.
+
+   https://github.com/owncloud/web/pull/13802
+
+* Enhancement - MFA session expiry warning: [#13803](https://github.com/owncloud/web/pull/13803)
+
+   We've added a warning modal that notifies users before their multi-factor
+   authentication session expires. Users can extend the session via silent OIDC
+   renewal or dismiss the warning. The modal state is synchronized across multiple
+   browser tabs using a BroadcastChannel.
+
+   https://github.com/owncloud/web/pull/13803
+
+* Enhancement - Vault-aware breadcrumbs: [#13803](https://github.com/owncloud/web/pull/13803)
+
+   We've introduced vault-aware breadcrumbs that show Vault or Drive as the root
+   item depending on the active scope. Users without vault access see the original
+   labels instead.
+
+   https://github.com/owncloud/web/pull/13803
 
 Changelog for ownCloud Web [12.3.3] (2026-04-27)
 =======================================
