@@ -56,7 +56,7 @@ export class ClientService {
     this.authStore = options.authStore
 
     this.initGraphClient(this.configStore.isInVault)
-    this.initOcsClient()
+    this.initOcsClient(this.configStore.isInVault)
     this.initWebDavClient()
 
     this.httpAuthenticatedClient = new HttpClient({
@@ -90,6 +90,10 @@ export class ClientService {
 
   public reinitializeGraphClient(isInVault: boolean) {
     this.initGraphClient(isInVault)
+  }
+
+  public reinitializeOcsClient(isInVault: boolean) {
+    this.initOcsClient(isInVault)
   }
 
   public get sseAuthenticated(): EventSource {
@@ -131,7 +135,7 @@ export class ClientService {
     )
   }
 
-  private initOcsClient() {
+  private initOcsClient(isInVault: boolean) {
     const axiosClient = axios.create({ headers: this.staticHeaders })
     axiosClient.interceptors.request.use((config) => {
       Object.assign(config.headers, this.getDynamicHeaders())
@@ -143,7 +147,10 @@ export class ClientService {
       this.#handleAxiosError.bind(this)
     )
 
-    this.ocsClient = ocs(this.configStore.serverUrl, axiosClient)
+    const baseUrl = isInVault
+      ? `${this.configStore.serverUrl}?vault=true`
+      : this.configStore.serverUrl
+    this.ocsClient = ocs(baseUrl, axiosClient)
   }
 
   private initWebDavClient() {
