@@ -212,6 +212,11 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       const passwordPolicyService = app.config.globalProperties.passwordPolicyService
       passwordPolicyService.initialize(capabilityStore)
 
+      const isInVault = window.location.pathname.startsWith('/vault')
+
+      configStore.setIsInVault(isInVault)
+      clientService.reinitializeGraphClient(isInVault)
+
       // Register SSE event listeners
       if (capabilityStore.supportSSE) {
         registerSSEEventListeners({
@@ -232,11 +237,6 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       const graphRoleDefinitions =
         await clientService.graphAuthenticated.permissions.listRoleDefinitions()
       sharesStore.setGraphRoles(graphRoleDefinitions)
-
-      const isInVault = window.location.pathname.startsWith('/vault')
-
-      configStore.setIsInVault(isInVault)
-      clientService.reinitializeGraphClient(isInVault)
 
       // Load spaces to make them available across the application
       try {

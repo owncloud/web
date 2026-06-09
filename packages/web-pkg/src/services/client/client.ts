@@ -94,7 +94,9 @@ export class ClientService {
 
   public get sseAuthenticated(): EventSource {
     return sse(
-      this.configStore.serverUrl,
+      this.configStore.isInVault
+        ? `${this.configStore.serverUrl}vault`
+        : this.configStore.serverUrl,
       createFetchOptions({ accessToken: this.authStore.accessToken }, this.currentLanguage)
     )
   }
