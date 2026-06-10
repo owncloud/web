@@ -15,6 +15,7 @@ Summary
 * Bugfix - Gate MFA expiry dialog on vault capability: [#13827](https://github.com/owncloud/web/pull/13827)
 * Bugfix - Logo not rendering in Firefox: [#13834](https://github.com/owncloud/web/pull/13834)
 * Bugfix - Fix theme switching issues: [#13843](https://github.com/owncloud/web/pull/13843)
+* Bugfix - Pass vault parameter to capabilities endpoint: [#13867](https://github.com/owncloud/web/pull/13867)
 
 Details
 -------
@@ -91,6 +92,16 @@ Details
    the dark action bar background.
 
    https://github.com/owncloud/web/pull/13843
+
+* Bugfix - Pass vault parameter to capabilities endpoint: [#13867](https://github.com/owncloud/web/pull/13867)
+
+   We've fixed the capabilities request to include the `vault=true` query parameter
+   when the application is in vault mode. This ensures the backend returns
+   vault-specific capabilities. The OCS client is now reinitialized with the
+   correct base URL when vault mode is detected, following the same pattern as the
+   graph client.
+
+   https://github.com/owncloud/web/pull/13867
 
 Changelog for ownCloud Web [12.4.0] (2026-05-22)
 =======================================
