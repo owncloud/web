@@ -1,6 +1,7 @@
 .oc-login {
   @extend .oc-background-cover;
 
+  background-image: var(--oc-login-background-image);
   position: relative;
 
   &-logo {

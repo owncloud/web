@@ -1,7 +1,7 @@
 <template>
   <div
     class="oc-login oc-height-viewport"
-    :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
+    :style="{ '--oc-login-background-image': 'url(' + backgroundImg + ')' }"
   >
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <router-view />
