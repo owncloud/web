@@ -11,6 +11,7 @@
     <inline-svg
       :src="nameWithFillType"
       :transform-source="transformSvgElement"
+      :role="accessibleLabel !== '' ? 'img' : null"
       :tabindex="accessibleLabel ? '0' : null"
       :aria-hidden="accessibleLabel === '' ? 'true' : null"
       :aria-labelledby="accessibleLabel === '' ? null : svgTitleId"

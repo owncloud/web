@@ -71,6 +71,9 @@
           class="oc-mr-xs"
           :name="testedRule.verified ? 'checkbox-circle' : 'close-circle'"
           :variation="testedRule.verified ? 'success' : 'danger'"
+          :accessible-label="
+            testedRule.verified ? $gettext('Fulfilled') : $gettext('Not fulfilled')
+          "
         />
         <span
           :class="[
