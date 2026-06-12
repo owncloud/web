@@ -84,7 +84,8 @@ import {
   createFileRouteOptions,
   formatDateFromISO,
   formatRelativeDateFromISO,
-  useClientService
+  useClientService,
+  useVault
 } from '@ownclouders/web-pkg'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
@@ -106,8 +107,24 @@ export default {
     const clientService = useClientService()
     const language = useGettext()
 
-    const notifications = ref<Notification[]>([])
+    const rawNotifications = ref<Notification[]>([])
     const notificationsInterval = ref()
+    const { isInVault } = useVault()
+
+    const isVaultNotification = (notification: Notification) =>
+      notification.object_id?.split('$')[0] === capabilityStore.vaultStorageProvider
+
+    const notifications = computed(() => {
+      if (!capabilityStore.vaultEnabled) {
+        return unref(rawNotifications)
+      }
+      if (isInVault) {
+        return unref(rawNotifications).filter(isVaultNotification)
+      }
+      return unref(rawNotifications).filter(
+        (notification: Notification) => !isVaultNotification(notification)
+      )
+    })
 
     const loading = computed(() => {
       return fetchNotificationsTask.isRunning || deleteNotificationsTask.isRunning
@@ -193,8 +210,9 @@ export default {
         const {
           ocs: { data = [] }
         } = response.data
-        notifications.value = data?.sort((a, b) => b.datetime.localeCompare(a.datetime)) || []
-        unref(notifications).forEach((notification) => setAdditionalNotificationData(notification))
+        const sorted = data?.sort((a, b) => b.datetime.localeCompare(a.datetime)) || []
+        sorted.forEach((notification) => setAdditionalNotificationData(notification))
+        rawNotifications.value = sorted
       } catch (e) {
         console.error(e)
       }
@@ -210,7 +228,9 @@ export default {
       } catch (e) {
         console.error(e)
       } finally {
-        notifications.value = unref(notifications).filter((n) => !ids.includes(n.notification_id))
+        rawNotifications.value = unref(rawNotifications).filter(
+          (n) => !ids.includes(n.notification_id)
+        )
       }
     }).restartable()
 
@@ -226,7 +246,7 @@ export default {
           return
         }
         setAdditionalNotificationData(notification)
-        notifications.value = [notification, ...unref(notifications)]
+        rawNotifications.value = [notification, ...unref(rawNotifications)]
       } catch {
         console.error('Unable to parse sse notification data')
       }
