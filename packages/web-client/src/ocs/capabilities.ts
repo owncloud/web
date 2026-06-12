@@ -177,6 +177,7 @@ export interface Capabilities {
     }
     vault?: {
       enabled?: boolean
+      vault_storage_provider?: string
     }
     graph?: {
       'personal-data-export'?: boolean
