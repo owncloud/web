@@ -392,7 +392,7 @@ export async function userChecksAccessDetailsOfShare({
   }
   const expectedAccessDetails = {
     ...accessDetails,
-    Name: substitute(accessDetails.Name).replace(/\s+\(\d+\)$/, '')
+    Name: substitute(accessDetails.Name).replace(/ \(\d+\)$/, '')
   }
 
   const actualDetails = await shareObject.getAccessDetails({
@@ -408,7 +408,7 @@ export async function userChecksAccessDetailsOfShare({
 
   const normalizedActualDetails = {
     ...actualDetails,
-    Name: (actualDetails.Name || '').replace(/\s+\(\d+\)$/, '')
+    Name: (actualDetails.Name || '').replace(/ \(\d+\)$/, '')
   }
 
   expect(normalizedActualDetails).toMatchObject(expectedAccessDetails)
