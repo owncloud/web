@@ -73,14 +73,15 @@
         />
       </template>
       <template #status="{ item }">
-        <span class="oc-flex oc-flex-middle">
-          <oc-icon
-            v-oc-tooltip="item.disabled ? $gettext('Disabled') : $gettext('Enabled')"
-            :name="item.disabled ? 'stop-circle' : 'play-circle'"
-            size="small"
-            fill-type="line"
-          />
-        </span>
+        <oc-icon
+          v-oc-tooltip="item.disabled ? $gettext('Disabled') : $gettext('Enabled')"
+          :name="item.disabled ? 'stop-circle' : 'play-circle'"
+          :accessible-label="
+            item.disabled ? $gettext('Space is disabled') : $gettext('Space is enabled')
+          "
+          size="small"
+          fill-type="line"
+        />
       </template>
       <template #actions="{ item }">
         <div class="spaces-list-actions">
