@@ -422,7 +422,8 @@ const handlers = computed(() => {
       var(--oc-color-swatch-danger-contrast)
     );
 
-    &-filled:hover {
+    &-filled:hover,
+    &-filled:focus {
       color: var(--oc-color-swatch-danger-default) !important;
       span > svg {
         fill: var(--oc-color-swatch-danger-default) !important;
