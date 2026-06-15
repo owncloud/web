@@ -194,9 +194,7 @@ const awaitAllOrThrow = async <T>(label: string, requests: Promise<T>[]) => {
   const results = await Promise.allSettled(requests)
   const failures = results.filter((r) => r.status === 'rejected')
   if (failures.length > 0) {
-    throw new Error(
-      `${label}: ${failures.map((f) => f.reason?.message || f.reason).join(', ')}`
-    )
+    throw new Error(`${label}: ${failures.map((f) => f.reason?.message || f.reason).join(', ')}`)
   }
 }
 

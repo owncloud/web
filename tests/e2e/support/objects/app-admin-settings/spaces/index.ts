@@ -82,7 +82,11 @@ export class Spaces {
     key: string
     value: string
   }): Promise<void> {
-    await po.changeSpaceSubtitleUsingContextMenu({ page: this.#page, id: this.getUUID({ key }), value })
+    await po.changeSpaceSubtitleUsingContextMenu({
+      page: this.#page,
+      id: this.getUUID({ key }),
+      value
+    })
   }
 
   async openPanel({ key }: { key: string }): Promise<void> {
