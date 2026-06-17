@@ -52,4 +52,23 @@ export class AppProviderService {
       mimeType.app_providers.some((appProvider) => appProvider.name === appName)
     )
   }
+
+  /**
+   * Resolves the app that should open a given mime type. Prefers the configured
+   * default_application (but only if it is actually offered for that mime type),
+   * otherwise the first registered provider. Returns undefined when the mime type
+   * is not handled by any app provider, so callers can surface an error instead of
+   * silently falling back to an arbitrary app.
+   */
+  public getDefaultAppNameForMimeType(mimeType: string): string | undefined {
+    const entry = unref(this._mimeTypes).find((m) => m.mime_type === mimeType)
+    if (!entry) {
+      return undefined
+    }
+    const providerNames = entry.app_providers.map((appProvider) => appProvider.name)
+    if (entry.default_application && providerNames.includes(entry.default_application)) {
+      return entry.default_application
+    }
+    return providerNames[0]
+  }
 }
