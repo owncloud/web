@@ -39,7 +39,9 @@ export async function seed(api: APIRequestContext): Promise<void> {
       headers: { Authorization: admin },
       data: 'An old draft, later deleted.'
     })
-    await api.delete(`/remote.php/dav/files/${USER}/old-draft.txt`, { headers: { Authorization: admin } })
+    await api.delete(`/remote.php/dav/files/${USER}/old-draft.txt`, {
+      headers: { Authorization: admin }
+    })
   } catch (error) {
     console.warn('[seed] trash:', error)
   }

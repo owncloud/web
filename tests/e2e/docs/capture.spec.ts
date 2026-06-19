@@ -10,7 +10,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const outputRoot = path.join(__dirname, 'output')
 const baseURL = process.env.OCIS_URL ?? 'https://localhost:9200'
 
-const shotName = (index: number, shot: string) => `${String(index + 1).padStart(2, '0')}-${shot}.png`
+const shotName = (index: number, shot: string) =>
+  `${String(index + 1).padStart(2, '0')}-${shot}.png`
 
 // Seed best-effort demo data once before capturing.
 test.beforeAll(async () => {
@@ -41,7 +42,9 @@ for (const tour of tours) {
 // documentation site (or any consumer) can pick up the screenshots and text.
 test.afterAll(() => {
   const captured = tours.filter((tour) =>
-    tour.steps.every((_, i) => fs.existsSync(path.join(outputRoot, tour.id, shotName(i, tour.steps[i].shot))))
+    tour.steps.every((_, i) =>
+      fs.existsSync(path.join(outputRoot, tour.id, shotName(i, tour.steps[i].shot)))
+    )
   )
   const manifest = {
     source: 'doc.owncloud.com/webui/latest/owncloud_web/web_for_users.html',

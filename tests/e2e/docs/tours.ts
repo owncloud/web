@@ -1,5 +1,10 @@
 import { Page, expect } from '@playwright/test'
-import { dismissOverlays } from './support/oc'
+import {
+  dismissOverlays,
+  openSection,
+  openSharingPanel,
+  selectReportAndOpenSidebar
+} from './support/oc'
 
 /**
  * A single captured step. `run` drives the UI into the state to capture; the
@@ -125,9 +130,7 @@ export const tours: Tour[] = [
         caption:
           '<strong>Shares</strong> collects everything other people have shared with you. Depending on the instance you may need to accept a share before it appears, and you can decline ones you do not want.',
         run: async (page) => {
-          await page.getByRole('link', { name: 'Shares' }).click()
-          await page.waitForURL(/files\/shares/, { timeout: 30_000 })
-          await page.waitForTimeout(900)
+          await openSection(page, 'Shares', /files\/shares/)
         }
       },
       {
@@ -136,9 +139,7 @@ export const tours: Tour[] = [
         caption:
           '<strong>Spaces</strong> are shared project areas with their own members and storage. Use them to collaborate with a team in a dedicated location, separate from your personal files.',
         run: async (page) => {
-          await page.getByRole('link', { name: 'Spaces' }).click()
-          await page.waitForURL(/files\/spaces\/projects/, { timeout: 30_000 })
-          await page.waitForTimeout(900)
+          await openSection(page, 'Spaces', /files\/spaces\/projects/)
         }
       },
       {
@@ -147,9 +148,7 @@ export const tours: Tour[] = [
         caption:
           '<strong>Deleted files</strong> is your trash bin. Restore something you removed by mistake, or permanently delete it to free up space.',
         run: async (page) => {
-          await page.getByRole('link', { name: 'Deleted files' }).click()
-          await page.waitForURL(/files\/trash/, { timeout: 30_000 })
-          await page.waitForTimeout(900)
+          await openSection(page, 'Deleted files', /files\/trash/)
         }
       }
     ]
@@ -168,16 +167,7 @@ export const tours: Tour[] = [
         caption:
           'Select a file to open the right sidebar. <strong>Details</strong> shows its size, when it was last modified, the owner, sharing status, tags and how many versions it has.',
         run: async (page) => {
-          await page.goto('/files/spaces/personal')
-          await page.waitForURL(/files\/spaces\/personal/, { timeout: 30_000 })
-          const checkbox = page.getByRole('row', { name: /report\.md/ }).getByLabel('Select file')
-          await checkbox.waitFor({ state: 'visible', timeout: 30_000 })
-          await checkbox.click()
-          // The right sidebar is collapsed in a fresh session; open it to reveal details.
-          const openSidebar = page.getByRole('button', { name: 'Open sidebar to view details' })
-          if (await openSidebar.isVisible().catch(() => false)) {
-            await openSidebar.click()
-          }
+          await selectReportAndOpenSidebar(page)
           await expect(page.getByRole('heading', { level: 3, name: 'report.md' })).toBeVisible({
             timeout: 15_000
           })
@@ -189,10 +179,7 @@ export const tours: Tour[] = [
         caption:
           'The <strong>Shares</strong> panel lets you invite registered users by name, or create a <strong>public link</strong> that anyone can open, optionally protected with a password and an expiry date.',
         run: async (page) => {
-          await page.locator('[data-testid="sidebar-panel-sharing-select"]').click()
-          await expect(page.getByRole('heading', { name: 'Share with people' })).toBeVisible({
-            timeout: 15_000
-          })
+          await openSharingPanel(page)
           await page.waitForTimeout(400)
         }
       },
@@ -241,19 +228,8 @@ export const tours: Tour[] = [
         caption:
           "Throughout the interface a small <strong>?</strong> icon sits next to features that need a little explanation, such as beside <strong>Share with people</strong> and <strong>Public links</strong> in a file's sharing panel.",
         run: async (page) => {
-          await page.goto('/files/spaces/personal')
-          await page.waitForURL(/files\/spaces\/personal/, { timeout: 30_000 })
-          const checkbox = page.getByRole('row', { name: /report\.md/ }).getByLabel('Select file')
-          await checkbox.waitFor({ state: 'visible', timeout: 30_000 })
-          await checkbox.click()
-          const openSidebar = page.getByRole('button', { name: 'Open sidebar to view details' })
-          if (await openSidebar.isVisible().catch(() => false)) {
-            await openSidebar.click()
-          }
-          await page.locator('[data-testid="sidebar-panel-sharing-select"]').click()
-          await expect(page.getByRole('heading', { name: 'Share with people' })).toBeVisible({
-            timeout: 15_000
-          })
+          await selectReportAndOpenSidebar(page)
+          await openSharingPanel(page)
           await page.waitForTimeout(300)
         }
       },
