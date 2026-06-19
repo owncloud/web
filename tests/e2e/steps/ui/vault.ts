@@ -1,18 +1,14 @@
 import { expect } from '@playwright/test'
-import type { World } from '../../environment/world'
+import { getWorld } from '../../environment/world'
 import { VaultPage } from '../../support/objects/vault/page/vaultPage'
 import { generateOtpFromScreenshot } from '../../support/utils/mfa'
+import { config } from '../../config'
 
 /**
  * Switch user from Drive → Vault mode
  */
-export async function userSwitchesToVaultMode({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userSwitchesToVaultMode({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const vaultPage = new VaultPage(page)
   await vaultPage.userEntersVaultMode()
@@ -22,28 +18,22 @@ export async function userSwitchesToVaultMode({
  * Assert user is redirected to the MFA authenticator page
  */
 export async function userIsRedirectedToAuthenticatorPage({
-  world, 
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const vaultPage = new VaultPage(page)
-  await expect(page).toHaveURL(/keycloak\.owncloud\.test/)
+  await expect(page).toHaveURL((url) => url.href.startsWith(config.keycloakUrl))
   await expect(vaultPage.authenticatorHeading).toBeVisible()
 }
 
 /**
  * Generate an OTP from the Vault QR code and authenticate the user
  */
-export async function userAuthenticatesToVault({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userAuthenticatesToVault({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const vaultPage = new VaultPage(page)
   const qrBuffer = await vaultPage.captureQrCodeScreenshot()
@@ -54,29 +44,20 @@ export async function userAuthenticatesToVault({
 /**
  * Assert user is in Vault mode
  */
-export async function userIsInVaultMode({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userIsInVaultMode({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const vaultPage = new VaultPage(page)
-  await expect(page).toHaveURL(/ocis\.owncloud\.test\/vault/)
-  await expect(vaultPage.vaultBreadcrumb).toBeVisible();
+  const vaultPageUrl = `${config.baseUrlOcis}/vault`
+  await expect(page).toHaveURL((url) => url.href.startsWith(vaultPageUrl))
+  await expect(vaultPage.vaultBreadcrumb).toBeVisible()
 }
 
 /**
  * Switch user from Vault → Drive mode
  */
-export async function userSwitchesToDriveMode({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userSwitchesToDriveMode({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const vaultPage = new VaultPage(page)
   await vaultPage.userEntersDriveMode()
@@ -85,15 +66,11 @@ export async function userSwitchesToDriveMode({
 /**
  * Assert user is in Drive mode
  */
-export async function userIsInDriveMode({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userIsInDriveMode({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const vaultPage = new VaultPage(page)
-  await expect(page).toHaveURL(/ocis\.owncloud\.test\/files/)
-  await expect(vaultPage.driveBreadcrumb).toBeVisible();
+  const drivePageUrl = `${config.baseUrlOcis}/files`
+  await expect(page).toHaveURL((url) => url.href.startsWith(drivePageUrl))
+  await expect(vaultPage.driveBreadcrumb).toBeVisible()
 }

@@ -4,15 +4,15 @@ on:
   workflow_call:
     inputs:
       full-ci:
-        description: 'Run all suites regardless of changed paths'
+        description: "Run all suites regardless of changed paths"
         type: boolean
         required: false
         default: true
       affected-suites:
-        description: 'Comma-separated list of suites affected by changed paths'
+        description: "Comma-separated list of suites affected by changed paths"
         type: string
         required: false
-        default: ''
+        default: ""
 
 jobs:
   e2e:
@@ -48,6 +48,9 @@ jobs:
           - suite: mfa
             test_suites: mfa
             mfa: true
+          - suite: vault-storage
+            test_suites: vault-mode
+            vault_storage: true
           - suite: keycloak
             feature_files: specs/admin-settings/spaces.spec.ts,specs/journeys/kindergarten.spec.ts,specs/keycloak/groups.spec.ts,specs/admin-settings/users.spec.ts:38,specs/admin-settings/users.spec.ts:75,specs/admin-settings/users.spec.ts:175,specs/admin-settings/users.spec.ts:210,specs/admin-settings/users.spec.ts:285
             keycloak: true
@@ -175,6 +178,9 @@ jobs:
           if [[ "${{ matrix.suites.mfa }}" == "true" ]]; then
             flags="$flags --mfa"
           fi
+          if [[ "${{ matrix.suites.vault_storage }}" == "true" ]]; then
+            flags="$flags --vault-storage"
+          fi
           cd "${{ github.workspace }}/tests/actions"
           bash setup-services.sh $flags
 
@@ -204,6 +210,12 @@ jobs:
       - name: Dump oCIS logs on failure
         if: failure()
         run: |
+          echo "=== Main oCIS ==="
+          cat /tmp/ocis-main.log || true
+
+          echo "=== Vault Storage ==="
+          cat /tmp/ocis-vault.log || true
+
           echo "=== oCIS LOCAL: relevant log lines ==="
           grep -i "ocm\|provider\|invite\|federation\|error\|ERR\|permissions\|drives.*items\|Federated" /tmp/ocis-ocis.log 2>/dev/null | tail -300 || echo "(no log file)"
           echo "=== oCIS FEDERATED: relevant log lines ==="

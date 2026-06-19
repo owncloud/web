@@ -79,7 +79,7 @@ jobs:
           DRONE_TARGET_BRANCH: ${{ github.base_ref }}
           DRONE_BUILD_EVENT: pull_request
         run: |
-          all_suites="admin-settings,spaces,navigation,user-settings,app-store,file-action,shares,search,runtime,app-provider,ocm,oidc,smoke,mfa"
+          all_suites="admin-settings,spaces,navigation,user-settings,app-store,file-action,shares,search,runtime,app-provider,ocm,oidc,smoke,mfa,vault-mode"
           node tests/drone/filterTestSuitesToRun.js "$all_suites" || exit_code=$?
           if [ "${exit_code:-0}" -eq 78 ]; then
             echo "suites=" >> $GITHUB_OUTPUT

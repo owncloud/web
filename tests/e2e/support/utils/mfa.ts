@@ -17,9 +17,7 @@ export const getOtpFromImage = async (
   return token
 }
 
-export const generateOtpFromScreenshot = async(
-  imageBuffer: Buffer
-): Promise<string> => {
+export const generateOtpFromScreenshot = async (imageBuffer: Buffer): Promise<string> => {
   const image = await Jimp.read(imageBuffer)
   const { data, width, height } = image.bitmap
   const otp = await getOtpFromImage(data, width, height)

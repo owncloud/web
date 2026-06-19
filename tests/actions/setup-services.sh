@@ -18,6 +18,7 @@ OIDC_ENABLED=false
 OIDC_IFRAME_ENABLED=false
 KEYCLOAK_ENABLED=false
 MFA=false
+VAULT_STORAGE=false
 KEYCLOAK_CONFIG="ocis-ci-realm.dist.json"
 
 while [[ $# -gt 0 ]]; do
@@ -48,7 +49,14 @@ while [[ $# -gt 0 ]]; do
       ;;
     --mfa)
       MFA=true
-	  KEYCLOAK_CONFIG="ocis-mfa-ci-realm.dist.json"
+	    KEYCLOAK_CONFIG="ocis-mfa-ci-realm.dist.json"
+      shift
+      ;;
+    --vault-storage)
+      VAULT_STORAGE=true
+      KEYCLOAK_ENABLED=true
+      MFA=true
+      KEYCLOAK_CONFIG="ocis-mfa-ci-realm.dist.json"
       shift
       ;;
     *)
@@ -70,6 +78,11 @@ wait_for_service() {
     sleep 5
   done
   echo "❌ $2 failed to start"
+
+  echo "=== Startup logs ==="
+  cat /tmp/ocis-main.log 2>/dev/null || true
+  cat /tmp/ocis-vault.log 2>/dev/null || true
+
   exit 1
 }
 
@@ -95,7 +108,11 @@ setup_tika() {
 
 clone_ocis() {
   echo "Cloning oCIS"
-  git clone $OCIS_REPOSITORY "$OCIS_DIR"
+
+  rm -rf "$OCIS_DIR"
+
+  git clone $OCIS_REPOSITORY "$OCIS_DIR" --depth=1
+
   cd "$OCIS_DIR"
 
   if [ "$OCIS_COMMIT" != "latest" ]; then
@@ -103,20 +120,34 @@ clone_ocis() {
     git checkout $OCIS_COMMIT
   fi
 
+  echo "Building oCIS binary"
+
   make generate && make -C ocis build
+
   OCIS_BIN="$(pwd)/ocis/bin/ocis"
 
+  if [ ! -f "$OCIS_BIN" ]; then
+    echo "oCIS binary not found: $OCIS_BIN"
+    exit 1
+  fi
+
   cd -
-  echo "oCIS cloned"
+
+  echo "oCIS cloned and built"
 }
 
 setup_ocis() {
   echo "Setting up $1"
 
   (
-    set -a && source .env.$1 && set +a
+    set -a
+    echo "PWD=$(pwd)"
+    ls -la
+    ls -la .env.ocis
+    source .env.ocis
+    set +a
 
-    if $TIKA_ENABLED; then
+     if $TIKA_ENABLED; then
       export SEARCH_EXTRACTOR_TYPE=tika
       export SEARCH_EXTRACTOR_TIKA_TIKA_URL=http://localhost:9998
       export SEARCH_EXTRACTOR_CS3SOURCE_INSECURE=true
@@ -170,13 +201,59 @@ setup_ocis() {
       export GRAPH_USERNAME_MATCH=none
       export KEYCLOAK_DOMAIN=localhost:8443
       export IDM_CREATE_DEMO_USERS=false
+      export OCIS_ENABLE_VAULT_MODE=true
+      export FRONTEND_ENABLE_VAULT_MODE=true
       export OCIS_MFA_ENABLED=true
       export WEB_OIDC_SCOPE="openid profile email acr"
       export MFA=true
+    fi 
+
+    # Vault storage
+    if $VAULT_STORAGE; then
+      echo "Configuring vault storage"
+
+      export OCIS_GATEWAY_GRPC_ADDR=https://localhost:9142
+      export OCIS_EVENTS_ENDPOINT=https://localhost:9233
+      export OCIS_CACHE_STORE_NODES=https://localhost:9233
+      export MICRO_REGISTRY_ADDRESS=https://localhost:9233
+
+      export STORAGE_USERS_ENABLE_VAULT_MODE=true
+      export STORAGE_USERS_SERVICE_NAME=storage-users-vault
+
+      export STORAGE_USERS_GRPC_ADDR=localhost:9285
+      export STORAGE_USERS_HTTP_ADDR=localhost:9286
+      export STORAGE_USERS_DEBUG_ADDR=localhost:9287
+
+      export STORAGE_USERS_DATA_SERVER_URL=https://localhost:9286
+      export STORAGE_USERS_OCIS_ROOT="$HOME/.ocis-9200/storage/users-vault"
+
+      export STORAGE_USERS_EVENTS_CONSUMER_GROUP=vault-dcfs
     fi
 
-    $OCIS_BIN init --insecure true --force-overwrite && cp $GITHUB_WORKSPACE/tests/drone/app-registry.yaml $OCIS_CONFIG_DIR/app-registry.yaml && $OCIS_BIN server
+    echo "Initializing oCIS"
+
+    $OCIS_BIN init --insecure true --force-overwrite
+
+    echo "Starting main oCIS"
+
+    $OCIS_BIN server > /tmp/ocis-main.log 2>&1 &
+
+    if $VAULT_STORAGE; then
+      echo "Starting vault storage users"
+
+      $OCIS_BIN storage-users server \
+        > /tmp/ocis-vault.log 2>&1 &
+
+      wait_for_port 9285 "storage-users-vault" || {
+        cat /tmp/ocis-vault.log
+        exit 1
+      }
+    fi
+
+    wait
+
   ) &
+
   wait_for_service "https://localhost:$2" "$1"
 }
 
