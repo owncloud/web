@@ -12,6 +12,7 @@
     "preview",
     "search",
     "text-editor",
+    "html-editor",
     "epub-reader"
   ],
   "applications" : []
