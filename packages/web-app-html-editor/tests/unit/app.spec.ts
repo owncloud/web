@@ -4,6 +4,7 @@ import App from '../../src/App.vue'
 import HtmlToolbar from '../../src/components/HtmlToolbar.vue'
 import HtmlEditorPane from '../../src/components/HtmlEditorPane.vue'
 import HtmlPreviewPane from '../../src/components/HtmlPreviewPane.vue'
+import { PREVIEW_SIZE_LIMIT } from '../../src/helpers/preview'
 
 describe('HTML editor app', () => {
   it('renders the toolbar, the editor and the preview', () => {
@@ -32,19 +33,39 @@ describe('HTML editor app', () => {
     expect(wrapper.find('.html-editor-body').classes()).toContain('html-editor-body-preview-only')
   })
 
+  it('wraps the preview content with a strict iframe CSP', () => {
+    const { wrapper } = getWrapper({ currentContent: '<h1>hi</h1>' })
+    const content = wrapper.findComponent(HtmlPreviewPane).props('content') as string
+    expect(content).toContain('Content-Security-Policy')
+    expect(content).toContain("default-src 'none'")
+    expect(content).toContain('<h1>hi</h1>')
+  })
+
   it('feeds debounced content to the preview', async () => {
     const { wrapper } = getWrapper({ currentContent: '<h1>start</h1>' })
-    // initial preview reflects the initial content synchronously
-    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toBe('<h1>start</h1>')
+    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain('<h1>start</h1>')
 
     vi.useFakeTimers()
     await wrapper.setProps({ currentContent: '<h1>changed</h1>' })
     // debounced: not updated yet
-    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toBe('<h1>start</h1>')
+    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain('<h1>start</h1>')
     vi.advanceTimersByTime(300)
     await nextTick()
-    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toBe('<h1>changed</h1>')
+    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain('<h1>changed</h1>')
     vi.useRealTimers()
+  })
+
+  it('pauses the live preview for large files until the user opts in', async () => {
+    const big = '<p>'.repeat(Math.ceil((PREVIEW_SIZE_LIMIT + 100) / 3))
+    const { wrapper } = getWrapper({ currentContent: big })
+    // preview is paused: pane not rendered, opt-in button shown
+    expect(wrapper.findComponent(HtmlPreviewPane).exists()).toBe(false)
+    const renderButton = wrapper.find('.html-editor-preview-render')
+    expect(renderButton.exists()).toBe(true)
+
+    await renderButton.trigger('click')
+    await nextTick()
+    expect(wrapper.findComponent(HtmlPreviewPane).exists()).toBe(true)
   })
 })
 

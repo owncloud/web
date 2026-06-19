@@ -33,14 +33,30 @@ MIME type** (Arch 1.1, 1.2). `defineWebApplication` exposes
 also accept the `xhtml` extension. There is no priority field to set (Arch 1.2).
 The app id is `html-editor` and the package `name` is `"html-editor"` (Arch 1.5).
 
-## D3 — Preview sandboxing: `srcdoc` + `sandbox="allow-scripts allow-forms allow-popups"`
+## D3 — Preview sandboxing: `srcdoc` + minimal sandbox + self-contained CSP
 
-Unchanged from the prompt and confirmed safe by Arch 1.4. We inject content via
-`srcdoc` (never a `src` URL), with `referrerpolicy="no-referrer"` and **without**
-`allow-same-origin`, so the preview runs at an opaque origin and cannot read the
-shell's cookies/storage. Nothing in this repo's CSP blocks this (Arch 1.4); inline
-scripts run under the proxy's `script-src 'unsafe-inline'`, while the user HTML's
-external `'self'` loads are blocked by the opaque origin — the desired isolation.
+We inject content via `srcdoc` (never a `src` URL), with `referrerpolicy="no-referrer"`
+and **without** `allow-same-origin`, so the preview runs at an opaque origin and
+cannot read the shell's cookies, storage or OIDC token (Arch 1.4). That opaque
+origin is the primary, repo-local control and holds even with no proxy CSP.
+
+Hardened after the security review (see `SECURITY-REVIEW.md`), which corrected the
+prompt's `sandbox="allow-scripts allow-forms allow-popups"`:
+
+- **Sandbox reduced to `allow-scripts` only.** `allow-forms` and `allow-popups`
+  added no value for a preview but enabled zero-click phishing / external
+  form-POST beaconing from the opaque-origin frame (those channels are independent
+  of CSP). Dropping them removes the vector at the source. `allow-scripts` is kept
+  so self-contained pages still render and run their inline JS.
+- **A strict, iframe-scoped CSP is injected into the `srcdoc`** (`helpers/preview.ts`,
+  applied in `App.vue`): `default-src 'none'` denies all network egress (so a
+  hostile script cannot beacon/exfiltrate), `form-action 'none'` and `base-uri 'none'`
+  are belt-and-suspenders, while inline `script-src`/`style-src` and `data:`/`blob:`
+  images keep self-contained previews working. This makes the preview
+  self-protecting rather than reliant on the deployment proxy CSP. Trade-off:
+  previews of documents that load **external** CSS/JS/images will not fetch them.
+- The exact sandbox string and `srcdoc`-not-`src` are pinned by a regression test
+  (`HtmlPreviewPane.spec.ts`), so loosening the contract fails CI.
 
 ## D4 — Layout: three view modes via CSS **grid**
 

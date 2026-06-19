@@ -10,7 +10,24 @@
         />
       </div>
       <div class="html-editor-body-preview">
-        <html-preview-pane :content="previewContent" />
+        <div v-if="previewPaused" class="html-editor-preview-paused">
+          <p class="html-editor-preview-paused__text">
+            {{
+              $gettext(
+                'This file is large, so the live preview is paused to keep the editor responsive.'
+              )
+            }}
+          </p>
+          <oc-button
+            class="html-editor-preview-render"
+            appearance="filled"
+            variation="primary"
+            @click="showPreviewAnyway"
+          >
+            {{ $gettext('Show preview anyway') }}
+          </oc-button>
+        </div>
+        <html-preview-pane v-else :content="previewContent" />
       </div>
     </div>
   </div>
@@ -23,6 +40,7 @@ import { AppConfigObject } from '@ownclouders/web-pkg'
 import HtmlEditorPane from './components/HtmlEditorPane.vue'
 import HtmlPreviewPane from './components/HtmlPreviewPane.vue'
 import HtmlToolbar, { HtmlEditorViewMode } from './components/HtmlToolbar.vue'
+import { isPreviewTooLarge, wrapWithPreviewCsp } from './helpers/preview'
 
 interface Props {
   applicationConfig: AppConfigObject
@@ -48,18 +66,31 @@ const bodyClass = computed(() => ({
   'html-editor-body-preview-only': viewMode.value === 'preview'
 }))
 
-// The preview is debounced so typing in a large document does not reload the
-// iframe on every keystroke. Both panes stay mounted across view-mode switches
-// (CSS grid collapses the hidden column) so the editor keeps its cursor/undo.
-const previewContent = ref(currentContent ?? '')
+// Large documents are not auto-previewed: re-parsing the whole document into the
+// iframe on every settled edit (and a hostile script in it) can hang the tab.
+// The user can opt in to render a large file once. See DECISIONS.md D3 and SECURITY-REVIEW.md.
+const renderLargeAnyway = ref(false)
+const previewPaused = computed(() => isPreviewTooLarge(currentContent) && !renderLargeAnyway.value)
+
+// The preview is debounced so typing does not reload the iframe on every
+// keystroke. The content is wrapped with a strict, iframe-scoped CSP before it
+// reaches the (sandboxed, opaque-origin) preview. Both panes stay mounted across
+// view-mode switches (CSS grid collapses the hidden column) so the editor keeps
+// its cursor/undo.
+const previewContent = ref(previewPaused.value ? '' : wrapWithPreviewCsp(currentContent ?? ''))
 let previewTimer: ReturnType<typeof setTimeout> | undefined
 const schedulePreview = (value: string) => {
   if (previewTimer) {
     clearTimeout(previewTimer)
   }
   previewTimer = setTimeout(() => {
-    previewContent.value = value
+    previewContent.value = wrapWithPreviewCsp(value ?? '')
   }, 250)
+}
+
+const showPreviewAnyway = () => {
+  renderLargeAnyway.value = true
+  schedulePreview(currentContent)
 }
 
 const onInput = (value: string) => {
@@ -67,10 +98,15 @@ const onInput = (value: string) => {
 }
 
 // Drives the preview for both user edits (which round-trip back through the prop)
-// and external content changes such as the initial WebDAV load.
+// and external content changes such as the initial WebDAV load. While paused, the
+// expensive wrap/render is skipped entirely.
 watch(
   () => currentContent,
   (value) => {
+    if (isPreviewTooLarge(value) && !renderLargeAnyway.value) {
+      previewContent.value = ''
+      return
+    }
     schedulePreview(value ?? '')
   }
 )
@@ -105,6 +141,18 @@ onBeforeUnmount(() => {
 
 .html-editor-body-preview {
   border-left: 1px solid var(--oc-color-border);
+}
+
+.html-editor-preview-paused {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--oc-space-medium);
+  height: 100%;
+  padding: var(--oc-space-large);
+  text-align: center;
+  color: var(--oc-color-text-muted);
 }
 
 .html-editor-body-split {
