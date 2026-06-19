@@ -2,25 +2,20 @@ import { useGettext } from 'vue3-gettext'
 import translations from '../l10n/translations.json'
 import HtmlEditor from './App.vue'
 import {
-  AppMenuItemExtension,
   AppWrapperRoute,
   ApplicationFileExtension,
   ApplicationInformation,
-  defineWebApplication,
-  useOpenEmptyEditor,
-  useUserStore
+  defineWebApplication
 } from '@ownclouders/web-pkg'
-import { computed } from 'vue'
-import { urlJoin } from '@ownclouders/web-client'
 
 export default defineWebApplication({
   setup() {
     const { $gettext } = useGettext()
-    const userStore = useUserStore()
-    const { openEmptyEditor } = useOpenEmptyEditor()
 
     const appId = 'html-editor'
 
+    // `newFileMenu` on the html entry adds a "New > HTML file" item to the Files
+    // create menu. The extensions also declare which file types open in this app.
     const fileExtensions: ApplicationFileExtension[] = [
       {
         extension: 'html',
@@ -65,40 +60,13 @@ export default defineWebApplication({
       meta: {
         fileSizeLimit: 2000000
       },
-      extensions: fileExtensions.map((extensionItem) => {
-        return {
-          extension: extensionItem.extension,
-          ...(Object.prototype.hasOwnProperty.call(extensionItem, 'newFileMenu') && {
-            newFileMenu: extensionItem.newFileMenu
-          })
-        }
-      })
+      extensions: fileExtensions
     }
-
-    const menuItems = computed<AppMenuItemExtension[]>(() => {
-      const items: AppMenuItemExtension[] = []
-
-      if (userStore.user) {
-        items.push({
-          id: `app.${appInfo.id}.menuItem`,
-          type: 'appMenuItem',
-          label: () => appInfo.name,
-          color: appInfo.color,
-          icon: appInfo.icon,
-          priority: 21,
-          path: urlJoin(appInfo.id),
-          handler: () => openEmptyEditor(appInfo.id, appInfo.defaultExtension)
-        })
-      }
-
-      return items
-    })
 
     return {
       appInfo,
       routes,
-      translations,
-      extensions: menuItems
+      translations
     }
   }
 })
