@@ -45,14 +45,15 @@ describe('HTML editor app', () => {
     const { wrapper } = getWrapper({ currentContent: '<h1>start</h1>' })
     expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain('<h1>start</h1>')
 
-    vi.useFakeTimers()
+    // Use real timers (no fake-timer manipulation) so this file can never leak
+    // timer state into other test projects in the shared run.
     await wrapper.setProps({ currentContent: '<h1>changed</h1>' })
-    // debounced: not updated yet
-    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain('<h1>start</h1>')
-    vi.advanceTimersByTime(300)
     await nextTick()
+    // debounced: not updated immediately after the change
+    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain('<h1>start</h1>')
+    // wait out the 250ms preview debounce
+    await new Promise((resolve) => setTimeout(resolve, 350))
     expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain('<h1>changed</h1>')
-    vi.useRealTimers()
   })
 
   it('pauses the live preview for large files until the user opts in', async () => {
