@@ -16,22 +16,13 @@ ownCloud Web is available on [Docker Hub](https://hub.docker.com/r/owncloud/web)
 
 ## Getting Started
 
-Follow the steps below to set up a development environment for ownCloud Web.
+Set up a local development environment for ownCloud Web:
 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (LTS recommended)
 - [pnpm](https://pnpm.io/)
 - [Docker Compose](https://docs.docker.com/compose/) (for backend)
-
-### Development Setup
-
-```bash
-git clone https://github.com/owncloud/web.git
-cd web
-pnpm install
-pnpm build
-```
 
 For the complete development setup, see the [setup guide](https://owncloud.dev/clients/web/getting-started/).
 
