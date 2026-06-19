@@ -25,7 +25,7 @@ const dataMock = {
 // give these tests more headroom than the 5s default to avoid flaky timeouts.
 vi.setConfig({ testTimeout: 20000, hookTimeout: 20000 })
 
-describe('delete worker', () => {
+describe('restore worker', () => {
   let worker: ReturnType<typeof useWebWorker>
   let webDavMock: ReturnType<typeof mock<WebDAV>>
 
