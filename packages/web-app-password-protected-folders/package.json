@@ -15,10 +15,10 @@
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
     "@ownclouders/web-test-helpers": "workspace:*",
-    "@vue/test-utils": "^2.4.6",
-    "uuid": "^14.0.0",
+    "@vue/test-utils": "^2.4.11",
+    "uuid": "^14.0.1",
     "vitest-mock-extended": "3.1.0",
-    "vue": "^3.5.29",
+    "vue": "^3.5.38",
     "vue3-gettext": "^2.4.0"
   }
 }
