@@ -4,50 +4,40 @@ import * as ui from '../../steps/ui/index'
 import { fileAction } from '../../environment/constants'
 
 test.describe('Notifications', () => {
-  test.beforeEach(async ({ world }) => {
+  test.beforeEach(async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
     //   | Carol |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice', 'Brian', 'Carol']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian', 'Carol'] })
 
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      world,
       stepUser: 'Admin',
       users: [{ id: 'Alice', role: 'Space Admin' }]
     })
   })
 
-  test.afterEach(async ({ world }) => {
-    await ui.userLogsOut({ world, stepUser: 'Carol' })
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+  test.afterEach(async () => {
+    await ui.userLogsOut({ stepUser: 'Carol' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('user should be able to read and dismiss notifications', async ({ world }) => {
+  test('user should be able to read and dismiss notifications', async () => {
     // Given "Admin" creates following groups using API
     //   | id    |
     //   | sales |
-    await api.groupsHaveBeenCreated({
-      world,
-      groupIds: ['sales'],
-      stepUser: 'Admin'
-    })
+    await api.groupsHaveBeenCreated({ groupIds: ['sales'], stepUser: 'Admin' })
 
     // And "Admin" adds user to the group using API
     //   | user  | group |
     //   | Alice | sales |
     //   | Brian | sales |
     await api.usersHaveBeenAddedToGroup({
-      world,
       stepUser: 'Admin',
       usersToAdd: [
         { user: 'Alice', group: 'sales' },
@@ -60,7 +50,6 @@ test.describe('Notifications', () => {
     //   | folder_to_shared |
     //   | share_to_group   |
     await api.userHasCreatedFolders({
-      world,
       stepUser: 'Alice',
       folderNames: ['folder_to_shared', 'share_to_group']
     })
@@ -69,20 +58,18 @@ test.describe('Notifications', () => {
     //   | name | id     |
     //   | team | team.1 |
     await api.userHasCreatedProjectSpaces({
-      world,
       stepUser: 'Alice',
       spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
 
     // When "Alice" shares the following resource using the sidebar panel
     //   | resource         | recipient | type  | role                      | resourceType |
     //   | folder_to_shared | Brian     | user  | Can edit without versions | folder       |
     //   | share_to_group   | sales     | group | Can edit without versions | folder       |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -104,14 +91,13 @@ test.describe('Notifications', () => {
     })
 
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
 
     // Then "Brian" should see the following notifications
     // | message                                                   |
     // | %user_alice_displayName% shared folder_to_shared with you |
     // | %user_alice_displayName% shared share_to_group with you   |
     await ui.userShouldSeeNotifications({
-      world,
       stepUser: 'Brian',
       expectedMessages: [
         '%user_alice_displayName% shared folder_to_shared with you',
@@ -120,16 +106,12 @@ test.describe('Notifications', () => {
     })
 
     // And "Brian" marks all notifications as read
-    await ui.userMarksAllNotificationsAsRead({
-      world,
-      stepUser: 'Brian'
-    })
+    await ui.userMarksAllNotificationsAsRead({ stepUser: 'Brian' })
 
     // When "Alice" removes following sharee
     //   | resource         | recipient |
     //   | folder_to_shared | Brian     |
     await ui.userRemovesSharees({
-      world,
       stepUser: 'Alice',
       sharees: [
         {
@@ -140,14 +122,13 @@ test.describe('Notifications', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
     //   | Brian | Can edit | user |
     //   | Carol | Can edit | user |
     await ui.userAddsMembersToSpace({
-      world,
       stepUser: 'Alice',
       members: [
         { user: 'Brian', role: 'Can edit with versions and trash bin', kind: 'user' },
@@ -156,14 +137,13 @@ test.describe('Notifications', () => {
     })
 
     // Then "Alice" should see no notifications
-    await ui.userShouldSeeNoNotifications({ world, stepUser: 'Alice' })
+    await ui.userShouldSeeNoNotifications({ stepUser: 'Alice' })
 
     // And "Brian" should see the following notifications
     //   | message                                         |
     //   | %user_alice_displayName% unshared folder_to_shared with you |
     //   | %user_alice_displayName% added you to Space team            |
     await ui.userShouldSeeNotifications({
-      world,
       stepUser: 'Brian',
       expectedMessages: [
         '%user_alice_displayName% unshared folder_to_shared with you',
@@ -172,30 +152,25 @@ test.describe('Notifications', () => {
     })
 
     // And "Brian" marks all notifications as read
-    await ui.userMarksAllNotificationsAsRead({
-      world,
-      stepUser: 'Brian'
-    })
+    await ui.userMarksAllNotificationsAsRead({ stepUser: 'Brian' })
 
     // When "Alice" removes access to following users from the project space
     //   | user  | role                      | kind |
     //   | Carol | Can edit without versions | user |
     await ui.userRemovesAccessToMember({
-      world,
       stepUser: 'Alice',
       reciver: 'Carol',
       role: 'Can edit with trashbin'
     })
 
     // And "Carol" logs in
-    await ui.userLogsIn({ world, stepUser: 'Carol' })
+    await ui.userLogsIn({ stepUser: 'Carol' })
 
     // And "Carol" should see the following notifications
     //   | message                                              |
     //   | %user_alice_displayName% added you to Space team     |
     //   | %user_alice_displayName% removed you from Space team |
     await ui.userShouldSeeNotifications({
-      world,
       stepUser: 'Carol',
       expectedMessages: [
         '%user_alice_displayName% added you to Space team',
@@ -204,14 +179,13 @@ test.describe('Notifications', () => {
     })
 
     // When "Alice" opens the "admin-settings" app
-    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'admin-settings' })
+    await ui.userOpensApplication({ stepUser: 'Alice', name: 'admin-settings' })
 
     // And "Alice" navigates to the project spaces management page
-    await ui.userNavigatesToProjectSpaceManagementPage({ world, stepUser: 'Alice' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ stepUser: 'Alice' })
 
     // And "Alice" disables the space "team.1" using the context-menu
     await ui.userManagesSpaceUsingContexMenu({
-      world,
       stepUser: 'Alice',
       action: 'disables',
       space: 'team.1'
@@ -221,14 +195,12 @@ test.describe('Notifications', () => {
     //  | message                          |
     //  | %user_alice_displayName% disabled Space team |
     await ui.userShouldSeeNotifications({
-      world,
       stepUser: 'Brian',
       expectedMessages: ['%user_alice_displayName% disabled Space team']
     })
 
     // When "Alice" deletes the space "team.1" using the context-menu
     await ui.userManagesSpaceUsingContexMenu({
-      world,
       stepUser: 'Alice',
       action: 'deletes',
       space: 'team.1'
@@ -238,38 +210,32 @@ test.describe('Notifications', () => {
     //   | message                         |
     //   | %user_alice_displayName% deleted Space team |
     await ui.userShouldSeeNotifications({
-      world,
       stepUser: 'Brian',
       expectedMessages: ['%user_alice_displayName% deleted Space team']
     })
 
-    await api.userHasDeletedGroup({ world, stepUser: 'Admin', name: 'sales' })
+    await api.userHasDeletedGroup({ stepUser: 'Admin', name: 'sales' })
   })
 
-  test('user should not get any notification when notification is disabled', async ({ world }) => {
+  test('user should not get any notification when notification is disabled', async () => {
     // Given "Alice" creates the following folder in personal space using API
     //   | name             |
     //   | folder_to_shared |
-    await api.userHasCreatedFolder({
-      world,
-      stepUser: 'Alice',
-      folderName: 'folder_to_shared'
-    })
+    await api.userHasCreatedFolder({ stepUser: 'Alice', folderName: 'folder_to_shared' })
 
     // And "Alice" creates the following project space using API
     //   | name | id     |
     //   | team | team.1 |
     await api.userHasCreatedProjectSpaces({
-      world,
       stepUser: 'Alice',
       spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
 
     // And "Brian" opens the user menu
-    await ui.userOpensAccountPage({ world, stepUser: 'Brian' })
+    await ui.userOpensAccountPage({ stepUser: 'Brian' })
 
     // When "Brian" disables notification for the following events
     //   | event                   |
@@ -278,7 +244,6 @@ test.describe('Notifications', () => {
     //   | Added as space member   |
     //   | Removed as space member |
     await ui.userDisablesNotificationEvents({
-      world,
       stepUser: 'Brian',
       events: [
         'Share Received',
@@ -289,29 +254,27 @@ test.describe('Notifications', () => {
     })
 
     // And "Carol" logs in
-    await ui.userLogsIn({ world, stepUser: 'Carol' })
+    await ui.userLogsIn({ stepUser: 'Carol' })
 
     // And "Carol" opens the user menu
-    await ui.userOpensAccountPage({ world, stepUser: 'Carol' })
+    await ui.userOpensAccountPage({ stepUser: 'Carol' })
 
     // And "Carol" disables notification for the following events
     //   | event          |
     //   | Space disabled |
     //   | Space deleted  |
     await ui.userDisablesNotificationEvents({
-      world,
       stepUser: 'Brian',
       events: ['Space disabled', 'Space deleted']
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
 
     // And "Alice" shares the following resource using the sidebar panel
     //   | resource         | recipient | type  | role                      | resourceType |
     //   | folder_to_shared | Brian     | user  | Can edit without versions | folder       |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -329,7 +292,6 @@ test.describe('Notifications', () => {
     //   | resource         | recipient |
     //   | folder_to_shared | Brian     |
     await ui.userRemovesSharees({
-      world,
       stepUser: 'Alice',
       sharees: [
         {
@@ -340,14 +302,13 @@ test.describe('Notifications', () => {
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user  | role     | kind |
     //   | Brian | Can edit | user |
     //   | Carol | Can edit | user |
     await ui.userAddsUsersToProjectSpace({
-      world,
       stepUser: 'Alice',
       space: 'team.1',
       members: [
@@ -360,24 +321,22 @@ test.describe('Notifications', () => {
     //   | user  | role     | kind |
     //   | Brian | Can edit | user |
     await ui.userRemovesAccessToMember({
-      world,
       stepUser: 'Alice',
       reciver: 'Carol',
       role: 'Can edit with versions and trash bin'
     })
 
     // Then "Alice" should see no notifications
-    await ui.userShouldSeeNoNotifications({ world, stepUser: 'Brian' })
+    await ui.userShouldSeeNoNotifications({ stepUser: 'Brian' })
 
     // When "Alice" opens the "admin-settings" app
-    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'admin-settings' })
+    await ui.userOpensApplication({ stepUser: 'Alice', name: 'admin-settings' })
 
     // And "Alice" navigates to the project spaces management page
-    await ui.userNavigatesToProjectSpaceManagementPage({ world, stepUser: 'Alice' })
+    await ui.userNavigatesToProjectSpaceManagementPage({ stepUser: 'Alice' })
 
     // And "Alice" disables the space "team.1" using the context-menu
     await ui.userManagesSpaceUsingContexMenu({
-      world,
       stepUser: 'Alice',
       action: 'disables',
       space: 'team.1'
@@ -385,13 +344,12 @@ test.describe('Notifications', () => {
 
     // When "Alice" deletes the space "team.1" using the context-menu
     await ui.userManagesSpaceUsingContexMenu({
-      world,
       stepUser: 'Alice',
       action: 'deletes',
       space: 'team.1'
     })
 
     // Then "Carol" should see no notifications
-    await ui.userShouldSeeNoNotifications({ world, stepUser: 'Carol' })
+    await ui.userShouldSeeNoNotifications({ stepUser: 'Carol' })
   })
 })

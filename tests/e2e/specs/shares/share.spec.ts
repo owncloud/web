@@ -4,30 +4,25 @@ import * as ui from '../../steps/ui/index'
 import { fileAction, resourcePage, shareIndicator } from '../../environment/constants'
 
 test.describe('share', () => {
-  test.beforeEach(async ({ world }) => {
+  test.beforeEach(async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice', 'Brian']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian'] })
   })
 
-  test('folder', { tag: '@predefined-users' }, async ({ world }) => {
+  test('folder', { tag: '@predefined-users' }, async () => {
     // Given "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
     // And "Alice" creates the following folder in personal space using API
     //   | name               |
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
     //   | shared_folder      |
     await api.userHasCreatedFolders({
-      world,
       stepUser: 'Alice',
       folderNames: ['folder_to_shared', 'folder_to_shared_2', 'shared_folder']
     })
@@ -37,7 +32,6 @@ test.describe('share', () => {
     //   | shared_folder      | Brian     | user | Can edit with trashbin | folder       |
     //   | folder_to_shared_2 | Brian     | user | Can edit with trashbin | folder       |
     await ui.userSharesResources({
-      world,
       actionType: fileAction.sideBarPanel,
       stepUser: 'Alice',
       shares: [
@@ -69,7 +63,6 @@ test.describe('share', () => {
     // | lorem.txt     | folder_to_shared   |
     // | lorem-big.txt | folder_to_shared_2 |
     await ui.userUploadsResources({
-      world,
       stepUser: 'Alice',
       resources: [
         { name: 'lorem.txt', to: 'folder_to_shared' },
@@ -77,38 +70,31 @@ test.describe('share', () => {
       ]
     })
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
     // And "Brian" opens folder "folder_to_shared"
-    await ui.userOpensResource({
-      world,
-      stepUser: 'Brian',
-      resource: 'folder_to_shared'
-    })
+    await ui.userOpensResource({ stepUser: 'Brian', resource: 'folder_to_shared' })
     // Then following resources should be displayed in the files list for user "Brian"
     //   | resource  |
     //   | lorem.txt |
     // user should have access to unsynced shares
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['lorem.txt']
     })
     // When "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
     // And "Brian" disables the sync for the following shares
     //   | name               |
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
     await ui.userDisablesSyncForShares({
-      world,
       stepUser: 'Brian',
       shares: ['folder_to_shared', 'folder_to_shared_2']
     })
     // Then "Brian" should not see a sync status for the folder "folder_to_shared"
     // And "Brian" should not see a sync status for the folder "folder_to_shared_2"
     await ui.sharesShouldNotHaveSyncStatus({
-      world,
       stepUser: 'Brian',
       shares: ['folder_to_shared', 'folder_to_shared_2']
     })
@@ -117,7 +103,6 @@ test.describe('share', () => {
     //   | folder_to_shared   |
     //   | folder_to_shared_2 |
     await ui.userEnablesSyncForShares({
-      world,
       stepUser: 'Brian',
       shares: ['folder_to_shared', 'folder_to_shared_2']
     })
@@ -125,7 +110,6 @@ test.describe('share', () => {
     // Then "Brian" should see a sync status for the folder "folder_to_shared"
     // And "Brian" should see a sync status for the folder "folder_to_shared_2"
     await ui.sharesShouldHaveSyncStatus({
-      world,
       stepUser: 'Brian',
       shares: ['folder_to_shared', 'folder_to_shared_2']
     })
@@ -134,7 +118,6 @@ test.describe('share', () => {
     //   | resource                   | as            |
     //   | folder_to_shared/lorem.txt | lorem_new.txt |
     await ui.userRenamesResource({
-      world,
       stepUser: 'Brian',
       resource: 'folder_to_shared/lorem.txt',
       newResourceName: 'lorem_new.txt'
@@ -144,7 +127,6 @@ test.describe('share', () => {
     //   | simple.pdf      | folder_to_shared   |
     //   | testavatar.jpeg | folder_to_shared_2 |
     await ui.userUploadsResources({
-      world,
       stepUser: 'Brian',
       resources: [
         { name: 'simple.pdf', to: 'folder_to_shared' },
@@ -156,19 +138,17 @@ test.describe('share', () => {
     //   | resource      | from               |
     //   | lorem-big.txt | folder_to_shared_2 |
     await ui.userDeletesResources({
-      world,
       stepUser: 'Brian',
       actionType: fileAction.sideBarPanel,
       resources: [{ name: 'lorem-big.txt', from: 'folder_to_shared_2' }]
     })
 
     // And "Alice" opens the "files" app
-    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ stepUser: 'Alice', name: 'files' })
     // And "Alice" uploads the following resource
     //   | resource          | to               | option  |
     //   | PARENT/simple.pdf | folder_to_shared | replace |
     await ui.userUploadsResources({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'simple.pdf', to: 'folder_to_shared', option: 'replace' }]
     })
@@ -176,7 +156,6 @@ test.describe('share', () => {
     //   | resource   | to               |
     //   | simple.pdf | folder_to_shared |
     await ui.userShouldNotSeeVersionPanelForFiles({
-      world,
       stepUser: 'Brian',
       file: 'simple.pdf',
       to: 'folder_to_shared'
@@ -185,7 +164,6 @@ test.describe('share', () => {
     //   | resource           | recipient |
     //   | folder_to_shared_2 | Brian     |
     await ui.userRemovesSharees({
-      world,
       stepUser: 'Alice',
       sharees: [
         {
@@ -200,49 +178,41 @@ test.describe('share', () => {
     //   | lorem_new.txt    | folder_to_shared |
     //   | folder_to_shared |                  |
     await ui.userDeletesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       resources: [{ name: 'lorem_new.txt', from: 'folder_to_shared' }, { name: 'folder_to_shared' }]
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
     // Then "Brian" should not be able to see the following shares
     //   | resource           | owner                    |
     //   | folder_to_shared_2 | %user_alice_displayName% |
     //   | folder_to_shared   | %user_alice_displayName% |
     await ui.userShouldNotSeeShare({
-      world,
       stepUser: 'Brian',
       resource: 'folder_to_shared_2',
       owner: '%user_alice_displayName%'
     })
 
     await ui.userShouldNotSeeShare({
-      world,
       stepUser: 'Brian',
       resource: 'folder_to_shared',
       owner: '%user_alice_displayName%'
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
   })
 
-  test('share with expiration date', async ({ world }) => {
+  test('share with expiration date', async () => {
     //    Given "Admin" creates following group using API
     //   | id    |
     //   | sales |
-    await api.groupsHaveBeenCreated({
-      world,
-      groupIds: ['sales'],
-      stepUser: 'Admin'
-    })
+    await api.groupsHaveBeenCreated({ groupIds: ['sales'], stepUser: 'Admin' })
     // And "Admin" adds user to the group using API
     //   | user  | group |
     //   | Brian | sales |
     await api.usersHaveBeenAddedToGroup({
-      world,
       stepUser: 'Admin',
       usersToAdd: [{ user: 'Brian', group: 'sales' }]
     })
@@ -251,17 +221,12 @@ test.describe('share', () => {
     //   | name       |
     //   | myfolder   |
     //   | mainFolder |
-    await api.userHasCreatedFolders({
-      world,
-      stepUser: 'Alice',
-      folderNames: ['myfolder', 'mainFolder']
-    })
+    await api.userHasCreatedFolders({ stepUser: 'Alice', folderNames: ['myfolder', 'mainFolder'] })
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile           | content      |
     //   | new.txt              | some content |
     //   | mainFolder/lorem.txt | lorem epsum  |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [
         { pathToFile: 'new.txt', content: 'some content' },
@@ -269,14 +234,13 @@ test.describe('share', () => {
       ]
     })
     // And "Alice" logs In
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // When "Alice" shares the following resource using the sidebar panel
     //   | resource   | recipient | type  | role                      | resourceType | expirationDate |
     //   | new.txt    | Brian     | user  | Can edit with trashbin    | file         | +5 days        |
     //   | myfolder   | sales     | group | Can view                  | folder       | +10 days       |
     //   | mainFolder | Brian     | user  | Can edit with trashbin    | folder       |                |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -309,7 +273,6 @@ test.describe('share', () => {
     // set expirationDate to existing share
     // And "Alice" sets the expiration date of share "mainFolder" of user "Brian" to "+5 days"
     await ui.userSetsExpirationDateOfShare({
-      world,
       stepUser: 'Alice',
       resource: 'mainFolder',
       collaboratorName: 'Brian',
@@ -321,7 +284,6 @@ test.describe('share', () => {
     //   | Name | Brian Murphy |
     //   | Type | User         |
     await ui.userChecksAccessDetailsOfShare({
-      world,
       stepUser: 'Alice',
       resource: 'mainFolder',
       sharee: { name: 'Brian', type: 'user' },
@@ -335,7 +297,6 @@ test.describe('share', () => {
     //   | Name | Brian Murphy |
     //   | Type | User         |
     await ui.userChecksAccessDetailsOfShare({
-      world,
       stepUser: 'Alice',
       resource: 'mainFolder/lorem.txt',
       sharee: { name: 'Brian', type: 'user' },
@@ -346,7 +307,6 @@ test.describe('share', () => {
     })
     // And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
     await ui.userSetsExpirationDateOfShare({
-      world,
       stepUser: 'Alice',
       resource: 'myfolder',
       collaboratorName: 'sales',
@@ -357,7 +317,6 @@ test.describe('share', () => {
     //   | Name | sales department |
     //   | Type | Group            |
     await ui.userChecksAccessDetailsOfShare({
-      world,
       stepUser: 'Alice',
       resource: 'myfolder',
       sharee: { name: 'sales', type: 'group' },
@@ -371,7 +330,6 @@ test.describe('share', () => {
     //   | resource | recipient | type  |
     //   | myfolder | sales     | group |
     await ui.userRemovesSharees({
-      world,
       stepUser: 'Alice',
       sharees: [
         {
@@ -382,31 +340,22 @@ test.describe('share', () => {
       ]
     })
     // And  "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('receive two shares with same name', async ({ world }) => {
+  test('receive two shares with same name', async () => {
     //    Given "Admin" creates following users using API
     //   | id    |
     //   | Carol |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Carol']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Carol'] })
     // And "Alice" creates the following folder in personal space using API
     //   | name        |
     //   | test-folder |
-    await api.userHasCreatedFolders({
-      world,
-      stepUser: 'Alice',
-      folderNames: ['test-folder']
-    })
+    await api.userHasCreatedFolders({ stepUser: 'Alice', folderNames: ['test-folder'] })
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile   | content      |
     //   | testfile.txt | example text |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [
         {
@@ -416,13 +365,12 @@ test.describe('share', () => {
       ]
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // And "Alice" shares the following resource using the sidebar panel
     //   | resource     | recipient | type | role     |
     //   | testfile.txt | Brian     | user | Can view |
     //   | test-folder  | Brian     | user | Can view |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -443,20 +391,15 @@ test.describe('share', () => {
       ]
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
     // And "Carol" creates the following folder in personal space using API
     //   | name        |
     //   | test-folder |
-    await api.userHasCreatedFolders({
-      world,
-      stepUser: 'Carol',
-      folderNames: ['test-folder']
-    })
+    await api.userHasCreatedFolders({ stepUser: 'Carol', folderNames: ['test-folder'] })
     // And "Carol" creates the following files into personal space using API
     //   | pathToFile   | content      |
     //   | testfile.txt | example text |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Carol',
       files: [
         {
@@ -466,13 +409,12 @@ test.describe('share', () => {
       ]
     })
     // And "Carol" logs in
-    await ui.userLogsIn({ world, stepUser: 'Carol' })
+    await ui.userLogsIn({ stepUser: 'Carol' })
     // And "Carol" shares the following resource using the sidebar panel
     //   | resource     | recipient | type | role     |
     //   | testfile.txt | Brian     | user | Can view |
     //   | test-folder  | Brian     | user | Can view |
     await ui.userSharesResources({
-      world,
       stepUser: 'Carol',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -493,11 +435,11 @@ test.describe('share', () => {
       ]
     })
     // And "Carol" logs out
-    await ui.userLogsOut({ world, stepUser: 'Carol' })
+    await ui.userLogsOut({ stepUser: 'Carol' })
     // When "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
     // Then following resources should be displayed in the Shares for user "Brian"
     //   | resource         |
     //   | testfile.txt     |
@@ -506,40 +448,28 @@ test.describe('share', () => {
     //   | testfile (1).txt |
     //   | test-folder (1)  |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.shares,
       stepUser: 'Brian',
       resources: ['testfile.txt', 'test-folder', 'testfile (1).txt', 'test-folder (1)']
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
   })
 
-  test('check file with same name but different paths are displayed correctly in shared with others page', async ({
-    world
-  }) => {
+  test('check file with same name but different paths are displayed correctly in shared with others page', async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Carol |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Carol']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Carol'] })
     // And "Alice" creates the following folder in personal space using API
     //   | name        |
     //   | test-folder |
-    await api.userHasCreatedFolders({
-      world,
-      stepUser: 'Alice',
-      folderNames: ['test-folder']
-    })
+    await api.userHasCreatedFolders({ stepUser: 'Alice', folderNames: ['test-folder'] })
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile               | content      |
     //   | testfile.txt             | example text |
     //   | test-folder/testfile.txt | some text    |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [
         {
@@ -557,7 +487,6 @@ test.describe('share', () => {
     //   | testfile.txt             | Brian     | user | Can edit with trashbin    |
     //   | test-folder/testfile.txt | Brian     | user | Can edit with trashbin    |
     await api.userHasSharedResources({
-      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -577,37 +506,31 @@ test.describe('share', () => {
       ]
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // And "Alice" navigates to the shared with others page
-    await ui.userNavigatesToSharedWithOthersPage({ world, stepUser: 'Alice' })
+    await ui.userNavigatesToSharedWithOthersPage({ stepUser: 'Alice' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource                 |
     //   | testfile.txt             |
     //   | test-folder/testfile.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['testfile.txt', 'test-folder/testfile.txt']
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('share indication', async ({ world }) => {
+  test('share indication', async () => {
     //  When "Alice" creates the following folders in personal space using API
     //   | name                  |
     //   | shareFolder/subFolder |
-    await api.userHasCreatedFolders({
-      world,
-      stepUser: 'Alice',
-      folderNames: ['shareFolder/subFolder']
-    })
+    await api.userHasCreatedFolders({ stepUser: 'Alice', folderNames: ['shareFolder/subFolder'] })
     // And "Alice" shares the following resource using API
     //   | resource    | recipient | type | role                   | resourceType |
     //   | shareFolder | Brian     | user | Can edit with trashbin | folder       |
     await api.userHasSharedResources({
-      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -620,28 +543,22 @@ test.describe('share', () => {
       ]
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // Then "Alice" should see user-direct indicator on the folder "shareFolder"
     await ui.userShouldSeeShareIndicatorOnResource({
-      world,
       stepUser: 'Alice',
       buttonLabel: shareIndicator.userDirect,
       resource: 'shareFolder'
     })
     // When "Alice" opens folder "shareFolder"
-    await ui.userOpensResource({
-      world,
-      stepUser: 'Alice',
-      resource: 'shareFolder'
-    })
+    await ui.userOpensResource({ stepUser: 'Alice', resource: 'shareFolder' })
     // Then "Alice" should see user-indirect indicator on the folder "subFolder"
     await ui.userShouldSeeShareIndicatorOnResource({
-      world,
       stepUser: 'Alice',
       buttonLabel: shareIndicator.userIndirect,
       resource: 'subFolder'
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 })

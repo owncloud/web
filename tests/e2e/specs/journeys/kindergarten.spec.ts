@@ -4,44 +4,35 @@ import * as api from '../../steps/api/api.js'
 import * as ui from '../../steps/ui/index'
 
 test.describe('Kindergarten can use web to organize a day', () => {
-  test.beforeEach(async ({ world }) => {
+  test.beforeEach(async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
     //   | Carol |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice', 'Brian', 'Carol']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian', 'Carol'] })
 
     // And "Admin" creates following group using API
     //   | id       |
     //   | sales    |
     //   | security |
-    await api.groupsHaveBeenCreated({
-      world,
-      groupIds: ['sales', 'security'],
-      stepUser: 'Admin'
-    })
+    await api.groupsHaveBeenCreated({ groupIds: ['sales', 'security'], stepUser: 'Admin' })
 
     // And "Admin" adds user to the group using API
     //   | user  | group |
     //   | Brian | sales |
     await api.usersHaveBeenAddedToGroup({
-      world,
       stepUser: 'Admin',
       usersToAdd: [{ user: 'Brian', group: 'sales' }]
     })
   })
 
-  test('Alice can share this weeks meal plan with all parents', async ({ world }) => {
+  test('Alice can share this weeks meal plan with all parents', async () => {
     // When "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
 
     // And "Alice" navigates to the personal space page
-    await ui.userNavigatesToPersonalSpacePage({ world, stepUser: 'Alice' })
+    await ui.userNavigatesToPersonalSpacePage({ stepUser: 'Alice' })
 
     // And "Alice" creates the following resources
     //   | resource                             | type   |
@@ -49,7 +40,6 @@ test.describe('Kindergarten can use web to organize a day', () => {
     //   | groups/Pre-Schools Pirates/meal plan | folder |
     //   | groups/Teddy Bear Daycare/meal plan  | folder |
     await ui.userCreatesResources({
-      world,
       stepUser: 'Alice',
       resources: [
         { name: 'groups/Kindergarten Koalas/meal plan', type: 'folder' },
@@ -70,7 +60,6 @@ test.describe('Kindergarten can use web to organize a day', () => {
     //   | lorem.txt         | groups/Teddy Bear Daycare/meal plan  |
     //   | lorem-big.txt     | groups/Teddy Bear Daycare/meal plan  |
     await ui.userUploadsResources({
-      world,
       stepUser: 'Alice',
       resources: [
         { name: 'PARENT/parent.txt', to: 'groups/Kindergarten Koalas/meal plan' },
@@ -103,7 +92,6 @@ test.describe('Kindergarten can use web to organize a day', () => {
     //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Brian     | user  | Can edit with trashbin | file         |
     //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit with trashbin | file         |
     await ui.userSharesResources({
-      world,
       actionType: fileAction.sideBarPanel,
       stepUser: 'Alice',
       shares: [
@@ -202,7 +190,6 @@ test.describe('Kindergarten can use web to organize a day', () => {
     //   | groups/Kindergarten Koalas/meal plan               | sales     | group | Can edit with trashbin | folder       |
     //   | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit with trashbin | file         |
     await ui.userUpdatesShareeRoles({
-      world,
       stepUser: 'Alice',
       roleUpdates: [
         {
@@ -237,16 +224,15 @@ test.describe('Kindergarten can use web to organize a day', () => {
     })
     // Then what do we check for to be confident that the above things done by Alice have worked?
     // When "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
 
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
 
     // And "Brian" downloads the following resources using the sidebar panel
     //   | resource | from      | type |
     //   | data.zip | meal plan | file |
     await ui.userDownloadsResource({
-      world,
       stepUser: 'Brian',
       resourceToDownload: [{ resource: 'data.zip', from: 'meal plan', type: 'file' }],
       actionType: fileAction.sideBarPanel
@@ -255,10 +241,10 @@ test.describe('Kindergarten can use web to organize a day', () => {
     // Then what do we check for to be confident that the above things done by Brian have worked?
     // Then the downloaded zip should contain... ?
     // When "Carol" logs in
-    await ui.userLogsIn({ world, stepUser: 'Carol' })
+    await ui.userLogsIn({ stepUser: 'Carol' })
 
     // And "Carol" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Carol' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Carol' })
     // And "Carol" downloads the following resources using the sidebar panel
     //   | resource      | from      | type   |
     //   | data.zip      | meal plan | file   |
@@ -268,7 +254,6 @@ test.describe('Kindergarten can use web to organize a day', () => {
     // Then what do we check for to be confident that the above things done by Carol have worked?
     // Then the downloaded files should have content "abc..."
     await ui.userDownloadsResource({
-      world,
       stepUser: 'Carol',
       resourceToDownload: [
         { resource: 'data.zip', from: 'meal plan', type: 'file' },
@@ -279,7 +264,7 @@ test.describe('Kindergarten can use web to organize a day', () => {
       actionType: fileAction.sideBarPanel
     })
     // And "Carol" logs out
-    await ui.userLogsOut({ world, stepUser: 'Carol' })
+    await ui.userLogsOut({ stepUser: 'Carol' })
 
     // When "Brian" downloads the following resources using the sidebar panel
     //   | resource      | from      | type   |
@@ -289,7 +274,6 @@ test.describe('Kindergarten can use web to organize a day', () => {
     // Then what do we check for to be confident that the above things done by Brian have worked?
     // Then the downloaded files should have content "abc..."
     await ui.userDownloadsResource({
-      world,
       stepUser: 'Brian',
       resourceToDownload: [
         { resource: 'lorem.txt', from: 'meal plan', type: 'file' },
@@ -300,7 +284,7 @@ test.describe('Kindergarten can use web to organize a day', () => {
     })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
     // And "Alice" downloads the following resources using the sidebar panel
     //   | resource            | from                                 | type   |
     //   | parent.txt          | groups/Kindergarten Koalas/meal plan | file   |
@@ -320,7 +304,6 @@ test.describe('Kindergarten can use web to organize a day', () => {
     //   | Teddy Bear Daycare  | groups                               | folder |
     //   | groups              |                                      | folder |
     await ui.userDownloadsResource({
-      world,
       stepUser: 'Alice',
       resourceToDownload: [
         {
@@ -421,7 +404,6 @@ test.describe('Kindergarten can use web to organize a day', () => {
     // # Then what do we check for to be confident that the above things done by Alice have worked?
     // # Then the downloaded files should have content "abc..."
     await ui.userDeletesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       resources: [
@@ -439,6 +421,6 @@ test.describe('Kindergarten can use web to organize a day', () => {
       ]
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 })

@@ -4,38 +4,33 @@ import * as ui from '../../steps/ui/index'
 import { fileAction, resourcePage, searchFilter, searchScope } from '../../environment/constants'
 
 test.describe('Search', { tag: '@predefined-users' }, () => {
-  test.beforeEach(async ({ world }) => {
+  test.beforeEach(async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
-    await api.usersHaveBeenCreated({ world, stepUser: 'Admin', users: ['Alice'] })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice'] })
   })
 
   test('Search in personal spaces', async ({ world }) => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Brian |
-    await api.usersHaveBeenCreated({ world, stepUser: 'Admin', users: ['Brian'] })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Brian'] })
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
 
     // And "Brian" creates the following folder in personal space using API
     //   | name                 |
     //   | new_share_from_brian |
-    await api.userHasCreatedFolder({
-      world,
-      stepUser: 'Brian',
-      folderName: 'new_share_from_brian'
-    })
+    await api.userHasCreatedFolder({ stepUser: 'Brian', folderName: 'new_share_from_brian' })
 
     // And "Brian" uploads the following local file into personal space using API
     //   | localFile                        | to                |
     //   | filesForUpload/new-lorem-big.txt | new-lorem-big.txt |
     await api.userHasUploadedFilesInPersonalSpace({
-      world,
       stepUser: 'Brian',
       filesToUpload: [{ localFile: 'filesForUpload/new-lorem-big.txt', to: 'new-lorem-big.txt' }]
     })
@@ -44,7 +39,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | new_share_from_brian | Alice     | user | Can view | folder       |
     //   | new-lorem-big.txt    | Alice     | user | Can view | file         |
     await ui.userSharesResources({
-      world,
       stepUser: 'Brian',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -65,7 +59,7 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       ]
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
 
     // And "Alice" creates the following resources
     //   | resource                   | type   |
@@ -73,7 +67,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | FolDer/child-one/child-two | folder |
     //   | strängéनेपालीName          | folder |
     await ui.userCreatesResources({
-      world,
       stepUser: 'Alice',
       resources: [
         { name: 'folder', type: 'folder' },
@@ -83,21 +76,16 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     })
 
     // And "Alice" enables the option to display the hidden file
-    await ui.userEnablesShowHiddenFilesOption({ world, stepUser: 'Alice' })
+    await ui.userEnablesShowHiddenFilesOption({ stepUser: 'Alice' })
 
     // And "Alice" uploads the following resources
     //   | resource         |
     //   | .hidden-file.txt |
-    await ui.userUploadsResources({
-      world,
-      stepUser: 'Alice',
-      resources: [{ name: '.hidden-file.txt' }]
-    })
+    await ui.userUploadsResources({ stepUser: 'Alice', resources: [{ name: '.hidden-file.txt' }] })
 
     // # search for objects of personal space
     // When "Alice" searches "foldeR" using the global search and the "all files" filter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'foldeR',
       filter: searchScope.allFiles
@@ -107,7 +95,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | folder   |
     //   | FolDer   |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer']
@@ -119,7 +106,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | new-lorem-big.txt    |
     //   | .hidden-file.txt     |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['new_share_from_brian', 'new-lorem-big.txt', '.hidden-file.txt']
@@ -128,7 +114,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // # search for hidden file
     // When "Alice" searches "hidden" using the global search and the "all files" filter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'hidden',
       filter: searchScope.allFiles
@@ -137,7 +122,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource         |
     //   | .hidden-file.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['.hidden-file.txt']
@@ -149,7 +133,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | PARENT            |
     //   | new-lorem-big.txt |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer', 'PARENT', 'new-lorem-big.txt']
@@ -158,7 +141,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // # subfolder search
     // And "Alice" searches "child" using the global search and the "all files" filter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'child',
       filter: searchScope.allFiles
@@ -168,7 +150,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | child-one |
     //   | child-two |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['child-one', 'child-two']
@@ -181,7 +162,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | .hidden-file.txt  |
     //   | new-lorem-big.txt |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer', 'folder_from_brian', '.hidden-file.txt', 'new-lorem-big.txt']
@@ -190,7 +170,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     // # received shares search
     // And "Alice" searches "NEW" using the global search and the "all files" filter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'NEW',
       filter: searchScope.allFiles
@@ -200,7 +179,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | new_share_from_brian |
     //   | new-lorem-big.txt    |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['new_share_from_brian', 'new-lorem-big.txt']
@@ -211,13 +189,12 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | FolDer           |
     //   | .hidden-file.txt |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer', '.hidden-file.txt']
     })
     // And "Alice" opens the "files" app
-    await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
+    await ui.userOpensApplication({ stepUser: 'Alice', name: 'files' })
 
     // # search renamed resources
     // When "Alice" renames the following resource
@@ -225,20 +202,17 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | folder   | renamedFolder |
     //   | FolDer   | renamedFolDer |
     await ui.userRenamesResource({
-      world,
       stepUser: 'Alice',
       resource: 'folder',
       newResourceName: 'renamedFolder'
     })
     await ui.userRenamesResource({
-      world,
       stepUser: 'Alice',
       resource: 'FolDer',
       newResourceName: 'renamedFolDer'
     })
     // And "Alice" searches "rena" using the global search and the "all files" filter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'rena',
       filter: searchScope.allFiles
@@ -248,7 +222,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | renamedFolder |
     //   | renamedFolDer |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['renamedFolder', 'renamedFolDer']
@@ -258,7 +231,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | folder   |
     //   | FolDer   |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['folder', 'FolDer']
@@ -270,18 +242,16 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     await page.waitForTimeout(5000)
     // When "Alice" searches "strängéनेपालीName" using the global search and the "all files" filter and presses enter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'strängéनेपालीName',
       filter: searchScope.allFiles,
       command: 'presses enter'
     })
     // And "Alice" enables the option to search title only
-    await ui.userEnablesTitleOnlySearch({ world, stepUser: 'Alice' })
+    await ui.userEnablesTitleOnlySearch({ stepUser: 'Alice' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | strängéनेपालीName |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['strängéनेपालीName']
@@ -292,7 +262,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource          | from |
     //   | strängéनेपालीName |      |
     await ui.userDeletesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       resources: [{ name: 'strängéनेपालीName' }]
@@ -300,7 +269,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
 
     // And "Alice" searches "forDeleting" using the global search and the "all files" filter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'forDeleting',
       filter: searchScope.allFiles
@@ -309,34 +277,28 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource          |
     //   | strängéनेपालीName |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: 'search list',
       stepUser: 'Alice',
       resources: ['strängéनेपालीName']
     })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('Search using "current folder" filter', async ({ world }) => {
+  test('Search using "current folder" filter', async () => {
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // And "Alice" creates the following folders in personal space using API
     //   | name                 |
     //   | mainFolder/subFolder |
-    await api.userHasCreatedFolder({
-      world,
-      stepUser: 'Alice',
-      folderName: 'mainFolder/subFolder'
-    })
+    await api.userHasCreatedFolder({ stepUser: 'Alice', folderName: 'mainFolder/subFolder' })
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile                                         | content                   |
     //   | exampleInsideThePersonalSpace.txt                  | I'm in the personal Space |
     //   | mainFolder/exampleInsideTheMainFolder.txt          | I'm in the main folder    |
     //   | mainFolder/subFolder/exampleInsideTheSubFolder.txt | I'm in the sub folder     |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [
         { pathToFile: 'exampleInsideThePersonalSpace.txt', content: "I'm in the personal Space" },
@@ -351,14 +313,9 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       ]
     })
     // When "Alice" opens folder "mainFolder"
-    await ui.userOpensResource({
-      world,
-      stepUser: 'Alice',
-      resource: 'mainFolder'
-    })
+    await ui.userOpensResource({ stepUser: 'Alice', resource: 'mainFolder' })
     // And "Alice" searches "example" using the global search and the "all files" filter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'example',
       filter: searchScope.allFiles
@@ -369,7 +326,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | exampleInsideTheMainFolder.txt    |
     //   | exampleInsideTheSubFolder.txt     |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: [
@@ -381,7 +337,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
 
     // When "Alice" searches "example" using the global search and the "current folder" filter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'example',
       filter: searchScope.currentFolder
@@ -391,7 +346,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | exampleInsideTheMainFolder.txt |
     //   | exampleInsideTheSubFolder.txt  |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['exampleInsideTheMainFolder.txt', 'exampleInsideTheSubFolder.txt']
@@ -400,31 +354,25 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource                          |
     //   | exampleInsideThePersonalSpace.txt |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: 'search list',
       stepUser: 'Alice',
       resources: ['exampleInsideThePersonalSpace.txt']
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('Search using mediaType filter', async ({ world }) => {
+  test('Search using mediaType filter', async () => {
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // And "Alice" creates the following folders in personal space using API
     //   | name      |
     //   | mediaTest |
-    await api.userHasCreatedFolder({
-      world,
-      stepUser: 'Alice',
-      folderName: 'mediaTest'
-    })
+    await api.userHasCreatedFolder({ stepUser: 'Alice', folderName: 'mediaTest' })
     // And "Alice" uploads the following local file into personal space using API
     //   | localFile                     | to            |
     //   | filesForUpload/testavatar.jpg | mediaTest.jpg |
     await api.userHasUploadedFilesInPersonalSpace({
-      world,
       stepUser: 'Alice',
       filesToUpload: [{ localFile: 'filesForUpload/testavatar.jpg', to: 'mediaTest.jpg' }]
     })
@@ -435,7 +383,6 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mediaTest.mp3 | I'm a Audio    |
     //   | mediaTest.zip | I'm a Archive  |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [
         { pathToFile: 'mediaTest.txt', content: "I'm a Document" },
@@ -446,102 +393,72 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     })
     // And "Alice" searches "mediaTest" using the global search and the "all files" filter and presses enter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'mediaTest',
       filter: searchScope.allFiles,
       command: 'presses enter'
     })
     // And "Alice" selects mediaType "Document" from the search result filter chip
-    await ui.userFiltersSearchByMediaType({
-      world,
-      stepUser: 'Alice',
-      mediaType: 'Document'
-    })
+    await ui.userFiltersSearchByMediaType({ stepUser: 'Alice', mediaType: 'Document' })
     // And "Alice" enables the option to search title only
-    await ui.userEnablesTitleOnlySearch({ world, stepUser: 'Alice' })
+    await ui.userEnablesTitleOnlySearch({ stepUser: 'Alice' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest.txt']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilter.mediaType })
+    await ui.userClearsFilter({ stepUser: 'Alice', filter: searchFilter.mediaType })
     // When "Alice" selects mediaType "PDF" from the search result filter chip
-    await ui.userFiltersSearchByMediaType({
-      world,
-      stepUser: 'Alice',
-      mediaType: 'PDF'
-    })
+    await ui.userFiltersSearchByMediaType({ stepUser: 'Alice', mediaType: 'PDF' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest.pdf |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest.pdf']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilter.mediaType })
+    await ui.userClearsFilter({ stepUser: 'Alice', filter: searchFilter.mediaType })
     // When "Alice" selects mediaType "Audio" from the search result filter chip
-    await ui.userFiltersSearchByMediaType({
-      world,
-      stepUser: 'Alice',
-      mediaType: 'Audio'
-    })
+    await ui.userFiltersSearchByMediaType({ stepUser: 'Alice', mediaType: 'Audio' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest.mp3 |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest.mp3']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilter.mediaType })
+    await ui.userClearsFilter({ stepUser: 'Alice', filter: searchFilter.mediaType })
     // When "Alice" selects mediaType "Archive" from the search result filter chip
-    await ui.userFiltersSearchByMediaType({
-      world,
-      stepUser: 'Alice',
-      mediaType: 'Archive'
-    })
+    await ui.userFiltersSearchByMediaType({ stepUser: 'Alice', mediaType: 'Archive' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest.zip |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest.zip']
     })
     // And "Alice" clears mediaType filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilter.mediaType })
+    await ui.userClearsFilter({ stepUser: 'Alice', filter: searchFilter.mediaType })
 
     // # multiple choose
     // When "Alice" selects mediaType "Folder" from the search result filter chip
-    await ui.userFiltersSearchByMediaType({
-      world,
-      stepUser: 'Alice',
-      mediaType: 'Folder'
-    })
+    await ui.userFiltersSearchByMediaType({ stepUser: 'Alice', mediaType: 'Folder' })
     // And "Alice" selects mediaType "Image" from the search result filter chip
-    await ui.userFiltersSearchByMediaType({
-      world,
-      stepUser: 'Alice',
-      mediaType: 'Image'
-    })
+    await ui.userFiltersSearchByMediaType({ stepUser: 'Alice', mediaType: 'Image' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource      |
     //   | mediaTest     |
     //   | mediaTest.jpg |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['mediaTest', 'mediaTest.jpg']
@@ -553,33 +470,27 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mediaTest.mp3 |
     //   | mediaTest.zip |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: 'files list',
       stepUser: 'Alice',
       resources: ['mediaTest.txt', 'mediaTest.pdf', 'mediaTest.mp3', 'mediaTest.zip']
     })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('Search using lastModified filter', async ({ world }) => {
+  test('Search using lastModified filter', async () => {
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // And "Alice" creates the following folders in personal space using API
     //   | name       |
     //   | mainFolder |
-    await api.userHasCreatedFolder({
-      world,
-      stepUser: 'Alice',
-      folderName: 'mainFolder'
-    })
+    await api.userHasCreatedFolder({ stepUser: 'Alice', folderName: 'mainFolder' })
     // And "Alice" creates the following files with mtime into personal space using API
     //   | pathToFile               | content             | mtimeDeltaDays |
     //   | mainFolder/mediaTest.pdf | created 29 days ago | -29 days       |
     //   | mainFolder/mediaTest.txt | created 5 days ago  | -5 days        |
     //   | mainFolder/mediaTest.md  | created today       |                |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [
         {
@@ -596,14 +507,9 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
       ]
     })
     // When "Alice" opens folder "mainFolder"
-    await ui.userOpensResource({
-      world,
-      stepUser: 'Alice',
-      resource: 'mainFolder'
-    })
+    await ui.userOpensResource({ stepUser: 'Alice', resource: 'mainFolder' })
     // And "Alice" searches "mediaTest" using the global search and the "current folder" filter and presses enter
     await ui.userSearchesGloballyWithFilter({
-      world,
       stepUser: 'Alice',
       keyword: 'mediaTest',
       filter: searchScope.currentFolder,
@@ -611,35 +517,28 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     })
     // And "Alice" selects lastModified "last 30 days" from the search result filter chip
     await ui.userFiltersSearchByLastModifiedDate({
-      world,
       stepUser: 'Alice',
       lastModified: 'last 30 days'
     })
     // And "Alice" enables the option to search title only
-    await ui.userEnablesTitleOnlySearch({ world, stepUser: 'Alice' })
+    await ui.userEnablesTitleOnlySearch({ stepUser: 'Alice' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource                 |
     //   | mainFolder/mediaTest.pdf |
     //   | mainFolder/mediaTest.txt |
     //   | mainFolder/mediaTest.md  |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.pdf', 'mainFolder/mediaTest.txt', 'mainFolder/mediaTest.md']
     })
     // When "Alice" selects lastModified "last 7 days" from the search result filter chip
-    await ui.userFiltersSearchByLastModifiedDate({
-      world,
-      stepUser: 'Alice',
-      lastModified: 'last 7 days'
-    })
+    await ui.userFiltersSearchByLastModifiedDate({ stepUser: 'Alice', lastModified: 'last 7 days' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource                 |
     //   | mainFolder/mediaTest.txt |
     //   | mainFolder/mediaTest.md  |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.txt', 'mainFolder/mediaTest.md']
@@ -648,22 +547,16 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | resource                 |
     //   | mainFolder/mediaTest.pdf |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.pdf']
     })
     // When "Alice" selects lastModified "today" from the search result filter chip
-    await ui.userFiltersSearchByLastModifiedDate({
-      world,
-      stepUser: 'Alice',
-      lastModified: 'today'
-    })
+    await ui.userFiltersSearchByLastModifiedDate({ stepUser: 'Alice', lastModified: 'today' })
     // Then following resources should be displayed in the files list for user "Alice"
     //   | resource                |
     //   | mainFolder/mediaTest.md |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.md']
@@ -673,14 +566,13 @@ test.describe('Search', { tag: '@predefined-users' }, () => {
     //   | mainFolder/mediaTest.pdf |
     //   | mainFolder/mediaTest.txt |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: resourcePage.searchList,
       stepUser: 'Alice',
       resources: ['mainFolder/mediaTest.pdf', 'mainFolder/mediaTest.txt']
     })
     // And "Alice" clears lastModified filter
-    await ui.userClearsFilter({ world, stepUser: 'Alice', filter: searchFilter.lastModified })
+    await ui.userClearsFilter({ stepUser: 'Alice', filter: searchFilter.lastModified })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 })

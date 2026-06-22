@@ -57,7 +57,7 @@ export class Link {
     return await po.showOrHidePassword({ page: this.#page, ...args })
   }
 
-  async copyEnteredPassword(): Promise<void> {
+  async copyEnteredPassword(): Promise<string> {
     return await po.copyEnteredPassword(this.#page)
   }
 

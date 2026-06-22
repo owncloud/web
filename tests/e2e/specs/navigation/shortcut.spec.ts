@@ -7,34 +7,29 @@ test.describe(
   'Users can create shortcuts for resources and sites',
   { tag: '@predefined-users' },
   () => {
-    test.beforeEach(async ({ world }) => {
+    test.beforeEach(async () => {
       //   Given "Admin" creates following users using API
       //    | id    |
       //    | Alice |
       //    | Brian |
-      await api.usersHaveBeenCreated({
-        world,
-        stepUser: 'Admin',
-        users: ['Alice', 'Brian']
-      })
+      await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian'] })
     })
 
-    test('shortcut', async ({ world }) => {
+    test('shortcut', async () => {
       // Given "Alice" logs in
-      await ui.userLogsIn({ world, stepUser: 'Alice' })
+      await ui.userLogsIn({ stepUser: 'Alice' })
       // And "Brian" logs in
-      await ui.userLogsIn({ world, stepUser: 'Brian' })
+      await ui.userLogsIn({ stepUser: 'Brian' })
 
       // And "Alice" creates the following folders in personal space using API
       //   | name |
       //   | docs |
-      await api.userHasCreatedFolder({ world, stepUser: 'Alice', folderName: 'docs' })
+      await api.userHasCreatedFolder({ stepUser: 'Alice', folderName: 'docs' })
 
       // And "Alice" creates the following files into personal space using API
       // | pathToFile      | content           |
       // | docs/notice.txt | important content |
       await api.userHasCreatedFiles({
-        world,
         stepUser: 'Alice',
         files: [{ pathToFile: 'docs/notice.txt', content: 'important content' }]
       })
@@ -43,7 +38,6 @@ test.describe(
       // | localFile                     | to             |
       // | filesForUpload/testavatar.jpg | testavatar.jpg |
       await api.userHasUploadedFilesInPersonalSpace({
-        world,
         stepUser: 'Alice',
         filesToUpload: [{ localFile: 'filesForUpload/testavatar.jpg', to: 'testavatar.jpg' }]
       })
@@ -51,7 +45,6 @@ test.describe(
       // | resource       | recipient | type | role     | resourceType |
       // | testavatar.jpg | Brian     | user | Can view | file         |
       await api.userHasSharedResources({
-        world,
         stepUser: 'Alice',
         shares: [
           {
@@ -67,20 +60,18 @@ test.describe(
       // | resource        | password |
       // | docs/notice.txt | %public% |
       await api.userHasCreatedPublicLinkOfResource({
-        world,
         stepUser: 'Alice',
         resource: 'docs/notice.txt',
         password: '%public%'
       })
       // And "Alice" renames the most recently created public link of resource "docs/notice.txt" to "myPublicLink"
       await ui.userRenamesMostRecentlyCreatedPublicLinkOfResource({
-        world,
         stepUser: 'Alice',
         resource: 'docs/notice.txt',
         newName: 'myPublicLink'
       })
       // When "Alice" opens the "files" app
-      await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
+      await ui.userOpensApplication({ stepUser: 'Alice', name: 'files' })
 
       // # create a shortcut to file folder website
       // And "Alice" creates a shortcut for the following resources
@@ -89,7 +80,6 @@ test.describe(
       // | docs                       |                | folder  |
       // | https://owncloud.com/news/ | companyNews    | website |
       await ui.userCreatesShortcutForResources({
-        world,
         stepUser: 'Alice',
         resources: [
           { resource: 'notice.txt', name: 'important file', type: 'file' },
@@ -103,93 +93,70 @@ test.describe(
       // | important file.url | file |
       const resourceToDownload = [{ resource: 'important file.url', type: 'file' }]
       await ui.userDownloadsResource({
-        world,
         stepUser: 'Alice',
         resourceToDownload: resourceToDownload,
         actionType: fileAction.sideBarPanel
       })
 
       // When "Alice" opens a shortcut "important file.url"
-      await ui.userOpensShortcut({
-        world,
-        stepUser: 'Alice',
-        name: 'important file.url'
-      })
+      await ui.userOpensShortcut({ stepUser: 'Alice', name: 'important file.url' })
       // Then "Alice" is in a text-editor
       await ui.userShouldBeInFileViewer({
-        world,
         stepUser: 'Alice',
         fileViewerType: application.textEditor
       })
       // And "Alice" closes the file viewer
-      await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
+      await ui.userClosesFileViewer({ stepUser: 'Alice' })
       // And "Alice" opens the "files" app
-      await ui.userOpensApplication({ world, stepUser: 'Alice', name: 'files' })
+      await ui.userOpensApplication({ stepUser: 'Alice', name: 'files' })
       // Then "Alice" can open a shortcut "companyNews.url" with external url "https://owncloud.com/news/"
       await ui.userCanOpenShortcutWithExternalUrl({
-        world,
         stepUser: 'Alice',
         name: 'companyNews.url',
         url: 'https://owncloud.com/blogs/'
       })
       // And "Alice" logs out
-      await ui.userLogsOut({ world, stepUser: 'Alice' })
+      await ui.userLogsOut({ stepUser: 'Alice' })
 
       // # create a shortcut to the shared file
       // When "Brian" creates a shortcut for the following resources
       // | resource       | name | type |
       // | testavatar.jpg | logo | file |
       await ui.userCreatesShortcutForResources({
-        world,
         stepUser: 'Brian',
         resources: [{ resource: 'testavatar.jpg', name: 'logo', type: 'file' }]
       })
       // And "Brian" opens a shortcut "logo.url"
-      await ui.userOpensShortcut({
-        world,
-        stepUser: 'Brian',
-        name: 'logo.url'
-      })
+      await ui.userOpensShortcut({ stepUser: 'Brian', name: 'logo.url' })
       // Then "Brian" is in a media-viewer
       await ui.userShouldBeInFileViewer({
-        world,
         stepUser: 'Brian',
         fileViewerType: application.mediaViewer
       })
       // And "Brian" closes the file viewer
-      await ui.userClosesFileViewer({ world, stepUser: 'Brian' })
+      await ui.userClosesFileViewer({ stepUser: 'Brian' })
 
       // # create a shortcut to the public link
       // When "Brian" opens the "files" app
-      await ui.userOpensApplication({ world, stepUser: 'Brian', name: 'files' })
+      await ui.userOpensApplication({ stepUser: 'Brian', name: 'files' })
       // And "Brian" creates a shortcut for the following resources
       // | resource     | name             | type        |
       // | myPublicLink | linkToNoticeFile | public link |
       await ui.userCreatesShortcutForResources({
-        world,
         stepUser: 'Brian',
         resources: [{ resource: 'myPublicLink', name: 'linkToNoticeFile', type: 'public link' }]
       })
       // And "Brian" opens a shortcut "linkToNoticeFile.url"
-      await ui.userOpensShortcut({
-        world,
-        stepUser: 'Brian',
-        name: 'linkToNoticeFile.url'
-      })
+      await ui.userOpensShortcut({ stepUser: 'Brian', name: 'linkToNoticeFile.url' })
       // And "Brian" unlocks the public link with password "%public%"
-      await ui.userUnlocksPublicLink({
-        world,
-        password: '%public%',
-        stepUser: 'Brian'
-      })
+      await ui.userUnlocksPublicLink({ password: '%public%', stepUser: 'Brian' })
       // Then "Brian" is in a text-editor
       await ui.userShouldBeInFileViewer({
-        world,
         stepUser: 'Brian',
         fileViewerType: application.textEditor
       })
       // And "Brian" logs out
-      await ui.userLogsOut({ world, stepUser: 'Brian' })
+      await ui.userLogsOut({ stepUser: 'Brian' })
     })
   }
 )

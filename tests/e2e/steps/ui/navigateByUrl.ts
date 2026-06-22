@@ -1,46 +1,39 @@
 import { objects } from '../../support'
-import { World } from '../../environment/world'
+import { getWorld } from '../../environment/world'
 import { application, client } from '../../environment/constants'
 
 export async function userNavigatesToNonExistingPage({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
   await urlNavObject.navigateToNonExistingPage()
 }
 
-export async function userShouldSeeNotFoundPage({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userShouldSeeNotFoundPage({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
   await urlNavObject.waitForNotFoundPageToBeVisible()
 }
 
 export async function userOpensResourceViaUrl({
-  world,
   stepUser,
   resource,
   space,
   editorName,
   clientType
 }: {
-  world: World
   stepUser: string
   resource: string
   space: string
   editorName: typeof application.collabora | typeof application.onlyOffice
   clientType: keyof typeof client
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const user = world.usersEnvironment.getUser({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
@@ -48,16 +41,15 @@ export async function userOpensResourceViaUrl({
 }
 
 export async function userOpensSpaceResourceViaUrl({
-  world,
   stepUser,
   resource,
   space
 }: {
-  world: World
   stepUser: string
   resource: string
   space: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const user = world.usersEnvironment.getUser({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
@@ -65,18 +57,17 @@ export async function userOpensSpaceResourceViaUrl({
 }
 
 export async function userOpensResourceDetailsPanelViaUrl({
-  world,
   stepUser,
   resource,
   detailsPanel,
   space
 }: {
-  world: World
   stepUser: string
   resource: string
   detailsPanel: string
   space: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const user = world.usersEnvironment.getUser({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })
@@ -84,14 +75,13 @@ export async function userOpensResourceDetailsPanelViaUrl({
 }
 
 export async function userOpensSpaceViaUrl({
-  world,
   stepUser,
   space
 }: {
-  world: World
   stepUser: string
   space: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const user = world.usersEnvironment.getUser({ key: stepUser })
   const urlNavObject = new objects.urlNavigation.URLNavigation({ page })

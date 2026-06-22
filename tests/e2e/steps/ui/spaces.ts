@@ -3,42 +3,35 @@ import { Space } from '../../support/types'
 import { getDynamicRoleIdByName, ResourceType, shareRoles } from '../../support/api/share/share'
 import { expect } from '@playwright/test'
 import { substitute } from '../../support/utils'
-import { World } from '../../environment/world'
+import { getWorld } from '../../environment/world'
 import { fileAction } from '../../environment/constants'
 
 export async function userNavigatesToPersonalSpacePage({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.spaces.Personal({ page })
   await pageObject.navigate()
 }
 
-export async function userNavigatesToSpacesPage({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userNavigatesToSpacesPage({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
   await pageObject.navigate()
 }
 
 export async function userNavigatesToSpace({
-  world,
   stepUser,
   space
 }: {
-  world: World
   stepUser: string
   space: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
@@ -47,14 +40,13 @@ export async function userNavigatesToSpace({
 }
 
 export async function userCreatesProjectSpaces({
-  world,
   stepUser,
   spaces
 }: {
-  world: World
   stepUser: string
   spaces: Array<{ name: string; id: string }>
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   for (const space of spaces) {
@@ -65,23 +57,29 @@ export async function userCreatesProjectSpaces({
   }
 }
 export async function userAddsMembersToSpace({
-  world,
   stepUser,
   members
 }: {
-  world: World
   stepUser: string
   members: { user: string; role: string; kind: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const sharer = world.usersEnvironment.getUser({ key: stepUser })
 
   for (const sharee of members) {
-    const collaborator =
-      sharee.kind === 'user'
-        ? world.usersEnvironment.getUser({ key: sharee.user })
-        : world.usersEnvironment.getGroup({ key: sharee.user })
+    let collaborator
+    if (sharee.kind === 'user') {
+      collaborator = world.usersEnvironment.getUser({ key: sharee.user })
+    } else {
+      // For group, use world-aware displayName for dropdown matching
+      const group = world.usersEnvironment.getGroup({ key: sharee.user })
+      collaborator = {
+        ...group,
+        displayName: `${group.displayName}`
+      }
+    }
     const roleId = await getDynamicRoleIdByName(sharer, sharee.role, 'space' as ResourceType)
     const collaboratorWithRole = {
       collaborator,
@@ -92,16 +90,15 @@ export async function userAddsMembersToSpace({
 }
 
 export async function userAddsExpirationDate({
-  world,
   stepUser,
   memberName,
   expirationDate
 }: {
-  world: World
   stepUser: string
   memberName: string
   expirationDate: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const member = { collaborator: world.usersEnvironment.getUser({ key: memberName }) }
@@ -109,14 +106,13 @@ export async function userAddsExpirationDate({
 }
 
 export async function userRemovesExpirationDate({
-  world,
   stepUser,
   memberName
 }: {
-  world: World
   stepUser: string
   memberName: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const member = { collaborator: world.usersEnvironment.getUser({ key: memberName }) }
@@ -124,16 +120,15 @@ export async function userRemovesExpirationDate({
 }
 
 export async function userRemovesAccessToMember({
-  world,
   stepUser,
   reciver,
   role
 }: {
-  world: World
   stepUser: string
   reciver: string
   role?: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const member = {
@@ -144,28 +139,26 @@ export async function userRemovesAccessToMember({
 }
 
 export async function userNavigatesToProjectSpaceManagementPage({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationAdminSettings.page.Spaces({ page })
   await pageObject.navigate()
 }
 
 export async function userManagesSpaceUsingContexMenu({
-  world,
   stepUser,
   action,
   space
 }: {
-  world: World
   stepUser: string
   action: 'disables' | 'deletes' | 'enables'
   space: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const spaceId = spacesObject.getUUID({ key: space })
@@ -184,40 +177,29 @@ export async function userManagesSpaceUsingContexMenu({
   }
 }
 
-export async function userDownloadsSpace({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userDownloadsSpace({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const downloadedResource = await spacesObject.downloadSpace()
   expect(downloadedResource).toContain('download.zip')
 }
 
-export async function userNavigatesToTrashbin({
-  world,
-  stepUser
-}: {
-  world: World
-  stepUser: string
-}): Promise<void> {
+export async function userNavigatesToTrashbin({ stepUser }: { stepUser: string }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.trashbin.Overview({ page })
   await pageObject.navigate()
 }
 
 export async function userNavigatesToTrashbinOfSpace({
-  world,
   stepUser,
   space
 }: {
-  world: World
   stepUser: string
   space: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.trashbin.Overview({ page })
   await pageObject.navigate()
@@ -226,14 +208,13 @@ export async function userNavigatesToTrashbinOfSpace({
 }
 
 export async function userShouldNotSeeSpace({
-  world,
   stepUser,
   space
 }: {
-  world: World
   stepUser: string
   space?: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const spaceLocator = await spacesObject.getSpaceLocator(space)
@@ -241,14 +222,13 @@ export async function userShouldNotSeeSpace({
 }
 
 export async function userShouldSeeSpace({
-  world,
   stepUser,
   space
 }: {
-  world: World
   stepUser: string
   space?: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const spaceLocator = await spacesObject.getSpaceLocator(space)
@@ -256,16 +236,15 @@ export async function userShouldSeeSpace({
 }
 
 export async function userChangesMemberRole({
-  world,
   stepUser,
   role,
   sharee
 }: {
-  world: World
   stepUser: string
   role: string
   sharee: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const sharer = world.usersEnvironment.getUser({ key: stepUser })
@@ -279,14 +258,13 @@ export async function userChangesMemberRole({
 }
 
 export async function userShouldSeeActivitiesOfSpace({
-  world,
   stepUser,
   activities
 }: {
-  world: World
   stepUser: string
   activities: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
 
@@ -296,14 +274,13 @@ export async function userShouldSeeActivitiesOfSpace({
 }
 
 export async function userShouldSeeSpaces({
-  world,
   stepUser,
   expectedSpaceIds
 }: {
-  world: World
   stepUser: string
   expectedSpaceIds: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const actualList = await spacesObject.getDisplayedSpaces()
@@ -314,14 +291,13 @@ export async function userShouldSeeSpaces({
 }
 
 export async function userShouldNotSeeSpaces({
-  world,
   stepUser,
   expectedSpaceIds
 }: {
-  world: World
   stepUser: string
   expectedSpaceIds: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const actualList = await spacesObject.getDisplayedSpaces()
@@ -332,14 +308,13 @@ export async function userShouldNotSeeSpaces({
 }
 
 export async function userDisablesSpaceUsingContextMenu({
-  world,
   stepUser,
   spaceId
 }: {
-  world: World
   stepUser: string
   spaceId: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const spaceUUID = spacesObject.getUUID({ key: spaceId })
@@ -347,14 +322,13 @@ export async function userDisablesSpaceUsingContextMenu({
 }
 
 export async function userEnablesSpaceUsingContextMenu({
-  world,
   stepUser,
   spaceId
 }: {
-  world: World
   stepUser: string
   spaceId: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const spaceUUID = spacesObject.getUUID({ key: spaceId })
@@ -362,14 +336,13 @@ export async function userEnablesSpaceUsingContextMenu({
 }
 
 export async function userDeletesSpaceUsingContextMenu({
-  world,
   stepUser,
   spaceId
 }: {
-  world: World
   stepUser: string
   spaceId: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const spaceUUID = spacesObject.getUUID({ key: spaceId })
@@ -377,14 +350,13 @@ export async function userDeletesSpaceUsingContextMenu({
 }
 
 export async function userDisablesSpacesUsingBatchActions({
-  world,
   stepUser,
   spaceIds
 }: {
-  world: World
   stepUser: string
   spaceIds: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const uuids = spaceIds.map((id) => spacesObject.getUUID({ key: id }))
@@ -395,14 +367,13 @@ export async function userDisablesSpacesUsingBatchActions({
 }
 
 export async function userEnablesSpacesUsingBatchActions({
-  world,
   stepUser,
   spaceIds
 }: {
-  world: World
   stepUser: string
   spaceIds: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const uuids = spaceIds.map((id) => spacesObject.getUUID({ key: id }))
@@ -413,14 +384,13 @@ export async function userEnablesSpacesUsingBatchActions({
 }
 
 export async function userDeletesSpacesUsingBatchActions({
-  world,
   stepUser,
   spaceIds
 }: {
-  world: World
   stepUser: string
   spaceIds: string[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const uuids = spaceIds.map((id) => spacesObject.getUUID({ key: id }))
@@ -431,16 +401,15 @@ export async function userDeletesSpacesUsingBatchActions({
 }
 
 export async function userUpdatesSpaceUsingContextMenu({
-  world,
   stepUser,
   spaceId,
   updates
 }: {
-  world: World
   stepUser: string
   spaceId: string
   updates: Array<{ attribute: 'name' | 'subtitle' | 'quota'; value: string }>
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const spaceUUID = spacesObject.getUUID({ key: spaceId })
@@ -467,16 +436,15 @@ export async function userUpdatesSpaceUsingContextMenu({
 }
 
 export async function userChangesSpaceQuotaUsingBatchActions({
-  world,
   stepUser,
   spaceIds,
   value
 }: {
-  world: World
   stepUser: string
   spaceIds: string[]
   value: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const uuids = []
@@ -492,28 +460,26 @@ export async function userChangesSpaceQuotaUsingBatchActions({
 }
 
 export async function userListsMembersOfProjectSpaceUsingSidebarPanel({
-  world,
   stepUser,
   space
 }: {
-  world: World
   stepUser: string
   space: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   await spacesObject.openPanel({ key: space })
   await spacesObject.openActionSideBarPanel({ action: 'SpaceMembers' })
 }
 export async function userShouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
-  world,
   stepUser,
   expectedMembers
 }: {
-  world: World
   stepUser: string
   expectedMembers: Array<{ user: string; role: string }>
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
   const actualMemberList = {
@@ -528,16 +494,15 @@ export async function userShouldSeeUsersInSidebarPanelOfSpacesAdminSettings({
 }
 
 export async function userUpdatesSpace({
-  world,
   stepUser,
   key,
   updates
 }: {
-  world: World
   stepUser: string
   key: string
   updates: { attribute: string; value: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
 

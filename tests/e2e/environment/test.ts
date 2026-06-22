@@ -1,8 +1,8 @@
-import { test as base } from '@playwright/test'
+import { test as base, TestInfo } from '@playwright/test'
 import { User, UserState, Group } from '../support/types'
 import { config } from '../config.js'
 import { api, store, environment, utils } from '../support'
-import { World } from './world'
+import { World, setWorld } from './world'
 import { state } from './shared'
 import { getBrowserLaunchOptions } from '../support/environment/actor/shared'
 import { Browser, chromium, firefox, webkit } from '@playwright/test'
@@ -12,8 +12,9 @@ export const test = base.extend<{
   globalCleanup: void
   globalBeforeHook: void
 }>({
-  world: async ({}, use) => {
-    const world = new World()
+  world: async ({}, use, testInfo) => {
+    const world = new World(testInfo.workerIndex, testInfo.testId)
+    setWorld(world)
     await use(world)
   },
   globalCleanup: [
@@ -22,12 +23,13 @@ export const test = base.extend<{
 
       config.federatedServer = false
       await world.actorsEnvironment.close()
-      if (!config.predefinedUsers && !config.mfa) {
-        let adminUser = world.usersEnvironment.getUser({ key: config.adminUsername })
+
+      const adminUser = config.keycloak
+        ? world.usersEnvironment.getUser({ key: config.keycloakAdminUser })
+        : world.usersEnvironment.getUser({ key: config.adminUsername })
+
+      if (!config.predefinedUsers && !config.mfa && adminUser) {
         if (config.keycloak) {
-          adminUser = world.usersEnvironment.getUser({
-            key: config.keycloakAdminUser
-          })
           await api.keycloak.refreshAccessTokenForKeycloakUser(adminUser)
           await api.keycloak.refreshAccessTokenForKeycloakOcisUser(adminUser)
         } else {
@@ -35,23 +37,16 @@ export const test = base.extend<{
         }
 
         if (isOcm(testInfo)) {
-          // need to set federatedServer config to true to delete federated oCIS users
           config.federatedServer = true
           await api.token.refreshAccessToken(adminUser)
-          await cleanUpUser(
-            store.federatedUserStore,
-            world.usersEnvironment.getUser({ key: config.adminUsername })
-          )
+          await cleanUpUser(store.federatedUserStore, adminUser)
           config.federatedServer = false
         }
       }
 
-      await cleanUpUser(
-        store.createdUserStore,
-        world.usersEnvironment.getUser({ key: config.adminUsername })
-      )
-      await cleanUpGroup(world.usersEnvironment.getUser({ key: config.adminUsername }))
-      await cleanUpSpaces(world.usersEnvironment.getUser({ key: config.adminUsername }))
+      await cleanUpUser(store.createdUserStore, adminUser)
+      await cleanUpGroup(adminUser)
+      await cleanUpSpaces(adminUser)
 
       store.createdLinkStore.clear()
       store.createdTokenStore.clear()
@@ -66,13 +61,13 @@ export const test = base.extend<{
   globalBeforeHook: [
     async ({ world }: { world: World }, use, testInfo) => {
       if (!config.basicAuth && !config.predefinedUsers && !config.mfa) {
-        let user = world.usersEnvironment.getUser({ key: config.adminUsername })
         if (config.keycloak) {
-          user = world.usersEnvironment.getUser({ key: config.keycloakAdminUser })
+          const user = world.usersEnvironment.getUser({ key: config.keycloakAdminUser })
           await api.keycloak.setAccessTokenForKeycloakOcisUser(user)
           await api.keycloak.setAccessTokenForKeycloakUser(user)
-          await storeKeycloakGroups(user, world.usersEnvironment)
+          await storeKeycloakGroups(user)
         } else {
+          const user = world.usersEnvironment.getUser({ key: config.adminUsername })
           await api.token.setAccessAndRefreshToken(user)
           if (isOcm(testInfo)) {
             config.federatedServer = true
@@ -98,12 +93,15 @@ test.beforeAll(async () => {
   state.browser = await browsers[config.browser]()
 
   if (config.keycloak) {
-    const usersEnvironment = new environment.UsersEnvironment()
-    api.keycloak.setupKeycloakAdminUser(usersEnvironment.getUser({ key: config.keycloakAdminUser }))
+    // Get base user directly from store — no world available in beforeAll
+    const adminUser = store.userStore.get(config.keycloakAdminUser.toLowerCase())
+    if (adminUser) {
+      api.keycloak.setupKeycloakAdminUser(adminUser)
+    }
   }
 })
 
-const cleanUpUser = async (createdUserStore, adminUser: User) => {
+const cleanUpUser = async (createdUserStore: Map<string, User>, adminUser: User) => {
   if (!adminUser) {
     return
   }
@@ -117,13 +115,7 @@ const cleanUpUser = async (createdUserStore, adminUser: User) => {
     }
   }
 
-  const results = await Promise.allSettled(requests)
-  const failures = results.filter((r) => r.status === 'rejected')
-  if (failures.length > 0) {
-    throw new Error(
-      `Failed to clean up users: ${failures.map((f: any) => f.reason?.message || f.reason).join(', ')}`
-    )
-  }
+  await awaitAllOrThrow('Failed to clean up users', requests)
 
   createdUserStore.clear()
   store.keycloakCreatedUser.clear()
@@ -163,13 +155,7 @@ const cleanUpGroup = async (adminUser: User) => {
     }
   })
 
-  const results = await Promise.allSettled(requests)
-  const failures = results.filter((r) => r.status === 'rejected')
-  if (failures.length > 0) {
-    throw new Error(
-      `Failed to clean up groups: ${failures.map((f: any) => f.reason?.message || f.reason).join(', ')}`
-    )
-  }
+  await awaitAllOrThrow('Failed to clean up groups', requests)
   store.createdGroupStore.clear()
 }
 
@@ -195,27 +181,30 @@ const cleanUpSpaces = async (adminUser: User) => {
         })
     )
   })
-  const results = await Promise.allSettled(requests)
-  const failures = results.filter((r) => r.status === 'rejected')
-  if (failures.length > 0) {
-    throw new Error(
-      `Space clean up failed: ${failures.map((f: any) => f.reason?.message || f.reason).join(', ')}`
-    )
-  }
+  await awaitAllOrThrow('Space clean up failed', requests)
   store.createdSpaceStore.clear()
 }
 
-const isOcm = (testInfo): boolean => {
+const isOcm = (testInfo: TestInfo): boolean => {
   return testInfo.tags.includes('@ocm')
 }
 
-const storeKeycloakGroups = async (adminUser: User, usersEnvironment) => {
+const awaitAllOrThrow = async <T>(label: string, requests: Promise<T>[]) => {
+  const results = await Promise.allSettled(requests)
+  const failures = results.filter((r) => r.status === 'rejected')
+  if (failures.length > 0) {
+    throw new Error(`${label}: ${failures.map((f) => f.reason?.message || f.reason).join(', ')}`)
+  }
+}
+
+const storeKeycloakGroups = async (adminUser: User) => {
   const groups = await api.graph.getGroups(adminUser)
 
   store.dummyKeycloakGroupStore.forEach((dummyGroup) => {
     const matchingGroup = groups.find((group) => group.displayName === dummyGroup.displayName)
     if (matchingGroup) {
-      usersEnvironment.storeCreatedGroup({ group: { ...dummyGroup, uuid: matchingGroup.id } })
+      const groupKey = (dummyGroup.originalId || dummyGroup.id).toLowerCase()
+      store.createdGroupStore.set(groupKey, { ...dummyGroup, uuid: matchingGroup.id })
     }
   })
 }

@@ -1,15 +1,14 @@
 import { expect } from '@playwright/test'
 import { objects } from '../../support'
 import { substitute } from '../../support/utils'
-import { World } from '../../environment/world'
+import { getWorld } from '../../environment/world'
 
 export async function userGeneratesInvitationTokenForTheFederationShare({
-  world,
   stepUser
 }: {
-  world: World
   stepUser: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.scienceMesh.Federation({ page })
   const user = world.usersEnvironment.getUser({ key: stepUser })
@@ -17,28 +16,27 @@ export async function userGeneratesInvitationTokenForTheFederationShare({
 }
 
 export async function userAcceptsFederatedShareInvitationByLocalUser({
-  world,
   stepUser,
   sharer
 }: {
-  world: World
   stepUser: string
   sharer: string
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
+  const sharerUser = world.usersEnvironment.getUser({ key: sharer })
   const pageObject = new objects.scienceMesh.Federation({ page })
-  await pageObject.acceptInvitation(sharer)
+  await pageObject.acceptInvitation(sharerUser.id)
 }
 
 export async function userShouldSeeTheFederatedConnections({
-  world,
   stepUser,
   federation
 }: {
-  world: World
   stepUser: string
   federation: { user: string; email: string }[]
 }): Promise<void> {
+  const world = getWorld()
   const { page } = world.actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.scienceMesh.Federation({ page })
   for (const fed of federation) {

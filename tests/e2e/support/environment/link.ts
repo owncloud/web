@@ -2,6 +2,9 @@ import { Link } from '../types'
 import { createdLinkStore } from '../store'
 
 export class LinksEnvironment {
+  // Store copied password for parallel test safety
+  copiedPassword: string = ''
+
   getLink({ name }: { name: string }): Link {
     if (!createdLinkStore.has(name)) {
       throw new Error(`link with name '${name}' not found`)

@@ -4,7 +4,7 @@ import * as api from '../../steps/api/api'
 import { fileAction } from '../../environment/constants'
 
 test.describe('Group actions', { tag: '@predefined-users' }, () => {
-  test.beforeEach(async ({ world }) => {
+  test.beforeEach(async () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
@@ -13,7 +13,6 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | David |
     //   | Edith |
     await api.usersHaveBeenCreated({
-      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol', 'David', 'Edith']
     })
@@ -23,7 +22,6 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | finance  |
     //   | security |
     await api.groupsHaveBeenCreated({
-      world,
       groupIds: ['sales', 'finance', 'security'],
       stepUser: 'Admin'
     })
@@ -33,7 +31,6 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | Brian | finance  |
     //   | Brian | security |
     await api.usersHaveBeenAddedToGroup({
-      world,
       stepUser: 'Admin',
       usersToAdd: [
         { user: 'Brian', group: 'sales' },
@@ -42,13 +39,13 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       ]
     })
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
   })
 
-  test('batch share a resource to multiple users and groups', async ({ world }) => {
+  test('batch share a resource to multiple users and groups', async () => {
     // disabling auto accepting to check accepting share
     // And "Brian" disables auto-accepting using API
-    await api.userHasDisabledAutoAcceptingShare({ world, stepUser: 'Brian' })
+    await api.userHasDisabledAutoAcceptingShare({ stepUser: 'Brian' })
 
     // And "Alice" creates the following folders in personal space using API
     //   | name                   |
@@ -60,7 +57,6 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     //   | folder5                |
     //   | parentFolder/SubFolder |
     await api.userHasCreatedFolders({
-      world,
       stepUser: 'Alice',
       folderNames: [
         'sharedFolder',
@@ -81,7 +77,6 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     // | folder5      | Brian     | user | Can edit with trashbin | folder       |
     // | parentFolder | Brian     | user | Can edit with trashbin | folder       |
     await api.userHasSharedResources({
-      world,
       stepUser: 'Alice',
       shares: [
         {
@@ -129,7 +124,7 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
       ]
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
 
     // # multiple share
     // And "Alice" shares the following resources using the sidebar panel
@@ -142,7 +137,6 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     // | sharedFolder | finance   | group | Can edit with trashbin | folder       |
     // | sharedFolder | security  | group | Can edit with trashbin | folder       |
     await ui.userSharesResources({
-      world,
       actionType: fileAction.sideBarPanel,
       stepUser: 'Alice',
       shares: [
@@ -199,14 +193,14 @@ test.describe('Group actions', { tag: '@predefined-users' }, () => {
     })
 
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
 
     // And "Brian" enables the sync for all shares using the batch action
-    await ui.userEnablesSyncForAllShares({ world, stepUser: 'Brian' })
+    await ui.userEnablesSyncForAllShares({ stepUser: 'Brian' })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
   })
 })

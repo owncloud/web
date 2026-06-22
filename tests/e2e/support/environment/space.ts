@@ -1,21 +1,28 @@
 import { Space } from '../types'
 import { createdSpaceStore } from '../store'
+import { getWorld } from '../../environment/world'
 
 export class SpacesEnvironment {
   getSpace({ key }: { key: string }): Space {
-    if (!createdSpaceStore.has(key)) {
-      throw new Error(`space with key '${key}' not found`)
+    const world = getWorld()
+    const storeKey = world ? world.getSpaceId(key) : key
+
+    if (!createdSpaceStore.has(storeKey)) {
+      throw new Error(`space with key '${storeKey}' not found`)
     }
 
-    return createdSpaceStore.get(key)
+    return createdSpaceStore.get(storeKey)
   }
 
   createSpace({ key, space }: { key: string; space: Space }): Space {
-    if (createdSpaceStore.has(key)) {
-      throw new Error(`link with key '${key}' already exists`)
+    const world = getWorld()
+    const storeKey = world ? world.getSpaceId(key) : key
+
+    if (createdSpaceStore.has(storeKey)) {
+      throw new Error(`space with key '${storeKey}' already exists`)
     }
 
-    createdSpaceStore.set(key, space)
+    createdSpaceStore.set(storeKey, space)
 
     return space
   }

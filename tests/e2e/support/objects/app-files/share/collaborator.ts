@@ -74,9 +74,10 @@ export default class Collaborator {
   private static readonly collaboratorRoleButton = '//button[contains(@id, "%s")]'
   public static readonly collaboratorEditDropdownButton =
     '%s//button[contains(@class,"collaborator-edit-dropdown-options-btn")]'
-  private static readonly collaboratorUserSelector = '//*[@data-testid="collaborator-user-item-%s"]'
+  private static readonly collaboratorUserSelector =
+    '//*[starts-with(@data-testid,"collaborator-user-item-%s")]'
   private static readonly collaboratorGroupSelector =
-    '//*[@data-testid="collaborator-group-item-%s" or @data-testid="collaborator-group-item-%s"]'
+    '//*[starts-with(@data-testid,"collaborator-group-item-%s")]'
   private static readonly collaboratorRoleSelector =
     '%s//button[contains(@class,"files-recipient-role-select-btn")]/span[text()="%s"]'
   private static readonly removeCollaboratorButton =
@@ -99,13 +100,21 @@ export default class Collaborator {
   static async addCollaborator(args: CollaboratorArgs): Promise<void> {
     const {
       page,
-      collaborator: { collaborator }
+      collaborator: { collaborator, shareType }
     } = args
     const collaboratorInputLocator = page.locator(Collaborator.inviteInput)
     await collaboratorInputLocator.click()
+    let fillValue: string
+    if (shareType === 'external') {
+      fillValue = collaborator.displayName
+    } else if ((collaborator as User).originalId) {
+      fillValue = collaborator.id
+    } else {
+      fillValue = collaborator.displayName
+    }
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('users') && resp.status() === 200),
-      collaboratorInputLocator.fill(collaborator.displayName)
+      collaboratorInputLocator.fill(fillValue)
     ])
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
@@ -116,6 +125,7 @@ export default class Collaborator {
     await page.locator('.vs--open').waitFor()
     await page
       .locator(util.format(Collaborator.collaboratorDropdownItem, collaborator.displayName))
+      .first() // in CI, resolves to two elements
       .click()
   }
 
@@ -374,11 +384,7 @@ export default class Collaborator {
 
   static getCollaboratorUserOrGroupSelector = (collaborator: User | Group, type = 'user') => {
     return type === 'group'
-      ? util.format(
-          Collaborator.collaboratorGroupSelector,
-          collaborator.displayName,
-          collaborator.displayName
-        )
+      ? util.format(Collaborator.collaboratorGroupSelector, collaborator.displayName)
       : util.format(Collaborator.collaboratorUserSelector, collaborator.displayName)
   }
 

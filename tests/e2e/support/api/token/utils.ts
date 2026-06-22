@@ -36,36 +36,39 @@ const logonRequest = (username: string, password: string): Promise<Response> => 
 const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
   const timeout = 5000 // 5 seconds timeout
   const startTime = Date.now()
-  let retry = true
-  let logonResponse: Response
+  const usernames = Array.from(new Set([user.id, user.originalId].filter(Boolean))) as string[]
+  let logonResponse: Response | undefined
 
-  // server may return 502 Bad Gateway if the request is too early
-  // retry until timeout
-  while (retry) {
-    logonResponse = await logonRequest(user.id, user.password)
-    const elapsedTime = Date.now() - startTime
-    retry = elapsedTime < timeout
+  for (const username of usernames) {
+    let retry = true
 
-    if (logonResponse.status === 200) {
+    // server may return 502 Bad Gateway if the request is too early
+    // retry until timeout
+    while (retry) {
+      logonResponse = await logonRequest(username, user.password)
+      const elapsedTime = Date.now() - startTime
+      retry = elapsedTime < timeout
+
+      if (logonResponse.status === 200) {
+        const cookies = logonResponse.headers.raw()['set-cookie']?.[0] || ''
+        const data = (await logonResponse.json()) as { hello: { continue_uri: string } }
+        return [data.hello.continue_uri, cookies]
+      }
+
+      if (logonResponse.status === 502 && retry) {
+        console.info('[INFO] Failed with 502 Bad Gateway. Retrying logon request...')
+        // wait for 1 second before retrying
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        continue
+      }
+
       break
-    }
-
-    if (logonResponse.status === 502 && retry) {
-      console.info('[INFO] Failed with 502 Bad Gateway. Retrying logon request...')
-      // wait for 1 second before retrying
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      continue
-    } else if (logonResponse.status !== 200) {
-      throw new Error(
-        `Logon failed: Expected status code be 200 but received ${logonResponse.status} Message: ${logonResponse.statusText}`
-      )
     }
   }
 
-  const cookies = logonResponse.headers.raw()['set-cookie']?.[0] || ''
-  const data = (await logonResponse.json()) as { hello: { continue_uri: string } }
-  const authorizedUrl = data.hello.continue_uri
-  return [authorizedUrl, cookies]
+  throw new Error(
+    `Logon failed for all candidate usernames: ${usernames.join(', ')}. Last status: ${logonResponse?.status} ${logonResponse?.statusText}`
+  )
 }
 
 const getCode = async ({

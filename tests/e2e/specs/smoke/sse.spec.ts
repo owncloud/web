@@ -4,40 +4,34 @@ import * as ui from '../../steps/ui/index'
 import { fileAction, shareIndicator, resourcePage } from '../../environment/constants'
 
 test.describe('server sent events', { tag: '@sse' }, () => {
-  test.beforeEach(async ({ world }) => {
+  test.beforeEach(async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
     //   | Brian |
     //   | Carol |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice', 'Brian', 'Carol']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian', 'Carol'] })
   })
 
-  test('space sse events', async ({ world }) => {
+  test('space sse events', async () => {
     // Given "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      world,
       stepUser: 'Admin',
       users: [{ id: 'Alice', role: 'Space Admin' }]
     })
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
     // And "Brian" navigates to the projects space page
-    await ui.userNavigatesToSpacesPage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSpacesPage({ stepUser: 'Brian' })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // And "Alice" creates the following project space using API
     //   | name      | id        |
     //   | Marketing | marketing |
     await api.userHasCreatedProjectSpaces({
-      world,
       stepUser: 'Alice',
       spaces: [{ name: 'Marketing', id: 'marketing' }]
     })
@@ -46,113 +40,64 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | user  | role     | shareType |
     //   | Brian | Can view | user      |
     await api.userHasAddedMembersToSpace({
-      world,
       stepUser: 'Alice',
       space: 'Marketing',
       sharee: [{ user: 'Brian', role: 'Can view', shareType: 'user' }]
     })
     // Then "Alice" should get "space-member-added" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'space-member-added'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'space-member-added' })
     // And "Brian" should get "userlog-notification" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'userlog-notification'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'userlog-notification' })
     // And "Brian" should get "space-member-added" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'space-member-added'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'space-member-added' })
     // And "Brian" should see space "marketing"
-    await ui.userShouldSeeSpace({
-      world,
-      stepUser: 'Brian',
-      space: 'marketing'
-    })
+    await ui.userShouldSeeSpace({ stepUser: 'Brian', space: 'marketing' })
 
     // folder-created
     // When "Brian" navigates to the project space "marketing"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Brian', space: 'marketing' })
+    await ui.userNavigatesToSpace({ stepUser: 'Brian', space: 'marketing' })
     // And "Alice" creates the following folder in space "Marketing" using API
     //   | name         |
     //   | space-folder |
     await api.userHasCreatedFoldersInSpace({
-      world,
       stepUser: 'Alice',
       spaceName: 'Marketing',
       folders: ['space-folder']
     })
     // Then "Alice" should get "folder-created" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'folder-created'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'folder-created' })
     // And "Brian" should get "folder-created" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'folder-created'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'folder-created' })
     // And following resources should be displayed in the files list for user "Brian"
     //   | resource     |
     //   | space-folder |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['space-folder']
     })
     // And "Brian" should not be able to edit folder "space-folder"
-    await ui.userShouldNotBeAbleToEditResource({
-      world,
-      stepUser: 'Brian',
-      resource: 'space-folder'
-    })
+    await ui.userShouldNotBeAbleToEditResource({ stepUser: 'Brian', resource: 'space-folder' })
 
     // space-share-updated
     // When "Alice" navigates to the project space "marketing"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'marketing' })
+    await ui.userNavigatesToSpace({ stepUser: 'Alice', space: 'marketing' })
     // And "Alice" changes the roles of the following users in the project space
     //   | user  | role     |
     //   | Brian | Can edit |
-    await ui.userChangesMemberRole({
-      world,
-      stepUser: 'Alice',
-      role: 'Can edit',
-      sharee: 'Brian'
-    })
+    await ui.userChangesMemberRole({ stepUser: 'Alice', role: 'Can edit', sharee: 'Brian' })
     // Then "Alice" should get "space-share-updated" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'space-share-updated'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'space-share-updated' })
     // And "Brian" should get "space-share-updated" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'space-share-updated'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'space-share-updated' })
     // And "Brian" should be able to edit folder "space-folder"
-    await ui.userShouldBeAbleToEditResource({
-      world,
-      stepUser: 'Brian',
-      resource: 'space-folder'
-    })
+    await ui.userShouldBeAbleToEditResource({ stepUser: 'Brian', resource: 'space-folder' })
 
     // share-created
     // When "Alice" shares the following resource using the sidebar panel
     //   | resource     | recipient | type | role     | resourceType |
     //   | space-folder | Carol     | user | Can view | folder       |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -167,23 +112,14 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     })
 
     // Then "Alice" should get "share-created" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'share-created'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'share-created' })
     // And "Brian" should get "share-created" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'share-created'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'share-created' })
 
     // And "Brian" closes the sidebar
-    await ui.userClosesSidebar({ world, stepUser: 'Brian' })
+    await ui.userClosesSidebar({ stepUser: 'Brian' })
     // And "Brian" should see user-direct indicator on the folder "space-folder"
     await ui.userShouldSeeShareIndicatorOnResource({
-      world,
       stepUser: 'Brian',
       buttonLabel: shareIndicator.userDirect,
       resource: 'space-folder'
@@ -194,7 +130,6 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | resource     | recipient | type | role     | resourceType |
     //   | space-folder | Carol     | user | Can view | folder       |
     await ui.userUpdatesShareeRoles({
-      world,
       stepUser: 'Alice',
       roleUpdates: [
         {
@@ -207,43 +142,25 @@ test.describe('server sent events', { tag: '@sse' }, () => {
       ]
     })
     // Then "Alice" should get "share-updated" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'share-updated'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'share-updated' })
     // And "Brian" should get "share-updated" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'share-updated'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'share-updated' })
 
     // # link-created
     // When "Alice" creates a public link of following resource using the sidebar panel
     //   | resource     | password |
     //   | space-folder | %public% |
     await ui.userCreatesPublicLink({
-      world,
       stepUser: 'Alice',
       resource: 'space-folder',
       password: '%public%'
     })
     // Then "Alice" should get "link-created" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'link-created'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'link-created' })
     // Then "Brian" should get "link-created" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'link-created'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'link-created' })
     // And "Brian" should see link-direct indicator on the folder "space-folder"
     await ui.userShouldSeeShareIndicatorOnResource({
-      world,
       stepUser: 'Brian',
       buttonLabel: shareIndicator.linkDirect,
       resource: 'space-folder'
@@ -252,48 +169,29 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     // link-updated
     // When "Alice" renames the most recently created public link of resource "space-folder" to "myLink"
     await ui.userRenamesMostRecentlyCreatedPublicLinkOfResource({
-      world,
       stepUser: 'Alice',
       resource: 'space-folder',
       newName: 'myLink'
     })
     // Then "Alice" should get "link-updated" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'link-updated'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'link-updated' })
     // And "Brian" should get "link-updated" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'link-updated'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'link-updated' })
 
     // share-removed
     // When "Alice" removes following sharee
     //   | resource     | recipient |
     //   | space-folder | Carol     |
     await ui.userRemovesSharees({
-      world,
       stepUser: 'Alice',
       sharees: [{ resource: 'space-folder', recipient: 'Carol' }]
     })
     // Then "Alice" should get "share-removed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'share-removed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'share-removed' })
     // And "Brian" should get "share-removed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'share-removed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'share-removed' })
     // And "Brian" should not see user-direct indicator on the folder "space-folder"
     await ui.userShouldNotSeeShareIndicatorOnResource({
-      world,
       stepUser: 'Brian',
       buttonLabel: shareIndicator.userDirect,
       resource: 'space-folder'
@@ -302,26 +200,16 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     // link-removed
     // When "Alice" removes the public link named "myLink" of resource "space-folder"
     await ui.userRemovesThePublicLinkOfResource({
-      world,
       stepUser: 'Alice',
       linkName: 'myLink',
       resource: 'space-folder'
     })
     // Then "Alice" should get "link-removed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'link-removed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'link-removed' })
     // And "Brian" should get "link-removed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'link-removed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'link-removed' })
     // And "Brian" should not see link-direct indicator on the folder "space-folder"
     await ui.userShouldNotSeeShareIndicatorOnResource({
-      world,
       stepUser: 'Brian',
       buttonLabel: shareIndicator.linkDirect,
       resource: 'space-folder'
@@ -329,64 +217,43 @@ test.describe('server sent events', { tag: '@sse' }, () => {
 
     // # space-member-removed
     // When "Brian" navigates to the projects space page
-    await ui.userNavigatesToSpacesPage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSpacesPage({ stepUser: 'Brian' })
     // And "Alice" navigates to the project space "marketing"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'marketing' })
+    await ui.userNavigatesToSpace({ stepUser: 'Alice', space: 'marketing' })
     // And "Alice" removes access to following users from the project space
     //   | user  |
     //   | Brian |
-    await ui.userRemovesAccessToMember({
-      world,
-      stepUser: 'Alice',
-      reciver: 'Brian'
-    })
+    await ui.userRemovesAccessToMember({ stepUser: 'Alice', reciver: 'Brian' })
     // Then "Alice" should get "space-member-removed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'space-member-removed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'space-member-removed' })
     // And "Brian" should get "space-member-removed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'space-member-removed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'space-member-removed' })
     // And "Brian" should not see space "marketing"
-    await ui.userShouldNotSeeSpace({
-      world,
-      stepUser: 'Brian',
-      space: 'marketing'
-    })
+    await ui.userShouldNotSeeSpace({ stepUser: 'Brian', space: 'marketing' })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('share sse events', async ({ world }) => {
+  test('share sse events', async () => {
     // When "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
     // And "Brian" navigates to the shared with me page
-    await ui.userNavigatesToSharedWithMePage({ world, stepUser: 'Brian' })
+    await ui.userNavigatesToSharedWithMePage({ stepUser: 'Brian' })
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // And "Alice" creates the following folder in personal space using API
     //   | name                   |
     //   | sharedFolder/subFolder |
-    await api.userHasCreatedFolders({
-      world,
-      stepUser: 'Alice',
-      folderNames: ['sharedFolder/subFolder']
-    })
+    await api.userHasCreatedFolders({ stepUser: 'Alice', folderNames: ['sharedFolder/subFolder'] })
 
     // share-created
     // When "Alice" shares the following resource using the sidebar panel
     //   | resource     | recipient | type | role     | resourceType |
     //   | sharedFolder | Brian     | user | Can view | folder       |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       shares: [
@@ -400,30 +267,17 @@ test.describe('server sent events', { tag: '@sse' }, () => {
       ]
     })
     // Then "Alice" should get "share-created" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'share-created'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'share-created' })
     // And "Brian" should get "share-created" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'share-created'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'share-created' })
     // And "Brian" should not be able to edit folder "sharedFolder"
-    await ui.userShouldNotBeAbleToEditResource({
-      world,
-      stepUser: 'Brian',
-      resource: 'sharedFolder'
-    })
+    await ui.userShouldNotBeAbleToEditResource({ stepUser: 'Brian', resource: 'sharedFolder' })
 
     // share-updated
     // When "Alice" updates following sharee role
     //   | resource     | recipient | type | role                   | resourceType |
     //   | sharedFolder | Brian     | user | Can edit with trashbin | folder       |
     await ui.userUpdatesShareeRoles({
-      world,
       stepUser: 'Alice',
       roleUpdates: [
         {
@@ -436,70 +290,43 @@ test.describe('server sent events', { tag: '@sse' }, () => {
       ]
     })
     // Then "Alice" should get "share-updated" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'share-updated'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'share-updated' })
     // And "Brian" should get "share-updated" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'share-updated'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'share-updated' })
     // And "Brian" opens folder "sharedFolder"
-    await ui.userOpensResource({
-      world,
-      stepUser: 'Brian',
-      resource: 'sharedFolder'
-    })
+    await ui.userOpensResource({ stepUser: 'Brian', resource: 'sharedFolder' })
     // And "Brian" should be able to edit folder "subFolder"
-    await ui.userShouldBeAbleToEditResource({
-      world,
-      stepUser: 'Brian',
-      resource: 'subFolder'
-    })
+    await ui.userShouldBeAbleToEditResource({ stepUser: 'Brian', resource: 'subFolder' })
 
     // share-removed
     // When "Alice" removes following sharee
     //   | resource     | recipient |
     //   | sharedFolder | Brian     |
     await ui.userRemovesSharees({
-      world,
       stepUser: 'Alice',
       sharees: [{ resource: 'sharedFolder', recipient: 'Brian' }]
     })
 
     // Then "Alice" should get "share-removed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'share-removed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'share-removed' })
     // And "Brian" should get "share-removed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'share-removed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'share-removed' })
     // And "Brian" should see the message "Your access to this share has been revoked. Please navigate to another location." on the webUI
     await ui.userShouldSeeMessageOnWebUI({
-      world,
       stepUser: 'Brian',
       message: 'Your access to this share has been revoked. Please navigate to another location.'
     })
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 
-  test('sse events on file operations', async ({ world }) => {
+  test('sse events on file operations', async () => {
     // Given "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      world,
       stepUser: 'Admin',
       users: [{ id: 'Alice', role: 'Space Admin' }]
     })
@@ -507,7 +334,6 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | name      | id        |
     //   | Marketing | marketing |
     await api.userHasCreatedProjectSpaces({
-      world,
       stepUser: 'Alice',
       spaces: [{ name: 'Marketing', id: 'marketing' }]
     })
@@ -515,7 +341,6 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | user  | role                   | shareType |
     //   | Brian | Can edit with trashbin | user      |
     await api.userHasAddedMembersToSpace({
-      world,
       stepUser: 'Alice',
       space: 'Marketing',
       sharee: [{ user: 'Brian', role: 'Can edit with trashbin', shareType: 'user' }]
@@ -524,55 +349,33 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | name         |
     //   | space-folder |
     await api.userHasCreatedFoldersInSpace({
-      world,
       stepUser: 'Alice',
       spaceName: 'Marketing',
       folders: ['space-folder']
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // When "Alice" navigates to the project space "marketing"
-    await ui.userNavigatesToSpace({
-      world,
-      stepUser: 'Alice',
-      space: 'marketing'
-    })
+    await ui.userNavigatesToSpace({ stepUser: 'Alice', space: 'marketing' })
 
     // And "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
     // And "Brian" navigates to the project space "marketing"
-    await ui.userNavigatesToSpace({
-      world,
-      stepUser: 'Brian',
-      space: 'marketing'
-    })
+    await ui.userNavigatesToSpace({ stepUser: 'Brian', space: 'marketing' })
 
     // postprocessing-finished - upload file
     // When "Brian" uploads the following resources
     //   | resource   |
     //   | simple.pdf |
-    await ui.userUploadsResources({
-      world,
-      stepUser: 'Brian',
-      resources: [{ name: 'simple.pdf' }]
-    })
+    await ui.userUploadsResources({ stepUser: 'Brian', resources: [{ name: 'simple.pdf' }] })
     // Then "Brian" should get "postprocessing-finished" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'postprocessing-finished'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'postprocessing-finished' })
     // And "Alice" should get "postprocessing-finished" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'postprocessing-finished'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'postprocessing-finished' })
     // And following resources should be displayed in the files list for user "Alice"
     //   | resource   |
     //   | simple.pdf |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['simple.pdf']
@@ -584,39 +387,21 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | resource    | type    | content   |
     //   | example.txt | txtFile | some text |
     await ui.userCreatesResources({
-      world,
       stepUser: 'Alice',
       resources: [{ name: 'example.txt', type: 'txtFile', content: 'some text' }]
     })
     // Then "Alice" should get "postprocessing-finished" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'postprocessing-finished'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'postprocessing-finished' })
     // And "Alice" should get "file-touched" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'file-touched'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'file-touched' })
     // And "Brian" should get "postprocessing-finished" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'postprocessing-finished'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'postprocessing-finished' })
     // And "Brian" should get "file-touched" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'file-touched'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'file-touched' })
     // And following resources should be displayed in the files list for user "Brian"
     //   | resource    |
     //   | example.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['example.txt']
@@ -627,28 +412,18 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | resource   | as                 |
     //   | simple.pdf | simple-renamed.pdf |
     await ui.userRenamesResource({
-      world,
       stepUser: 'Brian',
       resource: 'simple.pdf',
       newResourceName: 'simple-renamed.pdf'
     })
     // Then "Brian" should get "item-renamed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'item-renamed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'item-renamed' })
     // And "Alice" should get "item-renamed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'item-renamed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'item-renamed' })
     // And following resources should be displayed in the files list for user "Alice"
     //   | resource           |
     //   | simple-renamed.pdf |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['simple-renamed.pdf']
@@ -659,28 +434,18 @@ test.describe('server sent events', { tag: '@sse' }, () => {
     //   | resource    |
     //   | example.txt |
     await ui.userDeletesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.sideBarPanel,
       resources: [{ name: 'example.txt' }]
     })
     // Then "Alice" should get "item-trashed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'item-trashed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'item-trashed' })
     // And "Brian" should get "item-trashed" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'item-trashed'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'item-trashed' })
     // And following resources should not be displayed in the files list for user "Brian"
     //   | resource    |
     //   | example.txt |
     await ui.userShouldNotSeeTheResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['example.txt']
@@ -688,37 +453,20 @@ test.describe('server sent events', { tag: '@sse' }, () => {
 
     // item-restored
     // When "Brian" navigates to the trashbin of the project space "marketing"
-    await ui.userNavigatesToTrashbinOfSpace({
-      world,
-      stepUser: 'Brian',
-      space: 'marketing'
-    })
+    await ui.userNavigatesToTrashbinOfSpace({ stepUser: 'Brian', space: 'marketing' })
     // And "Brian" restores the following resources from trashbin
     //   | resource    |
     //   | example.txt |
-    await ui.userRestoresResourcesFromTrashbin({
-      world,
-      stepUser: 'Brian',
-      resources: ['example.txt']
-    })
+    await ui.userRestoresResourcesFromTrashbin({ stepUser: 'Brian', resources: ['example.txt'] })
 
     // Then "Brian" should get "item-restored" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'item-restored'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'item-restored' })
     // And "Alice" should get "item-restored" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'item-restored'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'item-restored' })
     // And following resources should be displayed in the files list for user "Alice"
     //   | resource    |
     //   | example.txt |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Alice',
       resources: ['example.txt']
@@ -726,51 +474,33 @@ test.describe('server sent events', { tag: '@sse' }, () => {
 
     // # item-moved
     // When "Brian" navigates to the project space "marketing"
-    await ui.userNavigatesToSpace({
-      world,
-      stepUser: 'Brian',
-      space: 'marketing'
-    })
+    await ui.userNavigatesToSpace({ stepUser: 'Brian', space: 'marketing' })
     // And "Brian" opens folder "space-folder"
-    await ui.userOpensResource({
-      world,
-      stepUser: 'Brian',
-      resource: 'space-folder'
-    })
+    await ui.userOpensResource({ stepUser: 'Brian', resource: 'space-folder' })
     // And "Alice" moves the following resource using drag-drop
     //   | resource           | to           |
     //   | simple-renamed.pdf | space-folder |
     await ui.userMovesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.dragDrop,
       resources: [{ resource: 'simple-renamed.pdf', to: 'space-folder' }]
     })
     // Then "Alice" should get "item-moved" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Alice',
-      event: 'item-moved'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Alice', event: 'item-moved' })
     // And "Brian" should get "item-moved" SSE event
-    await ui.userShouldGetSSEEvent({
-      world,
-      stepUser: 'Brian',
-      event: 'item-moved'
-    })
+    await ui.userShouldGetSSEEvent({ stepUser: 'Brian', event: 'item-moved' })
     // And following resources should be displayed in the files list for user "Brian"
     //   | resource           |
     //   | simple-renamed.pdf |
     await ui.userShouldSeeResources({
-      world,
       listType: resourcePage.filesList,
       stepUser: 'Brian',
       resources: ['simple-renamed.pdf']
     })
 
     // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 })

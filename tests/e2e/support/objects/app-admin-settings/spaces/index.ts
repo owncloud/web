@@ -97,7 +97,7 @@ export class Spaces {
     await po.openSpaceAdminActionSidebarPanel({ page: this.#page, action })
   }
 
-  listMembers({ filter }: { filter: string }): Promise<Array<string>> {
+  listMembers({ filter }: { filter: string }): Promise<string[]> {
     return po.listSpaceMembers({ page: this.#page, filter })
   }
 }

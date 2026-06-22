@@ -4,7 +4,7 @@ import * as ui from '../../steps/ui/index'
 import { fileAction } from '../../environment/constants'
 
 test.describe('check files pagination in project space', () => {
-  test('pagination', async ({ world }) => {
+  test('pagination', async () => {
     // Given "Admin" creates following users using API
     //   | id    |
     //   | Alice |
@@ -13,7 +13,6 @@ test.describe('check files pagination in project space', () => {
     //   | David |
     //   | Edith |
     await api.usersHaveBeenCreated({
-      world,
       stepUser: 'Admin',
       users: ['Alice', 'Brian', 'Carol', 'David', 'Edith']
     })
@@ -22,18 +21,13 @@ test.describe('check files pagination in project space', () => {
     //   | id       |
     //   | sales    |
     //   | security |
-    await api.groupsHaveBeenCreated({
-      world,
-      groupIds: ['sales', 'security'],
-      stepUser: 'Admin'
-    })
+    await api.groupsHaveBeenCreated({ groupIds: ['sales', 'security'], stepUser: 'Admin' })
 
     // And "Admin" adds user to the group using API
     //   | user  | group    |
     //   | David | sales    |
     //   | Edith | security |
     await api.usersHaveBeenAddedToGroup({
-      world,
       stepUser: 'Admin',
       usersToAdd: [
         { user: 'David', group: 'sales' },
@@ -45,25 +39,23 @@ test.describe('check files pagination in project space', () => {
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      world,
       stepUser: 'Admin',
       users: [{ id: 'Alice', role: 'Space Admin' }]
     })
 
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
 
     // And "Alice" creates the following project space using API
     //   | name | id     |
     //   | team | team.1 |
     await api.userHasCreatedProjectSpaces({
-      world,
       stepUser: 'Alice',
       spaces: [{ name: 'team', id: 'team.1' }]
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" adds following users to the project space
     //   | user     | role     | kind  |
@@ -72,7 +64,6 @@ test.describe('check files pagination in project space', () => {
     //   | sales    | Can view | group |
     //   | security | Can edit | group |
     await ui.userAddsMembersToSpace({
-      world,
       stepUser: 'Alice',
       members: [
         { user: 'Brian', role: 'Can edit', kind: 'user' },
@@ -83,16 +74,15 @@ test.describe('check files pagination in project space', () => {
     })
 
     // When "Brian" logs in
-    await ui.userLogsIn({ world, stepUser: 'Brian' })
+    await ui.userLogsIn({ stepUser: 'Brian' })
 
     // And "Brian" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Brian', space: 'team.1' })
+    await ui.userNavigatesToSpace({ stepUser: 'Brian', space: 'team.1' })
 
     // And "Brian" creates the following resources
     //   | resource | type   |
     //   | parent   | folder |
     await ui.userCreatesResources({
-      world,
       stepUser: 'Brian',
       resources: [{ name: 'parent', type: 'folder' }]
     })
@@ -101,38 +91,32 @@ test.describe('check files pagination in project space', () => {
     //   | resource  | to     |
     //   | lorem.txt | parent |
     await ui.userUploadsResources({
-      world,
       stepUser: 'Brian',
       resources: [{ name: 'lorem.txt', to: 'parent' }]
     })
 
     // When "David" logs in
-    await ui.userLogsIn({ world, stepUser: 'David' })
+    await ui.userLogsIn({ stepUser: 'David' })
 
     // And "David" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ world, stepUser: 'David', space: 'team.1' })
+    await ui.userNavigatesToSpace({ stepUser: 'David', space: 'team.1' })
 
     // Then "David" should not be able to edit folder "parent"
-    await ui.userShouldNotBeAbleToEditResource({
-      world,
-      stepUser: 'David',
-      resource: 'parent'
-    })
+    await ui.userShouldNotBeAbleToEditResource({ stepUser: 'David', resource: 'parent' })
 
     // And "David" logs out
-    await ui.userLogsOut({ world, stepUser: 'David' })
+    await ui.userLogsOut({ stepUser: 'David' })
 
     // When "Edith" logs in
-    await ui.userLogsIn({ world, stepUser: 'Edith' })
+    await ui.userLogsIn({ stepUser: 'Edith' })
 
     // And "Edith" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Edith', space: 'team.1' })
+    await ui.userNavigatesToSpace({ stepUser: 'Edith', space: 'team.1' })
 
     // And "Edith" creates the following resources
     //   | resource | type   |
     //   | edith    | folder |
     await ui.userCreatesResources({
-      world,
       stepUser: 'Edith',
       resources: [{ name: 'edith', type: 'folder' }]
     })
@@ -141,32 +125,26 @@ test.describe('check files pagination in project space', () => {
     //   | resource  | to    |
     //   | lorem.txt | edith |
     await ui.userUploadsResources({
-      world,
       stepUser: 'Edith',
       resources: [{ name: 'lorem.txt', to: 'edith' }]
     })
 
     // And "Edith" logs out
-    await ui.userLogsOut({ world, stepUser: 'Edith' })
+    await ui.userLogsOut({ stepUser: 'Edith' })
 
     // When "Carol" logs in
-    await ui.userLogsIn({ world, stepUser: 'Carol' })
+    await ui.userLogsIn({ stepUser: 'Carol' })
 
     // And "Carol" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Carol', space: 'team.1' })
+    await ui.userNavigatesToSpace({ stepUser: 'Carol', space: 'team.1' })
 
     // Then "Carol" should not be able to edit folder "parent"
-    await ui.userShouldNotBeAbleToEditResource({
-      world,
-      stepUser: 'Carol',
-      resource: 'parent'
-    })
+    await ui.userShouldNotBeAbleToEditResource({ stepUser: 'Carol', resource: 'parent' })
 
     // And "Alice" creates a public link of following resource using the sidebar panel
     //   | resource | role     | password |
     //   | parent   | Can edit | %public% |
     await ui.userCreatesPublicLink({
-      world,
       stepUser: 'Alice',
       resource: 'parent',
       role: 'Can edit',
@@ -174,24 +152,15 @@ test.describe('check files pagination in project space', () => {
     })
 
     // And "Anonymous" opens the public link "Unnamed link"
-    await ui.userOpensPublicLink({
-      world,
-      stepUser: 'Anonymous',
-      name: 'Unnamed link'
-    })
+    await ui.userOpensPublicLink({ stepUser: 'Anonymous', name: 'Unnamed link' })
 
     // And "Anonymous" unlocks the public link with password "%public%"
-    await ui.userUnlocksPublicLink({
-      world,
-      password: '%public%',
-      stepUser: 'Anonymous'
-    })
+    await ui.userUnlocksPublicLink({ password: '%public%', stepUser: 'Anonymous' })
 
     // And "Anonymous" uploads the following resources in public link page
     //   | resource     |
     //   | textfile.txt |
     await ui.userUploadsResourcesInPublicLink({
-      world,
       stepUser: 'Anonymous',
       resources: [{ name: 'textfile.txt' }]
     })
@@ -200,7 +169,6 @@ test.describe('check files pagination in project space', () => {
     //   | resource  | from |
     //   | lorem.txt |      |
     await ui.userDeletesResourcesFromPublicLink({
-      world,
       stepUser: 'Anonymous',
       actionType: fileAction.sideBarPanel,
       resources: [{ resource: 'lorem.txt' }]
@@ -210,25 +178,19 @@ test.describe('check files pagination in project space', () => {
     //   | resource     | from   |
     //   | textfile.txt | parent |
     await ui.userDeletesResources({
-      world,
       stepUser: 'Brian',
       actionType: fileAction.sideBarPanel,
       resources: [{ name: 'textfile.txt', from: 'parent' }]
     })
 
     // When "Carol" navigates to the trashbin of the project space "team.1"
-    await ui.userNavigatesToTrashbinOfSpace({
-      world,
-      stepUser: 'Carol',
-      space: 'team.1'
-    })
+    await ui.userNavigatesToTrashbinOfSpace({ stepUser: 'Carol', space: 'team.1' })
 
     // Then "Carol" should not be able to delete following resources from the trashbin
     //   | resource            |
     //   | parent/lorem.txt    |
     //   | parent/textfile.txt |
     await ui.userShouldNotBeAbleToDeleteResourceFromTrashbin({
-      world,
       stepUser: 'Carol',
       resources: ['parent/textfile.txt', 'parent/lorem.txt']
     })
@@ -237,22 +199,16 @@ test.describe('check files pagination in project space', () => {
     //   | parent/lorem.txt    |
     //   | parent/textfile.txt |
     await ui.userShouldNotBeAbleToRestoreResourceFromTrashbin({
-      world,
       stepUser: 'Carol',
       resources: ['parent/lorem.txt', 'parent/textfile.txt']
     })
     // When "Brian" navigates to the trashbin of the project space "team.1"
-    await ui.userNavigatesToTrashbinOfSpace({
-      world,
-      stepUser: 'Brian',
-      space: 'team.1'
-    })
+    await ui.userNavigatesToTrashbinOfSpace({ stepUser: 'Brian', space: 'team.1' })
 
     // Then "Brian" should be able to restore following resource from the trashbin
     //   | resource         |
     //   | parent/lorem.txt |
     await ui.userShouldBeAbleToRestoreResourceFromTrashbin({
-      world,
       stepUser: 'Brian',
       resources: ['parent/lorem.txt']
     })
@@ -261,79 +217,50 @@ test.describe('check files pagination in project space', () => {
     //   | resource            |
     //   | parent/textfile.txt |
     await ui.userShouldNotBeAbleToDeleteResourceFromTrashbin({
-      world,
       stepUser: 'Brian',
       resources: ['parent/textfile.txt']
     })
 
     // And "Alice" navigates to the project space "team.1"
-    await ui.userNavigatesToSpace({ world, stepUser: 'Alice', space: 'team.1' })
+    await ui.userNavigatesToSpace({ stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" removes access to following users from the project space
     //   | user  |
     //   | Brian |
-    await ui.userRemovesAccessToMember({
-      world,
-      stepUser: 'Alice',
-      reciver: 'Brian',
-      role: 'role'
-    })
+    await ui.userRemovesAccessToMember({ stepUser: 'Alice', reciver: 'Brian', role: 'role' })
 
     // Then "Brian" should not see space "team.1"
-    await ui.userShouldNotSeeSpace({
-      world,
-      stepUser: 'Brian',
-      space: 'team.1'
-    })
+    await ui.userShouldNotSeeSpace({ stepUser: 'Brian', space: 'team.1' })
 
     // // And "Brian" logs out
-    await ui.userLogsOut({ world, stepUser: 'Brian' })
+    await ui.userLogsOut({ stepUser: 'Brian' })
 
     // When "Alice" changes the roles of the following users in the project space
     //   | user  | role       |
     //   | Carol | Can manage |
-    await ui.userChangesMemberRole({
-      world,
-      stepUser: 'Alice',
-      role: 'Can manage',
-      sharee: 'Carol'
-    })
+    await ui.userChangesMemberRole({ stepUser: 'Alice', role: 'Can manage', sharee: 'Carol' })
 
     // And "Carol" navigates to the trashbin of the project space "team.1"
-    await ui.userNavigatesToTrashbinOfSpace({
-      world,
-      stepUser: 'Carol',
-      space: 'team.1'
-    })
+    await ui.userNavigatesToTrashbinOfSpace({ stepUser: 'Carol', space: 'team.1' })
 
     // Then "Carol" should be able to delete following resource from the trashbin
     //   | resource            |
     //   | parent/textfile.txt |
     await ui.userShouldBeAbleToDeleteResourceFromTrashbin({
-      world,
       stepUser: 'Carol',
       resources: ['parent/textfile.txt']
     })
 
     // And "Carol" logs out
-    await ui.userLogsOut({ world, stepUser: 'Carol' })
+    await ui.userLogsOut({ stepUser: 'Carol' })
 
     // And "Alice" as project manager removes their own access to the project space
-    await ui.userRemovesAccessToMember({
-      world,
-      stepUser: 'Alice',
-      reciver: 'Alice',
-      role: 'Can manage'
-    })
+    await ui.userRemovesAccessToMember({ stepUser: 'Alice', reciver: 'Alice', role: 'Can manage' })
 
     // Then "Alice" should not see space "team.1"
-    await ui.userShouldNotSeeSpace({
-      world,
-      stepUser: 'Alice',
-      space: 'team.1'
-    })
+    await ui.userShouldNotSeeSpace({ stepUser: 'Alice', space: 'team.1' })
 
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 })

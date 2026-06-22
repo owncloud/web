@@ -4,32 +4,23 @@ import * as ui from '../../steps/ui/index'
 import { application, fileAction } from '../../environment/constants'
 
 test.describe('Navigate web directly through urls', () => {
-  test('pagination', async ({ world }) => {
+  test('pagination', async () => {
     // Given "Admin" creates following user using API
     //   | id    |
     //   | Alice |
     //   | Brian |
-    await api.usersHaveBeenCreated({
-      world,
-      stepUser: 'Admin',
-      users: ['Alice', 'Brian']
-    })
+    await api.usersHaveBeenCreated({ stepUser: 'Admin', users: ['Alice', 'Brian'] })
     // And "Admin" assigns following roles to the users using API
     //   | id    | role        |
     //   | Alice | Space Admin |
     await api.userHasAssignedRolesToUsers({
-      world,
       stepUser: 'Admin',
       users: [{ id: 'Alice', role: 'Space Admin' }]
     })
     // And "Alice" creates the following folders in personal space using API
     //   | name   |
     //   | FOLDER |
-    await api.userHasCreatedFolder({
-      world,
-      stepUser: 'Alice',
-      folderName: 'FOLDER'
-    })
+    await api.userHasCreatedFolder({ stepUser: 'Alice', folderName: 'FOLDER' })
     // And "Alice" creates the following files into personal space using API
     //   | pathToFile                    | content      |
     //   | FOLDER/file_inside_folder.txt | example text |
@@ -37,7 +28,6 @@ test.describe('Navigate web directly through urls', () => {
     //   | test.odt                      | some content |
     //   | lorem.txt                     | new content |
     await api.userHasCreatedFiles({
-      world,
       stepUser: 'Alice',
       files: [
         {
@@ -62,7 +52,6 @@ test.describe('Navigate web directly through urls', () => {
     //   | name        | id     |
     //   | Development | team.1 |
     await api.userHasCreatedProjectSpaces({
-      world,
       stepUser: 'Alice',
       spaces: [{ name: 'Development', id: 'team.1' }]
     })
@@ -70,7 +59,6 @@ test.describe('Navigate web directly through urls', () => {
     //   | name              | content                   |
     //   | spaceTextfile.txt | This is test file. Cheers |
     await api.userHasCreatedFilesInsideSpace({
-      world,
       stepUser: 'Alice',
       files: [
         {
@@ -81,10 +69,9 @@ test.describe('Navigate web directly through urls', () => {
       ]
     })
     // And "Alice" logs in
-    await ui.userLogsIn({ world, stepUser: 'Alice' })
+    await ui.userLogsIn({ stepUser: 'Alice' })
     // When "Alice" navigates to "versions" details panel of file "lorem.txt" of space "personal" through the URL
     await ui.userOpensResourceDetailsPanelViaUrl({
-      world,
       stepUser: 'Alice',
       resource: 'lorem.txt',
       detailsPanel: 'versions',
@@ -94,7 +81,6 @@ test.describe('Navigate web directly through urls', () => {
     //   | resource  | to | version | openDetailsPanel |
     //   | lorem.txt | /  | 1       | false            |
     await ui.userRestoresResourceVersion({
-      world,
       stepUser: 'Alice',
       file: 'lorem.txt',
       to: '/',
@@ -104,7 +90,6 @@ test.describe('Navigate web directly through urls', () => {
 
     // When "Alice" navigates to "sharing" details panel of file "lorem.txt" of space "personal" through the URL
     await ui.userOpensResourceDetailsPanelViaUrl({
-      world,
       stepUser: 'Alice',
       resource: 'lorem.txt',
       detailsPanel: 'sharing',
@@ -114,7 +99,6 @@ test.describe('Navigate web directly through urls', () => {
     //   | resource  | recipient | type | role     | resourceType |
     //   | lorem.txt | Brian     | user | Can view | file         |
     await ui.userSharesResources({
-      world,
       stepUser: 'Alice',
       actionType: fileAction.urlNavigation,
       shares: [
@@ -131,26 +115,20 @@ test.describe('Navigate web directly through urls', () => {
     // file that has respective editor will open in the respective editor
     // When "Alice" opens the file "lorem.txt" of space "personal" through the URL
     await ui.userOpensSpaceResourceViaUrl({
-      world,
       stepUser: 'Alice',
       resource: 'lorem.txt',
       space: 'personal'
     })
 
     // Then "Alice" is in a text-editor
-    await ui.userShouldBeInFileViewer({
-      world,
-      stepUser: 'Alice',
-      fileViewerType: application.textEditor
-    })
+    await ui.userShouldBeInFileViewer({ stepUser: 'Alice', fileViewerType: application.textEditor })
 
     // And "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ stepUser: 'Alice' })
 
     // file without the respective editor will show the file in the file list
     // When "Alice" opens the file "test.odt" of space "personal" through the URL
     await ui.userOpensSpaceResourceViaUrl({
-      world,
       stepUser: 'Alice',
       resource: 'test.odt',
       space: 'personal'
@@ -161,14 +139,12 @@ test.describe('Navigate web directly through urls', () => {
     //   | lorem.txt |
     //   | test.odt  |
     await ui.userShouldSeeResources({
-      world,
       listType: 'files list',
       stepUser: 'Alice',
       resources: ['FOLDER', 'lorem.txt', 'test.odt']
     })
     // When "Alice" opens the folder "FOLDER" of space "personal" through the URL
     await ui.userOpensSpaceResourceViaUrl({
-      world,
       stepUser: 'Alice',
       resource: 'FOLDER',
       space: 'personal'
@@ -177,43 +153,29 @@ test.describe('Navigate web directly through urls', () => {
     //   | resource               |
     //   | file_inside_folder.txt |
     await ui.userOpensResourceInViewer({
-      world,
       stepUser: 'Alice',
       resource: 'file_inside_folder.txt',
       viewer: application.textEditor
     })
     // Then "Alice" is in a text-editor
-    await ui.userShouldBeInFileViewer({
-      world,
-      stepUser: 'Alice',
-      fileViewerType: application.textEditor
-    })
+    await ui.userShouldBeInFileViewer({ stepUser: 'Alice', fileViewerType: application.textEditor })
     // And "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ stepUser: 'Alice' })
     // When "Alice" opens space "Development" through the URL
-    await ui.userOpensSpaceViaUrl({
-      world,
-      stepUser: 'Alice',
-      space: 'Development'
-    })
+    await ui.userOpensSpaceViaUrl({ stepUser: 'Alice', space: 'Development' })
     // And "Alice" opens the following file in texteditor
     //   | resource          |
     //   | spaceTextfile.txt |
     await ui.userOpensResourceInViewer({
-      world,
       stepUser: 'Alice',
       resource: 'spaceTextfile.txt',
       viewer: application.textEditor
     })
     // Then "Alice" is in a text-editor
-    await ui.userShouldBeInFileViewer({
-      world,
-      stepUser: 'Alice',
-      fileViewerType: application.textEditor
-    })
+    await ui.userShouldBeInFileViewer({ stepUser: 'Alice', fileViewerType: application.textEditor })
     // And "Alice" closes the file viewer
-    await ui.userClosesFileViewer({ world, stepUser: 'Alice' })
+    await ui.userClosesFileViewer({ stepUser: 'Alice' })
     // And "Alice" logs out
-    await ui.userLogsOut({ world, stepUser: 'Alice' })
+    await ui.userLogsOut({ stepUser: 'Alice' })
   })
 })
