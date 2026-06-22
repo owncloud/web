@@ -16,7 +16,6 @@ export const test = base.extend<{
     const world = new World(testInfo.workerIndex, testInfo.testId)
     setWorld(world)
     await use(world)
-    setWorld(null)
   },
   globalCleanup: [
     async ({ world }: { world: World }, use, testInfo) => {
