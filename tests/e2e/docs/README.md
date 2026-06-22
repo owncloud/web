@@ -15,12 +15,14 @@ documentation: the top navigation, the left and right sidebars, sharing roles, a
 
 ## Run
 
-This reuses the repository's Playwright install — no extra dependencies. Point it at a running
-instance (defaults shown):
+This reuses the repository's Playwright install — no extra dependencies — and the shared e2e
+config in [`tests/e2e/config.js`](../config.js), so the instance URL and admin credentials are the
+same `BASE_URL_OCIS` / `ADMIN_USERNAME` / `ADMIN_PASSWORD` variables used by the rest of the e2e
+suite (all defaulting to a local instance with `admin` / `admin`):
 
 ```bash
 # from the repository root
-OCIS_URL=https://localhost:9200 OCIS_USER=admin OCIS_PASSWORD=admin pnpm docs:screenshots
+BASE_URL_OCIS=https://localhost:9200 pnpm docs:screenshots
 ```
 
 The tool seeds a little best-effort demo data first (a versioned file, a trashed item, a project

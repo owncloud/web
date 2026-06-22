@@ -5,10 +5,11 @@ import { fileURLToPath } from 'url'
 import { login } from './support/oc'
 import { seed } from './support/seed'
 import { tours } from './tours'
+import { config } from '../config'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const outputRoot = path.join(__dirname, 'output')
-const baseURL = process.env.OCIS_URL ?? 'https://localhost:9200'
+const baseURL = config.baseUrl
 
 const shotName = (index: number, shot: string) =>
   `${String(index + 1).padStart(2, '0')}-${shot}.png`

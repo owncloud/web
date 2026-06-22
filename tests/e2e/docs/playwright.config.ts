@@ -1,9 +1,11 @@
 import { defineConfig } from '@playwright/test'
+import { config } from '../config'
 
 // Standalone Playwright config for the documentation screenshot capture tool.
-// It reuses the repository's Playwright install. Point OCIS_URL at a running
-// ownCloud Web / oCIS instance (defaults to https://localhost:9200, admin/admin);
-// override credentials with OCIS_USER / OCIS_PASSWORD.
+// It reuses the repository's Playwright install and the shared e2e config
+// (tests/e2e/config.js): point BASE_URL_OCIS at a running ownCloud Web / oCIS
+// instance and set ADMIN_USERNAME / ADMIN_PASSWORD (all default to the same
+// values as the rest of the e2e suite).
 export default defineConfig({
   testDir: '.',
   testMatch: 'capture.spec.ts',
@@ -14,7 +16,7 @@ export default defineConfig({
   reporter: 'list',
   timeout: 120_000,
   use: {
-    baseURL: process.env.OCIS_URL ?? 'https://localhost:9200',
+    baseURL: config.baseUrl,
     ignoreHTTPSErrors: true,
     headless: true,
     viewport: { width: 1440, height: 900 }

@@ -1,7 +1,5 @@
 import { Page, expect } from '@playwright/test'
-
-const USER = process.env.OCIS_USER ?? 'admin'
-const PASS = process.env.OCIS_PASSWORD ?? 'admin'
+import { config } from '../../config'
 
 /**
  * Log in to ownCloud Web through the built-in IdP and wait until the Files
@@ -11,8 +9,8 @@ export async function login(page: Page): Promise<void> {
   await page.goto('/')
   const username = page.locator('input[placeholder="Username"]')
   await username.waitFor({ state: 'visible', timeout: 30_000 })
-  await username.fill(USER)
-  await page.locator('input[placeholder="Password"]').fill(PASS)
+  await username.fill(config.adminUsername)
+  await page.locator('input[placeholder="Password"]').fill(config.adminPassword)
   await page.locator('input[placeholder="Password"]').press('Enter')
   await page
     .getByRole('button', { name: 'My Account' })

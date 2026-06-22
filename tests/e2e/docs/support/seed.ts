@@ -1,7 +1,8 @@
 import { APIRequestContext } from '@playwright/test'
+import { config } from '../../config'
 
-const USER = process.env.OCIS_USER ?? 'admin'
-const PASS = process.env.OCIS_PASSWORD ?? 'admin'
+const USER = config.adminUsername
+const PASS = config.adminPassword
 
 const basic = (user: string, pass: string) =>
   'Basic ' + Buffer.from(`${user}:${pass}`).toString('base64')
