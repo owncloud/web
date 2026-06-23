@@ -73,6 +73,7 @@ interface Props {
   paddingSize?: AvailableSizeType | 'remove'
   offset?: string
   sameWidthAsTarget?: boolean
+  focusOnOpen?: boolean
 }
 interface Emits {
   (e: 'hideDrop'): void
@@ -96,13 +97,61 @@ const {
   target = null,
   paddingSize = 'medium',
   offset = '',
-  sameWidthAsTarget = false
+  sameWidthAsTarget = false,
+  focusOnOpen = false
 } = defineProps<Props>()
 
 const emit = defineEmits<Emits>()
 
 const drop = useTemplateRef<HTMLElement>('drop')
 const tippyInstance = ref(null)
+const triggerEl = ref<Element | null>(null)
+
+const getFocusableItems = () =>
+  Array.from(
+    unref(drop)?.querySelectorAll<HTMLElement>(
+      'a, button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    ) ?? []
+  )
+
+const onTriggerKeydown = (e: KeyboardEvent) => {
+  if (!unref(tippyInstance)?.state.isVisible) {
+    return
+  }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    getFocusableItems()[0]?.focus()
+  } else if (e.key === 'Tab') {
+    e.preventDefault()
+    hide()
+  }
+}
+
+const onDropKeydown = (e: KeyboardEvent) => {
+  const items = getFocusableItems()
+  const currentIdx = items.indexOf(document.activeElement as HTMLElement)
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    e.stopPropagation()
+    const next = items[currentIdx + 1] ?? items[0]
+    next?.focus()
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    e.stopPropagation()
+    const prev = items[currentIdx - 1] ?? items[items.length - 1]
+    prev?.focus()
+  } else if (e.key === 'Escape') {
+    e.preventDefault()
+    e.stopPropagation()
+    hide()
+    ;(unref(triggerEl) as HTMLElement)?.focus()
+  } else if (e.key === 'Tab') {
+    e.preventDefault()
+    hide()
+    ;(unref(triggerEl) as HTMLElement)?.focus()
+  }
+}
 
 const show = (duration?: number) => {
   unref(tippyInstance)?.show(duration)
@@ -118,10 +167,12 @@ const onClick = () => {
 }
 
 const onFocusOut = (event: FocusEvent) => {
-  const tippyBox = unref(drop).closest('.tippy-box')
+  const tippyBox = unref(drop)?.closest('.tippy-box')
+  if (!tippyBox) {
+    return
+  }
   const focusLeft = event.relatedTarget && !tippyBox.contains(event.relatedTarget as Node)
   if (focusLeft) {
-    // close drop when the focus leaves it
     hide()
   }
 }
@@ -189,6 +240,11 @@ function initializeTippy() {
         emit('showDrop')
         hideAll({ exclude: instance })
       },
+      onShown: () => {
+        if (focusOnOpen) {
+          getFocusableItems()[0]?.focus()
+        }
+      },
       onHide: () => {
         emit('hideDrop')
       }
@@ -251,15 +307,20 @@ function initializeTippy() {
   }
 
   tippyInstance.value = tippy(to, config)
+  triggerEl.value = to
+  to.addEventListener('keydown', onTriggerKeydown)
 }
 
 onMounted(() => {
   unref(drop).addEventListener('focusout', onFocusOut)
+  unref(drop).addEventListener('keydown', onDropKeydown)
   initializeTippy()
 })
 
 onBeforeUnmount(() => {
   unref(drop).removeEventListener('focusout', onFocusOut)
+  unref(drop).removeEventListener('keydown', onDropKeydown)
+  unref(triggerEl)?.removeEventListener('keydown', onTriggerKeydown)
   destroy(unref(tippyInstance))
 })
 

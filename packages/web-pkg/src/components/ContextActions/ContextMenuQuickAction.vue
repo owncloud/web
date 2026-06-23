@@ -20,6 +20,7 @@
       position="bottom-end"
       mode="click"
       close-on-click
+      focus-on-open
       padding-size="small"
     >
       <slot name="contextMenu" :item="item" />
