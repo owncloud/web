@@ -35,6 +35,7 @@
               padding-size="small"
               toggle="#oc-openfile-contextmenu-trigger"
               close-on-click
+              focus-on-open
               @click.stop.prevent
             >
               <context-action-menu
