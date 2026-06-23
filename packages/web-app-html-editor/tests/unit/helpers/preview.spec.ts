@@ -43,6 +43,22 @@ describe('preview CSP', () => {
     const out = wrapWithPreviewCsp('<head id="h">x</head>')
     expect(out).toBe(`<head id="h">${META}x</head>`)
   })
+
+  it('ignores a <head> inside an HTML comment and targets the real head', () => {
+    const out = wrapWithPreviewCsp(
+      '<!-- <head> --><html><head><title>t</title></head><body>x</body></html>'
+    )
+    // injected into the real head, never into the decoy comment
+    expect(out).toContain(`<head>${META}<title>`)
+    expect(out).toContain('<!-- <head> -->')
+    // exactly one CSP meta is injected
+    expect(out.split(META).length - 1).toBe(1)
+  })
+
+  it('wraps a head after <html> when the only <head> is commented out', () => {
+    const out = wrapWithPreviewCsp('<html><!-- <head> --><body>x</body></html>')
+    expect(out).toContain(`<html><head>${META}</head>`)
+  })
 })
 
 describe('preview size guard', () => {

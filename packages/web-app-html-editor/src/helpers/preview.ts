@@ -24,23 +24,47 @@ export const PREVIEW_SIZE_LIMIT = 500_000
 
 const META = `<meta http-equiv="Content-Security-Policy" content="${PREVIEW_CSP}">`
 
+// Find the first match of `re` that is NOT inside an HTML comment. Matching the
+// raw string would let a crafted `<!-- <head> -->` divert the CSP injection away
+// from the real head, leaving the rendered preview without its self-protecting CSP.
+function firstUncommentedMatch(html: string, re: RegExp): RegExpExecArray | null {
+  const comments: Array<[number, number]> = []
+  const commentRe = /<!--[\s\S]*?-->/g
+  let c: RegExpExecArray | null
+  while ((c = commentRe.exec(html)) !== null) {
+    comments.push([c.index, c.index + c[0].length])
+  }
+  const scan = new RegExp(re.source, re.flags.includes('g') ? re.flags : `${re.flags}g`)
+  let m: RegExpExecArray | null
+  while ((m = scan.exec(html)) !== null) {
+    const at = m.index
+    if (!comments.some(([start, end]) => at >= start && at < end)) {
+      return m
+    }
+  }
+  return null
+}
+
 /**
  * Inject the preview CSP `<meta>` into an HTML document without disturbing its
- * rendering mode: into an existing `<head>`, else wrap a `<head>` right after
- * `<html>`, else prepend it (a fragment has no doctype to preserve). Using a
- * replacer function avoids `$`-pattern interpretation in the replacement.
+ * rendering mode: into the first real `<head>`, else wrap a `<head>` right after
+ * the first real `<html>`, else prepend it (a fragment has no doctype to
+ * preserve). Matches ignore HTML comments so the CSP cannot be diverted into a
+ * commented-out tag.
  */
 export function wrapWithPreviewCsp(html: string): string {
   if (!html) {
     return META
   }
-  const headOpen = /<head\b[^>]*>/i
-  if (headOpen.test(html)) {
-    return html.replace(headOpen, (match) => `${match}${META}`)
+  const head = firstUncommentedMatch(html, /<head\b[^>]*>/i)
+  if (head) {
+    const at = head.index + head[0].length
+    return `${html.slice(0, at)}${META}${html.slice(at)}`
   }
-  const htmlOpen = /<html\b[^>]*>/i
-  if (htmlOpen.test(html)) {
-    return html.replace(htmlOpen, (match) => `${match}<head>${META}</head>`)
+  const htmlTag = firstUncommentedMatch(html, /<html\b[^>]*>/i)
+  if (htmlTag) {
+    const at = htmlTag.index + htmlTag[0].length
+    return `${html.slice(0, at)}<head>${META}</head>${html.slice(at)}`
   }
   return `${META}${html}`
 }

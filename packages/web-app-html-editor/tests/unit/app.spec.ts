@@ -67,6 +67,23 @@ describe('HTML editor app', () => {
     await renderButton.trigger('click')
     await nextTick()
     expect(wrapper.findComponent(HtmlPreviewPane).exists()).toBe(true)
+    // rendered synchronously on opt-in, not after the 250ms debounce
+    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain('Content-Security-Policy')
+  })
+
+  it('re-pauses after opt-in when the content changes (large-file guard re-arms)', async () => {
+    const big = '<p>'.repeat(Math.ceil((PREVIEW_SIZE_LIMIT + 100) / 3))
+    const { wrapper } = getWrapper({ currentContent: big })
+    await wrapper.find('.html-editor-preview-render').trigger('click')
+    await nextTick()
+    expect(wrapper.findComponent(HtmlPreviewPane).exists()).toBe(true)
+
+    // a later change (e.g. an external conflict-reload) must not silently
+    // auto-render another large document — it has to re-pause and re-prompt
+    await wrapper.setProps({ currentContent: big + '<p>more</p>' })
+    await nextTick()
+    expect(wrapper.findComponent(HtmlPreviewPane).exists()).toBe(false)
+    expect(wrapper.find('.html-editor-preview-render').exists()).toBe(true)
   })
 })
 

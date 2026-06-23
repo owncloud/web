@@ -16,19 +16,18 @@ export default defineWebApplication({
 
     // `newFileMenu` on the html entry adds a "New > HTML file" item to the Files
     // create menu. The extensions also declare which file types open in this app.
+    const htmlFileLabel = () => $gettext('HTML file')
     const fileExtensions: ApplicationFileExtension[] = [
       {
         extension: 'html',
-        label: () => $gettext('HTML file'),
+        label: htmlFileLabel,
         newFileMenu: {
-          menuTitle() {
-            return $gettext('HTML file')
-          }
+          menuTitle: htmlFileLabel
         }
       },
       {
         extension: 'htm',
-        label: () => $gettext('HTML file')
+        label: htmlFileLabel
       },
       {
         extension: 'xhtml',

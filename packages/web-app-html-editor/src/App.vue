@@ -90,7 +90,13 @@ const schedulePreview = (value: string) => {
 
 const showPreviewAnyway = () => {
   renderLargeAnyway.value = true
-  schedulePreview(currentContent)
+  // Explicit user action: render the current content immediately rather than
+  // through the debounce, so the preview pane does not mount empty for 250 ms.
+  if (previewTimer) {
+    clearTimeout(previewTimer)
+    previewTimer = undefined
+  }
+  previewContent.value = wrapWithPreviewCsp(currentContent ?? '')
 }
 
 const onInput = (value: string) => {
@@ -103,7 +109,18 @@ const onInput = (value: string) => {
 watch(
   () => currentContent,
   (value) => {
-    if (isPreviewTooLarge(value) && !renderLargeAnyway.value) {
+    // Re-arm the large-file guard on every content change. The "show anyway"
+    // opt-in is scoped to the document the user explicitly approved; a later
+    // change (notably an external conflict-reload) must re-pause rather than
+    // silently auto-render a different, possibly hostile, large document.
+    renderLargeAnyway.value = false
+    if (isPreviewTooLarge(value)) {
+      // Drop any queued render so a previously scheduled small-content preview
+      // cannot fire after the content has grown past the limit.
+      if (previewTimer) {
+        clearTimeout(previewTimer)
+        previewTimer = undefined
+      }
       previewContent.value = ''
       return
     }
