@@ -131,7 +131,7 @@ export class AuthService implements AuthServiceInterface {
     }
 
     if (to.params.scope === 'vault') {
-      this.requireAcr('advanced', to.fullPath)
+      this.requireAcr(this.capabilityStore.authMfaRequiredLevelname, to.fullPath)
     }
 
     if (isPublicLinkContextRequired(this.router, to)) {
