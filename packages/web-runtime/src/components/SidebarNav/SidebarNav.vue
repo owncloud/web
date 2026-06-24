@@ -192,6 +192,10 @@ export default defineComponent({
     &:hover {
       overflow: hidden;
     }
+    &:focus-visible {
+      outline: none !important;
+      box-shadow: inset 0 0 0 2px var(--oc-color-swatch-passive-default) !important;
+    }
   }
 
   .toggle-sidebar-button-expanded {
