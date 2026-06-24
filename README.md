@@ -18,7 +18,7 @@ ownCloud Web is a single page, standalone frontend, based on modern web technolo
 
 ## Compatibility
 
-Usage of Web UI and [ownCloud 10](https://github.com/owncloud/core) as backend is **not** recommended starting with version `7.1.0` of the Web UI, meaning newer versions only support [ownCloud Infinite Scale](https://github.com/owncloud/ocis). If you want to use the Web UI with ownCloud 10, please use App version `7.0.2`. Critical bugs can be fixed upon request.
+Usage of Web UI and [ownCloud Classic 10](https://github.com/owncloud/core) as backend is **not** recommended starting with version `7.1.0` of the Web UI, meaning newer versions only support [ownCloud Infinite Scale](https://github.com/owncloud/ocis). If you want to use the Web UI with ownCloud Classic 10, please use App version `7.0.2`. Critical bugs can be fixed upon request.
 
 ## Examples
 

@@ -1,5 +1,5 @@
 ---
-title: "Deploy as an app in ownCloud 10"
+title: "Deploy as an app in ownCloud Classic 10"
 date: 2018-05-02T00:00:00+00:00
 weight: 1
 geekdocRepo: https://github.com/owncloud/web
@@ -12,15 +12,15 @@ geekdocFilePath: oc10-app.md
 
 ## Compatibility
 
-Please note that the usage of Web UI and ownCloud 10 as backend is not recommended starting with version 7.1.0 of the Web UI. Therefore, this section only applies to versions < 7.1.0.
+Please note that the usage of Web UI and ownCloud Classic 10 as backend is not recommended starting with version 7.1.0 of the Web UI. Therefore, this section only applies to versions < 7.1.0.
 
 ## Introduction
 
-ownCloud Web is being deployed as an app to [ownCloud marketplace](https://marketplace.owncloud.com/) to enable easy integration into existing ownCloud 10 instances.
+ownCloud Web is being deployed as an app to [ownCloud marketplace](https://marketplace.owncloud.com/) to enable easy integration into existing ownCloud Classic 10 instances.
 After completing this setup, ownCloud Web will be available on `https://<your-owncloud-server>/index.php/apps/web`.
 
 ## Prerequisites
-- Running [ownCloud 10 server](https://owncloud.com/download-server/) with version 10.8
+- Running [ownCloud Classic 10 server](https://owncloud.com/download-server/) with version 10.8
 - Installed [oauth2 app](https://marketplace.owncloud.com/apps/oauth2)
 - Command line access to your server
 
@@ -31,7 +31,7 @@ occ market:install web
 ```
 
 ## Configure oauth2
-Within the `Admin` page of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name (e.g. `ownCloud Web`) and redirection URL `https://<your-owncloud-server>/index.php/apps/web/oidc-callback.html`.
+Within the `Admin` page of ownCloud Classic 10, head into `User Authentication` and add a new client with arbitrary name (e.g. `ownCloud Web`) and redirection URL `https://<your-owncloud-server>/index.php/apps/web/oidc-callback.html`.
 
 {{< figure src="/clients/web/static/oauth2.png" alt="Example OAuth2 entry" >}}
 
@@ -43,7 +43,7 @@ You can mark the ownCloud web client as `trusted` by clicking the respective che
 If you use OpenID Connect you need to add a new client for ownCloud Web to your identity provider instead.
 {{< /hint >}}
 
-## Configure ownCloud 10
+## Configure ownCloud Classic 10
 ### Set ownCloud Web address
 To set the ownCloud Web address and to display ownCloud Web in the app switcher, add the following line into `config/config.php`:
 
@@ -118,7 +118,7 @@ If any issues arise when trying to access the new design, a good start for debug
 
 |config parameter|explanation|
 |---|---|
-|server|ownCloud 10 server address|
+|server|ownCloud Classic 10 server address|
 |theme|Theme to be used in ownCloud Web pointing to a json file inside of `themes` folder|
 |auth.clientId|Client ID received when adding ownCloud Web in the `User Authentication` section in `Admin`|
 |apps|List of internal extensions to be loaded|
@@ -166,7 +166,7 @@ To add new elements in the app switcher, paste the following into the `applicati
 ```
 
 {{< hint info >}}
-The URL in the example might need adaptations depending on the configuration of your ownCloud Server. App switcher elements added this way will open the respective page in a new tab. This method can also be used to link external sites like Help pages or similar.
+The URL in the example might need adaptations depending on the configuration of your ownCloud Classic. App switcher elements added this way will open the respective page in a new tab. This method can also be used to link external sites like Help pages or similar.
 {{< /hint >}}
 
 ### Add links to the user menu
@@ -188,10 +188,10 @@ Just like adding links to the app switcher, you can also add links to the user m
 This will add a link to the specified URL in the user menu. This way, the link will open in the same tab. If you instead want to open it in a new tab, just remove the line `"target": "_self",`.
 
 ### ONLYOFFICE
-For ONLYOFFICE there is a [native integration](https://github.com/ONLYOFFICE/onlyoffice-owncloud-web) available for ownCloud Web when it is used with ownCloud Classic Server. It fully integrates the ONLYOFFICE Document Editors and allows users to create and open documents right from ownCloud Web.
+For ONLYOFFICE there is a [native integration](https://github.com/ONLYOFFICE/onlyoffice-owncloud-web) available for ownCloud Web when it is used with ownCloud Classic. It fully integrates the ONLYOFFICE Document Editors and allows users to create and open documents right from ownCloud Web.
 
 To be able to use ONLYOFFICE in ownCloud Web, it is required to run
-- ownCloud Server >= 10.8
+- ownCloud Classic >= 10.8
 - ownCloud Web >= 4.0.0
 - [ONLYOFFICE Connector for ownCloud Classic](https://marketplace.owncloud.com/apps/onlyoffice) >= 7.1.1
 
@@ -207,14 +207,14 @@ Make sure that ONLYOFFICE works as expected in the Classic UI and add the follow
 ```
 
 {{< hint info >}}
-The URL in the example might need adaptations depending on the configuration of your ownCloud Server.
+The URL in the example might need adaptations depending on the configuration of your ownCloud Classic.
 {{< /hint >}}
 
 ### Collabora Online
-For Collabora Online there is a native integration available for ownCloud Web when it is used with ownCloud Classic Server. It fully integrates the Collabora Online Document Editors and allows users to create and open documents right from ownCloud Web.
+For Collabora Online there is a native integration available for ownCloud Web when it is used with ownCloud Classic. It fully integrates the Collabora Online Document Editors and allows users to create and open documents right from ownCloud Web.
 
 To be able to use Collabora Online in ownCloud Web, it is required to run
-- ownCloud Server >= 10.8
+- ownCloud Classic >= 10.8
 - ownCloud Web >= 4.0.0
 - [Collabora Online Connector for ownCloud Classic](https://marketplace.owncloud.com/apps/richdocuments) >= 2.7.0
 
@@ -230,7 +230,7 @@ Make sure that Collabora Online works as expected in the Classic UI and add the 
 ```
 
 {{< hint info >}}
-The URL in the example might need adaptations depending on the configuration of your ownCloud Server.
+The URL in the example might need adaptations depending on the configuration of your ownCloud Classic.
 {{< /hint >}}
 
 ## Additional configuration for certain core apps
@@ -285,4 +285,4 @@ The reason why the app needs to be ported from the `apps` section to the `extern
 ## Accessing ownCloud Web
 After following all the steps, you should see a new entry in the application switcher called `New Design` which points to the ownCloud web.
 
-{{< figure src="/clients/web/static/application-switcher-oc10.jpg" alt="ownCloud 10 application switcher" >}}
+{{< figure src="/clients/web/static/application-switcher-oc10.jpg" alt="ownCloud Classic 10 application switcher" >}}
