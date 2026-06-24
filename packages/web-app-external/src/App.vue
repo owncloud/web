@@ -1,11 +1,13 @@
 <template>
   <iframe
     v-if="appUrl && method === 'GET'"
+    ref="appIframe"
     :src="appUrl"
     class="oc-width-1-1 oc-height-1-1"
     :title="iFrameTitle"
     allowfullscreen
     allow="camera; clipboard-read; clipboard-write"
+    @load="onIframeLoad"
   />
   <div v-if="appUrl && method === 'POST' && formParameters" class="oc-height-1-1 oc-width-1-1">
     <form :action="appUrl" target="app-iframe" method="post">
@@ -15,19 +17,32 @@
       </div>
     </form>
     <iframe
+      ref="appIframe"
       name="app-iframe"
       :src="appUrl"
       class="oc-width-1-1 oc-height-1-1"
       :title="iFrameTitle"
       allowfullscreen
       allow="camera; clipboard-read; clipboard-write"
+      @load="onIframeLoad"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { stringify } from 'qs'
-import { computed, inject, unref, nextTick, ref, watch, VNodeRef, onMounted, type Ref } from 'vue'
+import {
+  computed,
+  inject,
+  unref,
+  nextTick,
+  ref,
+  watch,
+  VNodeRef,
+  onMounted,
+  onBeforeUnmount,
+  type Ref
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
@@ -38,6 +53,7 @@ import {
   useCapabilityStore,
   useConfigStore,
   useMessages,
+  useModals,
   useRequest,
   useAppProviderService,
   useRoute,
@@ -67,6 +83,7 @@ const props = defineProps<Props>()
 const language = useGettext()
 const { $gettext } = language
 const { showErrorMessage } = useMessages()
+const { dispatchModal } = useModals()
 const capabilityStore = useCapabilityStore()
 const configStore = useConfigStore()
 const route = useRoute()
@@ -97,6 +114,68 @@ const appUrl = ref()
 const formParameters = ref({})
 const method = ref()
 const subm: VNodeRef = ref()
+const appIframe = ref<HTMLIFrameElement>()
+
+// Origin of the editor (e.g. the Collabora host) used as the target origin when
+// posting messages into the iframe.
+const appOrigin = computed(() => {
+  try {
+    return new URL(unref(appUrl)).origin
+  } catch {
+    return ''
+  }
+})
+
+// Collabora exposes "Save As" (export to another format, saved back to storage
+// via WOPI PutRelativeFile) as a host-delegated operation: it shows a grouped
+// Save-As control and posts a `UI_SaveAs` message, expecting the host to reply
+// with the target filename. Request that grouped control via `ui_defaults`.
+// The parameter is Collabora-specific and ignored by other app providers.
+const withSaveAsUiDefaults = (rawUrl: string) => {
+  try {
+    const url = new URL(rawUrl)
+    if (!url.searchParams.has('ui_defaults')) {
+      url.searchParams.set('ui_defaults', 'SaveAsMode=group')
+    }
+    return url.href
+  } catch {
+    return rawUrl
+  }
+}
+
+// Post a WOPI postMessage into the editor iframe (messages are JSON strings).
+const postToApp = (message: Record<string, unknown>) => {
+  const target = unref(appIframe)?.contentWindow
+  if (!target || !unref(appOrigin)) {
+    return
+  }
+  target.postMessage(JSON.stringify({ ...message, SendTime: Date.now() }), unref(appOrigin))
+}
+
+// The editor only emits its rich postMessage API (UI_SaveAs, App_LoadingStatus,
+// ...) once the host has announced itself with `Host_PostmessageReady`. Without
+// this handshake "Save As" silently does nothing. Send it as soon as the iframe
+// has loaded.
+const onIframeLoad = () => {
+  postToApp({ MessageId: 'Host_PostmessageReady', Values: {} })
+}
+
+// Handle the editor's "Save As" request: ask the user for the copy's name (the
+// extension selects the export format) and reply with `Action_SaveAs`, which
+// makes the editor render to that format and PutRelativeFile it into the space.
+const onSaveAs = () => {
+  dispatchModal({
+    variation: 'passive',
+    title: $gettext('Save a copy'),
+    confirmText: $gettext('Save'),
+    hasInput: true,
+    inputValue: props.resource.name,
+    inputLabel: $gettext('File name'),
+    onConfirm: (filename: string) => {
+      postToApp({ MessageId: 'Action_SaveAs', Values: { Filename: filename, Notify: true } })
+    }
+  })
+}
 
 const iFrameTitle = computed(() => {
   return $gettext('"%{appName}" app content area', {
@@ -157,7 +236,7 @@ const loadAppUrl = useTask(function* (signal, viewMode: string) {
       throw new Error('Error in app server response')
     }
 
-    appUrl.value = response.data.app_url
+    appUrl.value = withSaveAsUiDefaults(response.data.app_url)
     method.value = response.data.method
 
     if (response.data.form_parameters) {
@@ -179,20 +258,35 @@ const determineOpenAsPreview = (appName: string) => {
   return openAsPreview === true || (Array.isArray(openAsPreview) && openAsPreview.includes(appName))
 }
 
-// switch to write mode when edit is clicked
-const catchClickMicrosoftEdit = (event: MessageEvent) => {
+// Single handler for the editor's postMessage events. Only messages coming from
+// the editor's own origin are accepted.
+const onAppMessage = (event: MessageEvent) => {
+  if (unref(appOrigin) && event.origin !== unref(appOrigin)) {
+    return
+  }
+  let message: { MessageId?: string }
   try {
-    if (JSON.parse(event.data)?.MessageId === 'UI_Edit') {
-      loadAppUrl.perform('write')
-    }
-  } catch {}
+    message = JSON.parse(event.data)
+  } catch {
+    return
+  }
+  switch (message?.MessageId) {
+    case 'UI_Edit':
+      // switch to write mode when edit is clicked
+      if (determineOpenAsPreview(unref(appName))) {
+        loadAppUrl.perform('write')
+      }
+      break
+    case 'UI_SaveAs':
+      onSaveAs()
+      break
+  }
 }
 onMounted(() => {
-  if (determineOpenAsPreview(unref(appName))) {
-    window.addEventListener('message', catchClickMicrosoftEdit)
-  } else {
-    window.removeEventListener('message', catchClickMicrosoftEdit)
-  }
+  window.addEventListener('message', onAppMessage)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('message', onAppMessage)
 })
 
 watch(
