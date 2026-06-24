@@ -1,5 +1,5 @@
 ---
-title: "Setup With ownCloud Classic 10"
+title: "Setup With ownCloud Classic"
 date: 2020-04-15T00:00:00+00:00
 weight: 40
 geekdocRepo: https://github.com/owncloud/web
@@ -11,7 +11,7 @@ geekdocFilePath: backend-oc10.md
 
 ## Compatibility
 
-Please note that the usage of Web UI and ownCloud Classic 10 as backend is not recommended starting with version 7.1.0 of the Web UI. Therefore, this section only applies to versions < 7.1.0.
+Please note that the usage of Web UI and ownCloud Classic as backend is not recommended starting with version 7.1.0 of the Web UI. Therefore, this section only applies to versions < 7.1.0.
 
 ## Prerequisites
 
