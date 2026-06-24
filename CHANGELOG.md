@@ -16,6 +16,11 @@ Summary
 * Bugfix - Logo not rendering in Firefox: [#13834](https://github.com/owncloud/web/pull/13834)
 * Bugfix - Fix theme switching issues: [#13843](https://github.com/owncloud/web/pull/13843)
 * Bugfix - Pass vault parameter to capabilities endpoint: [#13867](https://github.com/owncloud/web/pull/13867)
+* Bugfix - Filter notifications by vault mode: [#13877](https://github.com/owncloud/web/pull/13877)
+* Bugfix - Fix danger filled button text color on focus: [#13887](https://github.com/owncloud/web/pull/13887)
+* Bugfix - Open external apps based on the file mime type: [#13888](https://github.com/owncloud/web/pull/13888)
+* Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
+* Enhancement - Add a documentation screenshot capture tool: [#13894](https://github.com/owncloud/web/pull/13894)
 
 Details
 -------
@@ -102,6 +107,59 @@ Details
    graph client.
 
    https://github.com/owncloud/web/pull/13867
+
+* Bugfix - Filter notifications by vault mode: [#13877](https://github.com/owncloud/web/pull/13877)
+
+   We've fixed the notifications panel to only show notifications relevant to the
+   current mode. Previously, all notifications were shown regardless of whether the
+   user was in vault or drive mode. Notifications are now filtered so that vault
+   notifications appear only in vault mode and drive notifications appear only in
+   drive mode.
+
+   https://github.com/owncloud/web/pull/13877
+
+* Bugfix - Fix danger filled button text color on focus: [#13887](https://github.com/owncloud/web/pull/13887)
+
+   We've fixed the `OcButton` danger filled variant not applying the correct text
+   color when focused via keyboard.
+
+   https://github.com/owncloud/web/pull/13887
+
+* Bugfix - Open external apps based on the file mime type: [#13888](https://github.com/owncloud/web/pull/13888)
+
+   We've fixed the external app redirect (`/external`) picking an arbitrary app
+   when no `app` query parameter was present. It fell back to the first registered
+   app provider, which might not support the file's mime type, so the following
+   request to open the file failed with an "app not found" error that surfaced as a
+   generic error to the user.
+
+   The redirect now resolves the app from the file's mime type, preferring the
+   configured default application, and shows an explicit error when no suitable app
+   is available instead of silently redirecting to the wrong one.
+
+   https://github.com/owncloud/web/pull/13888
+
+* Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
+
+   The default login page background has been replaced with the ownCloud branding
+   background. The background image is now applied through the CSS custom property
+   `--oc-login-background-image`, so a future branding update only needs to change
+   one value. The image itself still comes from the theme
+   (`loginPage.backgroundImg` in theme.json) and remains fully customizable.
+
+   https://github.com/owncloud/web/pull/13875
+
+* Enhancement - Add a documentation screenshot capture tool: [#13894](https://github.com/owncloud/web/pull/13894)
+
+   We added a Playwright-based tool under `tests/e2e/docs` that automatically
+   captures end-user documentation screenshots from a live ownCloud Web instance.
+   Each "tour" drives the UI through a documented flow and saves a captioned
+   screenshot per step plus a `manifest.json`, so the screenshots used in the user
+   documentation can be regenerated on demand and never drift from the product. The
+   initial tours mirror the "Web for users" documentation: the top navigation, the
+   file sidebars, sharing roles and contextual help.
+
+   https://github.com/owncloud/web/pull/13894
 
 Changelog for ownCloud Web [12.4.0] (2026-05-22)
 =======================================
