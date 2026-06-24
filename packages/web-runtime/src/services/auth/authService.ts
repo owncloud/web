@@ -131,7 +131,23 @@ export class AuthService implements AuthServiceInterface {
     }
 
     if (to.params.scope === 'vault') {
-      this.requireAcr('advanced', to.fullPath)
+      // Capabilities carry the required MFA level name. Fetch them directly (without
+      // establishing the user context) so we can enforce the ACR before any vault data
+      // is loaded. Establishing the user context here would flip `userContextReady`,
+      // triggering the bootstrap watcher to load spaces against the vault endpoint with
+      // a non-MFA token, which fails and crashes the app.
+      if (!this.capabilityStore.isInitialized) {
+        this.capabilityStore.setCapabilities(await this.clientService.ocs.getCapabilities())
+      }
+
+      const requiredAcr = this.capabilityStore.authMfaRequiredLevelname
+      const user = await this.userManager.getUser()
+      if (!user || user.expired || user.profile.acr !== requiredAcr) {
+        this.userManager.setPostLoginRedirectUrl(to.fullPath)
+        await this.userManager.signinRedirect({ acr_values: requiredAcr })
+        // redirecting to the IdP, don't establish the user context below
+        return
+      }
     }
 
     if (isPublicLinkContextRequired(this.router, to)) {
