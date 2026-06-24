@@ -1,5 +1,5 @@
 ---
-title: "Setup With ownCloud 10"
+title: "Setup With ownCloud Classic"
 date: 2020-04-15T00:00:00+00:00
 weight: 40
 geekdocRepo: https://github.com/owncloud/web
@@ -11,7 +11,7 @@ geekdocFilePath: backend-oc10.md
 
 ## Compatibility
 
-Please note that the usage of Web UI and ownCloud 10 as backend is not recommended starting with version 7.1.0 of the Web UI. Therefore, this section only applies to versions < 7.1.0.
+Please note that the usage of Web UI and ownCloud Classic as backend is not recommended starting with version 7.1.0 of the Web UI. Therefore, this section only applies to versions < 7.1.0.
 
 ## Prerequisites
 
@@ -20,9 +20,9 @@ In this document, we will refer to the following:
 - `<web-url>` as the full URL, for example `https://web-host:9100/web-path/`
 - `<web-domain>` as the protocol, domain and port, for example: `https://web-host:9100`
 
-## Setting up the ownCloud Server
+## Setting up ownCloud Classic
 
-Make sure you have an [ownCloud Server](https://owncloud.org/download/#owncloud-server) already installed.
+Make sure you have [ownCloud Classic](https://owncloud.org/download/#owncloud-server) already installed.
 
 ### Adjusting config.php
 
@@ -48,7 +48,7 @@ Install and enable the [oauth2 app](https://marketplace.owncloud.com/apps/oauth2
 % occ app:enable oauth2
 ```
 
-Login as administrator in the ownCloud Server web interface and go to the "User Authentication" section in the admin settings and add an entry for Web as follows:
+Login as administrator in the ownCloud Classic web interface and go to the "User Authentication" section in the admin settings and add an entry for Web as follows:
 
 - pick an arbitrary name for the client
 - set the redirection URI to `<web-url>/oidc-callback.html`

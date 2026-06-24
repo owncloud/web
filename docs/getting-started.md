@@ -98,7 +98,7 @@ integration libraries.
 
 ## Setting up backend and running
 
-Newer versions of Web (> 7.0.2) can only run against [oCIS](https://github.com/owncloud/ocis), whereas older versions (< 7.1.0) can run against [ownCloud 10](https://github.com/owncloud/core/) as well.
+Newer versions of Web (> 7.0.2) can only run against [oCIS](https://github.com/owncloud/ocis), whereas older versions (< 7.1.0) can run against [ownCloud Classic](https://github.com/owncloud/core/) as well.
 Depending which one you chose, please check the matching section:
 
 - [Setting up with oCIS as backend]({{< ref "backend-ocis.md" >}})
