@@ -68,7 +68,9 @@ describe('HTML editor app', () => {
     await nextTick()
     expect(wrapper.findComponent(HtmlPreviewPane).exists()).toBe(true)
     // rendered synchronously on opt-in, not after the 250ms debounce
-    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain('Content-Security-Policy')
+    expect(wrapper.findComponent(HtmlPreviewPane).props('content')).toContain(
+      'Content-Security-Policy'
+    )
   })
 
   it('re-pauses after opt-in when the content changes (large-file guard re-arms)', async () => {
