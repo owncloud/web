@@ -4,6 +4,13 @@ import RestoreWorker from '../../../../../src/composables/webWorkers/restoreWork
 import { mock } from 'vitest-mock-extended'
 import type { WebDAV } from '@ownclouders/web-client/webdav'
 
+let webDavMock: ReturnType<typeof mock<WebDAV>>
+
+vi.mock('@ownclouders/web-client', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  webdav: () => webDavMock
+}))
+
 const resourceMock = {
   id: 'resourceId',
   name: 'resourceName',
@@ -27,7 +34,6 @@ vi.setConfig({ testTimeout: 20000, hookTimeout: 20000 })
 
 describe('restore worker', () => {
   let worker: ReturnType<typeof useWebWorker>
-  let webDavMock: ReturnType<typeof mock<WebDAV>>
 
   let resolveTest: (value: boolean) => unknown
   let workerPromise: Promise<unknown>
@@ -39,11 +45,6 @@ describe('restore worker', () => {
     workerPromise = new Promise((resolve) => {
       resolveTest = resolve
     })
-
-    vi.doMock('@ownclouders/web-client', async (importOriginal) => ({
-      ...(await importOriginal<any>()),
-      webdav: () => webDavMock
-    }))
   })
 
   afterEach(() => {
