@@ -5,6 +5,13 @@ import { TransferType } from '../../../../../src/helpers/resource/conflictHandli
 import { mock } from 'vitest-mock-extended'
 import type { WebDAV } from '@ownclouders/web-client/webdav'
 
+let webDavMock: ReturnType<typeof mock<WebDAV>>
+
+vi.mock('@ownclouders/web-client', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  webdav: () => webDavMock
+}))
+
 const resourceMock = {
   id: 'resourceId',
   name: 'resourceName'
@@ -29,8 +36,7 @@ const transferDataMock = {
   sourceSpace: sourceSpaceMock,
   targetSpace: targetSpaceMock,
   targetFolder: targetFolderMock,
-  path: '',
-  baseUrl: 'https://example.com'
+  path: ''
 }
 
 // Real web workers can be slow to spin up and reply under heavy CI parallelism;
@@ -39,7 +45,6 @@ vi.setConfig({ testTimeout: 20000, hookTimeout: 20000 })
 
 describe('paste worker', () => {
   let worker: ReturnType<typeof useWebWorker>
-  let webDavMock: ReturnType<typeof mock<WebDAV>>
 
   let resolveTest: (value: boolean) => unknown
   let workerPromise: Promise<unknown>
@@ -51,11 +56,6 @@ describe('paste worker', () => {
     workerPromise = new Promise((resolve) => {
       resolveTest = resolve
     })
-
-    vi.doMock('@ownclouders/web-client', async (importOriginal) => ({
-      ...(await importOriginal<any>()),
-      webdav: () => webDavMock
-    }))
   })
 
   afterEach(() => {
@@ -81,6 +81,7 @@ describe('paste worker', () => {
       JSON.stringify({
         topic: 'startProcess',
         data: {
+          baseUrl: 'https://example.com',
           transferData: [{ ...transferDataMock, transferType: TransferType.COPY }]
         }
       })
@@ -104,6 +105,7 @@ describe('paste worker', () => {
       JSON.stringify({
         topic: 'startProcess',
         data: {
+          baseUrl: 'https://example.com',
           transferData: [{ ...transferDataMock, transferType: TransferType.MOVE }]
         }
       })
@@ -127,6 +129,7 @@ describe('paste worker', () => {
       JSON.stringify({
         topic: 'startProcess',
         data: {
+          baseUrl: 'https://example.com',
           transferData: [{ ...transferDataMock, transferType: TransferType.COPY }]
         }
       })

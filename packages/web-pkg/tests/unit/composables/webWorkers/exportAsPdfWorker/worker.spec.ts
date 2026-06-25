@@ -34,6 +34,13 @@ const createdResourceMock = {
   spaceId: '1'
 }
 
+let webDavMock: ReturnType<typeof mock<WebDAV>>
+
+vi.mock('@ownclouders/web-client', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  webdav: () => webDavMock
+}))
+
 vi.mock('../../../../../src/composables/webWorkers/exportAsPdfWorker/renderer', () => ({
   PDFRenderer: vi.fn().mockImplementation(function () {
     return {
@@ -48,7 +55,6 @@ vi.setConfig({ testTimeout: 20000, hookTimeout: 20000 })
 
 describe('export as PDF worker', () => {
   let worker: ReturnType<typeof useWebWorker>
-  let webDavMock: ReturnType<typeof mock<WebDAV>>
 
   let resolveTest: (value: boolean) => unknown
   let workerPromise: Promise<unknown>
@@ -60,11 +66,6 @@ describe('export as PDF worker', () => {
     workerPromise = new Promise((resolve) => {
       resolveTest = resolve
     })
-
-    vi.doMock('@ownclouders/web-client', async (importOriginal) => ({
-      ...(await importOriginal<any>()),
-      webdav: () => webDavMock
-    }))
   })
 
   afterEach(() => {
