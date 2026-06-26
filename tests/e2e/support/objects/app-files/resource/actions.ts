@@ -1899,6 +1899,26 @@ export const getDisplayedResourcesFromSearch = async (page: Page): Promise<strin
   return result.map((result) => result.replace('\n', ''))
 }
 
+// The global search dropdown only queries the backend when the search term changes
+// (see the debounced `watch(term)` in SearchBar.vue). A single query issued right after
+// an upload can miss resources that tika is still indexing, and re-reading that one-shot
+// dropdown will never surface them. Re-issue the query by clearing and re-filling the
+// existing keyword: clearing forces a term change so the watcher re-runs the search even
+// for the same keyword, and avoiding a page reload preserves the active location filter.
+export const reSearchAndGetDisplayedResourcesFromSearch = async (page: Page): Promise<string[]> => {
+  const searchInput = page.locator(globalSearchInput)
+  const keyword = await searchInput.inputValue()
+  if (keyword) {
+    await searchInput.clear()
+    await Promise.all([
+      page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
+      searchInput.fill(keyword)
+    ])
+    await expect(page.locator(loadingSpinner)).not.toBeVisible()
+  }
+  return getDisplayedResourcesFromSearch(page)
+}
+
 export const getDisplayedResourcesFromFilesList = async (page: Page): Promise<string[]> => {
   // wait for tika indexing
   await new Promise((resolve) => setTimeout(resolve, 1000))

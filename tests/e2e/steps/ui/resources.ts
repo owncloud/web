@@ -186,15 +186,19 @@ export async function userShouldSeeResources({
   const resourceObject = new objects.applicationFiles.Resource({ page })
 
   // search list waits longer for tika full-text indexing; other lists only need UI render time
-  const timeout = listType === resourcePage.searchList ? 30000 : 10000
+  const isSearchList = listType === resourcePage.searchList
+  const timeout = isSearchList ? 30000 : 10000
 
   for (const resource of resources) {
     await expect
       .poll(
         async () => {
-          const actualList = await resourceObject.getDisplayedResources({
-            keyword: listType
-          })
+          // the global search dropdown is a one-shot query, so for the search list we
+          // re-issue the search each poll to pick up resources that finish indexing after
+          // the initial query instead of repeatedly reading a stale result list
+          const actualList = isSearchList
+            ? await resourceObject.reSearchAndGetDisplayedResources()
+            : await resourceObject.getDisplayedResources({ keyword: listType })
           return actualList.includes(resource)
         },
         {

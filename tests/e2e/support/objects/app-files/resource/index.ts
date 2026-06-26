@@ -189,6 +189,12 @@ export class Resource {
     await po.searchResourceGlobalSearch({ ...args, page: this.#page })
   }
 
+  // re-issues the global search before reading, so resources still being indexed when the
+  // initial query ran are picked up instead of polling a stale one-shot result list
+  reSearchAndGetDisplayedResources(): Promise<string[]> {
+    return po.reSearchAndGetDisplayedResourcesFromSearch(this.#page)
+  }
+
   getDisplayedResources(args: Omit<po.getDisplayedResourcesArgs, 'page'>): Promise<string[]> {
     switch (args.keyword) {
       case resourcePage.filesList:
