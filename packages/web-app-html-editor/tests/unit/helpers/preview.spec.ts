@@ -18,46 +18,42 @@ describe('preview CSP', () => {
     expect(PREVIEW_CSP).not.toContain('*')
   })
 
-  it('injects the meta into an existing <head> (preserving the doctype)', () => {
+  it('prepends the CSP meta as the very first bytes of a full document', () => {
     const out = wrapWithPreviewCsp(
       '<!doctype html><html><head><title>t</title></head><body>x</body></html>'
     )
-    expect(out.startsWith('<!doctype html>')).toBe(true)
-    expect(out).toContain(`<head>${META}`)
+    expect(out.startsWith(META)).toBe(true)
+    // the original document follows the meta unchanged
+    expect(out).toBe(
+      `${META}<!doctype html><html><head><title>t</title></head><body>x</body></html>`
+    )
   })
 
-  it('wraps a <head> after <html> when none exists', () => {
-    const out = wrapWithPreviewCsp('<html><body>x</body></html>')
-    expect(out).toContain(`<html><head>${META}</head>`)
-  })
-
-  it('prepends the meta for a bare fragment', () => {
+  it('prepends the CSP meta for a bare fragment', () => {
     expect(wrapWithPreviewCsp('<p>x</p>')).toBe(`${META}<p>x</p>`)
   })
 
-  it('returns just the meta for empty content', () => {
+  it('returns just the meta for empty or nullish content', () => {
     expect(wrapWithPreviewCsp('')).toBe(META)
+    expect(wrapWithPreviewCsp(undefined as unknown as string)).toBe(META)
   })
 
-  it('does not duplicate or mangle on the <head> path', () => {
-    const out = wrapWithPreviewCsp('<head id="h">x</head>')
-    expect(out).toBe(`<head id="h">${META}x</head>`)
+  it('governs a resource placed before any <head> (regression: first meta wins)', () => {
+    // An attacker can position an exfiltration element before the document's head
+    // so that an "inject into the real head" strategy would leave it uncovered.
+    // Because the meta is prepended, the CSP still precedes — and governs — it.
+    const out = wrapWithPreviewCsp('<img src="https://evil.example/beacon"><head></head>')
+    expect(out.startsWith(META)).toBe(true)
+    expect(out.indexOf(META)).toBeLessThan(out.indexOf('<img'))
   })
 
-  it('ignores a <head> inside an HTML comment and targets the real head', () => {
+  it('is not diverted by a commented-out <head> decoy', () => {
     const out = wrapWithPreviewCsp(
       '<!-- <head> --><html><head><title>t</title></head><body>x</body></html>'
     )
-    // injected into the real head, never into the decoy comment
-    expect(out).toContain(`<head>${META}<title>`)
-    expect(out).toContain('<!-- <head> -->')
-    // exactly one CSP meta is injected
+    // exactly one CSP meta, and it leads the whole document
+    expect(out.startsWith(META)).toBe(true)
     expect(out.split(META).length - 1).toBe(1)
-  })
-
-  it('wraps a head after <html> when the only <head> is commented out', () => {
-    const out = wrapWithPreviewCsp('<html><!-- <head> --><body>x</body></html>')
-    expect(out).toContain(`<html><head>${META}</head>`)
   })
 })
 

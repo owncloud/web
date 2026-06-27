@@ -1,12 +1,27 @@
 import { mount } from '@ownclouders/web-test-helpers'
-import { nextTick } from 'vue'
+import { nextTick, type Ref } from 'vue'
+import { useThemeStore } from '@ownclouders/web-pkg'
 import HtmlEditorPane from '../../../src/components/HtmlEditorPane.vue'
 
-// The editor reads the (optional) theme store from web-pkg; mock it so the editor
-// constructs without a real Pinia theme store.
-vi.mock('@ownclouders/web-pkg')
+// Mock the theme store with a real-shaped, mutable `currentTheme` ref. The editor
+// reads `themeStore.currentTheme` directly (no optional chaining), and using a real
+// ref lets the dark-mode watch be exercised as a genuine reactive dependency.
+vi.mock('@ownclouders/web-pkg', async () => {
+  const { ref } = await import('vue')
+  const currentTheme = ref({ isDark: false })
+  return { useThemeStore: vi.fn(() => ({ currentTheme })) }
+})
 
 describe('HtmlEditorPane', () => {
+  // The mocked store hands out the same `currentTheme` ref the component reads. The
+  // real store type unwraps it (the component reads it ref-free via `unref`), so the
+  // cast lets the test flip dark mode on the very ref the watch tracks.
+  const currentTheme = useThemeStore().currentTheme as unknown as Ref<{ isDark: boolean }>
+
+  beforeEach(() => {
+    currentTheme.value = { isDark: false }
+  })
+
   it('renders a CodeMirror editor for empty content', () => {
     const { wrapper } = getWrapper('')
     expect(wrapper.find('.cm-editor').exists()).toBe(true)
@@ -29,6 +44,18 @@ describe('HtmlEditorPane', () => {
     const { wrapper } = getWrapper('<p>one</p>')
     await wrapper.setProps({ modelValue: '<p>two</p>' })
     expect(wrapper.vm.getView().state.doc.toString()).toBe('<p>two</p>')
+  })
+
+  it('reconfigures the editor when the theme dark mode changes', async () => {
+    const { wrapper } = getWrapper('')
+    const view = wrapper.vm.getView()
+    const dispatchSpy = vi.spyOn(view, 'dispatch')
+    currentTheme.value = { isDark: true }
+    await nextTick()
+    // the dark-mode watch fired and pushed a reconfigure effect into the editor
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ effects: expect.anything() })
+    )
   })
 })
 

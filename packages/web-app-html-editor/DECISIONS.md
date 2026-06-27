@@ -48,13 +48,18 @@ prompt's `sandbox="allow-scripts allow-forms allow-popups"`:
   form-POST beaconing from the opaque-origin frame (those channels are independent
   of CSP). Dropping them removes the vector at the source. `allow-scripts` is kept
   so self-contained pages still render and run their inline JS.
-- **A strict, iframe-scoped CSP is injected into the `srcdoc`** (`helpers/preview.ts`,
-  applied in `App.vue`): `default-src 'none'` denies all network egress (so a
-  hostile script cannot beacon/exfiltrate), `form-action 'none'` and `base-uri 'none'`
-  are belt-and-suspenders, while inline `script-src`/`style-src` and `data:`/`blob:`
-  images keep self-contained previews working. This makes the preview
-  self-protecting rather than reliant on the deployment proxy CSP. Trade-off:
-  previews of documents that load **external** CSS/JS/images will not fetch them.
+- **A strict, iframe-scoped CSP is prepended to the `srcdoc`** (`helpers/preview.ts`,
+  applied in `App.vue`). It is prepended as the document's first bytes — not inserted
+  into the `<head>` — so the first `<meta>` policy wins and governs the *whole*
+  document, including any element placed before a real or decoy `<head>` that
+  head-insertion would leave uncovered. `default-src 'none'` denies all network
+  egress (so a hostile script cannot beacon/exfiltrate), `form-action 'none'` and
+  `base-uri 'none'` are belt-and-suspenders, while inline `script-src`/`style-src`
+  and `data:`/`blob:` images, fonts and media keep self-contained previews working.
+  This makes the preview self-protecting rather than reliant on the deployment proxy
+  CSP. Trade-off: previews of documents that load **external** CSS/JS/images will not
+  fetch them (and the preview can still navigate itself away — accepted low residual
+  risk F11, see `SECURITY-REVIEW.md`).
 - The exact sandbox string and `srcdoc`-not-`src` are pinned by a regression test
   (`HtmlPreviewPane.spec.ts`), so loosening the contract fails CI.
 

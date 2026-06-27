@@ -7,6 +7,19 @@ import {
   ApplicationInformation,
   defineWebApplication
 } from '@ownclouders/web-pkg'
+import { PREVIEW_SIZE_LIMIT } from './helpers/preview'
+
+// AppWrapper refuses to open files larger than this (bytes). It must stay strictly
+// above PREVIEW_SIZE_LIMIT so the editor still opens "large-but-openable" files
+// whose live preview is merely paused — otherwise the two limits would silently
+// disagree and such files would be rejected before the pause logic ever runs.
+const FILE_SIZE_LIMIT = 2_000_000
+if (PREVIEW_SIZE_LIMIT >= FILE_SIZE_LIMIT) {
+  throw new Error(
+    `html-editor: PREVIEW_SIZE_LIMIT (${PREVIEW_SIZE_LIMIT}) must be smaller than ` +
+      `FILE_SIZE_LIMIT (${FILE_SIZE_LIMIT})`
+  )
+}
 
 export default defineWebApplication({
   setup() {
@@ -57,7 +70,7 @@ export default defineWebApplication({
       color: '#e34c26',
       defaultExtension: 'html',
       meta: {
-        fileSizeLimit: 2000000
+        fileSizeLimit: FILE_SIZE_LIMIT
       },
       extensions: fileExtensions
     }

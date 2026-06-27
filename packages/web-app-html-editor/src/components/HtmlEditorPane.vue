@@ -33,10 +33,10 @@ interface Emits {
 const { modelValue, isReadOnly = false } = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-// The theme store is optional here: in unit tests `@ownclouders/web-pkg` is mocked
-// and `useThemeStore()` returns undefined, so we read it defensively.
+// The active theme drives the editor's dark/light chrome. `currentTheme` is a ref
+// the dark-mode watch below tracks, so the editor reconfigures on a theme switch.
 const themeStore = useThemeStore()
-const isDark = () => Boolean(unref(themeStore?.currentTheme)?.isDark)
+const isDark = () => Boolean(unref(themeStore.currentTheme)?.isDark)
 
 const editorRef = ref<HTMLElement>()
 let view: EditorView | undefined

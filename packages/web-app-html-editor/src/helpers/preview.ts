@@ -9,8 +9,12 @@ export const PREVIEW_CSP = [
   "default-src 'none'",
   "script-src 'unsafe-inline'",
   "style-src 'unsafe-inline'",
+  // `data:`/`blob:` are local, non-network sources (a `blob:` URL is minted by the
+  // sandboxed document's own script and never leaves the opaque origin), so they
+  // cannot exfiltrate. They are allowed symmetrically for every media kind a
+  // self-contained document may inline.
   'img-src data: blob:',
-  'font-src data:',
+  'font-src data: blob:',
   'media-src data: blob:',
   "form-action 'none'",
   "base-uri 'none'"
@@ -24,49 +28,23 @@ export const PREVIEW_SIZE_LIMIT = 500_000
 
 const META = `<meta http-equiv="Content-Security-Policy" content="${PREVIEW_CSP}">`
 
-// Find the first match of `re` that is NOT inside an HTML comment. Matching the
-// raw string would let a crafted `<!-- <head> -->` divert the CSP injection away
-// from the real head, leaving the rendered preview without its self-protecting CSP.
-function firstUncommentedMatch(html: string, re: RegExp): RegExpExecArray | null {
-  const comments: Array<[number, number]> = []
-  const commentRe = /<!--[\s\S]*?-->/g
-  let c: RegExpExecArray | null
-  while ((c = commentRe.exec(html)) !== null) {
-    comments.push([c.index, c.index + c[0].length])
-  }
-  const scan = new RegExp(re.source, re.flags.includes('g') ? re.flags : `${re.flags}g`)
-  let m: RegExpExecArray | null
-  while ((m = scan.exec(html)) !== null) {
-    const at = m.index
-    if (!comments.some(([start, end]) => at >= start && at < end)) {
-      return m
-    }
-  }
-  return null
-}
-
 /**
- * Inject the preview CSP `<meta>` into an HTML document without disturbing its
- * rendering mode: into the first real `<head>`, else wrap a `<head>` right after
- * the first real `<html>`, else prepend it (a fragment has no doctype to
- * preserve). Matches ignore HTML comments so the CSP cannot be diverted into a
- * commented-out tag.
+ * Prepend the preview CSP `<meta>` as the very first bytes of the document.
+ *
+ * A `Content-Security-Policy` delivered via `<meta>` governs every resource the
+ * parser encounters *after* it, and the first such meta wins. Prepending
+ * unconditionally is therefore the only placement that covers the *whole*
+ * document: any element positioned before a `<head>` — or before a crafted,
+ * commented-out one — would escape a policy injected "into the real head" and be
+ * free to fetch/beacon. The only cost is that a document without a doctype renders
+ * in quirks mode, which is an acceptable trade for a preview whose entire purpose
+ * is to be sandboxed and network-isolated; correctness of the isolation outranks
+ * fidelity of the rendering mode. Keeping this a pure string prepend (no parsing,
+ * no positioning) also means there is no head-detection logic for hostile markup
+ * to defeat.
  */
 export function wrapWithPreviewCsp(html: string): string {
-  if (!html) {
-    return META
-  }
-  const head = firstUncommentedMatch(html, /<head\b[^>]*>/i)
-  if (head) {
-    const at = head.index + head[0].length
-    return `${html.slice(0, at)}${META}${html.slice(at)}`
-  }
-  const htmlTag = firstUncommentedMatch(html, /<html\b[^>]*>/i)
-  if (htmlTag) {
-    const at = htmlTag.index + htmlTag[0].length
-    return `${html.slice(0, at)}<head>${META}</head>${html.slice(at)}`
-  }
-  return `${META}${html}`
+  return `${META}${html ?? ''}`
 }
 
 /** Whether a document is large enough that the live preview should be paused. */
