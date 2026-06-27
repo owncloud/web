@@ -160,6 +160,20 @@ const onIframeLoad = () => {
   postToApp({ MessageId: 'Host_PostmessageReady', Values: {} })
 }
 
+// Reject empty names and any path separators before the name is sent on. The
+// server-side `PutRelativeFile` sanitizes the name as well, but validating here
+// gives immediate feedback and avoids a pointless round-trip on invalid input.
+const validateSaveAsFilename = (filename: string): string => {
+  const trimmed = filename?.trim()
+  if (!trimmed) {
+    return $gettext('The file name cannot be empty.')
+  }
+  if (/[/\\]/.test(trimmed)) {
+    return $gettext('The file name cannot contain "/" or "\\".')
+  }
+  return ''
+}
+
 // Handle the editor's "Save As" request: ask the user for the copy's name (the
 // extension selects the export format) and reply with `Action_SaveAs`, which
 // makes the editor render to that format and PutRelativeFile it into the space.
@@ -171,8 +185,19 @@ const onSaveAs = () => {
     hasInput: true,
     inputValue: props.resource.name,
     inputLabel: $gettext('File name'),
+    onInput: (filename: string, setError: (error: string) => void) => {
+      setError(validateSaveAsFilename(filename))
+    },
     onConfirm: (filename: string) => {
-      postToApp({ MessageId: 'Action_SaveAs', Values: { Filename: filename, Notify: true } })
+      // Guard again on confirm (defense-in-depth); onInput normally prevents
+      // reaching here with an invalid name.
+      if (validateSaveAsFilename(filename)) {
+        return
+      }
+      postToApp({
+        MessageId: 'Action_SaveAs',
+        Values: { Filename: filename.trim(), Notify: true }
+      })
     }
   })
 }
@@ -261,7 +286,14 @@ const determineOpenAsPreview = (appName: string) => {
 // Single handler for the editor's postMessage events. Only messages coming from
 // the editor's own origin are accepted.
 const onAppMessage = (event: MessageEvent) => {
-  if (unref(appOrigin) && event.origin !== unref(appOrigin)) {
+  // Fail closed: reject every message until the editor origin is known (i.e.
+  // `appUrl` has resolved to an absolute URL) and accept only messages from that
+  // exact origin. The listener is attached on mount, before the WOPI `open_url`
+  // POST resolves, so an empty `appOrigin` must reject rather than wave messages
+  // through. No legitimate editor message can arrive before `appUrl` is set (the
+  // iframe cannot have loaded yet), so this is strictly correct and also covers a
+  // backend returning a non-absolute `app_url`.
+  if (!unref(appOrigin) || event.origin !== unref(appOrigin)) {
     return
   }
   let message: { MessageId?: string }
