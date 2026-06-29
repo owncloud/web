@@ -1,12 +1,18 @@
 <template>
   <div>
-    <div class="item-inline-filter oc-flex-inline" :class="`item-inline-filter-${filterName}`">
+    <div
+      role="radiogroup"
+      class="item-inline-filter oc-flex-inline"
+      :class="`item-inline-filter-${filterName}`"
+    >
       <oc-button
         v-for="(option, index) in filterOptions"
         :id="option.name"
         :key="index"
+        role="radio"
         class="item-inline-filter-option"
         :class="{ 'item-inline-filter-option-selected': activeOption === option.name }"
+        :aria-checked="activeOption === option.name"
         appearance="raw"
         @click="toggleFilter(option)"
       >
