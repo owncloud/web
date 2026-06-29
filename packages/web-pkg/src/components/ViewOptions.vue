@@ -12,6 +12,7 @@
         :class="viewMode.name"
         :appearance="viewModeCurrent === viewMode.name ? 'filled' : 'outline'"
         :aria-label="$gettext(viewMode.label)"
+        :aria-pressed="viewModeCurrent === viewMode.name"
         variation="primary"
         @click="setViewMode(viewMode)"
       >
