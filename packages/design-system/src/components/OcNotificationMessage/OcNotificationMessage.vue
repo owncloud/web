@@ -26,6 +26,7 @@
           class="oc-notification-message-error-log-toggle-button"
           gap-size="none"
           appearance="raw"
+          :aria-expanded="showErrorLog"
           @click="showErrorLog = !showErrorLog"
         >
           <span v-text="$gettext('Details')"></span>
