@@ -83,6 +83,17 @@ describe('OcNotificationMessage', () => {
       expect(errorLogEl.exists()).toBeTruthy()
     })
 
+    it('should toggle aria-expanded on the details button when clicked', async () => {
+      const wrapper = getWrapper({ errorLogContent: 'X-REQUEST-ID: 1234' })
+      const errorLogToggleButtonEl = wrapper.find(selectors.errorLogToggleButton)
+
+      expect(errorLogToggleButtonEl.attributes('aria-expanded')).toBe('false')
+      await errorLogToggleButtonEl.trigger('click')
+      expect(errorLogToggleButtonEl.attributes('aria-expanded')).toBe('true')
+      await errorLogToggleButtonEl.trigger('click')
+      expect(errorLogToggleButtonEl.attributes('aria-expanded')).toBe('false')
+    })
+
     it('should not render OcErrorLogComponent, if errorLogContent is not provided', () => {
       const wrapper = getWrapper()
       const errorLogToggleButtonEl = wrapper.find(selectors.errorLogToggleButton)
