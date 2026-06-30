@@ -1,11 +1,13 @@
 import { Resource, SpaceResource, urlJoin } from '@ownclouders/web-client'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { useClientService, useResourcesStore, useSharesStore } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 export const useCreateFileHandler = () => {
   const clientService = useClientService()
   const { upsertResource } = useResourcesStore()
   const { addLink } = useSharesStore()
+  const { $pgettext } = useGettext()
 
   const createFileHandler = async ({
     fileName,
@@ -51,6 +53,16 @@ export const useCreateFileHandler = () => {
         resource: folder,
         options: { password, type }
       })
+
+      const shareUrl = new URL(share.webUrl)
+      if (!['https:', 'http:'].includes(shareUrl.protocol)) {
+        throw new Error(
+          $pgettext(
+            'Error shown when creating a password-protected folder fails because the generated share link has an unexpected format.',
+            'The folder could not be created because the share link is invalid.'
+          )
+        )
+      }
 
       const path = urlJoin(currentFolder.path, fileName + '.psec')
 
