@@ -8,6 +8,7 @@
       :id="id"
       class="oc-filter-chip-button oc-pill"
       :class="{ 'oc-filter-chip-button-selected': filterActive }"
+      :aria-pressed="filterActive"
       appearance="raw"
       @click="isToggle ? handleToggleFilter() : false"
     >
