@@ -8,6 +8,7 @@
       class="oc-width-1-1 oc-height-1-1"
       :title="iframeTitle"
       :src="iframeUrl.href"
+      sandbox="allow-scripts allow-forms allow-same-origin allow-popups"
       tabindex="0"
       @load="onLoad"
     ></iframe>
@@ -24,6 +25,7 @@ import { useGettext } from 'vue3-gettext'
 const props = defineProps<{
   modal: Modal
   publicLink: string
+  serverUrl: string
 }>()
 
 const iframeRef = ref<HTMLIFrameElement>()
@@ -33,6 +35,12 @@ const { current } = useGettext()
 
 const iframeTitle = themeStore.currentTheme.common?.name
 const iframeUrl = new URL(props.publicLink)
+if (!['https:', 'http:'].includes(iframeUrl.protocol)) {
+  throw new Error('Invalid URL scheme for iframe')
+}
+if (iframeUrl.origin !== new URL(props.serverUrl).origin) {
+  throw new Error('URL does not belong to this server')
+}
 iframeUrl.searchParams.append('hide-logo', 'true')
 iframeUrl.searchParams.append('hide-app-switcher', 'true')
 iframeUrl.searchParams.append('hide-account-menu', 'true')

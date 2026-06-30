@@ -76,6 +76,35 @@ describe('createFileHandler', () => {
     })
   })
 
+  it.each(['javascript:alert(1)', 'data:text/html,<script>alert(1)</script>', 'blob:fake'])(
+    'should throw and delete the folder when share URL has a non-http(s) scheme: %s',
+    (invalidUrl) => {
+      getWrapper({
+        async setup(instance, mocks) {
+          const { addLink } = useSharesStore()
+
+          ;(addLink as MockedFunction<typeof addLink>).mockResolvedValue(
+            mock<LinkShare>({ webUrl: invalidUrl })
+          )
+
+          await expect(
+            instance.createFileHandler({
+              fileName: 'protected',
+              personalSpace,
+              currentFolder,
+              currentSpace: space,
+              password: 'Pass$123',
+              type: SharingLinkType.Edit
+            })
+          ).rejects.toThrow('The folder could not be created because the share link is invalid.')
+          expect(mocks.$clientService.webdav.deleteFile).toHaveBeenCalledWith(personalSpace, {
+            path: '/.PasswordProtectedFolders/projects/With psec file/current/folder/protected'
+          })
+        }
+      })
+    }
+  )
+
   it('should delete the folder if the file creation fails', () => {
     getWrapper({
       async setup(instance, mocks) {
