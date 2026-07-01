@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> The [owncloud/web](https://github.com/owncloud/web) repository has been merged into [owncloud/ocis](https://github.com/owncloud/ocis) as part of our ongoing consolidation into a single oCIS monorepo. All future development, issues, and pull requests for the web frontend now happen there.
+
 # ownCloud Web
 
 <!-- OSPO-managed README | Generated: 2026-04-16 | v2 -->
