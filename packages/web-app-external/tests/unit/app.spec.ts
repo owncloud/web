@@ -1,6 +1,17 @@
 import { mock } from 'vitest-mock-extended'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
-import { AppProviderService, useModals, useRequest, useRoute } from '@ownclouders/web-pkg'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  flushPromises,
+  shallowMount
+} from '@ownclouders/web-test-helpers'
+import {
+  AppProviderService,
+  useMessages,
+  useModals,
+  useRequest,
+  useRoute
+} from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 
 import { Resource } from '@ownclouders/web-client'
@@ -11,7 +22,8 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useRequest: vi.fn(),
   useRoute: vi.fn(),
-  useModals: vi.fn()
+  useModals: vi.fn(),
+  useMessages: vi.fn()
 }))
 
 const appUrl = 'https://example.test/d12ab86/loe009157-MzBw'
@@ -77,12 +89,6 @@ describe('The app provider extension', () => {
 describe('Collabora Save As postMessage handling', () => {
   const successGet = { ok: true, status: 200, data: providerSuccessResponseGet }
 
-  const flushAppUrl = async (wrapper: any) => {
-    for (let i = 0; i < 5; i++) {
-      await wrapper.vm.$nextTick()
-    }
-  }
-
   const dispatchEditorMessage = (origin: string, messageId: string) => {
     window.dispatchEvent(
       new MessageEvent('message', { origin, data: JSON.stringify({ MessageId: messageId }) })
@@ -118,7 +124,7 @@ describe('Collabora Save As postMessage handling', () => {
     const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
       appName: 'Collabora'
     })
-    await flushAppUrl(wrapper)
+    await flushPromises()
 
     dispatchEditorMessage('https://evil.test', 'UI_SaveAs')
 
@@ -131,7 +137,7 @@ describe('Collabora Save As postMessage handling', () => {
     const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
       appName: 'Collabora'
     })
-    await flushAppUrl(wrapper)
+    await flushPromises()
     const { postMessage } = stubIframeContentWindow(wrapper)
 
     dispatchEditorMessage(appOrigin, 'UI_SaveAs')
@@ -152,13 +158,56 @@ describe('Collabora Save As postMessage handling', () => {
     wrapper.unmount()
   })
 
+  it('ignores a second UI_SaveAs while the modal is already open', async () => {
+    const makeRequest = vi.fn().mockResolvedValue(successGet)
+    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
+      appName: 'Collabora'
+    })
+    await flushPromises()
+    stubIframeContentWindow(wrapper)
+
+    dispatchEditorMessage(appOrigin, 'UI_SaveAs')
+    dispatchEditorMessage(appOrigin, 'UI_SaveAs')
+
+    expect(dispatchModal).toHaveBeenCalledTimes(1)
+
+    // once cancelled/confirmed, a subsequent UI_SaveAs may open the modal again
+    const modal = dispatchModal.mock.calls[0][0] as any
+    modal.onCancel()
+    dispatchEditorMessage(appOrigin, 'UI_SaveAs')
+    expect(dispatchModal).toHaveBeenCalledTimes(2)
+    wrapper.unmount()
+  })
+
+  it('shows an error instead of silently closing when the iframe is unavailable on confirm', async () => {
+    const makeRequest = vi.fn().mockResolvedValue(successGet)
+    const { wrapper, dispatchModal, showErrorMessage } = createShallowMountWrapper(makeRequest, {
+      appName: 'Collabora'
+    })
+    await flushPromises()
+    Object.defineProperty(wrapper.find('iframe').element, 'contentWindow', {
+      value: null,
+      configurable: true
+    })
+
+    dispatchEditorMessage(appOrigin, 'UI_SaveAs')
+    const modal = dispatchModal.mock.calls[0][0] as any
+
+    modal.onConfirm('export.pdf')
+
+    expect(showErrorMessage).toHaveBeenCalledWith(
+      expect.objectContaining({ title: expect.stringContaining('editor is not available') })
+    )
+    wrapper.unmount()
+  })
+
   it('does not open the modal on UI_SaveAs when the file is read-only', async () => {
     const makeRequest = vi.fn().mockResolvedValue(successGet)
     const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
       appName: 'Collabora',
       isReadOnly: true
     })
-    await flushAppUrl(wrapper)
+    await flushPromises()
 
     dispatchEditorMessage(appOrigin, 'UI_SaveAs')
 
@@ -171,7 +220,7 @@ describe('Collabora Save As postMessage handling', () => {
     const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
       appName: 'Collabora'
     })
-    await flushAppUrl(wrapper)
+    await flushPromises()
     const { postMessage } = stubIframeContentWindow(wrapper)
 
     dispatchEditorMessage(appOrigin, 'UI_SaveAs')
@@ -196,7 +245,7 @@ describe('Collabora Save As postMessage handling', () => {
   it('posts Host_PostmessageReady when the editor iframe loads', async () => {
     const makeRequest = vi.fn().mockResolvedValue(successGet)
     const { wrapper } = createShallowMountWrapper(makeRequest, { appName: 'Collabora' })
-    await flushAppUrl(wrapper)
+    await flushPromises()
     const { iframe, postMessage } = stubIframeContentWindow(wrapper)
 
     await iframe.trigger('load')
@@ -211,7 +260,7 @@ describe('Collabora Save As postMessage handling', () => {
   it('does not post Host_PostmessageReady or request ui_defaults for non-Collabora providers', async () => {
     const makeRequest = vi.fn().mockResolvedValue(successGet)
     const { wrapper } = createShallowMountWrapper(makeRequest, { appName: 'example-app' })
-    await flushAppUrl(wrapper)
+    await flushPromises()
     const { iframe, postMessage } = stubIframeContentWindow(wrapper)
 
     expect(wrapper.find('iframe').attributes('src')).toBe(appUrl)
@@ -228,7 +277,7 @@ describe('Collabora Save As postMessage handling', () => {
       appName: 'Collabora',
       openAsPreview: false
     })
-    await flushAppUrl(wrapper)
+    await flushPromises()
     makeRequest.mockClear()
 
     dispatchEditorMessage(appOrigin, 'UI_Edit')
@@ -258,6 +307,9 @@ function createShallowMountWrapper(
   const dispatchModal = vi.fn()
   vi.mocked(useModals).mockReturnValue(mock<ReturnType<typeof useModals>>({ dispatchModal }))
 
+  const showErrorMessage = vi.fn()
+  vi.mocked(useMessages).mockReturnValue(mock<ReturnType<typeof useMessages>>({ showErrorMessage }))
+
   const mocks = {
     ...defaultComponentMocks(),
     $appProviderService: mock<AppProviderService>({ appNames: [appName] })
@@ -271,6 +323,7 @@ function createShallowMountWrapper(
 
   return {
     dispatchModal,
+    showErrorMessage,
     wrapper: shallowMount(App, {
       props: {
         space: null,

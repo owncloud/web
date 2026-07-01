@@ -121,10 +121,12 @@ const subm: VNodeRef = ref()
 const appIframe = ref<HTMLIFrameElement>()
 
 // Origin of the editor (e.g. the Collabora host) used as the target origin when
-// posting messages into the iframe.
+// posting messages into the iframe. Resolved against the current origin so a
+// relative `app_url` (WOPI server co-hosted with the web app) still yields a
+// usable origin instead of permanently failing the postMessage origin check.
 const appOrigin = computed(() => {
   try {
-    return new URL(unref(appUrl)).origin
+    return new URL(unref(appUrl), window.location.origin).origin
   } catch {
     return ''
   }
@@ -151,12 +153,20 @@ const withSaveAsUiDefaults = (rawUrl: string) => {
 }
 
 // Post a WOPI postMessage into the editor iframe (messages are JSON strings).
-const postToApp = (message: Record<string, unknown>) => {
-  const target = unref(appIframe)?.contentWindow
-  if (!target || !unref(appOrigin)) {
-    return
+// Accepts an explicit target/origin so callers that captured them at the time
+// a user action started (e.g. opening the Save-As modal) don't re-read the
+// live refs, which may have moved on to a different resource by the time the
+// user confirms. Returns whether the message was actually sent.
+const postToApp = (
+  message: Record<string, unknown>,
+  target: Window | null | undefined = unref(appIframe)?.contentWindow,
+  origin: string = unref(appOrigin)
+): boolean => {
+  if (!target || !origin) {
+    return false
   }
-  target.postMessage(JSON.stringify({ ...message, SendTime: Date.now() }), unref(appOrigin))
+  target.postMessage(JSON.stringify({ ...message, SendTime: Date.now() }), origin)
+  return true
 }
 
 // The editor only emits its rich postMessage API (UI_SaveAs, App_LoadingStatus,
@@ -188,6 +198,11 @@ const validateSaveAsFilename = (filename: string): string => {
   return ''
 }
 
+// Guards against a second Save-As modal being dispatched while one is already
+// open (e.g. the editor's grouped Save-As control emitting `UI_SaveAs` twice
+// in quick succession).
+const isSaveAsModalOpen = ref(false)
+
 // Handle the editor's "Save As" request: ask the user for the copy's name (the
 // extension selects the export format) and reply with `Action_SaveAs`, which
 // makes the editor render to that format and PutRelativeFile it into the space.
@@ -196,6 +211,18 @@ const onSaveAs = () => {
     showErrorMessage({ title: $gettext('Cannot save a copy: file is read-only') })
     return
   }
+  if (unref(isSaveAsModalOpen)) {
+    return
+  }
+
+  // Capture the target iframe/origin now, at dispatch time, rather than
+  // re-reading the (reactive) refs in `onConfirm`: if the component gets
+  // reused for a different resource while the modal is open, the live refs
+  // would point at the new document by the time the user presses Save.
+  const target = unref(appIframe)?.contentWindow
+  const origin = unref(appOrigin)
+
+  isSaveAsModalOpen.value = true
   dispatchModal({
     variation: 'passive',
     title: $gettext('Save a copy'),
@@ -206,16 +233,24 @@ const onSaveAs = () => {
     onInput: (filename: string, setError: (error: string) => void) => {
       setError(validateSaveAsFilename(filename))
     },
+    onCancel: () => {
+      isSaveAsModalOpen.value = false
+    },
     onConfirm: (filename: string) => {
+      isSaveAsModalOpen.value = false
       // Guard again on confirm (defense-in-depth); onInput normally prevents
       // reaching here with an invalid name.
       if (validateSaveAsFilename(filename)) {
         return
       }
-      postToApp({
-        MessageId: 'Action_SaveAs',
-        Values: { Filename: filename.trim(), Notify: true }
-      })
+      const sent = postToApp(
+        { MessageId: 'Action_SaveAs', Values: { Filename: filename.trim(), Notify: true } },
+        target,
+        origin
+      )
+      if (!sent) {
+        showErrorMessage({ title: $gettext('Cannot save a copy: the editor is not available') })
+      }
     }
   })
 }
