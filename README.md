@@ -2,7 +2,7 @@
 
 <!-- OSPO-managed README | Generated: 2026-04-16 | v2 -->
 
-[![License](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE) [![ownCloud OSPO](https://img.shields.io/badge/OSPO-ownCloud-blue)](https://kiteworks.com/opensource) [![Docker Hub](https://img.shields.io/docker/pulls/owncloud)](https://hub.docker.com/r/owncloud/web)
+[![License](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE) [![ownCloud OSPO](https://img.shields.io/badge/OSPO-ownCloud-blue)](https://kiteworks.com/opensource) [![Docker Hub](https://img.shields.io/docker/pulls/owncloud/web)](https://hub.docker.com/r/owncloud/web)
 
 ownCloud Web is the next-generation frontend for ownCloud Infinite Scale, built as a single-page application with Vue.js and TypeScript. It provides a modern, accessible and themeable user interface for managing files, sharing, real-time collaboration and administration -- designed to be extensible through a plugin-based architecture that allows third-party developers to build custom apps and extensions.
 
