@@ -1,15 +1,150 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [12.5.0] (2026-07-01)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 12.5.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v12.4.0...master
+[12.5.0]: https://github.com/owncloud/web/compare/v12.4.2...v12.5.0
+
+Summary
+-------
+
+* Bugfix - Add open button to PDF viewer on iOS/iPadOS: [#13797](https://github.com/owncloud/web/issues/13797)
+* Bugfix - Fix danger filled button text color on focus: [#13887](https://github.com/owncloud/web/pull/13887)
+* Bugfix - Open external apps based on the file mime type: [#13888](https://github.com/owncloud/web/pull/13888)
+* Bugfix - Validate URL before opening password-protected folder: [#13924](https://github.com/owncloud/web/pull/13924)
+* Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
+* Enhancement - Add a documentation screenshot capture tool: [#13894](https://github.com/owncloud/web/pull/13894)
+* Enhancement - Add an HTML editor app: [#13895](https://github.com/owncloud/web/pull/13895)
+* Enhancement - Save a copy of office documents to another format (Collabora): [#13906](https://github.com/owncloud/web/pull/13906)
+
+Details
+-------
+
+* Bugfix - Add open button to PDF viewer on iOS/iPadOS: [#13797](https://github.com/owncloud/web/issues/13797)
+
+   On iOS/iPadOS, we now display a button to open the PDF file in the browser
+   instead of the native PDF viewer. This is a workaround to avoid issues with the
+   native PDF viewer on iOS/iPadOS.
+
+   https://github.com/owncloud/web/issues/13797
+   https://github.com/owncloud/web/pull/13816
+
+* Bugfix - Fix danger filled button text color on focus: [#13887](https://github.com/owncloud/web/pull/13887)
+
+   We've fixed the `OcButton` danger filled variant not applying the correct text
+   color when focused via keyboard.
+
+   https://github.com/owncloud/web/pull/13887
+
+* Bugfix - Open external apps based on the file mime type: [#13888](https://github.com/owncloud/web/pull/13888)
+
+   We've fixed the external app redirect (`/external`) picking an arbitrary app
+   when no `app` query parameter was present. It fell back to the first registered
+   app provider, which might not support the file's mime type, so the following
+   request to open the file failed with an "app not found" error that surfaced as a
+   generic error to the user.
+
+   The redirect now resolves the app from the file's mime type, preferring the
+   configured default application, and shows an explicit error when no suitable app
+   is available instead of silently redirecting to the wrong one.
+
+   https://github.com/owncloud/web/pull/13888
+
+* Bugfix - Validate URL before opening password-protected folder: [#13924](https://github.com/owncloud/web/pull/13924)
+
+   We've fixed an issue where the URL stored inside a `.psec` file was not
+   validated before being used as the source of the folder view iframe. The URL is
+   now checked to ensure it uses a safe scheme and points to the configured
+   ownCloud server.
+
+   https://github.com/owncloud/web/pull/13924
+
+* Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
+
+   The default login page background has been replaced with the ownCloud branding
+   background. The background image is now applied through the CSS custom property
+   `--oc-login-background-image`, so a future branding update only needs to change
+   one value. The image itself still comes from the theme
+   (`loginPage.backgroundImg` in theme.json) and remains fully customizable.
+
+   https://github.com/owncloud/web/pull/13875
+
+* Enhancement - Add a documentation screenshot capture tool: [#13894](https://github.com/owncloud/web/pull/13894)
+
+   We added a Playwright-based tool under `tests/e2e/docs` that automatically
+   captures end-user documentation screenshots from a live ownCloud Web instance.
+   Each "tour" drives the UI through a documented flow and saves a captioned
+   screenshot per step plus a `manifest.json`, so the screenshots used in the user
+   documentation can be regenerated on demand and never drift from the product. The
+   initial tours mirror the "Web for users" documentation: the top navigation, the
+   file sidebars, sharing roles and contextual help.
+
+   https://github.com/owncloud/web/pull/13894
+
+* Enhancement - Add an HTML editor app: [#13895](https://github.com/owncloud/web/pull/13895)
+
+   We added a new app, `web-app-html-editor`, that opens `.html`, `.htm` and
+   `.xhtml` files in a CodeMirror source editor with a live preview. The file is
+   loaded and saved over WebDAV by the standard app wrapper, and the document is
+   rendered in a strictly sandboxed iframe (opaque origin, no network egress) with
+   Editor, Split and Preview view modes. The app is registered by file extension
+   and follows the same thin pattern as the text editor.
+
+   https://github.com/owncloud/web/pull/13895
+
+* Enhancement - Save a copy of office documents to another format (Collabora): [#13906](https://github.com/owncloud/web/pull/13906)
+
+   Office documents opened in Collabora Online could be renamed but not saved as a
+   copy or exported to another format back into oCIS storage: "Save As" silently
+   did nothing. Collabora exposes "Save As" as a host-delegated operation - it
+   posts a `UI_SaveAs` message and waits for the integration to reply with the
+   target filename via `Action_SaveAs` - but the app-provider integration never
+   opened that postMessage channel.
+
+   The app-provider now announces itself to the editor with `Host_PostmessageReady`
+   once the iframe has loaded, requests the grouped Save-As control via
+   `ui_defaults` (`SaveAsMode=group`), and on `UI_SaveAs` prompts for the copy's
+   name and replies with `Action_SaveAs`. The collaboration service already
+   implements WOPI `PutRelativeFile`, so the copy is written into the same space,
+   respecting the user's permissions. The chosen file extension selects the export
+   format (e.g. docx to pdf/odt, xlsx to ods, pptx to pdf).
+
+   https://github.com/owncloud/web/pull/13906
+
+Changelog for ownCloud Web [12.4.2] (2026-06-26)
+=======================================
+The following sections list the changes in ownCloud web 12.4.2 relevant to
+ownCloud admins and users.
+
+[12.4.2]: https://github.com/owncloud/web/compare/v12.4.1...v12.4.2
+
+Summary
+-------
+
+* Bugfix - Use authMfaRequiredLevelname from capabilities instead of hardcoded value: [#13907](https://github.com/owncloud/web/pull/13907)
+
+Details
+-------
+
+* Bugfix - Use authMfaRequiredLevelname from capabilities instead of hardcoded value: [#13907](https://github.com/owncloud/web/pull/13907)
+
+   The MFA required ACR level for vault routes is now read from the capabilities
+   store (`authMfaRequiredLevelname`) instead of being hardcoded to `"advanced"`.
+   This ensures the correct level is always used as configured by the server.
+
+   https://github.com/owncloud/web/pull/13907
+
+Changelog for ownCloud Web [12.4.1] (2026-06-18)
+=======================================
+The following sections list the changes in ownCloud web 12.4.1 relevant to
+ownCloud admins and users.
+
+[12.4.1]: https://github.com/owncloud/web/compare/v12.4.0...v12.4.1
 
 Summary
 -------
 
 * Security - Validate postMessage origin in embed mode modals: [#13844](https://github.com/owncloud/web/issues/13844)
-* Bugfix - Add open button to PDF viewer on iOS/iPadOS: [#13797](https://github.com/owncloud/web/issues/13797)
 * Bugfix - Add explicit size to space header image: [#13822](https://github.com/owncloud/web/issues/13822)
 * Bugfix - Apply vault theme after OIDC callback: [#13826](https://github.com/owncloud/web/pull/13826)
 * Bugfix - Gate MFA expiry dialog on vault capability: [#13827](https://github.com/owncloud/web/pull/13827)
@@ -17,10 +152,6 @@ Summary
 * Bugfix - Fix theme switching issues: [#13843](https://github.com/owncloud/web/pull/13843)
 * Bugfix - Pass vault parameter to capabilities endpoint: [#13867](https://github.com/owncloud/web/pull/13867)
 * Bugfix - Filter notifications by vault mode: [#13877](https://github.com/owncloud/web/pull/13877)
-* Bugfix - Fix danger filled button text color on focus: [#13887](https://github.com/owncloud/web/pull/13887)
-* Bugfix - Open external apps based on the file mime type: [#13888](https://github.com/owncloud/web/pull/13888)
-* Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
-* Enhancement - Add a documentation screenshot capture tool: [#13894](https://github.com/owncloud/web/pull/13894)
 
 Details
 -------
@@ -37,15 +168,6 @@ Details
    own origin and the optionally configured `embed.messagesOrigin`.
 
    https://github.com/owncloud/web/issues/13844
-
-* Bugfix - Add open button to PDF viewer on iOS/iPadOS: [#13797](https://github.com/owncloud/web/issues/13797)
-
-   On iOS/iPadOS, we now display a button to open the PDF file in the browser
-   instead of the native PDF viewer. This is a workaround to avoid issues with the
-   native PDF viewer on iOS/iPadOS.
-
-   https://github.com/owncloud/web/issues/13797
-   https://github.com/owncloud/web/pull/13816
 
 * Bugfix - Add explicit size to space header image: [#13822](https://github.com/owncloud/web/issues/13822)
 
@@ -117,49 +239,6 @@ Details
    drive mode.
 
    https://github.com/owncloud/web/pull/13877
-
-* Bugfix - Fix danger filled button text color on focus: [#13887](https://github.com/owncloud/web/pull/13887)
-
-   We've fixed the `OcButton` danger filled variant not applying the correct text
-   color when focused via keyboard.
-
-   https://github.com/owncloud/web/pull/13887
-
-* Bugfix - Open external apps based on the file mime type: [#13888](https://github.com/owncloud/web/pull/13888)
-
-   We've fixed the external app redirect (`/external`) picking an arbitrary app
-   when no `app` query parameter was present. It fell back to the first registered
-   app provider, which might not support the file's mime type, so the following
-   request to open the file failed with an "app not found" error that surfaced as a
-   generic error to the user.
-
-   The redirect now resolves the app from the file's mime type, preferring the
-   configured default application, and shows an explicit error when no suitable app
-   is available instead of silently redirecting to the wrong one.
-
-   https://github.com/owncloud/web/pull/13888
-
-* Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
-
-   The default login page background has been replaced with the ownCloud branding
-   background. The background image is now applied through the CSS custom property
-   `--oc-login-background-image`, so a future branding update only needs to change
-   one value. The image itself still comes from the theme
-   (`loginPage.backgroundImg` in theme.json) and remains fully customizable.
-
-   https://github.com/owncloud/web/pull/13875
-
-* Enhancement - Add a documentation screenshot capture tool: [#13894](https://github.com/owncloud/web/pull/13894)
-
-   We added a Playwright-based tool under `tests/e2e/docs` that automatically
-   captures end-user documentation screenshots from a live ownCloud Web instance.
-   Each "tour" drives the UI through a documented flow and saves a captioned
-   screenshot per step plus a `manifest.json`, so the screenshots used in the user
-   documentation can be regenerated on demand and never drift from the product. The
-   initial tours mirror the "Web for users" documentation: the top navigation, the
-   file sidebars, sharing roles and contextual help.
-
-   https://github.com/owncloud/web/pull/13894
 
 Changelog for ownCloud Web [12.4.0] (2026-05-22)
 =======================================
