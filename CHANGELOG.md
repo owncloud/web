@@ -19,8 +19,12 @@ Summary
 * Bugfix - Filter notifications by vault mode: [#13877](https://github.com/owncloud/web/pull/13877)
 * Bugfix - Fix danger filled button text color on focus: [#13887](https://github.com/owncloud/web/pull/13887)
 * Bugfix - Open external apps based on the file mime type: [#13888](https://github.com/owncloud/web/pull/13888)
+* Bugfix - Use authMfaRequiredLevelname from capabilities instead of hardcoded value: [#13907](https://github.com/owncloud/web/pull/13907)
+* Bugfix - Validate URL before opening password-protected folder: [#13924](https://github.com/owncloud/web/pull/13924)
 * Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
 * Enhancement - Add a documentation screenshot capture tool: [#13894](https://github.com/owncloud/web/pull/13894)
+* Enhancement - Add an HTML editor app: [#13895](https://github.com/owncloud/web/pull/13895)
+* Enhancement - Save a copy of office documents to another format (Collabora): [#13906](https://github.com/owncloud/web/pull/13906)
 
 Details
 -------
@@ -139,6 +143,23 @@ Details
 
    https://github.com/owncloud/web/pull/13888
 
+* Bugfix - Use authMfaRequiredLevelname from capabilities instead of hardcoded value: [#13907](https://github.com/owncloud/web/pull/13907)
+
+   The MFA required ACR level for vault routes is now read from the capabilities
+   store (`authMfaRequiredLevelname`) instead of being hardcoded to `"advanced"`.
+   This ensures the correct level is always used as configured by the server.
+
+   https://github.com/owncloud/web/pull/13907
+
+* Bugfix - Validate URL before opening password-protected folder: [#13924](https://github.com/owncloud/web/pull/13924)
+
+   We've fixed an issue where the URL stored inside a `.psec` file was not
+   validated before being used as the source of the folder view iframe. The URL is
+   now checked to ensure it uses a safe scheme and points to the configured
+   ownCloud server.
+
+   https://github.com/owncloud/web/pull/13924
+
 * Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
 
    The default login page background has been replaced with the ownCloud branding
@@ -160,6 +181,36 @@ Details
    file sidebars, sharing roles and contextual help.
 
    https://github.com/owncloud/web/pull/13894
+
+* Enhancement - Add an HTML editor app: [#13895](https://github.com/owncloud/web/pull/13895)
+
+   We added a new app, `web-app-html-editor`, that opens `.html`, `.htm` and
+   `.xhtml` files in a CodeMirror source editor with a live preview. The file is
+   loaded and saved over WebDAV by the standard app wrapper, and the document is
+   rendered in a strictly sandboxed iframe (opaque origin, no network egress) with
+   Editor, Split and Preview view modes. The app is registered by file extension
+   and follows the same thin pattern as the text editor.
+
+   https://github.com/owncloud/web/pull/13895
+
+* Enhancement - Save a copy of office documents to another format (Collabora): [#13906](https://github.com/owncloud/web/pull/13906)
+
+   Office documents opened in Collabora Online could be renamed but not saved as a
+   copy or exported to another format back into oCIS storage: "Save As" silently
+   did nothing. Collabora exposes "Save As" as a host-delegated operation - it
+   posts a `UI_SaveAs` message and waits for the integration to reply with the
+   target filename via `Action_SaveAs` - but the app-provider integration never
+   opened that postMessage channel.
+
+   The app-provider now announces itself to the editor with `Host_PostmessageReady`
+   once the iframe has loaded, requests the grouped Save-As control via
+   `ui_defaults` (`SaveAsMode=group`), and on `UI_SaveAs` prompts for the copy's
+   name and replies with `Action_SaveAs`. The collaboration service already
+   implements WOPI `PutRelativeFile`, so the copy is written into the same space,
+   respecting the user's permissions. The chosen file extension selects the export
+   format (e.g. docx to pdf/odt, xlsx to ods, pptx to pdf).
+
+   https://github.com/owncloud/web/pull/13906
 
 Changelog for ownCloud Web [12.4.0] (2026-05-22)
 =======================================
