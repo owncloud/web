@@ -102,7 +102,9 @@ describe('Collabora Save As postMessage handling', () => {
   it('ignores editor messages until the editor origin is known (fail closed)', async () => {
     // makeRequest never resolves -> appUrl stays undefined -> origin unknown
     const makeRequest = vi.fn().mockReturnValue(new Promise(() => undefined))
-    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest)
+    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
+      appName: 'Collabora'
+    })
     await wrapper.vm.$nextTick()
 
     dispatchEditorMessage(appOrigin, 'UI_SaveAs')
@@ -113,7 +115,9 @@ describe('Collabora Save As postMessage handling', () => {
 
   it('drops editor messages coming from a foreign origin', async () => {
     const makeRequest = vi.fn().mockResolvedValue(successGet)
-    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest)
+    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
+      appName: 'Collabora'
+    })
     await flushAppUrl(wrapper)
 
     dispatchEditorMessage('https://evil.test', 'UI_SaveAs')
@@ -124,7 +128,9 @@ describe('Collabora Save As postMessage handling', () => {
 
   it('opens the modal on UI_SaveAs from the editor origin and posts Action_SaveAs on confirm', async () => {
     const makeRequest = vi.fn().mockResolvedValue(successGet)
-    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest)
+    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
+      appName: 'Collabora'
+    })
     await flushAppUrl(wrapper)
     const { postMessage } = stubIframeContentWindow(wrapper)
 
@@ -146,9 +152,25 @@ describe('Collabora Save As postMessage handling', () => {
     wrapper.unmount()
   })
 
-  it('rejects empty and path-separator file names in the modal', async () => {
+  it('does not open the modal on UI_SaveAs when the file is read-only', async () => {
     const makeRequest = vi.fn().mockResolvedValue(successGet)
-    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest)
+    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
+      appName: 'Collabora',
+      isReadOnly: true
+    })
+    await flushAppUrl(wrapper)
+
+    dispatchEditorMessage(appOrigin, 'UI_SaveAs')
+
+    expect(dispatchModal).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('rejects empty, path-separator and reserved file names in the modal', async () => {
+    const makeRequest = vi.fn().mockResolvedValue(successGet)
+    const { wrapper, dispatchModal } = createShallowMountWrapper(makeRequest, {
+      appName: 'Collabora'
+    })
     await flushAppUrl(wrapper)
     const { postMessage } = stubIframeContentWindow(wrapper)
 
@@ -160,6 +182,8 @@ describe('Collabora Save As postMessage handling', () => {
     expect(setError).toHaveBeenLastCalledWith(expect.stringContaining('empty'))
     modal.onInput('foo/bar.pdf', setError)
     expect(setError).toHaveBeenLastCalledWith(expect.stringContaining('/'))
+    modal.onInput('..', setError)
+    expect(setError).toHaveBeenLastCalledWith(expect.stringContaining('..'))
     modal.onInput('valid.pdf', setError)
     expect(setError).toHaveBeenLastCalledWith('')
 
@@ -171,7 +195,7 @@ describe('Collabora Save As postMessage handling', () => {
 
   it('posts Host_PostmessageReady when the editor iframe loads', async () => {
     const makeRequest = vi.fn().mockResolvedValue(successGet)
-    const { wrapper } = createShallowMountWrapper(makeRequest)
+    const { wrapper } = createShallowMountWrapper(makeRequest, { appName: 'Collabora' })
     await flushAppUrl(wrapper)
     const { iframe, postMessage } = stubIframeContentWindow(wrapper)
 
@@ -183,15 +207,52 @@ describe('Collabora Save As postMessage handling', () => {
     expect(JSON.parse(payload as string)).toMatchObject({ MessageId: 'Host_PostmessageReady' })
     wrapper.unmount()
   })
+
+  it('does not post Host_PostmessageReady or request ui_defaults for non-Collabora providers', async () => {
+    const makeRequest = vi.fn().mockResolvedValue(successGet)
+    const { wrapper } = createShallowMountWrapper(makeRequest, { appName: 'example-app' })
+    await flushAppUrl(wrapper)
+    const { iframe, postMessage } = stubIframeContentWindow(wrapper)
+
+    expect(wrapper.find('iframe').attributes('src')).toBe(appUrl)
+
+    await iframe.trigger('load')
+
+    expect(postMessage).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('does not switch to write mode on UI_Edit when openAsPreview is false', async () => {
+    const makeRequest = vi.fn().mockResolvedValue(successGet)
+    const { wrapper } = createShallowMountWrapper(makeRequest, {
+      appName: 'Collabora',
+      openAsPreview: false
+    })
+    await flushAppUrl(wrapper)
+    makeRequest.mockClear()
+
+    dispatchEditorMessage(appOrigin, 'UI_Edit')
+    await wrapper.vm.$nextTick()
+
+    expect(makeRequest).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
 })
 
-function createShallowMountWrapper(makeRequest = vi.fn().mockResolvedValue({ status: 200 })) {
+function createShallowMountWrapper(
+  makeRequest = vi.fn().mockResolvedValue({ status: 200 }),
+  {
+    appName = 'example-app',
+    isReadOnly = false,
+    openAsPreview = true
+  }: { appName?: string; isReadOnly?: boolean; openAsPreview?: boolean | string[] } = {}
+) {
   vi.mocked(useRequest).mockImplementation(() => ({
     makeRequest
   }))
 
   vi.mocked(useRoute).mockReturnValue(
-    computed(() => mock<RouteLocation>({ name: 'external-example-app-apps' }))
+    computed(() => mock<RouteLocation>({ name: `external-${appName.toLowerCase()}-apps` }))
   )
 
   const dispatchModal = vi.fn()
@@ -199,7 +260,7 @@ function createShallowMountWrapper(makeRequest = vi.fn().mockResolvedValue({ sta
 
   const mocks = {
     ...defaultComponentMocks(),
-    $appProviderService: mock<AppProviderService>({ appNames: ['example-app'] })
+    $appProviderService: mock<AppProviderService>({ appNames: [appName] })
   }
 
   const capabilities = {
@@ -214,14 +275,14 @@ function createShallowMountWrapper(makeRequest = vi.fn().mockResolvedValue({ sta
       props: {
         space: null,
         resource: mock<Resource>({ name: 'document.odt' }),
-        isReadOnly: false
+        isReadOnly
       },
       global: {
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
               capabilityState: { capabilities },
-              configState: { options: { editor: { openAsPreview: true } } }
+              configState: { options: { editor: { openAsPreview } } }
             }
           })
         ],

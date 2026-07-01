@@ -110,6 +110,10 @@ const appName = computed(() => {
   return appProviderService.appNames.find((appName) => appName.toLowerCase() === lowerCaseAppName)
 })
 
+// The grouped Save-As control and the Host_PostmessageReady handshake are
+// Collabora-specific WOPI extensions; other app providers don't implement them.
+const isCollabora = computed(() => unref(appName) === 'Collabora')
+
 const appUrl = ref()
 const formParameters = ref({})
 const method = ref()
@@ -129,14 +133,17 @@ const appOrigin = computed(() => {
 // Collabora exposes "Save As" (export to another format, saved back to storage
 // via WOPI PutRelativeFile) as a host-delegated operation: it shows a grouped
 // Save-As control and posts a `UI_SaveAs` message, expecting the host to reply
-// with the target filename. Request that grouped control via `ui_defaults`.
-// The parameter is Collabora-specific and ignored by other app providers.
+// with the target filename. Request that grouped control via `ui_defaults`,
+// which is a semicolon-delimited list, so append rather than overwrite it in
+// case the server already decorates the URL with its own defaults.
 const withSaveAsUiDefaults = (rawUrl: string) => {
   try {
     const url = new URL(rawUrl)
-    if (!url.searchParams.has('ui_defaults')) {
-      url.searchParams.set('ui_defaults', 'SaveAsMode=group')
-    }
+    const existing = url.searchParams.get('ui_defaults')
+    url.searchParams.set(
+      'ui_defaults',
+      existing ? `${existing};SaveAsMode=group` : 'SaveAsMode=group'
+    )
     return url.href
   } catch {
     return rawUrl
@@ -155,14 +162,18 @@ const postToApp = (message: Record<string, unknown>) => {
 // The editor only emits its rich postMessage API (UI_SaveAs, App_LoadingStatus,
 // ...) once the host has announced itself with `Host_PostmessageReady`. Without
 // this handshake "Save As" silently does nothing. Send it as soon as the iframe
-// has loaded.
+// has loaded. This handshake is Collabora-specific; other providers don't expect it.
 const onIframeLoad = () => {
+  if (!unref(isCollabora)) {
+    return
+  }
   postToApp({ MessageId: 'Host_PostmessageReady', Values: {} })
 }
 
-// Reject empty names and any path separators before the name is sent on. The
-// server-side `PutRelativeFile` sanitizes the name as well, but validating here
-// gives immediate feedback and avoids a pointless round-trip on invalid input.
+// Reject empty names, path separators and the reserved "." / ".." names before
+// the name is sent on. The server-side `PutRelativeFile` sanitizes the name as
+// well, but validating here gives immediate feedback and avoids a pointless
+// round-trip on invalid input.
 const validateSaveAsFilename = (filename: string): string => {
   const trimmed = filename?.trim()
   if (!trimmed) {
@@ -171,6 +182,9 @@ const validateSaveAsFilename = (filename: string): string => {
   if (/[/\\]/.test(trimmed)) {
     return $gettext('The file name cannot contain "/" or "\\".')
   }
+  if (trimmed === '.' || trimmed === '..') {
+    return $gettext('The file name cannot be "." or "..".')
+  }
   return ''
 }
 
@@ -178,6 +192,10 @@ const validateSaveAsFilename = (filename: string): string => {
 // extension selects the export format) and reply with `Action_SaveAs`, which
 // makes the editor render to that format and PutRelativeFile it into the space.
 const onSaveAs = () => {
+  if (props.isReadOnly) {
+    showErrorMessage({ title: $gettext('Cannot save a copy: file is read-only') })
+    return
+  }
   dispatchModal({
     variation: 'passive',
     title: $gettext('Save a copy'),
@@ -261,7 +279,9 @@ const loadAppUrl = useTask(function* (signal, viewMode: string) {
       throw new Error('Error in app server response')
     }
 
-    appUrl.value = withSaveAsUiDefaults(response.data.app_url)
+    appUrl.value = unref(isCollabora)
+      ? withSaveAsUiDefaults(response.data.app_url)
+      : response.data.app_url
     method.value = response.data.method
 
     if (response.data.form_parameters) {
