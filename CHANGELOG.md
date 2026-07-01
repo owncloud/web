@@ -19,8 +19,11 @@ Summary
 * Bugfix - Filter notifications by vault mode: [#13877](https://github.com/owncloud/web/pull/13877)
 * Bugfix - Fix danger filled button text color on focus: [#13887](https://github.com/owncloud/web/pull/13887)
 * Bugfix - Open external apps based on the file mime type: [#13888](https://github.com/owncloud/web/pull/13888)
+* Bugfix - Use authMfaRequiredLevelname from capabilities instead of hardcoded value: [#13907](https://github.com/owncloud/web/pull/13907)
+* Bugfix - Validate URL before opening password-protected folder: [#13924](https://github.com/owncloud/web/pull/13924)
 * Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
 * Enhancement - Add a documentation screenshot capture tool: [#13894](https://github.com/owncloud/web/pull/13894)
+* Enhancement - Add an HTML editor app: [#13895](https://github.com/owncloud/web/pull/13895)
 
 Details
 -------
@@ -139,6 +142,23 @@ Details
 
    https://github.com/owncloud/web/pull/13888
 
+* Bugfix - Use authMfaRequiredLevelname from capabilities instead of hardcoded value: [#13907](https://github.com/owncloud/web/pull/13907)
+
+   The MFA required ACR level for vault routes is now read from the capabilities
+   store (`authMfaRequiredLevelname`) instead of being hardcoded to `"advanced"`.
+   This ensures the correct level is always used as configured by the server.
+
+   https://github.com/owncloud/web/pull/13907
+
+* Bugfix - Validate URL before opening password-protected folder: [#13924](https://github.com/owncloud/web/pull/13924)
+
+   We've fixed an issue where the URL stored inside a `.psec` file was not
+   validated before being used as the source of the folder view iframe. The URL is
+   now checked to ensure it uses a safe scheme and points to the configured
+   ownCloud server.
+
+   https://github.com/owncloud/web/pull/13924
+
 * Enhancement - OwnCloud branded login background: [#13875](https://github.com/owncloud/web/pull/13875)
 
    The default login page background has been replaced with the ownCloud branding
@@ -160,6 +180,17 @@ Details
    file sidebars, sharing roles and contextual help.
 
    https://github.com/owncloud/web/pull/13894
+
+* Enhancement - Add an HTML editor app: [#13895](https://github.com/owncloud/web/pull/13895)
+
+   We added a new app, `web-app-html-editor`, that opens `.html`, `.htm` and
+   `.xhtml` files in a CodeMirror source editor with a live preview. The file is
+   loaded and saved over WebDAV by the standard app wrapper, and the document is
+   rendered in a strictly sandboxed iframe (opaque origin, no network egress) with
+   Editor, Split and Preview view modes. The app is registered by file extension
+   and follows the same thin pattern as the text editor.
+
+   https://github.com/owncloud/web/pull/13895
 
 Changelog for ownCloud Web [12.4.0] (2026-05-22)
 =======================================
