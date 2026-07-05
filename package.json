@@ -60,7 +60,7 @@
     "commander": "14.0.2",
     "debug": "^4.4.3",
     "ejs": "4.0.1",
-    "eslint": "9.39.1",
+    "eslint": "10.6.0",
     "git-repo-info": "2.1.1",
     "globals": "^16.5.0",
     "happy-dom": "20.8.9",
