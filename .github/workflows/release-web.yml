@@ -52,7 +52,7 @@ jobs:
         run: echo "version=$(echo '${{ github.ref_name }}' | sed 's/^v//' | cut -d- -f1)" >> "$GITHUB_OUTPUT"
 
       - name: Generate release changelog
-        uses: actionhippie/calens@e9170506332c244739683cb578d99b6cabd9b296 # v1.14.0
+        uses: actionhippie/calens@6c54a62bb0c9ac28f361e40f536fe0c69ba50e34 # v1.14.1
         with:
           version: ${{ steps.version.outputs.version }}
           target: ${{ env.CHANGELOG_PATH }}
