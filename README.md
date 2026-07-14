@@ -1,3 +1,6 @@
+> **⚠️ This repository is archived and no longer maintained.**
+> It is read-only and will not receive further updates or contributions.
+
 > [!IMPORTANT]
 > The [owncloud/web](https://github.com/owncloud/web) repository has been merged into [owncloud/ocis](https://github.com/owncloud/ocis) as part of our ongoing consolidation into a single oCIS monorepo. All future development, issues, and pull requests for the web frontend now happen there.
 
