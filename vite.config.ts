@@ -7,7 +7,6 @@ import {
   ViteDevServer
 } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import EnvironmentPlugin from 'vite-plugin-environment'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import { treatAsCommonjs } from 'vite-plugin-treat-umd-as-commonjs'
 import visualizer from 'rollup-plugin-visualizer'
@@ -18,7 +17,6 @@ import { basename, join } from 'path'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 
 // build config
-import packageJson from './package.json'
 import { compilerOptions } from './vite.config.common'
 import { getUserAgentRegex } from 'browserslist-useragent-regexp'
 import browserslistToEsbuild from 'browserslist-to-esbuild'
@@ -40,7 +38,6 @@ const buildConfig = {
 }
 
 const projectRootDir = searchForWorkspaceRoot(process.cwd())
-const { version } = packageJson
 const supportedBrowsersRegex = getUserAgentRegex({ allowHigherVersions: true })
 
 const stripScssMarker = '/* STYLES STRIP IMPORTS MARKER */'
@@ -220,9 +217,6 @@ export default defineConfig(({ mode, command }) => {
             }
           }
         },
-        EnvironmentPlugin({
-          PACKAGE_VERSION: version
-        }),
         vue({
           template: {
             compilerOptions
