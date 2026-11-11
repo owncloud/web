@@ -7,6 +7,10 @@ import { mock } from 'vitest-mock-extended'
 vi.mock('mermaid')
 vi.mock('html2canvas')
 
+// mermaid is initialized when the module is imported; capture the call before
+// clearMocks resets the mock between tests
+const initializeCalls = [...vi.mocked(mermaid.initialize).mock.calls]
+
 const mockCanvas = {
   width: 300,
   height: 200,
@@ -61,6 +65,11 @@ describe('useMermaid', () => {
       value: mockDocument,
       configurable: true
     })
+  })
+
+  it('initializes mermaid with the dagre layout', () => {
+    expect(initializeCalls).toHaveLength(1)
+    expect(initializeCalls[0][0]).toEqual(expect.objectContaining({ layout: 'dagre' }))
   })
 
   describe('method "preprocessMermaidCharts"', () => {

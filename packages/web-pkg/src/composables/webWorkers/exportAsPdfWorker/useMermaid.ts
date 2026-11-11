@@ -6,7 +6,8 @@ import { pdfColorToCssRgb } from './helpers'
 
 mermaid.initialize({
   startOnLoad: false,
-  theme: 'default'
+  theme: 'default',
+  layout: 'dagre'
 })
 
 /**
