@@ -67,6 +67,16 @@ export const useEmbedMode = () => {
     return unref(delegateAuthenticationOrigin) === eventOrigin
   }
 
+  const verifyMessageOrigin = (eventOrigin: string): boolean => {
+    const allowedOrigins = [window.location.origin]
+
+    if (unref(messagesTargetOrigin)) {
+      allowedOrigins.push(unref(messagesTargetOrigin))
+    }
+
+    return allowedOrigins.includes(eventOrigin)
+  }
+
   return {
     isEnabled,
     isLocationPicker,
@@ -77,6 +87,7 @@ export const useEmbedMode = () => {
     isDelegatingAuthentication,
     fileTypes,
     postMessage,
-    verifyDelegatedAuthenticationOrigin
+    verifyDelegatedAuthenticationOrigin,
+    verifyMessageOrigin
   }
 }
