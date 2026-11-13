@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SCRIPT_PATH=$(dirname "$0")
-SCRIPT_PATH=$(cd "${SCRIPT_PATH_REL}" && pwd) # absolute path
+SCRIPT_PATH=$(cd "${SCRIPT_PATH}" && pwd) # absolute path
 PROJECT_ROOT=$(cd "$SCRIPT_PATH/../../" && pwd)
 SCRIPT_PATH_REL=${SCRIPT_PATH//"$PROJECT_ROOT/"/}
 
