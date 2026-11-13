@@ -3,7 +3,222 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v12.2.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v12.3.4...master
+
+Summary
+-------
+
+* Security - Validate postMessage origin in embed mode modals: [#13844](https://github.com/owncloud/web/issues/13844)
+* Bugfix - Show mermaid diagrams in the PDF export: [#13963](https://github.com/owncloud/web/pull/13963)
+* Bugfix - Only open supported file types in viewer apps: [#13966](https://github.com/owncloud/web/pull/13966)
+* Change - Remove web version from the admin settings: [#13399](https://github.com/owncloud/ocis/pull/13399)
+* Enhancement - Update mermaid to 12.3.0: [#13961](https://github.com/owncloud/web/pull/13961)
+
+Details
+-------
+
+* Security - Validate postMessage origin in embed mode modals: [#13844](https://github.com/owncloud/web/issues/13844)
+
+   We've fixed a cross-site request forgery (CSRF) vulnerability where the embed
+   mode modals (Save As, Export As PDF and the file picker) processed incoming
+   `postMessage` events without verifying the sender's origin. A malicious page
+   holding a reference to an authenticated ownCloud window could forge
+   `owncloud-embed:select`, `owncloud-embed:file-pick` or `owncloud-embed:cancel`
+   messages and trigger authenticated file writes in the victim's space. Incoming
+   messages are now validated against an allowlist consisting of the application's
+   own origin and the optionally configured `embed.messagesOrigin`.
+
+   https://github.com/owncloud/web/issues/13844
+
+* Bugfix - Show mermaid diagrams in the PDF export: [#13963](https://github.com/owncloud/web/pull/13963)
+
+   Exporting a markdown file as PDF replaced every mermaid diagram with "Failed to
+   render Mermaid chart." when the theme defined its colors with `oklch()`. The
+   diagrams are now included as images in the PDF.
+
+   https://github.com/owncloud/web/pull/13963
+
+* Bugfix - Only open supported file types in viewer apps: [#13966](https://github.com/owncloud/web/pull/13966)
+
+   Viewer apps, like the PDF viewer, could be opened for any file by entering its
+   address directly, even when the app does not support that file type. The file
+   was then loaded and shown anyway.
+
+   Viewer apps now check that the file type is supported before loading the file
+   and show an error message otherwise.
+
+   https://github.com/owncloud/web/pull/13966
+
+* Change - Remove web version from the admin settings: [#13399](https://github.com/owncloud/ocis/pull/13399)
+
+   The admin settings info section no longer displays the web client version, and
+   the version is no longer embedded in the Web UI build.
+
+   https://github.com/owncloud/ocis/pull/13399
+
+* Enhancement - Update mermaid to 12.3.0: [#13961](https://github.com/owncloud/web/pull/13961)
+
+   Mermaid has been updated to version 12.3.0. Diagrams in the markdown editor, the
+   preview and the PDF export keep the dagre layout they used so far instead of the
+   new default layout of mermaid 12. Mermaid 12 requires Safari 17.4 or newer.
+
+   https://github.com/owncloud/web/pull/13961
+
+Changelog for ownCloud Web [12.3.4] (2026-11-09)
+=======================================
+The following sections list the changes in ownCloud web 12.3.4 relevant to
+ownCloud admins and users.
+
+[12.3.4]: https://github.com/owncloud/web/compare/v12.3.3...v12.3.4
+
+Summary
+-------
+
+* Bugfix - Disable confirm in the link password dialog until a password is entered: [#13218](https://github.com/owncloud/ocis/pull/13218)
+* Bugfix - Stop logging OAuth tokens to the browser console: [#13233](https://github.com/owncloud/ocis/pull/13233)
+* Bugfix - Hide the space "Edit description" button without edit permission: [#13350](https://github.com/owncloud/ocis/pull/13350)
+* Change - Remove web version from the Web UI: [#13346](https://github.com/owncloud/ocis/pull/13346)
+
+Details
+-------
+
+* Bugfix - Disable confirm in the link password dialog until a password is entered: [#13218](https://github.com/owncloud/ocis/pull/13218)
+
+   The "Add password" / "Edit password" dialog for links could be confirmed with an
+   empty field, which removed the password from the link. The confirm button is now
+   disabled until a valid password is entered.
+
+   https://github.com/owncloud/ocis/pull/13218
+
+* Bugfix - Stop logging OAuth tokens to the browser console: [#13233](https://github.com/owncloud/ocis/pull/13233)
+
+   On every login and every silent token renewal, the web client wrote the
+   signed-in user's raw OAuth `access_token` and `refresh_token` to the browser
+   console via a `console.debug` call in the `userLoaded` handler of the auth
+   service. Anyone with access to that browser's console or log buffer - a
+   malicious or over-permissioned browser extension, a shared or kiosk terminal, a
+   screen share or recording, or a session-replay tool that captures console output
+   - could read and reuse those live credentials. The production build does not
+   strip `console.debug`, so this shipped in the deployed bundle, not just local
+   dev.
+
+   The debug line now confirms that a new user was loaded without logging the
+   token, profile, or any other user field.
+
+   https://github.com/owncloud/ocis/pull/13233
+
+* Bugfix - Hide the space "Edit description" button without edit permission: [#13350](https://github.com/owncloud/ocis/pull/13350)
+
+   The pencil button next to the description in the space header was shown to every
+   space member, including those who are not allowed to edit the description. It is
+   now only shown to users who are allowed to edit the space description,
+   consistent with the equivalent entries in the space context menu and the
+   sidebar.
+
+   https://github.com/owncloud/ocis/pull/13350
+
+* Change - Remove web version from the Web UI: [#13346](https://github.com/owncloud/ocis/pull/13346)
+
+   The Web UI no longer displays its own version. It was previously shown in the
+   bottom of the left sidebar and on the public file drop page, and was also
+   announced in the browser console and the page metadata. This avoids exposing
+   internal version details in the interface. The backend version information
+   remains unchanged.
+
+   https://github.com/owncloud/ocis/pull/13346
+
+Changelog for ownCloud Web [12.3.3] (2026-04-27)
+=======================================
+The following sections list the changes in ownCloud web 12.3.3 relevant to
+ownCloud admins and users.
+
+[12.3.3]: https://github.com/owncloud/web/compare/v12.3.2...v12.3.3
+
+Summary
+-------
+
+* Bugfix - Share button not usable when role dropdown text is too long: [#13638](https://github.com/owncloud/web/pull/13638)
+* Bugfix - Shared with does not show members: [#13667](https://github.com/owncloud/web/pull/13667)
+* Bugfix - Escape strings when returned from server: [#13680](https://github.com/owncloud/web/pull/13680)
+
+Details
+-------
+
+* Bugfix - Share button not usable when role dropdown text is too long: [#13638](https://github.com/owncloud/web/pull/13638)
+
+   We've fixed an issue where the share button was not usable when the text in the
+   role dropdown was too long.
+
+   https://github.com/owncloud/web/pull/13638
+
+* Bugfix - Shared with does not show members: [#13667](https://github.com/owncloud/web/pull/13667)
+
+   We've fixed an issue where the list of external users in the "Shared with"
+   section was not displayed.
+
+   https://github.com/owncloud/web/pull/13667
+
+* Bugfix - Escape strings when returned from server: [#13680](https://github.com/owncloud/web/pull/13680)
+
+   We've fixed an issue where strings returned from the server were not escaped
+
+   https://github.com/owncloud/web/pull/13680
+
+Changelog for ownCloud Web [12.3.2] (2026-02-27)
+=======================================
+The following sections list the changes in ownCloud web 12.3.2 relevant to
+ownCloud admins and users.
+
+[12.3.2]: https://github.com/owncloud/web/compare/v12.3.1...v12.3.2
+
+Summary
+-------
+
+* Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
+
+Details
+-------
+
+* Enhancement - Use signature auth: [#11963](https://github.com/owncloud/ocis/issues/11963)
+
+   When requesting resources from public links, we now request also
+   `oc:signature-auth` property. This property is then used to sign the archiver
+   download URL within password protected public links.
+
+   https://github.com/owncloud/ocis/issues/11963
+   https://github.com/owncloud/web/pull/13576
+
+Changelog for ownCloud Web [12.3.1] (2026-02-05)
+=======================================
+The following sections list the changes in ownCloud web 12.3.1 relevant to
+ownCloud admins and users.
+
+[12.3.1]: https://github.com/owncloud/web/compare/v12.3.0...v12.3.1
+
+Summary
+-------
+
+* Bugfix - Search Text Overalps With Search Icon In The Search Bar: [#13542](https://github.com/owncloud/web/issues/13542)
+
+Details
+-------
+
+* Bugfix - Search Text Overalps With Search Icon In The Search Bar: [#13542](https://github.com/owncloud/web/issues/13542)
+
+   We have fixed an issue where the search text in the search bar would overlap
+   with the search icon, making it difficult to read. This improvement enhances the
+   user experience by ensuring that the search text is clearly visible and does not
+   interfere with the functionality of the search icon.
+
+   https://github.com/owncloud/web/issues/13542
+   https://github.com/owncloud/web/pull/13553
+
+Changelog for ownCloud Web [12.3.0] (2026-01-23)
+=======================================
+The following sections list the changes in ownCloud web 12.3.0 relevant to
+ownCloud admins and users.
+
+[12.3.0]: https://github.com/owncloud/web/compare/v12.2.0...v12.3.0
 
 Summary
 -------
