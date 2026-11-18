@@ -32,11 +32,17 @@ export const DrivesFactory = ({ axiosClient, config }: GraphFactoryOptions): Gra
 
     async deleteDrive(id, ifMatch, requestOptions) {
       await drivesApiFactory.deleteDriveBeta(id, ifMatch, {
-        headers: {
-          ...((requestOptions?.headers && requestOptions.headers) || {}),
-          Purge: 'T'
-        },
-        ...((requestOptions && { requestOptions }) || {})
+        ...requestOptions,
+        // axios (>= 1.20) drops request headers named after an HTTP method while flattening
+        // the config headers, and `purge` is one of them. Setting the header in
+        // transformRequest runs after that step, so it reaches the server.
+        transformRequest: [
+          (data, headers) => {
+            headers.set('Purge', 'T')
+            return data
+          },
+          ...[].concat(axiosClient.defaults.transformRequest ?? [])
+        ]
       })
     },
 
